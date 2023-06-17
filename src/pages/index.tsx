@@ -6,20 +6,19 @@ import { api } from "~/utils/api";
 const Home = () => {
   const { isLoaded, isSignedIn, user } = useUser();
 
-  const { data, isLoading, error } = api.testRouter.protectedRoute.useQuery();
 
   if (!isLoaded || !isSignedIn) {
     return (
       <>
-        {JSON.stringify(error)}
+        <p>Hello World!</p>
         <SignInButton mode="modal"> Sign In</SignInButton>
       </>
     );
   }
   return (
     <>
-      {user.firstName}
-      {data?.secret}
+      <p>Hello {user.firstName}</p>
+    
       <Button>
         <SignOutButton />
       </Button>

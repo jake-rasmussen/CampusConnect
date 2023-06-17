@@ -6,7 +6,8 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { AuthObject, getAuth } from "@clerk/nextjs/server";
+
+import { getAuth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
@@ -14,10 +15,6 @@ import { ZodError } from "zod";
 import { prisma } from "~/server/db";
 
 import type { User } from "@prisma/client";
-import type {
-  SignedInAuthObject,
-  SignedOutAuthObject,
-} from "@clerk/nextjs/server";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 /**
@@ -45,14 +42,51 @@ const createInnerTRPCContext = (user: User | null) => {
   };
 };
 
+const getOrCreateUser = async (
+  id: string,
+  emailAddress: string,
+  firstName: string,
+  lastName: string,
+) => {
+  return await prisma.user.upsert({
+    where: {
+      id,
+    },
+    update: {
+      emailAddress,
+      firstName,
+      lastName,
+    },
+    create: {
+      id,
+      emailAddress,
+      firstName,
+      lastName,
+    },
+  });
+};
+
 /**
  * This is the actual context you will use in your router. It will be used to process every request
  * that goes through your tRPC endpoint.
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (opts: CreateNextContextOptions) => {
-  return createInnerTRPCContext({ auth: getAuth(opts.req) });
+export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+  const { sessionClaims, userId } = getAuth(opts.req);
+  if (!userId) {
+    return createInnerTRPCContext(null);
+  }
+
+  const { email, firstName, lastName } = sessionClaims;
+  const user = await getOrCreateUser(
+    userId as string,
+    email as string,
+    firstName as string,
+    lastName as string,
+  );
+
+  return createInnerTRPCContext(user);
 };
 
 /**
@@ -102,7 +136,7 @@ export const publicProcedure = t.procedure;
 
 const isAuthed = t.middleware(({ next, ctx }) => {
   //TODO: add auth check and then add user to the context
-  if (!ctx.user || !ctx.user.isSignedIn) {
+  if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({

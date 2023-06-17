@@ -1,5 +1,4 @@
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { protectedRouter as testRouter } from "./routers/test";
+import { createTRPCRouter } from "~/server/api/trpc";
 
 /**
  * This is the primary router for your server.
@@ -7,7 +6,6 @@ import { protectedRouter as testRouter } from "./routers/test";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  testRouter: testRouter,
 });
 
 // export type definition of API
