@@ -13,10 +13,14 @@
     "docker:down": "docker compose down --timeout 5",
     "prisma:format": "prisma format",
     "prisma:generate": "prisma generate",
-    "prisma:seed": "prisma db seed",
+    "prisma:seed": "NODE_ENV=development prisma db seed",
+    "prisma:prototype": "prisma db push && yarn prisma:seed",
     "prisma:dev": "yarn docker:up && dotenv -e .env -- prisma migrate dev",
     "prisma:dev:studio": "yarn docker:up && dotenv -e .env -- prisma studio",
     "prisma:dev:reset": "yarn docker:up && dotenv -e .env -- prisma migrate reset --force"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.21.3",
@@ -60,6 +64,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.8",
     "prisma": "^4.14.0",
+    "tsx": "^3.12.7",
     "typescript": "^5.0.4"
   },
   "ct3aMetadata": {

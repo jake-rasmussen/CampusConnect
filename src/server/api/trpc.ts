@@ -43,14 +43,14 @@ const createInnerTRPCContext = (user: User | null) => {
 };
 
 const getOrCreateUser = async (
-  id: string,
+  externalId: string,
   emailAddress: string,
   firstName: string,
   lastName: string,
 ) => {
   return await prisma.user.upsert({
     where: {
-      id,
+      externalId,
     },
     update: {
       emailAddress,
@@ -58,7 +58,7 @@ const getOrCreateUser = async (
       lastName,
     },
     create: {
-      id,
+      externalId,
       emailAddress,
       firstName,
       lastName,
@@ -80,7 +80,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 
   const { email, firstName, lastName } = sessionClaims;
   const user = await getOrCreateUser(
-    userId as string,
+    userId,
     email as string,
     firstName as string,
     lastName as string,
