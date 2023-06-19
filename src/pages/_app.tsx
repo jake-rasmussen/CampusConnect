@@ -1,23 +1,16 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { MantineProvider } from "@mantine/core";
-
-import { api } from "~/utils/api";
 
 import type { AppProps } from "next/app";
+
+import "~/styles/globals.css";
+
+import { api } from "~/utils/api";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ClerkProvider {...pageProps}>
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          //TODO: Add theme
-          colorScheme: "light",
-        }}
-      >
-        <Component {...pageProps} />
-      </MantineProvider>
+      <div className="h-5 bg-[#CC0007] p-10 w-5">test</div>
+      <Component {...pageProps} />
     </ClerkProvider>
   );
 }

@@ -1,11 +1,8 @@
 import { prisma } from "~/server/db";
-import { seedUsers, deleteUsers } from "./seedFiles/userSeed";
+import { deleteUsers, seedUsers } from "./seedFiles/userSeed";
 
 async function cleanupDb() {
-  await prisma.$transaction([
-    deleteUsers,
-  ]);
-
+  await prisma.$transaction([deleteUsers]);
 }
 
 async function main() {

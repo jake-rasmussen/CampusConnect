@@ -1,5 +1,8 @@
 /** @type {import("@ianvs/prettier-plugin-sort-imports").PrettierConfig} */
 const config = {
+  plugins: [
+    require.resolve("prettier-plugin-tailwindcss")
+  ],
   arrowParens: "always",
   printWidth: 80,
   singleQuote: false,
@@ -16,7 +19,7 @@ const config = {
     "^[.]",
     "",
     "<TYPES>",
-  ],
+  ]
 };
 
 module.exports = config;

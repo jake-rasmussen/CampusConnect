@@ -39,13 +39,13 @@ enum ClubApplicationStatus {
 }
 
 model User {
-    userId          String       @id @default(cuid())
-    externalId      String       @unique
-    firstName       String
-    lastName        String
-    emailAddress    String
-    createdAt       DateTime     @default(now())
-    updatedAt       DateTime     @updatedAt
+    userId       String   @id @default(cuid())
+    externalId   String   @unique
+    firstName    String
+    lastName     String
+    emailAddress String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
     // clubMemberships ClubMember[]
 }
 
@@ -57,7 +57,8 @@ model Club {
     clubApplications ClubApplication[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
-    ClubProfile      ClubProfile[]
+    clubProfileId    String            @unique
+    clubProfile      ClubProfile?
 }
 
 // model ClubMember {
@@ -74,12 +75,12 @@ model Club {
 
 model ClubProfile {
     id              String            @id @default(cuid())
-    clubId          String
+    clubId          String            @unique
     club            Club              @relation(fields: [clubId], references: [id], onDelete: Cascade)
     description     String            @default("")
     timelineDesc    String            @default("") @db.VarChar(500)
     events          ClubEvent[]
-    ClubContactInfo ClubContactInfo[]
+    clubContactInfo ClubContactInfo[]
 }
 
 model ClubContactInfo {
@@ -116,15 +117,15 @@ model ClubEvent {
 }
 
 model ClubApplication {
-    id                             String                           @id @default(cuid())
-    clubId                         String
-    club                           Club                             @relation(fields: [clubId], references: [id], onDelete: Cascade)
-    deadline                       DateTime?
-    status                         ClubApplicationStatus            @default(DRAFT)
-    questions                      ClubApplicationQuestion[]
-    ClubApplicationScoringCriteria ClubApplicationScoringCriteria[]
-    createdAt                      DateTime                         @default(now())
-    updatedAt                      DateTime                         @updatedAt
+    id              String                           @id @default(cuid())
+    clubId          String
+    club            Club                             @relation(fields: [clubId], references: [id], onDelete: Cascade)
+    deadline        DateTime?
+    status          ClubApplicationStatus            @default(DRAFT)
+    questions       ClubApplicationQuestion[]
+    scoringCriteria ClubApplicationScoringCriteria[]
+    createdAt       DateTime                         @default(now())
+    updatedAt       DateTime                         @updatedAt
 }
 
 model ClubApplicationQuestion {

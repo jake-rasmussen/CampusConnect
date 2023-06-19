@@ -1,11 +1,9 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
-import { Button } from "@mantine/core";
 
 import { api } from "~/utils/api";
 
 const Home = () => {
   const { isLoaded, isSignedIn, user } = useUser();
-
 
   if (!isLoaded || !isSignedIn) {
     return (
@@ -17,11 +15,9 @@ const Home = () => {
   }
   return (
     <>
-      <p>Hello {user.firstName}</p>
-    
-      <Button>
-        <SignOutButton />
-      </Button>
+      <p className="text-xl p-5 bg-black">Hello {user.firstName}</p>
+      <div className="h-5 bg-black p-10 w-5">test</div>
+      <SignOutButton />
     </>
   );
 };
