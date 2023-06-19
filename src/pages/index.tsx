@@ -15,8 +15,8 @@ const Home = () => {
   }
   return (
     <>
-      <p className="text-xl p-5 bg-black">Hello {user.firstName}</p>
-      <div className="h-5 bg-black p-10 w-5">test</div>
+      <p className="bg-black p-5 text-xl">Hello {user.firstName}</p>
+      <div className="h-5 w-5 bg-black p-10">test</div>
       <SignOutButton />
     </>
   );

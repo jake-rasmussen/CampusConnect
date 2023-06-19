@@ -1,7 +1,8 @@
 /** @type {import("@ianvs/prettier-plugin-sort-imports").PrettierConfig} */
 const config = {
   plugins: [
-    require.resolve("prettier-plugin-tailwindcss")
+    // @ts-ignore
+    require("prettier-plugin-tailwindcss")
   ],
   arrowParens: "always",
   printWidth: 80,
