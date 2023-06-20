@@ -12,7 +12,7 @@ import {
 const ApplicationCard = () => {
   return (
     <>
-      <Card className="m-6 mb-0 w-[20rem] shadow-xl">
+      <Card className="m-6 mb-0 w-[20rem] rounded-xl bg-white shadow-xl">
         <CardHeader>
           <CardTitle>Card Title</CardTitle>
           <CardDescription>Card Description</CardDescription>
@@ -22,7 +22,7 @@ const ApplicationCard = () => {
         </CardContent>
         <CardFooter>
           <p className="flex w-full justify-end">
-            <button className="flex flex-row text-[#394867] transition duration-300 ease-in-out hover:translate-x-2">
+            <button className="flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2 mr-1">
               Apply <ArrowRight className="mx-1 h-full" />
             </button>
           </p>

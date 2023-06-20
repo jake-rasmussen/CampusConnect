@@ -35,10 +35,10 @@ const ClubDashboard = () => {
 
   return (
     <>
-      <header className="relative bg-[#212A3E] shadow-2xl">
+      <header className="relative bg-gradient-to-r from-secondary to-primary shadow-2xl">
         <div className="mx-auto px-4 py-20 md:px-24 lg:px-8 lg:py-28">
           <div className="relative text-center">
-            <h2 className="mb-6 font-sans text-5xl font-bold tracking-tight text-white sm:text-7xl sm:leading-none">
+            <h2 className="mb-6 font-sans text-5xl font-bold tracking-tight sm:text-7xl text-white sm:leading-none">
               {club.name}
             </h2>
           </div>
@@ -99,17 +99,21 @@ const ClubDashboard = () => {
             </div>
             <div className="justify-left col-span-2 flex flex flex-col">
               <h1 className="text-2xl font-semibold underline">Contact</h1>
-              <div className="relative my-6 max-w-sm border-l-2 border-[#394867] px-6 py-2">
+              <div className="relative my-6 max-w-sm border-l-2 border-primary px-6 py-2">
                 <h1 className="font-bold">Jake Rasmussen</h1>
                 <p>www.jakerasmussen.dev</p>
                 <p>(610) 316-7252</p>
-                <Badge className="absolute right-0 top-0">Technical Lead</Badge>
+                <Badge className="absolute right-0 top-0 text-white bg-secondary shadow-xl">
+                  Technical Lead
+                </Badge>
               </div>
-              <div className="relative my-6 max-w-sm border-l-2 border-[#394867] px-6 py-2">
+              <div className="relative my-6 max-w-sm border-l-2 border-primary px-6 py-2">
                 <h1 className="font-bold">Daniel Drozdov</h1>
                 <p>www.crowded.com</p>
                 <p>(610) 222-1234</p>
-                <Badge className="absolute right-0 top-0">Waterboy</Badge>
+                <Badge className="absolute right-0 top-0 text-white bg-secondary shadow-xl">
+                  Waterboy
+                </Badge>
               </div>
             </div>
           </div>

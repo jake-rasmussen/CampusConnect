@@ -8,7 +8,7 @@ import type { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <main className="min-h-screen w-screen bg-[#F1F6F9]">
+    <main className="min-h-screen w-screen bg-background">
       <ClerkProvider {...pageProps}>
         <Component {...pageProps} />
       </ClerkProvider>
