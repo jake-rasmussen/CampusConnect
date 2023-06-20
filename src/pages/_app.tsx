@@ -8,10 +8,11 @@ import type { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ClerkProvider {...pageProps}>
-      <div className="h-5 w-5 bg-[#CC0007] p-10">test</div>
-      <Component {...pageProps} />
-    </ClerkProvider>
+    <main className="min-h-screen w-screen bg-[#F1F6F9]">
+      <ClerkProvider {...pageProps}>
+        <Component {...pageProps} />
+      </ClerkProvider>
+    </main>
   );
 }
 
