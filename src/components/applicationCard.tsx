@@ -20,7 +20,7 @@ const ApplicationCard = (props: PropType) => {
 
   return (
     <>
-      <Card className="mb-0 mr-3yarn mt-6 w-[17.5rem] rounded-xl bg-white shadow-xl">
+      <Card className="mb-0 mr-4 mt-6 w-[17.5rem] rounded-xl bg-white shadow-xl">
         <CardHeader>
           <CardTitle>{clubApplication.name}</CardTitle>
           <CardDescription>{clubApplication.description}</CardDescription>
