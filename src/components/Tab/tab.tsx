@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 type PropType = {
-  children: any;
+  children: JSX.Element[];
 };
 
 const Tab = (props: PropType) => {

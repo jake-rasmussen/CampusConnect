@@ -3,7 +3,7 @@ import React from "react";
 type PropType = {
   activeTabIndex?: number;
   setActiveTabIndex?: React.Dispatch<React.SetStateAction<number>>;
-  children: any;
+  children: JSX.Element[];
 };
 
 const TabList = (props: PropType) => {

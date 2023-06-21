@@ -1,4 +1,4 @@
-import { ClubEvent } from "@prisma/client";
+import { type ClubEvent } from "@prisma/client";
 import { Calendar } from "tabler-icons-react";
 
 import { dateAndTimeToStringFormatted } from "~/utils/helpers";
@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "./ui/card";

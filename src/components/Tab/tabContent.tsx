@@ -1,6 +1,6 @@
 type PropType = {
   isActive?: boolean;
-  children: any;
+  children: JSX.Element;
 };
 
 const TabContent = (props: PropType) => {

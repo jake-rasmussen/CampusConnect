@@ -1,4 +1,4 @@
-import { ClubContactInfo } from "@prisma/client";
+import { type ClubContactInfo } from "@prisma/client";
 
 import { Badge } from "./ui/badge";
 

@@ -1,6 +1,6 @@
-import { ClubApplication, ClubContactInfo, ClubEvent } from "@prisma/client";
+import { type ClubApplication, type ClubContactInfo, type ClubEvent } from "@prisma/client";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 
 import ApplicationCard from "~/components/applicationCard";
 import ContactCard from "~/components/contactCard";
@@ -9,7 +9,6 @@ import Tab from "~/components/Tab/tab";
 import TabContent from "~/components/Tab/tabContent";
 import TabHeader from "~/components/Tab/tabHeader";
 import TabList from "~/components/Tab/tabList";
-import { Badge } from "~/components/ui/badge";
 import { api } from "~/utils/api";
 
 const ClubDashboard = () => {
@@ -102,8 +101,8 @@ const ClubDashboard = () => {
                 </h1>
                 <div className="mx-auto md:mx-0">
                   {club.clubProfile?.clubContactInfo.map(
-                    (clubContactInfo: ClubContactInfo) => (
-                      <ContactCard clubContactInfo={clubContactInfo} />
+                    (clubContactInfo: ClubContactInfo, index: number) => (
+                      <ContactCard clubContactInfo={clubContactInfo} key={`clubContact${index}`} />
                     ),
                   )}
                 </div>

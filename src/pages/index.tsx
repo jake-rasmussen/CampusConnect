@@ -1,7 +1,5 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 
-import { api } from "~/utils/api";
-
 const Home = () => {
   const { isLoaded, isSignedIn, user } = useUser();
 
