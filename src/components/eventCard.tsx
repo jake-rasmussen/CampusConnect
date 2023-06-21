@@ -53,9 +53,9 @@ const EventCard = (props: PropType) => {
                   {dateAndTimeToStringFormatted(clubEvent.date)}
                 </CardDescription>
               </CardHeader>
-              {/* <CardContent>
-                <p>{clubEvent.inPerson ? "In person" : "Remote"}</p>
-              </CardContent> */}
+              <CardContent>
+                <p>{clubEvent.inPerson ? "This event is in person" : "This event is not in person"}</p>
+              </CardContent>
             </section>
             <section>
               <CardHeader>
