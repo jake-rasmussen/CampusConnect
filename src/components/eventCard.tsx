@@ -25,7 +25,7 @@ const EventCard = (props: PropType) => {
 
   return (
     <>
-      <Card className="m-6 mb-0 w-full rounded-2xl bg-white shadow-xl">
+      <Card className="m-6 mb-0 w-full max-w-[80rem] rounded-2xl bg-white shadow-xl">
         <div className="flex flex-col md:flex-row">
           <div className="item flex h-auto w-full justify-center rounded-2xl bg-primary shadow-xl md:w-48">
             <TooltipProvider>
@@ -54,7 +54,11 @@ const EventCard = (props: PropType) => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p>{clubEvent.inPerson ? "This event is in person" : "This event is not in person"}</p>
+                <p>
+                  {clubEvent.inPerson
+                    ? "This event is in person"
+                    : "This event is not in person"}
+                </p>
               </CardContent>
             </section>
             <section>

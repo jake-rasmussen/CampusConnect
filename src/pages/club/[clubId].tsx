@@ -1,4 +1,5 @@
-import { type ClubApplication, type ClubContactInfo, type ClubEvent } from "@prisma/client";
+import "@prisma/client";
+
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -10,6 +11,12 @@ import TabContent from "~/components/Tab/tabContent";
 import TabHeader from "~/components/Tab/tabHeader";
 import TabList from "~/components/Tab/tabList";
 import { api } from "~/utils/api";
+
+import type {
+  ClubApplication,
+  ClubContactInfo,
+  ClubEvent,
+} from "@prisma/client";
 
 const ClubDashboard = () => {
   const router = useRouter();
@@ -50,7 +57,9 @@ const ClubDashboard = () => {
           </TabList>
           <TabContent>
             <div className="max-w-6xl py-6 text-center md:px-6 md:py-0">
-              <p className="p-4 px-8 text-center">{club.clubProfile?.description}</p>
+              <p className="p-4 px-8 text-center">
+                {club.clubProfile?.description}
+              </p>
             </div>
           </TabContent>
           <TabContent>
@@ -78,7 +87,10 @@ const ClubDashboard = () => {
                 <div className="mx-auto md:mx-0">
                   {club.clubProfile?.clubContactInfo.map(
                     (clubContactInfo: ClubContactInfo, index: number) => (
-                      <ContactCard clubContactInfo={clubContactInfo} key={`clubContact${index}`} />
+                      <ContactCard
+                        clubContactInfo={clubContactInfo}
+                        key={`clubContact${index}`}
+                      />
                     ),
                   )}
                 </div>
