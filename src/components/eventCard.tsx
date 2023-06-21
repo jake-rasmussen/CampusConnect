@@ -1,6 +1,7 @@
-import { Calendar, Plus } from "tabler-icons-react";
+import { ClubEvent } from "@prisma/client";
+import { Calendar } from "tabler-icons-react";
 
-import { Button } from "./ui/button";
+import { dateAndTimeToStringFormatted } from "~/utils/helpers";
 import {
   Card,
   CardContent,
@@ -16,12 +17,18 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 
-const EventCard = () => {
+type PropType = {
+  clubEvent: ClubEvent;
+};
+
+const EventCard = (props: PropType) => {
+  const { clubEvent } = props;
+
   return (
     <>
-      <Card className="m-6 mb-0 w-[80rem] rounded-2xl bg-white shadow-xl">
-        <div className="flex flex-row">
-          <div className="item flex h-auto w-48 justify-center rounded-2xl bg-primary shadow-xl">
+      <Card className="m-6 mb-0 w-full rounded-2xl bg-white shadow-xl">
+        <div className="flex flex-col md:flex-row">
+          <div className="item flex h-auto w-full justify-center rounded-2xl bg-primary shadow-xl md:w-48">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -29,34 +36,34 @@ const EventCard = () => {
                     <Calendar className="h-full w-full text-white transition duration-300 ease-in-out group-hover:scale-125" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-white rounded-xl">
+                <TooltipContent className="rounded-xl bg-white">
                   <p>Add to Calendar</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
 
-          <main className="flex flex-row p-4">
-            <section>
+          <main className="flex flex-col p-4 md:flex-row">
+            <section className="min-w-[15rem]">
               <CardHeader>
-                <CardTitle className="text-xl">Spikeball Meetup</CardTitle>
-                <CardDescription className="text-gray-400">October 17th, 2023 at 4:30PM</CardDescription>
+                <CardTitle className="text-xl">
+                  {clubEvent.name} <span className="font-normal">at</span>{" "}
+                  {clubEvent.location}
+                </CardTitle>
+                <CardDescription className="text-gray-400">
+                  {dateAndTimeToStringFormatted(clubEvent.date)}
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <p>Wyman Quad</p>
-              </CardContent>
+              {/* <CardContent>
+                <p>{clubEvent.inPerson ? "In person" : "Remote"}</p>
+              </CardContent> */}
             </section>
-            <section className="">
+            <section>
               <CardHeader>
                 <CardTitle className="text-xl">Event Description</CardTitle>
               </CardHeader>
               <CardContent className="max-w-2xl">
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Natus, ab. Iure sed asperiores ex. Et animi rem consectetur
-                  laborum non? Nisi voluptate vero tempore quae provident? Cum
-                  quasi molestiae beatae!
-                </p>
+                <p>{clubEvent.description}</p>
               </CardContent>
             </section>
           </main>

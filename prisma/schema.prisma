@@ -58,6 +58,7 @@ model Club {
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
     clubProfileId    String            @unique
+    events           ClubEvent[]
     clubProfile      ClubProfile?
 }
 
@@ -79,7 +80,6 @@ model ClubProfile {
     club            Club              @relation(fields: [clubId], references: [id], onDelete: Cascade)
     description     String            @default("")
     timelineDesc    String            @default("") @db.VarChar(500)
-    events          ClubEvent[]
     clubContactInfo ClubContactInfo[]
 }
 
@@ -106,10 +106,11 @@ model SocialMedia {
 
 model ClubEvent {
     id            String      @id @default(cuid())
-    clubProfile   ClubProfile @relation(fields: [clubProfileId], references: [id])
-    clubProfileId String
+    club          Club @relation(fields: [clubId], references: [id])
+    clubId        String
     name          String
     date          DateTime
+    description   String
     inPerson      Boolean
     location      String
     createdAt     DateTime    @default(now())
@@ -119,6 +120,8 @@ model ClubEvent {
 model ClubApplication {
     id              String                           @id @default(cuid())
     clubId          String
+    name            String                           @unique
+    description     String                           @default("")
     club            Club                             @relation(fields: [clubId], references: [id], onDelete: Cascade)
     deadline        DateTime?
     status          ClubApplicationStatus            @default(DRAFT)

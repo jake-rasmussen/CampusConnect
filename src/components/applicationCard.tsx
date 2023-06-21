@@ -1,5 +1,7 @@
+import { ClubApplication } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
 
+import { dateToStringFormatted } from "~/utils/helpers";
 import {
   Card,
   CardContent,
@@ -9,20 +11,41 @@ import {
   CardTitle,
 } from "./ui/card";
 
-const ApplicationCard = () => {
+type PropType = {
+  clubApplication: ClubApplication;
+};
+
+const ApplicationCard = (props: PropType) => {
+  const { clubApplication } = props;
+
   return (
     <>
-      <Card className="m-6 mb-0 w-[20rem] rounded-xl bg-white shadow-xl">
+      <Card className="mb-0 mr-3 mt-6 w-[17.5rem] rounded-xl bg-white shadow-xl">
         <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <CardDescription>Card Description</CardDescription>
+          <CardTitle>{clubApplication.name}</CardTitle>
+          <CardDescription>{clubApplication.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Card Content</p>
+          <p>
+            Status:{" "}
+            <span className="tracking-none font-black text-secondary">
+              {clubApplication.status}
+            </span>
+          </p>
+          {clubApplication.deadline ? (
+            <p>
+              Deadline:{" "}
+              <span className="font-semibold">
+                {dateToStringFormatted(clubApplication.deadline)}
+              </span>
+            </p>
+          ) : (
+            <></>
+          )}
         </CardContent>
         <CardFooter>
           <p className="flex w-full justify-end">
-            <button className="flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2 mr-1">
+            <button className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2">
               Apply <ArrowRight className="mx-1 h-full" />
             </button>
           </p>
