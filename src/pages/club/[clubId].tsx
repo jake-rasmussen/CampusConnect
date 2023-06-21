@@ -50,31 +50,7 @@ const ClubDashboard = () => {
           </TabList>
           <TabContent>
             <div className="max-w-6xl py-6 text-center md:px-6 md:py-0">
-              <p className="p-4 px-8 text-center">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Molestias asperiores eveniet quas est laboriosam. Harum veniam
-                nostrum magnam temporibus cum libero exercitationem quisquam
-                distinctio quaerat praesentium, expedita cupiditate, inventore
-                alias? Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Et ex voluptates repudiandae quae eum architecto necessitatibus.
-                Earum mollitia, pariatur voluptas in dolores cumque ea labore
-                veniam blanditiis commodi explicabo neque. Lorem ipsum dolor sit
-                amet, consectetur adipisicing elit. Odit, illo quia obcaecati
-                harum, porro, esse tenetur culpa aperiam doloribus sunt
-                temporibus alias distinctio aliquam vel? Deserunt quae labore
-                recusandae obcaecati. Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit. Molestias asperiores eveniet quas est
-                laboriosam. Harum veniam nostrum magnam temporibus cum libero
-                exercitationem quisquam distinctio quaerat praesentium, expedita
-                cupiditate, inventore alias? Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Et ex voluptates repudiandae quae
-                eum architecto necessitatibus. Earum mollitia, pariatur voluptas
-                in dolores cumque ea labore veniam blanditiis commodi explicabo
-                neque. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Odit, illo quia obcaecati harum, porro, esse tenetur culpa
-                aperiam doloribus sunt temporibus alias distinctio aliquam vel?
-                Deserunt quae labore recusandae obcaecati.
-              </p>
+              <p className="p-4 px-8 text-center">{club.clubProfile?.description}</p>
             </div>
           </TabContent>
           <TabContent>
