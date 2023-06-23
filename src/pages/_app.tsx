@@ -10,7 +10,7 @@ import MainLayout from "~/layouts/layout";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <MainLayout>
-      <main className="min-h-screen w-screen bg-background pt-20">
+      <main className="min-h-screen w-screen bg-background pt-24">
         <ClerkProvider {...pageProps}>
           <Component {...pageProps} />
         </ClerkProvider>
