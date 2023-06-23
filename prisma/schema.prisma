@@ -105,16 +105,16 @@ model SocialMedia {
 }
 
 model ClubEvent {
-    id            String      @id @default(cuid())
-    club          Club @relation(fields: [clubId], references: [id])
-    clubId        String
-    name          String
-    date          DateTime
-    description   String
-    inPerson      Boolean
-    location      String
-    createdAt     DateTime    @default(now())
-    updatedAt     DateTime    @updatedAt
+    id          String   @id @default(cuid())
+    club        Club     @relation(fields: [clubId], references: [id])
+    clubId      String
+    name        String
+    date        DateTime
+    description String
+    inPerson    Boolean
+    location    String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
 
 model ClubApplication {

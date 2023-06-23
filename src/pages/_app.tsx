@@ -5,14 +5,18 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 
 import type { AppProps } from "next/app";
+import MainLayout from "~/layouts/layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <main className="min-h-screen w-screen bg-background">
-      <ClerkProvider {...pageProps}>
-        <Component {...pageProps} />
-      </ClerkProvider>
-    </main>
+    <MainLayout>
+      <main className="min-h-screen w-screen bg-background pt-20">
+        <ClerkProvider {...pageProps}>
+          <Component {...pageProps} />
+        </ClerkProvider>
+      </main>
+    </MainLayout>
+
   );
 }
 
