@@ -17,6 +17,7 @@ import type {
   ClubContactInfo,
   ClubEvent,
 } from "@prisma/client";
+import Navbar from "~/components/navbar";
 
 const ClubDashboard = () => {
   const router = useRouter();
@@ -63,8 +64,8 @@ const ClubDashboard = () => {
             </div>
           </TabContent>
           <TabContent>
-            <div className="mx-10 grid w-full grid-cols-5 py-6">
-              <div className="col-span-5 flex w-full flex-col items-center md:col-span-3">
+            <div className="mx-10 grid w-full grid-cols-2 lg:grid-cols-5 py-6">
+              <div className="col-span-2 md:col-span-1 flex w-full flex-col items-center lg:col-span-3">
                 <h1 className="text-2xl font-semibold underline">
                   Open Applications
                 </h1>
@@ -80,7 +81,7 @@ const ClubDashboard = () => {
                 </div>
               </div>
 
-              <div className="justify-left col-span-5 flex flex-col pt-20 md:col-span-2 md:pt-0">
+              <div className="justify-left col-span-2 md:col-span-1 flex flex-col pt-20 lg:col-span-2 md:pt-0">
                 <h1 className="text-center text-2xl font-semibold underline md:text-left">
                   Contact
                 </h1>
