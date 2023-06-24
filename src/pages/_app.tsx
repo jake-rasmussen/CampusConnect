@@ -1,24 +1,22 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { MantineProvider } from "@mantine/core";
 
 import { api } from "~/utils/api";
 
+import "~/styles/globals.css";
+
 import type { AppProps } from "next/app";
+import MainLayout from "~/components/layouts/layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ClerkProvider {...pageProps}>
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          //TODO: Add theme
-          colorScheme: "light",
-        }}
-      >
-        <Component {...pageProps} />
-      </MantineProvider>
-    </ClerkProvider>
+    <MainLayout>
+      <main className="min-h-screen w-screen bg-background pt-24">
+        <ClerkProvider {...pageProps}>
+          <Component {...pageProps} />
+        </ClerkProvider>
+      </main>
+    </MainLayout>
+
   );
 }
 
