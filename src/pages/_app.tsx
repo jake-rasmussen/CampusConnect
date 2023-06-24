@@ -5,7 +5,7 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 
 import type { AppProps } from "next/app";
-import MainLayout from "~/layouts/layout";
+import MainLayout from "~/components/layouts/layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

@@ -4,11 +4,11 @@ type PropType = {
   children: JSX.Element[];
 };
 
-const Tab = (props: PropType) => {
+const Tab = ({ children }: PropType) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const childrenWithProps = React.Children.map(
-    props.children,
+    children,
     (child, index: number) => {
       if (index === 0) {
         // If so, its the Tab List (the list of tab headers)

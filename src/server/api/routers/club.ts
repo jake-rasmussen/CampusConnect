@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const clubRouter = createTRPCRouter({
-  getClubById: protectedProcedure
+  getClubByIdForUsers: protectedProcedure
     .input(z.object({ clubId: z.string() }))
     .query(async ({ ctx, input }) => {
       const { clubId } = input;

@@ -11,7 +11,7 @@ const TabHeader = (props: PropType) => {
   const { tabIndex, setActiveTabIndex, isActive } = props;
 
   let buttonClassName =
-    "flex items-center flex-shrink-0 px-5 py-4 border-b-4 text-gray-400 border-gray-400 transition duration-300 ease-in-out min-h-8";
+    "flex items-center flex-shrink-0 px-5 py-4 border-b-4 text-gray border-gray transition duration-300 ease-in-out min-h-8";
   buttonClassName = twMerge(buttonClassName, isActive ? "border-primary" : "");
 
   let textClassName =

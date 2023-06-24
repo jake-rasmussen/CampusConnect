@@ -49,7 +49,7 @@ const EventCard = (props: PropType) => {
                   {clubEvent.name} <span className="font-normal">at</span>{" "}
                   {clubEvent.location}
                 </CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-gray">
                   {dateAndTimeToStringFormatted(clubEvent.date)}
                 </CardDescription>
               </CardHeader>
