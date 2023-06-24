@@ -1,15 +1,10 @@
 import "@prisma/client";
 
+import Error from "next/error";
 import { useRouter } from "next/router";
 import React from "react";
 
-import ApplicationCard from "~/components/applicationCard";
-import ContactCard from "~/components/contactCard";
-import EventCard from "~/components/eventCard";
-import Tab from "~/components/tab/tab";
-import TabContent from "~/components/tab/tabContent";
-import TabHeader from "~/components/tab/tabHeader";
-import TabList from "~/components/tab/tabList";
+import ClubDashboardPage from "~/components/clubDashboardPage";
 import { api } from "~/utils/api";
 
 import type {
@@ -17,7 +12,6 @@ import type {
   ClubContactInfo,
   ClubEvent,
 } from "@prisma/client";
-import ClubDashboardPage from "~/components/clubDashboardPage";
 
 const ClubDashboard = () => {
   const router = useRouter();
@@ -25,8 +19,9 @@ const ClubDashboard = () => {
 
   const {
     data: club,
-    isLoading: isLoadingClub,
-    isError: isErrorClub,
+    isLoading,
+    isError,
+    error,
   } = api.clubRouter.getClubByIdForUsers.useQuery(
     {
       clubId,
@@ -34,13 +29,13 @@ const ClubDashboard = () => {
     { enabled: !!clubId },
   );
 
-  if (isLoadingClub || isErrorClub) {
-    return <>Loading...</>;
+  if (isError) {
+    return <Error statusCode={error.data?.httpStatus || 500} />;
   }
 
   return (
     <>
-      <ClubDashboardPage club={club} />
+      <ClubDashboardPage isLoading={isLoading} club={club} />
     </>
   );
 };
