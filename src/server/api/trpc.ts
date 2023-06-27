@@ -135,7 +135,6 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 const isAuthed = t.middleware(({ next, ctx }) => {
-  //TODO: add auth check and then add user to the context
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
@@ -147,3 +146,16 @@ const isAuthed = t.middleware(({ next, ctx }) => {
 });
 
 export const protectedProcedure = t.procedure.use(isAuthed);
+
+const isAdmin = t.middleware(({ next, ctx }) => {
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({
+    ctx: {
+      user: ctx.user,
+    },
+  });
+});
+
+export const adminProcedure = t.procedure.use(isAdmin);

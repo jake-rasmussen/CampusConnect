@@ -8,13 +8,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
+} from "../ui/tooltip";
 
 type PropType = {
   clubEvent: ClubEvent;
@@ -27,7 +27,7 @@ const EventCard = (props: PropType) => {
     <>
       <Card className="m-6 mb-0 w-full max-w-[80rem] rounded-2xl bg-white shadow-xl">
         <div className="flex flex-col md:flex-row">
-          <div className="item flex h-auto w-full justify-center rounded-2xl bg-primary shadow-xl md:w-48">
+          <div className="item flex h-auto w-full justify-center rounded-l-xl bg-primary shadow-2xl md:w-48">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>

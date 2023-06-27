@@ -1,6 +1,6 @@
 import { type ClubContactInfo } from "@prisma/client";
 
-import { Badge } from "./ui/badge";
+import { Badge } from "../ui/badge";
 
 type PropType = {
   clubContactInfo: ClubContactInfo;

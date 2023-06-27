@@ -4,14 +4,9 @@ import Error from "next/error";
 import { useRouter } from "next/router";
 import React from "react";
 
-import ClubDashboardPage from "~/components/clubDashboardPage";
+import ClubDashboardPage from "~/components/dashboardPage";
+import ClubDashBoardSkeleton from "~/components/skeletons/clubDashboardSkeleton";
 import { api } from "~/utils/api";
-
-import type {
-  ClubApplication,
-  ClubContactInfo,
-  ClubEvent,
-} from "@prisma/client";
 
 const ClubDashboard = () => {
   const router = useRouter();
@@ -35,7 +30,17 @@ const ClubDashboard = () => {
 
   return (
     <>
-      <ClubDashboardPage isLoading={isLoading} club={club} />
+      {!isLoading && club !== undefined && club.clubProfile !== null ? (
+        <ClubDashboardPage
+          name={club.name}
+          clubProfile={club.clubProfile}
+          events={club.events}
+          contactInfo={club.clubProfile?.clubContactInfo}
+          applications={club.clubApplications}
+        />
+      ) : (
+        <ClubDashBoardSkeleton />
+      )}
     </>
   );
 };
