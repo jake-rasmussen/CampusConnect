@@ -2,11 +2,11 @@ import "@prisma/client";
 
 import { Toaster } from "react-hot-toast";
 
-import Applications from "./dashboard/applications";
-import Contact from "./dashboard/contact";
-import Description from "./dashboard/description";
-import Events from "./dashboard/events";
-import Header from "./dashboard/header";
+import Applications from "./dashboard/applications/applications";
+import Contact from "./dashboard/contact/contact";
+import Description from "./dashboard/description/description";
+import Events from "./dashboard/clubEvents/events";
+import Header from "./dashboard/header/header";
 import Tab from "./tab/tab";
 import TabContent from "./tab/tabContent";
 import TabHeader from "./tab/tabHeader";
@@ -21,6 +21,7 @@ import type {
 
 type PropType = {
   name: string;
+  clubId: string;
   clubProfile: ClubProfile & { clubContactInfo: ClubContactInfo[] };
   events: ClubEvent[];
   contactInfos: ClubContactInfo[];
@@ -28,7 +29,8 @@ type PropType = {
 };
 
 const DashboardPage = (props: PropType) => {
-  const { name, clubProfile, events, contactInfos, applications } = props;
+  const { name, clubId, clubProfile, events, contactInfos, applications } =
+    props;
 
   return (
     <>
@@ -42,21 +44,25 @@ const DashboardPage = (props: PropType) => {
             <TabHeader>Applications</TabHeader>
           </TabList>
           <TabContent>
-            <Description
-              clubId={clubProfile.id}
-              clubDescription={clubProfile.description}
-              edit={true}
-            />
-          </TabContent>
-          <TabContent>
-            <div className="mx-10 grid w-full grid-cols-2 py-6 lg:grid-cols-5">
-              <div className="col-span-2 md:col-span-1 lg:col-span-3">
-                <Applications applications={applications} />
+            <div className="mx-10 grid w-full grid-cols-2 py-6 xl:grid-cols-5">
+              <div className="col-span-2 lg:col-span-1 xl:col-span-3 lg:pr-10">
+                <Description
+                  clubId={clubProfile.id}
+                  clubDescription={clubProfile.description}
+                  edit={true}
+                />
               </div>
-              <div className="col-span-2 md:col-span-1 lg:col-span-2">
+              <div className="py-6 col-span-2 lg:col-span-1 xl:col-span-2">
                 <Contact contactInfos={contactInfos} />
               </div>
             </div>
+          </TabContent>
+          <TabContent>
+            <Applications
+              applications={applications}
+              clubId={clubId}
+              edit={true}
+            />
           </TabContent>
         </Tab>
       </main>

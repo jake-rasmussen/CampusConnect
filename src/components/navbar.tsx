@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Affiliate, Menu2 } from "tabler-icons-react";
 
-import { Input } from "./ui/input";
-import { Separator } from "./ui/separator";
+import { Input } from "./shadcn_ui/input";
+import { Separator } from "./shadcn_ui/separator";
 
 const Navbar = () => {
   return (

@@ -1,15 +1,12 @@
-import { Skeleton } from "../ui/skeleton";
+import HeaderOutline from "../dashboard/header/headerOutline";
+import { Skeleton } from "../shadcn_ui/skeleton";
 
 const TitleSkeleton = () => {
   return (
     <>
-      <header className="relative bg-gradient-to-r from-secondary to-primary shadow-2xl">
-        <div className="flex justify-center px-4 py-20 md:px-24 lg:px-8 lg:py-28">
-          <div className="relative flex items-center justify-center text-center">
-            <Skeleton className="h-[5.5rem] w-[25vw] rounded-full" />
-          </div>
-        </div>
-      </header>
+      <HeaderOutline>
+        <Skeleton className="h-[5.5rem] w-[25vw] rounded-full" />
+      </HeaderOutline>
     </>
   );
 };

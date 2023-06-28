@@ -33,6 +33,7 @@ const ClubDashboard = () => {
       {!isLoading && club !== undefined && club.clubProfile !== null ? (
         <ClubDashboardPage
           name={club.name}
+          clubId={club.id}
           clubProfile={club.clubProfile}
           events={club.events}
           contactInfos={club.clubProfile?.clubContactInfo}

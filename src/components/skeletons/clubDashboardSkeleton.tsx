@@ -2,7 +2,7 @@ import Tab from "../tab/tab";
 import TabContent from "../tab/tabContent";
 import TabHeader from "../tab/tabHeader";
 import TabList from "../tab/tabList";
-import ApplicationSkeleton from "./applicationSkeleton";
+import ApplicationsSkeleton from "./applicationsSkeleton";
 import ContactSkeleton from "./contactSkeleton";
 import DescriptionSkeleton from "./descriptionSkeleton";
 import EventSkeleton from "./eventSkeleton";
@@ -24,7 +24,7 @@ const ClubDashBoardSkeleton = () => {
           </TabContent>
           <TabContent>
             <div className="mx-10 grid w-full grid-cols-2 py-6 lg:grid-cols-5">
-              <ApplicationSkeleton />
+              <ApplicationsSkeleton />
               <ContactSkeleton />
             </div>
           </TabContent>

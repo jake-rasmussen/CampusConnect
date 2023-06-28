@@ -2,8 +2,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
-import { Textarea } from "../ui/textarea";
-import EditController from "./editController";
+import { Textarea } from "../../shadcn_ui/textarea";
+import EditController from "../editController";
 
 type PropType = {
   clubDescription: string;
@@ -48,13 +48,16 @@ const DescriptionEditor = (props: PropType) => {
       closeAction={() => setEditClubDescription(originalClubDescription)}
       dialogDescription={"Update the Club Description"}
     >
-      <Textarea
-        className="col-span-3"
-        placeholder="Type your message here."
-        value={editClubDescription}
-        onChange={(e) => setEditClubDescription(e.currentTarget.value)}
-        rows={15}
-      />
+      <main className="grid grid-cols-4">
+        <span className="col-span-1 font-semibold underline">Description</span>
+        <Textarea
+          className="col-span-3 bg-white"
+          placeholder="Type your message here."
+          value={editClubDescription}
+          onChange={(e) => setEditClubDescription(e.currentTarget.value)}
+          rows={15}
+        />
+      </main>
     </EditController>
   );
 };

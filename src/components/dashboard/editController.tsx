@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
+} from "../shadcn_ui/dialog";
 
 type PropType = {
   dialogDescription: string;

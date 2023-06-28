@@ -9,18 +9,21 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "../../shadcn_ui/card";
+import ApplicationEditor from "./applicationEditor";
 
 type PropType = {
   clubApplication: ClubApplication;
+  clubId: string;
+  edit: boolean;
 };
 
 const ApplicationCard = (props: PropType) => {
-  const { clubApplication } = props;
+  const { clubApplication, clubId, edit } = props;
 
   return (
     <>
-      <Card className="mb-0 mr-4 mt-6 w-[17.5rem] rounded-xl bg-white shadow-xl">
+      <Card className="relative mb-0 mr-4 my-6 w-[17.5rem] rounded-xl bg-white shadow-xl">
         <CardHeader>
           <CardTitle>{clubApplication.name}</CardTitle>
           <CardDescription>{clubApplication.description}</CardDescription>
@@ -39,6 +42,14 @@ const ApplicationCard = (props: PropType) => {
                 {dateToStringFormatted(clubApplication.deadline)}
               </span>
             </p>
+          ) : (
+            <></>
+          )}
+          {edit ? (
+            <ApplicationEditor
+              applicationName={clubApplication.name}
+              clubId={clubId}
+            />
           ) : (
             <></>
           )}

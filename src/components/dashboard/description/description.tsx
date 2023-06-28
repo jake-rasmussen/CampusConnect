@@ -1,4 +1,5 @@
 import DescriptionEditor from "./descriptionEditor";
+import DescriptionOutline from "./descriptionOutline";
 
 type PropType = {
   clubId: string;
@@ -11,7 +12,7 @@ const Description = (props: PropType) => {
 
   return (
     <>
-      <div className="relative max-w-6xl py-6 text-center md:px-6 md:py-0">
+      <DescriptionOutline>
         <p className="flex flex-col justify-center space-y-2 p-4 px-8 text-center">
           {clubDescription}
         </p>
@@ -23,7 +24,7 @@ const Description = (props: PropType) => {
         ) : (
           <></>
         )}
-      </div>
+      </DescriptionOutline>
     </>
   );
 };
