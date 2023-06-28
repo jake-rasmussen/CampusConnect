@@ -1,11 +1,11 @@
-import { ClubContactInfo } from "@prisma/client";
+import { type ClubContactInfo } from "@prisma/client";
 
 import ContactCard from "./contactCard";
 
 const Contact = ({ contactInfos }: { contactInfos: ClubContactInfo[] }) => {
   return (
     <>
-      <div className="justify-left pt-20 md:pt-0 flex flex-col">
+      <div className="justify-left flex flex-col pt-20 md:pt-0">
         <h1 className="text-center text-2xl font-semibold underline md:text-left">
           Contact
         </h1>

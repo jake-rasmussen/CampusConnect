@@ -4,11 +4,10 @@ import ApplicationCard from "./applicationCard";
 
 type PropType = {
   applications: ClubApplication[];
-  edit: boolean;
 };
 
 const Applications = (props: PropType) => {
-  const { applications, edit } = props;
+  const { applications } = props;
 
   return (
     <>

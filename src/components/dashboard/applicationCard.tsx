@@ -2,7 +2,6 @@ import { type ClubApplication } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
 
 import { dateToStringFormatted } from "~/utils/helpers";
-import ApplicationSkeleton from "../skeletons/applicationSkeleton";
 import {
   Card,
   CardContent,

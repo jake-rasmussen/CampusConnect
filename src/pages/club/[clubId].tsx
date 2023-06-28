@@ -35,7 +35,7 @@ const ClubDashboard = () => {
           name={club.name}
           clubProfile={club.clubProfile}
           events={club.events}
-          contactInfo={club.clubProfile?.clubContactInfo}
+          contactInfos={club.clubProfile?.clubContactInfo}
           applications={club.clubApplications}
         />
       ) : (

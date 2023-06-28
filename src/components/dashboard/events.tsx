@@ -1,4 +1,4 @@
-import { ClubEvent } from "@prisma/client";
+import { type ClubEvent } from "@prisma/client";
 
 import EventCard from "./eventCard";
 
