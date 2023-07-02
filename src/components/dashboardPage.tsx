@@ -3,9 +3,9 @@ import "@prisma/client";
 import { Toaster } from "react-hot-toast";
 
 import Applications from "./dashboard/applications/applications";
+import Events from "./dashboard/clubEvents/events";
 import Contact from "./dashboard/contact/contact";
 import Description from "./dashboard/description/description";
-import Events from "./dashboard/clubEvents/events";
 import Header from "./dashboard/header/header";
 import Tab from "./tab/tab";
 import TabContent from "./tab/tabContent";
@@ -35,7 +35,7 @@ const DashboardPage = (props: PropType) => {
   return (
     <>
       <Toaster />
-      <Header name={name} />
+      <Header name={name} edit={true} />
 
       <main className="relative flex justify-center">
         <Tab>
@@ -45,15 +45,19 @@ const DashboardPage = (props: PropType) => {
           </TabList>
           <TabContent>
             <div className="mx-10 grid w-full grid-cols-2 py-6 xl:grid-cols-5">
-              <div className="col-span-2 lg:col-span-1 xl:col-span-3 lg:pr-10">
+              <div className="col-span-2 lg:col-span-1 lg:pr-10 xl:col-span-3">
                 <Description
                   clubId={clubProfile.id}
                   clubDescription={clubProfile.description}
                   edit={true}
                 />
               </div>
-              <div className="py-6 col-span-2 lg:col-span-1 xl:col-span-2">
-                <Contact contactInfos={contactInfos} />
+              <div className="col-span-2 py-6 lg:col-span-1 xl:col-span-2">
+                <Contact
+                  contactInfos={contactInfos}
+                  clubProfileId={clubProfile.id}
+                  edit={true}
+                />
               </div>
             </div>
           </TabContent>
@@ -67,7 +71,7 @@ const DashboardPage = (props: PropType) => {
         </Tab>
       </main>
 
-      <Events events={events} />
+      <Events events={events} clubId={clubId} edit={true} />
     </>
   );
 };

@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { Field, Form } from "houseform";
 import toast from "react-hot-toast";
+import { z } from "zod";
 
+import Button from "~/components/button";
 import { api } from "~/utils/api";
 import { Textarea } from "../../shadcn_ui/textarea";
 import EditController from "../editController";
@@ -11,21 +13,12 @@ type PropType = {
 };
 
 const DescriptionEditor = (props: PropType) => {
-  const { clubDescription: originalClubDescription, clubId } = props;
-
-  const [editClubDescription, setEditClubDescription] = useState(
-    originalClubDescription ? originalClubDescription : "",
-  );
+  const { clubDescription, clubId } = props;
 
   const queryClient = api.useContext();
 
   const updateDescription =
     api.clubProfileRouter.updateClubProfileDescription.useMutation({
-      onMutate() {
-        if (editClubDescription.trim() === "") {
-          toast.error("Please Enter a Description!");
-        }
-      },
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Updated Club Description!");
@@ -39,25 +32,57 @@ const DescriptionEditor = (props: PropType) => {
 
   return (
     <EditController
-      saveAction={() =>
-        updateDescription.mutate({
-          id: clubId,
-          description: editClubDescription,
-        })
-      }
-      closeAction={() => setEditClubDescription(originalClubDescription)}
       dialogDescription={"Update the Club Description"}
+      editType="update"
     >
-      <main className="grid grid-cols-4">
-        <span className="col-span-1 font-semibold underline">Description</span>
-        <Textarea
-          className="col-span-3 bg-white"
-          placeholder="Type your message here."
-          value={editClubDescription}
-          onChange={(e) => setEditClubDescription(e.currentTarget.value)}
-          rows={15}
-        />
-      </main>
+      <Form
+        onSubmit={(values, errors) => {
+          if (errors.errors.length > 0) {
+            toast.dismiss();
+            errors.errors.map((error) => {
+              toast.error(error);
+            });
+          } else {
+            updateDescription.mutate({
+              id: clubId,
+              description: values.description,
+            });
+          }
+        }}
+        submitWhenInvalid
+      >
+        {({ submit }) => (
+          <main className="gap-4">
+            <Field
+              name="description"
+              initialValue={clubDescription}
+              onSubmitValidate={z
+                .string()
+                .min(
+                  50,
+                  "Please enter a description longer than 50 characters",
+                )}
+            >
+              {({ value, setValue, onBlur }) => (
+                <div>
+                  <span className="font-semibold">Description</span>
+                  <Textarea
+                    className="bg-white"
+                    placeholder="Type your description here."
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    onBlur={onBlur}
+                    rows={15}
+                  />
+                </div>
+              )}
+            </Field>
+            <Button onClick={submit} className="my-4">
+              Submit
+            </Button>
+          </main>
+        )}
+      </Form>
     </EditController>
   );
 };
