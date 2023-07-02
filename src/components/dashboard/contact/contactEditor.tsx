@@ -8,7 +8,7 @@ type PropType = {
   clubProfileId: string;
 };
 
-const ContactAddEditor = (props: PropType) => {
+const ContactEditor = (props: PropType) => {
   const { clubProfileId } = props;
 
   const queryClient = api.useContext();
@@ -43,15 +43,10 @@ const ContactAddEditor = (props: PropType) => {
       editType={"create"}
     >
       <ContactForm
-        firstName={undefined}
-        lastName={undefined}
-        email={undefined}
-        phone={undefined}
-        role={undefined}
-        handleUpdate={handleSubmit}
+        onSubmit={handleSubmit}
       />
     </EditController>
   );
 };
 
-export default ContactAddEditor;
+export default ContactEditor;

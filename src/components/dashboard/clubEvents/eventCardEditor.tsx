@@ -14,7 +14,7 @@ type PropType = {
   eventId: string;
 };
 
-const EventUpdateEditor = (props: PropType) => {
+const EventCardEditor = (props: PropType) => {
   const {
     eventName,
     eventDescription,
@@ -66,7 +66,7 @@ const EventUpdateEditor = (props: PropType) => {
   const handleDelete = () => {
     deleteEvent.mutate({
       id: eventId
-    })
+    });
   };
 
   return (
@@ -81,11 +81,11 @@ const EventUpdateEditor = (props: PropType) => {
         eventInPerson={eventInPerson}
         eventDate={eventDate}
         eventId={eventId}
-        handleUpdate={handleUpdate}
+        handleSubmit={handleUpdate}
         handleDelete={handleDelete}
       />
     </EditController>
   );
 };
 
-export default EventUpdateEditor;
+export default EventCardEditor;

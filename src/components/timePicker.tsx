@@ -11,7 +11,7 @@ import {
 } from "./shadcn_ui/select";
 
 type PropType = {
-  date: Date | undefined;
+  date?: Date;
   setValue: (val: Date | ((prevState: Date) => Date)) => void;
   onBlur: () => void;
 };
@@ -62,7 +62,7 @@ const TimePicker = (props: PropType) => {
         setMinute("0" + minute);
       }
     }
-  }, []);
+  }, [date, hour, minute]);
 
   useEffect(() => {
     if (date !== undefined) {

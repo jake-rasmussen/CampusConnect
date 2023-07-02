@@ -11,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../shadcn_ui/dialog";
-import { Input } from "../shadcn_ui/input";
 
 type PropType = {
   dialogDescription: string;

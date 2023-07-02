@@ -1,9 +1,4 @@
-import { Field, Form } from "houseform";
 import toast from "react-hot-toast";
-import { z } from "zod";
-
-import Button from "~/components/button";
-import { Input } from "~/components/shadcn_ui/input";
 import { api } from "~/utils/api";
 import EditController from "../editController";
 import ContactForm from "./contactForm";
@@ -12,12 +7,12 @@ type PropType = {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string | undefined;
+  phone?: string;
   role: string;
   contactInfoId: string;
 };
 
-const ContactUpdateEditor = (props: PropType) => {
+const ContactCardEditor = (props: PropType) => {
   const { firstName, lastName, email, phone, role, contactInfoId } = props;
 
   const queryClient = api.useContext();
@@ -76,11 +71,11 @@ const ContactUpdateEditor = (props: PropType) => {
         email={email}
         phone={phone}
         role={role}
-        handleUpdate={handleUpdate}
+        onSubmit={handleUpdate}
         handleDelete={handleDelete}
       />
     </EditController>
   );
 };
 
-export default ContactUpdateEditor;
+export default ContactCardEditor;

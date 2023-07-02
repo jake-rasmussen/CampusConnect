@@ -1,6 +1,5 @@
 import { Field, Form } from "houseform";
 import toast from "react-hot-toast";
-import { Trash } from "tabler-icons-react";
 import { z } from "zod";
 
 import Button from "../../button";
@@ -8,12 +7,12 @@ import { Input } from "../../shadcn_ui/input";
 import DeleteController from "../deleteController";
 
 type PropType = {
-  firstName: string | undefined;
-  lastName: string | undefined;
-  email: string | undefined;
-  phone: string | undefined;
-  role: string | undefined;
-  handleUpdate: (values: Record<string, any>) => void;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  role?: string;
+  onSubmit: (values: Record<string, any>) => void;
   handleDelete?: () => void;
 };
 
@@ -24,7 +23,7 @@ const ContactForm = (props: PropType) => {
     email,
     phone,
     role,
-    handleUpdate,
+    onSubmit,
     handleDelete,
   } = props;
 
@@ -37,7 +36,7 @@ const ContactForm = (props: PropType) => {
             toast.error(error);
           });
         } else {
-          handleUpdate(values);
+          onSubmit(values);
         }
       }}
       submitWhenInvalid

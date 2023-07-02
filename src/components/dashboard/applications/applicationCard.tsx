@@ -18,7 +18,7 @@ type PropType = {
 };
 
 const ApplicationCard = (props: PropType) => {
-  const { clubApplication, clubId, edit } = props;
+  const { clubApplication } = props;
 
   return (
     <>

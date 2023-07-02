@@ -27,13 +27,13 @@ import {
 import DeleteController from "../deleteController";
 
 type PropType = {
-  eventName: string | undefined;
-  eventDescription: string | undefined;
-  eventLocation: string | undefined;
-  eventInPerson: boolean | undefined;
-  eventDate: Date | undefined;
-  eventId: string | undefined;
-  handleUpdate: (values: Record<string, any>) => void;
+  eventName?: string;
+  eventDescription?: string;
+  eventLocation?: string;
+  eventInPerson?: boolean;
+  eventDate?: Date;
+  eventId?: string;
+  handleSubmit: (values: Record<string, any>) => void;
   handleDelete?: () => void;
 };
 
@@ -44,7 +44,7 @@ const EventForm = (props: PropType) => {
     eventLocation,
     eventInPerson,
     eventDate,
-    handleUpdate,
+    handleSubmit,
     handleDelete,
   } = props;
 
@@ -57,7 +57,7 @@ const EventForm = (props: PropType) => {
             toast.error(error);
           });
         } else {
-          handleUpdate(values);
+          handleSubmit(values);
         }
       }}
       submitWhenInvalid
@@ -84,7 +84,7 @@ const EventForm = (props: PropType) => {
           </Field>
 
           <Field name="inPerson" initialValue={eventInPerson}>
-            {({ value, setValue }) => (
+            {({ setValue }) => (
               <div className="col-span-1">
                 <span className="whitespace-nowrap font-semibold">
                   In Person?
@@ -133,7 +133,7 @@ const EventForm = (props: PropType) => {
             )}
           </Field>
 
-          {/** TODO: Add date */}
+          {/** TODO: Add date validaiton */}
 
           <Field name="date" initialValue={eventDate}>
             {({ value, setValue, onBlur }) => (

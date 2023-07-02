@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
+import { adminProcedure, createTRPCRouter } from "../trpc";
 
 export const clubEventsRouter = createTRPCRouter({
   updateClubEventById: adminProcedure

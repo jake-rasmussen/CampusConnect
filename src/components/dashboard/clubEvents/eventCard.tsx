@@ -15,7 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../../shadcn_ui/tooltip";
-import EventUpdateEditor from "./eventUpdateEditor";
+import EventCardEditor from "./eventCardEditor";
 
 type PropType = {
   clubEvent: ClubEvent;
@@ -24,7 +24,7 @@ type PropType = {
 };
 
 const EventCard = (props: PropType) => {
-  const { clubEvent, clubId, edit } = props;
+  const { clubEvent, edit } = props;
 
   return (
     <>
@@ -55,7 +55,7 @@ const EventCard = (props: PropType) => {
               </CardHeader>
               <CardContent>
                 {edit ? (
-                  <EventUpdateEditor
+                  <EventCardEditor
                     eventName={clubEvent.name}
                     eventDescription={clubEvent.description}
                     eventLocation={clubEvent.location}

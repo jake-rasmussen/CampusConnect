@@ -1,7 +1,7 @@
 import { type ClubContactInfo } from "@prisma/client";
 
 import { Badge } from "../../shadcn_ui/badge";
-import ContactUpdateEditor from "./contactUpdateEditor";
+import ContactUpdateEditor from "./contactCardEditor";
 
 type PropType = {
   clubContactInfo: ClubContactInfo;

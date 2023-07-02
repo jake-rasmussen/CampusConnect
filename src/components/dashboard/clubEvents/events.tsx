@@ -1,6 +1,6 @@
 import { type ClubEvent } from "@prisma/client";
 
-import EventAddEditor from "./eventAddEditor";
+import EventAddEditor from "./eventEditor";
 import EventCard from "./eventCard";
 import EventsOutline from "./eventsOutline";
 

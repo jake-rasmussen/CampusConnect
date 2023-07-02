@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const clubRouter = createTRPCRouter({
   getClubByIdForUsers: protectedProcedure

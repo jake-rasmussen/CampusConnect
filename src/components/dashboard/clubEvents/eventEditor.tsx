@@ -24,10 +24,13 @@ const EventAddEditor = (props: PropType) => {
       toast.error("Error...");
     },
   });
-
+  
   const handleSubmit = (values: Record<string, any>) => {
-    values.date.setHours(values.time.getHours());
-    values.date.setMinutes(values.time.getMinutes());
+    if (values.date !== undefined && values.time !== undefined) {
+      values.date.setHours(values.time.getHours());
+      values.date.setMinutes(values.time.getMinutes());
+    }
+    
     createEvent.mutate({
       clubId: clubId,
       name: values.name,
@@ -41,13 +44,7 @@ const EventAddEditor = (props: PropType) => {
   return (
     <EditController dialogDescription="Create an event" editType="create">
       <EventForm
-        eventName={undefined}
-        eventDescription={undefined}
-        eventLocation={undefined}
-        eventInPerson={undefined}
-        eventDate={undefined}
-        eventId={undefined}
-        handleUpdate={handleSubmit}
+        handleSubmit={handleSubmit}
       />
     </EditController>
   );
