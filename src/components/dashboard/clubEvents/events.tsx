@@ -1,7 +1,7 @@
 import { type ClubEvent } from "@prisma/client";
 
-import EventAddEditor from "./eventEditor";
 import EventCard from "./eventCard";
+import EventsEditor from "./eventsEditor";
 import EventsOutline from "./eventsOutline";
 
 type PropType = {
@@ -27,7 +27,7 @@ const Events = (props: PropType) => {
               />
             );
           })}
-          {edit ? <EventAddEditor clubId={clubId} /> : <></>}
+          {edit && <EventsEditor clubId={clubId} />}
         </>
       </EventsOutline>
     </>

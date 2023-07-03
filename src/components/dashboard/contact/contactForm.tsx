@@ -6,29 +6,30 @@ import Button from "../../button";
 import { Input } from "../../shadcn_ui/input";
 import DeleteController from "../deleteController";
 
+export type ContactFormType = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  role: string;
+};
+
 type PropType = {
   firstName?: string;
   lastName?: string;
   email?: string;
   phone?: string;
   role?: string;
-  onSubmit: (values: Record<string, any>) => void;
+  onSubmit: (values: ContactFormType) => void;
   handleDelete?: () => void;
 };
 
 const ContactForm = (props: PropType) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    phone,
-    role,
-    onSubmit,
-    handleDelete,
-  } = props;
+  const { firstName, lastName, email, phone, role, onSubmit, handleDelete } =
+    props;
 
   return (
-    <Form
+    <Form<ContactFormType>
       onSubmit={(values, errors) => {
         if (errors.errors.length > 0) {
           toast.dismiss();
@@ -145,22 +146,28 @@ const ContactForm = (props: PropType) => {
             )}
           </Field>
 
-          <div className="col-span-1">
-            <Button onClick={submit} className="my-4">
-              Submit
-            </Button>
-          </div>
+          {/* TODO: Figure out how to close Submit when form is valid */}
+          <div className="col-span-4 flex flex-row justify-end">
+            {handleDelete && (
+              <div className="mx-8 flex w-auto grow justify-end">
+                <DeleteController
+                  dialogDescription="Are you sure you want to delete the Contact Info?"
+                  handleDelete={handleDelete}
+                />
+              </div>
+            )}
 
-          {handleDelete !== undefined ? (
-            <div className="col-span-3 flex justify-end">
-              <DeleteController
-                dialogDescription="Are you sure you want to delete the Contact Info?"
-                handleDelete={handleDelete}
-              />
+            <div className="flex justify-end">
+              <Button
+                onClick={() => {
+                  submit();
+                }}
+                className="my-4"
+              >
+                Submit
+              </Button>
             </div>
-          ) : (
-            <></>
-          )}
+          </div>
         </main>
       )}
     </Form>

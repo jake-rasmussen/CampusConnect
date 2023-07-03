@@ -5,6 +5,8 @@ import { api } from "~/utils/api";
 import EditController from "../editController";
 import EventForm from "./eventForm";
 
+import type { EventFormType } from "./eventForm";
+
 type PropType = {
   eventName: string;
   eventDescription: string;
@@ -48,9 +50,9 @@ const EventCardEditor = (props: PropType) => {
       toast.dismiss();
       toast.error("Error...");
     },
-  })
+  });
 
-  const handleUpdate = (values: Record<string, any>) => {
+  const handleUpdate = (values: EventFormType) => {
     values.date.setHours(values.time.getHours());
     values.date.setMinutes(values.time.getMinutes());
     updateEvent.mutate({
@@ -65,7 +67,7 @@ const EventCardEditor = (props: PropType) => {
 
   const handleDelete = () => {
     deleteEvent.mutate({
-      id: eventId
+      id: eventId,
     });
   };
 
@@ -81,7 +83,7 @@ const EventCardEditor = (props: PropType) => {
         eventInPerson={eventInPerson}
         eventDate={eventDate}
         eventId={eventId}
-        handleSubmit={handleUpdate}
+        onSubmit={handleUpdate}
         handleDelete={handleDelete}
       />
     </EditController>

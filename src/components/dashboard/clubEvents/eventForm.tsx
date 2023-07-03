@@ -26,6 +26,15 @@ import {
 } from "../../shadcn_ui/select";
 import DeleteController from "../deleteController";
 
+export type EventFormType = {
+  name: string;
+  date: Date;
+  time: Date;
+  description: string;
+  inPerson: boolean;
+  location: string;
+};
+
 type PropType = {
   eventName?: string;
   eventDescription?: string;
@@ -33,7 +42,7 @@ type PropType = {
   eventInPerson?: boolean;
   eventDate?: Date;
   eventId?: string;
-  handleSubmit: (values: Record<string, any>) => void;
+  onSubmit: (values: EventFormType) => void;
   handleDelete?: () => void;
 };
 
@@ -44,12 +53,12 @@ const EventForm = (props: PropType) => {
     eventLocation,
     eventInPerson,
     eventDate,
-    handleSubmit,
+    onSubmit,
     handleDelete,
   } = props;
 
   return (
-    <Form
+    <Form<EventFormType>
       onSubmit={(values, errors) => {
         if (errors.errors.length > 0) {
           toast.dismiss();
@@ -57,7 +66,7 @@ const EventForm = (props: PropType) => {
             toast.error(error);
           });
         } else {
-          handleSubmit(values);
+          onSubmit(values);
         }
       }}
       submitWhenInvalid
@@ -84,19 +93,13 @@ const EventForm = (props: PropType) => {
           </Field>
 
           <Field name="inPerson" initialValue={eventInPerson}>
-            {({ setValue }) => (
+            {({ value, setValue, onBlur }) => (
               <div className="col-span-1">
                 <span className="whitespace-nowrap font-semibold">
                   In Person?
                 </span>
                 <Select
-                  defaultValue={
-                    eventInPerson
-                      ? "yes"
-                      : eventInPerson !== undefined
-                      ? "no"
-                      : ""
-                  }
+                  defaultValue={value ? "yes" : (eventInPerson !== undefined ? "no" : "")}
                   onValueChange={(input) => {
                     input === "yes" ? setValue(true) : setValue(false);
                   }}
@@ -104,7 +107,7 @@ const EventForm = (props: PropType) => {
                   <SelectTrigger className="col-span-3 h-[3rem] rounded-xl bg-white">
                     <SelectValue placeholder="" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
+                  <SelectContent className="bg-white" onBlur={onBlur}>
                     <SelectItem value="yes">Yes</SelectItem>
                     <SelectItem value="no">No</SelectItem>
                   </SelectContent>
@@ -175,14 +178,10 @@ const EventForm = (props: PropType) => {
           </Field>
 
           <Field name="time" initialValue={eventDate}>
-            {({ setValue, onBlur }) => (
+            {({ value, setValue, onBlur }) => (
               <div className="col-span-2 flex flex-col">
                 <span className="font-semibold">Time</span>
-                <TimePicker
-                  date={eventDate}
-                  setValue={setValue}
-                  onBlur={onBlur}
-                />
+                <TimePicker value={value} setValue={setValue} onBlur={onBlur} />
               </div>
             )}
           </Field>
@@ -206,22 +205,28 @@ const EventForm = (props: PropType) => {
             )}
           </Field>
 
-          <div className="col-span-1">
-            <Button onClick={submit} className="my-4">
-              Submit
-            </Button>
-          </div>
+          {/* TODO: Figure out how to close Submit when form is valid */}
+          <div className="col-span-4 flex flex-row justify-end">
+            {handleDelete && (
+              <div className="mx-8 flex w-auto grow justify-end">
+                <DeleteController
+                  dialogDescription="Are you sure you want to delete the Contact Info?"
+                  handleDelete={handleDelete}
+                />
+              </div>
+            )}
 
-          {handleDelete !== undefined ? (
-            <div className="col-span-3 flex justify-end">
-              <DeleteController
-                dialogDescription="Are you sure you want to delete the Contact Info?"
-                handleDelete={handleDelete}
-              />
+            <div className="flex justify-end">
+              <Button
+                onClick={() => {
+                  submit();
+                }}
+                className="my-4"
+              >
+                Submit
+              </Button>
             </div>
-          ) : (
-            <></>
-          )}
+          </div>
         </main>
       )}
     </Form>

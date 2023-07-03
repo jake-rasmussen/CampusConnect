@@ -4,11 +4,13 @@ import { api } from "~/utils/api";
 import EditController from "../editController";
 import ContactForm from "./contactForm";
 
+import type { ContactFormType } from "./contactForm";
+
 type PropType = {
   clubProfileId: string;
 };
 
-const ContactEditor = (props: PropType) => {
+const ContactsEditor = (props: PropType) => {
   const { clubProfileId } = props;
 
   const queryClient = api.useContext();
@@ -26,7 +28,7 @@ const ContactEditor = (props: PropType) => {
       },
     });
 
-  const handleSubmit = (values: Record<string, any>) => {
+  const handleSubmit = (values: ContactFormType) => {
     createContactInfo.mutate({
       clubProfileId,
       firstName: values.firstName,
@@ -42,11 +44,9 @@ const ContactEditor = (props: PropType) => {
       dialogDescription={"Create Contact Info"}
       editType={"create"}
     >
-      <ContactForm
-        onSubmit={handleSubmit}
-      />
+      <ContactForm onSubmit={handleSubmit} />
     </EditController>
   );
 };
 
-export default ContactEditor;
+export default ContactsEditor;

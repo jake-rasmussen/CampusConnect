@@ -1,8 +1,8 @@
 import { type ClubContactInfo } from "@prisma/client";
 
-import ContactEditor from "./contactEditor";
 import ContactCard from "./contactCard";
 import ContactOutline from "./contactOutline";
+import ContactsEditor from "./contactsEditor";
 
 type PropType = {
   contactInfos: ClubContactInfo[];
@@ -26,7 +26,7 @@ const Contact = (props: PropType) => {
               />
             ),
           )}
-          {edit ? <ContactEditor clubProfileId={clubProfileId} /> : <></>}
+          {edit && <ContactsEditor clubProfileId={clubProfileId} />}
         </>
       </ContactOutline>
     </>

@@ -28,7 +28,7 @@ const DeleteController = (props: PropType) => {
             <Trash className="h-full w-full transition duration-300 ease-in-out hover:rotate-12 hover:scale-110 hover:text-red-800" />
           </button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent>
           <DialogHeader className="pb-6">
             <DialogTitle>Confirm Delete</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
@@ -36,7 +36,9 @@ const DeleteController = (props: PropType) => {
           <DialogFooter>
             <DialogClose>
               <Button className="mx-2 bg-red-700">Cancel</Button>
-              <Button className="mx-2" onClick={handleDelete}>Confirm</Button>
+              <Button className="mx-2" onClick={handleDelete}>
+                Confirm
+              </Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

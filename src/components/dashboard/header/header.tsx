@@ -1,4 +1,5 @@
-import { Badge } from "~/components/shadcn_ui/badge";
+import { InfoCircle } from "tabler-icons-react";
+
 import {
   HoverCard,
   HoverCardContent,
@@ -20,10 +21,8 @@ const Header = (props: PropType) => {
         {edit ? (
           <HoverCard>
             <HoverCardTrigger className="absolute translate-y-20 rounded-xl px-8 py-2 backdrop-invert">
-              <Badge className="absolute right-0 top-0 -translate-y-4 translate-x-6 bg-white text-primary hover:bg-secondary">
-                Hover
-              </Badge>
-              <h1 className="tracking-none md:text-md text-sm font-black uppercase">
+              <h1 className="tracking-none md:text-md flex flex-row items-center text-sm font-black uppercase">
+                <InfoCircle className="mr-2" />
                 You are now in edit mode
               </h1>
             </HoverCardTrigger>

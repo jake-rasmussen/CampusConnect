@@ -1,7 +1,10 @@
 import toast from "react-hot-toast";
+
 import { api } from "~/utils/api";
 import EditController from "../editController";
 import ContactForm from "./contactForm";
+
+import type { ContactFormType } from "./contactForm";
 
 type PropType = {
   firstName: string;
@@ -21,7 +24,7 @@ const ContactCardEditor = (props: PropType) => {
     api.clubContactInfoRouter.updateClubContactInfoById.useMutation({
       onSuccess() {
         toast.dismiss();
-        toast.success("Successfully Updated Contact Info!");
+        toast.success("Successfully Updated Contact!");
         queryClient.invalidate().catch((e) => console.log(e));
       },
       onError() {
@@ -43,7 +46,7 @@ const ContactCardEditor = (props: PropType) => {
       },
     });
 
-  const handleUpdate = (values: Record<string, any>) => {
+  const handleUpdate = (values: ContactFormType) => {
     updateContactInfo.mutate({
       id: contactInfoId,
       firstName: values.firstName,
@@ -64,6 +67,7 @@ const ContactCardEditor = (props: PropType) => {
     <EditController
       dialogDescription={"Update the Contact Info"}
       editType="update"
+      className="scale-y-110 rounded-none"
     >
       <ContactForm
         firstName={firstName}

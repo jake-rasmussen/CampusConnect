@@ -11,61 +11,54 @@ import {
 } from "./shadcn_ui/select";
 
 type PropType = {
-  date?: Date;
+  value?: Date;
   setValue: (val: Date | ((prevState: Date) => Date)) => void;
   onBlur: () => void;
 };
 
 const TimePicker = (props: PropType) => {
-  const { setValue, onBlur } = props;
-  let { date } = props;
+  const { value, setValue, onBlur } = props;
 
-  const [hour, setHour] = useState(
-    date !== undefined ? date.getHours().toString() : "",
-  );
-  const [minute, setMinute] = useState(
-    date !== undefined ? date.getMinutes().toString() : "",
-  );
-  const [meridiem, setMeridiem] = useState(
-    date !== undefined ? (date.getHours() >= 12 ? "PM" : "AM") : "",
-  );
+  const [date] = useState(value ? value : undefined);
 
-  useEffect(() => {
-    if (date !== undefined) {
-      if (date.getHours() > 12) {
-        if (date.getHours() >= 13 && date.getHours() <= 21) {
-          setHour("0" + (date.getHours() - 12).toString());
-        } else {
-          setHour((date.getHours() - 12).toString());
-        }
-      }
-
-      if (date.getHours() === 0) {
-        setHour("12");
+  const formatHours = (date: Date) => {
+    let hour: string = date.getHours().toString();
+    if (date.getHours() > 12) {
+      if (date.getHours() >= 13 && date.getHours() <= 21) {
+        hour = "0" + (date.getHours() - 12).toString();
       } else {
-        if (+hour < 10) {
-          setHour("0" + hour);
-        }
-      }
-
-      if (date.getMinutes() === 0) {
-        setMinute("00");
-      }
-
-      if (date.getHours() >= 12) {
-        setMeridiem("PM");
-      } else {
-        setMeridiem("AM");
-      }
-
-      if (+minute < 10) {
-        setMinute("0" + minute);
+        hour = (date.getHours() - 12).toString();
       }
     }
-  }, [date, hour, minute]);
+
+    if (date.getHours() === 0) {
+      hour = "12";
+    } else {
+      if (date.getHours() < 10) {
+        hour = "0" + hour;
+      }
+    }
+    return hour;
+  };
+
+  const formatMinutes = (date: Date) => {
+    let minute: string = date.getMinutes().toString();
+    if (date.getMinutes() === 0) {
+      minute = "00";
+    } else if (+minute < 10) {
+      minute = "0" + minute;
+    }
+    return minute;
+  };
+
+  const [hour, setHour] = useState(date ? formatHours(date) : "");
+  const [minute, setMinute] = useState(date ? formatMinutes(date) : "");
+  const [meridiem, setMeridiem] = useState(
+    date ? (date.getHours() >= 12 ? "PM" : "AM") : "",
+  );
 
   useEffect(() => {
-    if (date !== undefined) {
+    if (date) {
       if (meridiem === "PM") {
         if (+hour < 12) {
           date.setHours(+hour + 12);
@@ -83,7 +76,7 @@ const TimePicker = (props: PropType) => {
       date.setMinutes(+minute);
       setValue(date);
     }
-  }, [minute, hour, meridiem]);
+  }, [minute, hour, meridiem, date, setValue]);
 
   return (
     <>
@@ -103,11 +96,6 @@ const TimePicker = (props: PropType) => {
             }}
             value={hour}
             onBlur={onBlur}
-            onFocus={() => {
-              if (date === undefined) {
-                date = new Date();
-              }
-            }}
           />
         </div>
         <h1 className="px-2 text-xl">:</h1>
@@ -116,33 +104,23 @@ const TimePicker = (props: PropType) => {
             className="h-[3rem]"
             onChange={(e) => {
               const input = e.currentTarget.value;
-              if (+input <= 60 && +input >= 0 && input.length <= 2) {
+              if (+input < 60 && +input >= 0 && input.length <= 2) {
                 setMinute(input);
               }
             }}
             value={minute}
             onBlur={onBlur}
-            onFocus={() => {
-              if (date === undefined) {
-                date = new Date();
-              }
-            }}
           />
         </div>
         <h1 className="px-2 text-xl">:</h1>
-        <div className="w-18 h-full">
+        <div className="h-full w-44">
           <Select
             onValueChange={(input) => {
               setMeridiem(input);
             }}
             value={meridiem}
-            onOpenChange={() => {
-              if (date === undefined) {
-                date = new Date();
-              }
-            }}
           >
-            <SelectTrigger className="h-full w-18 w-full rounded-xl bg-white">
+            <SelectTrigger className="h-full w-full rounded-xl bg-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-white">

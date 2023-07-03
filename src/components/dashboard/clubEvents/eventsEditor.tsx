@@ -4,11 +4,13 @@ import { api } from "~/utils/api";
 import EditController from "../editController";
 import EventForm from "./eventForm";
 
+import type { EventFormType } from "./eventForm";
+
 type PropType = {
   clubId: string;
 };
 
-const EventAddEditor = (props: PropType) => {
+const EventsEditor = (props: PropType) => {
   const { clubId } = props;
 
   const queryClient = api.useContext();
@@ -24,13 +26,11 @@ const EventAddEditor = (props: PropType) => {
       toast.error("Error...");
     },
   });
-  
-  const handleSubmit = (values: Record<string, any>) => {
-    if (values.date !== undefined && values.time !== undefined) {
-      values.date.setHours(values.time.getHours());
-      values.date.setMinutes(values.time.getMinutes());
-    }
-    
+
+  const onSubmit = (values: EventFormType) => {
+    values.date.setHours(values.time.getHours());
+    values.date.setMinutes(values.time.getMinutes());
+
     createEvent.mutate({
       clubId: clubId,
       name: values.name,
@@ -43,11 +43,9 @@ const EventAddEditor = (props: PropType) => {
 
   return (
     <EditController dialogDescription="Create an event" editType="create">
-      <EventForm
-        handleSubmit={handleSubmit}
-      />
+      <EventForm onSubmit={onSubmit} />
     </EditController>
   );
 };
 
-export default EventAddEditor;
+export default EventsEditor;

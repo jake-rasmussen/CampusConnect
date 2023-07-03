@@ -7,6 +7,10 @@ import { api } from "~/utils/api";
 import { Textarea } from "../../shadcn_ui/textarea";
 import EditController from "../editController";
 
+type EditorFormType = {
+  description: string;
+};
+
 type PropType = {
   clubDescription: string;
   clubId: string;
@@ -35,7 +39,7 @@ const DescriptionEditor = (props: PropType) => {
       dialogDescription={"Update the Club Description"}
       editType="update"
     >
-      <Form
+      <Form<EditorFormType>
         onSubmit={(values, errors) => {
           if (errors.errors.length > 0) {
             toast.dismiss();
@@ -77,7 +81,12 @@ const DescriptionEditor = (props: PropType) => {
                 </div>
               )}
             </Field>
-            <Button onClick={submit} className="my-4">
+            <Button
+              onClick={() => {
+                submit();
+              }}
+              className="my-4"
+            >
               Submit
             </Button>
           </main>
