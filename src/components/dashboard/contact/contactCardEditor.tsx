@@ -1,3 +1,4 @@
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
@@ -17,6 +18,8 @@ type PropType = {
 
 const ContactCardEditor = (props: PropType) => {
   const { firstName, lastName, email, phone, role, contactInfoId } = props;
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
@@ -67,6 +70,8 @@ const ContactCardEditor = (props: PropType) => {
     <EditController
       dialogDescription={"Update the Contact Info"}
       editType="update"
+      openDialog={openDialog}
+      setOpenDialog={setOpenDialog}
       className="scale-y-110 rounded-none"
     >
       <ContactForm
@@ -75,6 +80,7 @@ const ContactCardEditor = (props: PropType) => {
         email={email}
         phone={phone}
         role={role}
+        setOpenDialog={setOpenDialog}
         onSubmit={handleUpdate}
         handleDelete={handleDelete}
       />

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
@@ -12,6 +13,8 @@ type PropType = {
 
 const ContactsEditor = (props: PropType) => {
   const { clubProfileId } = props;
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
@@ -43,6 +46,8 @@ const ContactsEditor = (props: PropType) => {
     <EditController
       dialogDescription={"Create Contact Info"}
       editType={"create"}
+      openDialog={openDialog}
+      setOpenDialog={setOpenDialog}
     >
       <ContactForm onSubmit={handleSubmit} />
     </EditController>

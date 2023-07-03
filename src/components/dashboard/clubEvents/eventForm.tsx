@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "../../shadcn_ui/select";
 import DeleteController from "../deleteController";
+import ErrorMessage from "../errorMessage";
 
 export type EventFormType = {
   name: string;
@@ -42,6 +43,7 @@ type PropType = {
   eventInPerson?: boolean;
   eventDate?: Date;
   eventId?: string;
+  setOpenDialog: React.Dispatch<boolean>;
   onSubmit: (values: EventFormType) => void;
   handleDelete?: () => void;
 };
@@ -53,6 +55,7 @@ const EventForm = (props: PropType) => {
     eventLocation,
     eventInPerson,
     eventDate,
+    setOpenDialog,
     onSubmit,
     handleDelete,
   } = props;
@@ -60,13 +63,14 @@ const EventForm = (props: PropType) => {
   return (
     <Form<EventFormType>
       onSubmit={(values, errors) => {
-        if (errors.errors.length > 0) {
-          toast.dismiss();
-          errors.errors.map((error) => {
-            toast.error(error);
-          });
-        } else {
+        if (errors.errors.length === 0) {
           onSubmit(values);
+          setOpenDialog(false);
+          toast.dismiss();
+          toast.success("Success submitting the form!");
+        } else {
+          toast.dismiss();
+          toast.error("There are errors with the form");
         }
       }}
       submitWhenInvalid
@@ -76,9 +80,9 @@ const EventForm = (props: PropType) => {
           <Field
             name="name"
             initialValue={eventName}
-            onChangeValidate={z.string().min(1, "Please enter an event name")}
+            onChangeValidate={z.string().min(1)}
           >
-            {({ value, setValue, onBlur }) => (
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-3">
                 <span className="font-semibold">Name</span>
                 <Input
@@ -88,18 +92,25 @@ const EventForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
 
-          <Field name="inPerson" initialValue={eventInPerson}>
-            {({ value, setValue, onBlur }) => (
+          <Field
+            name="inPerson"
+            initialValue={eventInPerson}
+            onChangeValidate={z.boolean()}
+          >
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-1">
                 <span className="whitespace-nowrap font-semibold">
                   In Person?
                 </span>
                 <Select
-                  defaultValue={value ? "yes" : (eventInPerson !== undefined ? "no" : "")}
+                  defaultValue={
+                    value ? "yes" : eventInPerson !== undefined ? "no" : ""
+                  }
                   onValueChange={(input) => {
                     input === "yes" ? setValue(true) : setValue(false);
                   }}
@@ -112,6 +123,7 @@ const EventForm = (props: PropType) => {
                     <SelectItem value="no">No</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
@@ -119,9 +131,9 @@ const EventForm = (props: PropType) => {
           <Field
             name="description"
             initialValue={eventDescription}
-            onChangeValidate={z.string().min(1, "Please provide a description")}
+            onChangeValidate={z.string().min(1)}
           >
-            {({ value, setValue, onBlur }) => (
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-4">
                 <span className="font-semibold">Description</span>
                 <Textarea
@@ -132,14 +144,17 @@ const EventForm = (props: PropType) => {
                   onBlur={onBlur}
                   rows={4}
                 />
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
 
-          {/** TODO: Add date validaiton */}
-
-          <Field name="date" initialValue={eventDate}>
-            {({ value, setValue, onBlur }) => (
+          <Field
+            name="date"
+            initialValue={eventDate}
+            onChangeValidate={z.date()}
+          >
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-2 flex flex-col">
                 <span className="font-semibold">Date</span>
                 <Popover>
@@ -173,15 +188,21 @@ const EventForm = (props: PropType) => {
                     />
                   </PopoverContent>
                 </Popover>
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
 
-          <Field name="time" initialValue={eventDate}>
-            {({ value, setValue, onBlur }) => (
+          <Field
+            name="time"
+            initialValue={eventDate}
+            onChangeValidate={z.date()}
+          >
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-2 flex flex-col">
                 <span className="font-semibold">Time</span>
                 <TimePicker value={value} setValue={setValue} onBlur={onBlur} />
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
@@ -189,9 +210,9 @@ const EventForm = (props: PropType) => {
           <Field
             name="location"
             initialValue={eventLocation}
-            onChangeValidate={z.string().min(1, "Please provide a location")}
+            onChangeValidate={z.string().min(1)}
           >
-            {({ value, setValue, onBlur }) => (
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-4">
                 <span className="font-semibold">Location / Link</span>
                 <Input
@@ -201,11 +222,11 @@ const EventForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
 
-          {/* TODO: Figure out how to close Submit when form is valid */}
           <div className="col-span-4 flex flex-row justify-end">
             {handleDelete && (
               <div className="mx-8 flex w-auto grow justify-end">
@@ -219,7 +240,7 @@ const EventForm = (props: PropType) => {
             <div className="flex justify-end">
               <Button
                 onClick={() => {
-                  submit();
+                  submit().catch((e) => console.log(e));
                 }}
                 className="my-4"
               >

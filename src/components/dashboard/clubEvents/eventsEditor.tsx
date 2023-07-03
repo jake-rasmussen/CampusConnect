@@ -1,3 +1,4 @@
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
@@ -12,6 +13,8 @@ type PropType = {
 
 const EventsEditor = (props: PropType) => {
   const { clubId } = props;
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
@@ -42,8 +45,13 @@ const EventsEditor = (props: PropType) => {
   };
 
   return (
-    <EditController dialogDescription="Create an event" editType="create">
-      <EventForm onSubmit={onSubmit} />
+    <EditController
+      dialogDescription="Create an event"
+      editType="create"
+      openDialog={openDialog}
+      setOpenDialog={setOpenDialog}
+    >
+      <EventForm onSubmit={onSubmit} setOpenDialog={setOpenDialog} />
     </EditController>
   );
 };

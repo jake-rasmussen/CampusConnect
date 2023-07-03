@@ -19,7 +19,7 @@ type PropType = {
 const TimePicker = (props: PropType) => {
   const { value, setValue, onBlur } = props;
 
-  const [date] = useState(value ? value : undefined);
+  const [date, setDate] = useState(value ? value : undefined);
 
   const formatHours = (date: Date) => {
     let hour: string = date.getHours().toString();
@@ -58,23 +58,33 @@ const TimePicker = (props: PropType) => {
   );
 
   useEffect(() => {
-    if (date) {
-      if (meridiem === "PM") {
-        if (+hour < 12) {
-          date.setHours(+hour + 12);
-        } else {
-          date.setHours(+hour);
-        }
-      } else {
-        if (+hour === 12) {
-          date.setHours(+hour - 12);
-        } else {
-          date.setHours(+hour);
-        }
-      }
+    if (!date && hour !== "" && minute !== "" && meridiem !== "") {
+      setDate(new Date());
+      console.log("New Date");
+    }
 
-      date.setMinutes(+minute);
-      setValue(date);
+    if (date) {
+      if (hour === "" || minute === "" || meridiem === "") {
+        setDate(undefined);
+        setValue(new Date("Invalid"));
+      } else {
+        if (meridiem === "PM") {
+          if (+hour < 12) {
+            date.setHours(+hour + 12);
+          } else {
+            date.setHours(+hour);
+          }
+        } else {
+          if (+hour === 12) {
+            date.setHours(+hour - 12);
+          } else {
+            date.setHours(+hour);
+          }
+        }
+
+        date.setMinutes(+minute);
+        setValue(date);
+      }
     }
   }, [minute, hour, meridiem, date, setValue]);
 

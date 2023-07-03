@@ -26,7 +26,7 @@ const Header = (props: PropType) => {
                 You are now in edit mode
               </h1>
             </HoverCardTrigger>
-            <HoverCardContent className="max-w-2xl bg-white">
+            <HoverCardContent className="w-96 bg-white">
               Hover over any content you wish to edit, and you will see a pop-up
               once clicked.
               <h1 className="text-red tracking-none py-2 font-black uppercase">

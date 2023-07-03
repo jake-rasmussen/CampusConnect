@@ -1,4 +1,5 @@
 import { Field, Form } from "houseform";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
@@ -6,6 +7,7 @@ import Button from "~/components/button";
 import { api } from "~/utils/api";
 import { Textarea } from "../../shadcn_ui/textarea";
 import EditController from "../editController";
+import ErrorMessage from "../errorMessage";
 
 type EditorFormType = {
   description: string;
@@ -18,6 +20,8 @@ type PropType = {
 
 const DescriptionEditor = (props: PropType) => {
   const { clubDescription, clubId } = props;
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
@@ -38,19 +42,22 @@ const DescriptionEditor = (props: PropType) => {
     <EditController
       dialogDescription={"Update the Club Description"}
       editType="update"
+      openDialog={openDialog}
+      setOpenDialog={setOpenDialog}
     >
       <Form<EditorFormType>
         onSubmit={(values, errors) => {
-          if (errors.errors.length > 0) {
-            toast.dismiss();
-            errors.errors.map((error) => {
-              toast.error(error);
-            });
-          } else {
+          if (errors.errors.length === 0) {
             updateDescription.mutate({
               id: clubId,
               description: values.description,
             });
+            setOpenDialog(false);
+            toast.dismiss();
+            toast.success("Success submitting the form!");
+          } else {
+            toast.dismiss();
+            toast.error("There are errors with the form");
           }
         }}
         submitWhenInvalid
@@ -60,14 +67,9 @@ const DescriptionEditor = (props: PropType) => {
             <Field
               name="description"
               initialValue={clubDescription}
-              onSubmitValidate={z
-                .string()
-                .min(
-                  50,
-                  "Please enter a description longer than 50 characters",
-                )}
+              onSubmitValidate={z.string().min(50)}
             >
-              {({ value, setValue, onBlur }) => (
+              {({ value, setValue, onBlur, errors }) => (
                 <div>
                   <span className="font-semibold">Description</span>
                   <Textarea
@@ -78,12 +80,15 @@ const DescriptionEditor = (props: PropType) => {
                     onBlur={onBlur}
                     rows={15}
                   />
+                  {errors.length !== 0 && (
+                    <ErrorMessage alternateMessage="Must be longer than 50 characters" />
+                  )}
                 </div>
               )}
             </Field>
             <Button
               onClick={() => {
-                submit();
+                submit().catch((e) => console.log(e));
               }}
               className="my-4"
             >

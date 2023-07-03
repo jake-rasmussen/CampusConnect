@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
@@ -25,6 +25,8 @@ const EventCardEditor = (props: PropType) => {
     eventDate,
     eventId,
   } = props;
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
@@ -75,6 +77,8 @@ const EventCardEditor = (props: PropType) => {
     <EditController
       dialogDescription={`Edit the event, ${eventName}`}
       editType={"update"}
+      openDialog={openDialog}
+      setOpenDialog={setOpenDialog}
     >
       <EventForm
         eventName={eventName}
@@ -83,6 +87,7 @@ const EventCardEditor = (props: PropType) => {
         eventInPerson={eventInPerson}
         eventDate={eventDate}
         eventId={eventId}
+        setOpenDialog={setOpenDialog}
         onSubmit={handleUpdate}
         handleDelete={handleDelete}
       />

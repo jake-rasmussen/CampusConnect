@@ -5,6 +5,7 @@ import { z } from "zod";
 import Button from "../../button";
 import { Input } from "../../shadcn_ui/input";
 import DeleteController from "../deleteController";
+import ErrorMessage from "../errorMessage";
 
 export type ContactFormType = {
   firstName: string;
@@ -20,24 +21,34 @@ type PropType = {
   email?: string;
   phone?: string;
   role?: string;
+  setOpenDialog: React.Dispatch<boolean>;
   onSubmit: (values: ContactFormType) => void;
   handleDelete?: () => void;
 };
 
 const ContactForm = (props: PropType) => {
-  const { firstName, lastName, email, phone, role, onSubmit, handleDelete } =
-    props;
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    role,
+    setOpenDialog,
+    onSubmit,
+    handleDelete,
+  } = props;
 
   return (
     <Form<ContactFormType>
       onSubmit={(values, errors) => {
-        if (errors.errors.length > 0) {
-          toast.dismiss();
-          errors.errors.map((error) => {
-            toast.error(error);
-          });
-        } else {
+        if (errors.errors.length === 0) {
           onSubmit(values);
+          setOpenDialog(false);
+          toast.dismiss();
+          toast.success("Success submitting the form!");
+        } else {
+          toast.dismiss();
+          toast.error("There are errors with the form");
         }
       }}
       submitWhenInvalid
@@ -47,9 +58,9 @@ const ContactForm = (props: PropType) => {
           <Field
             name="firstName"
             initialValue={firstName}
-            onChangeValidate={z.string().min(1, "Please enter a first name")}
+            onChangeValidate={z.string().min(1)}
           >
-            {({ value, setValue, onBlur }) => (
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-2">
                 <span className="font-semibold">First Name</span>
                 <Input
@@ -59,6 +70,7 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
@@ -68,7 +80,7 @@ const ContactForm = (props: PropType) => {
             initialValue={lastName}
             onChangeValidate={z.string().min(1, "Please enter a last name")}
           >
-            {({ value, setValue, onBlur }) => (
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-2">
                 <span className="font-semibold">Last Name</span>
                 <Input
@@ -78,6 +90,7 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
@@ -85,12 +98,9 @@ const ContactForm = (props: PropType) => {
           <Field
             name="email"
             initialValue={email}
-            onChangeValidate={z
-              .string()
-              .min(1, "Please enter an email")
-              .email("Please enter a valid email")}
+            onChangeValidate={z.string().min(1).email("email")}
           >
-            {({ value, setValue, onBlur }) => (
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-2">
                 <span className="font-semibold">Email</span>
                 <Input
@@ -100,6 +110,15 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
+                {errors.length !== 0 && (
+                  <>
+                    {errors[0] !== "email" ? (
+                      <ErrorMessage />
+                    ) : (
+                      <ErrorMessage alternateMessage="Invalid" />
+                    )}
+                  </>
+                )}
               </div>
             )}
           </Field>
@@ -107,13 +126,9 @@ const ContactForm = (props: PropType) => {
           <Field
             name="phone"
             initialValue={phone ? phone : ""}
-            onChangeValidate={z
-              .string()
-              .min(10, "Please enter a valid phone number")
-              .optional()
-              .or(z.literal(""))}
+            onChangeValidate={z.string().min(10).optional().or(z.literal(""))}
           >
-            {({ value, setValue, onBlur }) => (
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-2">
                 <span className="font-semibold">Phone Number</span>
                 <Input
@@ -123,6 +138,7 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
@@ -130,9 +146,9 @@ const ContactForm = (props: PropType) => {
           <Field
             name="role"
             initialValue={role}
-            onChangeValidate={z.string().min(1, "Please enter a role")}
+            onChangeValidate={z.string().min(1)}
           >
-            {({ value, setValue, onBlur }) => (
+            {({ value, setValue, onBlur, errors }) => (
               <div className="col-span-4">
                 <span className="font-semibold">Role</span>
                 <Input
@@ -142,11 +158,11 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
+                {errors.length !== 0 && <ErrorMessage />}
               </div>
             )}
           </Field>
 
-          {/* TODO: Figure out how to close Submit when form is valid */}
           <div className="col-span-4 flex flex-row justify-end">
             {handleDelete && (
               <div className="mx-8 flex w-auto grow justify-end">
@@ -160,7 +176,7 @@ const ContactForm = (props: PropType) => {
             <div className="flex justify-end">
               <Button
                 onClick={() => {
-                  submit();
+                  submit().catch((e) => console.log(e));
                 }}
                 className="my-4"
               >
