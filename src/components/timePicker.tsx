@@ -64,7 +64,7 @@ const TimePicker = (props: PropType) => {
     }
 
     if (date) {
-      if (hour === "" || minute === "" || meridiem === "") {
+      if (hour === "" || minute === "" || meridiem === "" || +hour === 0) {
         setDate(undefined);
         setValue(new Date("Invalid"));
       } else {
