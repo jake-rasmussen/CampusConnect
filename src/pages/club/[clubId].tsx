@@ -5,10 +5,13 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import ClubDashboardPage from "~/components/dashboardPage";
+import UserLayout from "~/components/layouts/userLayout";
 import ClubDashBoardSkeleton from "~/components/skeletons/clubDashboardSkeleton";
 import { api } from "~/utils/api";
 
-const ClubDashboard = () => {
+import type { NextPageWithLayout } from "~/pages/_app";
+
+const ClubDashboard: NextPageWithLayout = () => {
   const router = useRouter();
   const clubId = router.query.clubId as string;
 
@@ -24,26 +27,26 @@ const ClubDashboard = () => {
     { enabled: !!clubId },
   );
 
-  if (isError) {
-    return <Error statusCode={error.data?.httpStatus || 500} />;
+  if (isLoading) {
+    return <ClubDashBoardSkeleton />;
+  } else if (isError || !club.clubProfile) {
+    return <Error statusCode={error?.data?.httpStatus || 500} />;
+  } else {
+    return (
+      <ClubDashboardPage
+        name={club.name}
+        clubId={club.id}
+        clubProfile={club.clubProfile}
+        events={club.events}
+        contactInfos={club.clubProfile.clubContactInfo}
+        applications={club.clubApplications}
+      />
+    );
   }
+};
 
-  return (
-    <>
-      {!isLoading && club !== undefined && club.clubProfile !== null ? (
-        <ClubDashboardPage
-          name={club.name}
-          clubId={club.id}
-          clubProfile={club.clubProfile}
-          events={club.events}
-          contactInfos={club.clubProfile?.clubContactInfo}
-          applications={club.clubApplications}
-        />
-      ) : (
-        <ClubDashBoardSkeleton />
-      )}
-    </>
-  );
+ClubDashboard.getLayout = (page) => {
+  return <UserLayout>{page}</UserLayout>;
 };
 
 export default ClubDashboard;

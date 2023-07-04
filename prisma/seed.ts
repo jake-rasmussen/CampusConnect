@@ -1,13 +1,15 @@
 import { prisma } from "~/server/db";
+import { deleteClubs, seedClubs } from "./seedFiles/clubSeed";
 import { deleteUsers, seedUsers } from "./seedFiles/userSeed";
 
 async function cleanupDb() {
-  await prisma.$transaction([deleteUsers]);
+  await prisma.$transaction([deleteClubs, deleteUsers]);
 }
 
 async function main() {
   await cleanupDb();
-  return await seedUsers();
+  await seedUsers();
+  await seedClubs();
 }
 main()
   .then(async () => {

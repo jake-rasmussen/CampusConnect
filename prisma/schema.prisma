@@ -57,7 +57,6 @@ model Club {
     clubApplications ClubApplication[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
-    clubProfileId    String            @unique
     events           ClubEvent[]
     clubProfile      ClubProfile?
 }
@@ -106,7 +105,7 @@ model SocialMedia {
 
 model ClubEvent {
     id          String   @id @default(cuid())
-    club        Club     @relation(fields: [clubId], references: [id])
+    club        Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
     clubId      String
     name        String
     date        DateTime

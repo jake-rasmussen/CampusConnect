@@ -24,4 +24,8 @@ export const clubRouter = createTRPCRouter({
 
       return club;
     }),
+
+  getAllClubs: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.club.findMany({});
+  }),
 });
