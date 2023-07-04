@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import ClubDashboardPage from "~/components/dashboardPage";
-import UserLayout from "~/components/layouts/userLayout";
+import UserLayout from "~/layouts/userLayout";
 import ClubDashBoardSkeleton from "~/components/skeletons/clubDashboardSkeleton";
 import { api } from "~/utils/api";
 
