@@ -1,7 +1,9 @@
 import { Club } from "@prisma/client";
+import { Search } from "lucide-react";
 import Error from "next/error";
 import { useEffect, useRef, useState } from "react";
 
+import ClubCard from "~/components/allClubs/clubCard";
 import { Input } from "~/components/shadcn_ui/input";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
@@ -47,28 +49,23 @@ const AllClubs: NextPageWithLayout = (props: PropTypes) => {
     );
   }
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center">
+    <div className="flex h-full w-full flex-col items-center justify-center ">
       <h1 className="text-gray-800 tracking-none text-center text-4xl font-black uppercase">
         All Clubs
       </h1>
       <Input
-        placeholder="Search for clubs"
+        className=" w-full max-w-[80rem] rounded-none border-x-0 border-b-2 border-t-0 border-blue-100 bg-transparent"
+        placeholder={"Search"}
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
           console.log(query);
         }}
       />
+
       <div className="flex flex-wrap items-center justify-center">
         {clubs.map((club, index) => (
-          <div
-            className="m-4 flex flex-col items-center justify-center"
-            key={index}
-          >
-            <h1 className="text-gray-800 tracking-none text-center text-2xl font-black uppercase">
-              {club.name}
-            </h1>
-          </div>
+          <ClubCard clubId={club.id} name={club.name} key={index} />
         ))}
       </div>
     </div>
