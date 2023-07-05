@@ -1,7 +1,6 @@
 import { Club } from "@prisma/client";
-import { Search } from "lucide-react";
 import Error from "next/error";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import ClubCard from "~/components/allClubs/clubCard";
 import { Input } from "~/components/shadcn_ui/input";
@@ -10,9 +9,7 @@ import { api } from "~/utils/api";
 
 import type { NextPageWithLayout } from "~/pages/_app";
 
-type PropTypes = object;
-
-const AllClubs: NextPageWithLayout = (props: PropTypes) => {
+const AllClubs: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
   const [clubs, setClubs] = useState<Array<Club>>([]);
   const {
@@ -56,14 +53,13 @@ const AllClubs: NextPageWithLayout = (props: PropTypes) => {
         </h1>
       </section>
 
-      <section className="w-full max-w-2xl">
+      <section className="w-full max-w-2xl px-4">
         <Input
           className="rounded-none border-x-0 border-b-2 border-t-0 border-secondary bg-transparent focus-visible:ring-0"
           placeholder={"Search"}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
-            console.log(query);
           }}
         />
       </section>
