@@ -1,13 +1,15 @@
 import { type ClubContactInfo } from "@prisma/client";
 
 import { Badge } from "../../shadcn_ui/badge";
+import ContactUpdateEditor from "./contactCardEditor";
 
 type PropType = {
   clubContactInfo: ClubContactInfo;
+  edit: boolean;
 };
 
 const ContactCard = (props: PropType) => {
-  const { clubContactInfo } = props;
+  const { clubContactInfo, edit } = props;
 
   return (
     <>
@@ -20,6 +22,18 @@ const ContactCard = (props: PropType) => {
         </h1>
         <p>{clubContactInfo.email}</p>
         <p>{clubContactInfo.phone}</p>
+        {edit ? (
+          <ContactUpdateEditor
+            firstName={clubContactInfo.firstName}
+            lastName={clubContactInfo.lastName}
+            email={clubContactInfo.email}
+            phone={clubContactInfo.phone ? clubContactInfo.phone : undefined}
+            role={clubContactInfo.role}
+            contactInfoId={clubContactInfo.id}
+          />
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

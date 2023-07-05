@@ -1,7 +1,6 @@
 import { type ClubApplication } from "@prisma/client";
 
 import ApplicationCard from "./applicationCard";
-import ApplicationEditor from "./applicationEditor";
 import ApplicationsOutline from "./applicationsOutline";
 
 type PropType = {

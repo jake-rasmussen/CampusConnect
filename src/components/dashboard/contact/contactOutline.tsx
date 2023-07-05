@@ -5,12 +5,12 @@ const ContactOutline = ({
 }) => {
   return (
     <>
-      <div className="justify-left flex flex-col  md:pt-0">
+      <section className="justify-left flex flex-col md:pt-0">
         <h1 className="text-center text-2xl font-semibold underline lg:text-left">
           Contact
         </h1>
-        <div className="mx-auto flex flex-col lg:mx-0">{children}</div>
-      </div>
+        <div className="relative mx-auto flex flex-col lg:mx-0">{children}</div>
+      </section>
     </>
   );
 };

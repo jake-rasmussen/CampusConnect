@@ -1,7 +1,6 @@
 "use client";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Cross2Icon } from "@radix-ui/react-icons";
 import * as React from "react";
 
 import { cn } from "../../../lib/utils";
@@ -108,6 +107,12 @@ const DialogDescription = React.forwardRef<
 ));
 DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
+const DialogClose = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Close>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>
+>(({ ...props }, ref) => <DialogPrimitive.Close ref={ref} {...props} />);
+DialogClose.displayName = DialogPrimitive.Title.displayName;
+
 export {
   Dialog,
   DialogTrigger,
@@ -116,4 +121,5 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  DialogClose,
 };

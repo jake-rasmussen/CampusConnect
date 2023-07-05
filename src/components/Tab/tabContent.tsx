@@ -9,7 +9,7 @@ const TabContent = (props: PropType) => {
   return (
     <>
       <main className="flex w-full justify-center">
-        {isActive ? props.children : <></>}
+        {isActive && props.children}
       </main>
     </>
   );

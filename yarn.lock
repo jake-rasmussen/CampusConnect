@@ -2584,6 +2584,11 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
+houseform@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/houseform/-/houseform-1.11.0.tgz#b6e30e76688c0174c060cc3529be3494edd17eba"
+  integrity sha512-rh0mKDHtKKtygqrT/BnmBkGavYk+hqiVtogdqxStDcP+d0a2WmABZ4v7fHk/x1YpmCmnHKjd0GBr6KR7HmFsyA==
+
 human-signals@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz"

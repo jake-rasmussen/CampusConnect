@@ -20,7 +20,12 @@ export const dateToStringFormatted = (date: Date) => {
 export const dateToTimeStringFormatted = (date: Date) => {
   let str = "";
 
-  str += date.getHours() <= 12 ? date.getHours() : date.getHours() - 12;
+  if (date.getHours() !== 0) {
+    str += date.getHours() <= 12 ? date.getHours() : date.getHours() - 12;
+  } else {
+    str += "12";
+  }
+
   str += ":";
 
   if (date.getMinutes() < 10) str += "0";

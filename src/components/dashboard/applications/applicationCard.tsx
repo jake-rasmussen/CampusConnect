@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../shadcn_ui/card";
-import ApplicationEditor from "./applicationEditor";
 
 type PropType = {
   clubApplication: ClubApplication;
@@ -19,7 +18,7 @@ type PropType = {
 };
 
 const ApplicationCard = (props: PropType) => {
-  const { clubApplication, clubId, edit } = props;
+  const { clubApplication } = props;
 
   return (
     <>
@@ -42,14 +41,6 @@ const ApplicationCard = (props: PropType) => {
                 {dateToStringFormatted(clubApplication.deadline)}
               </span>
             </p>
-          ) : (
-            <></>
-          )}
-          {edit ? (
-            <ApplicationEditor
-              applicationName={clubApplication.name}
-              clubId={clubId}
-            />
           ) : (
             <></>
           )}

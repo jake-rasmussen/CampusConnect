@@ -1,9 +1,17 @@
+import { Field, Form } from "houseform";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { z } from "zod";
 
+import Button from "~/components/button";
 import { api } from "~/utils/api";
 import { Textarea } from "../../shadcn_ui/textarea";
 import EditController from "../editController";
+import ErrorMessage from "../errorMessage";
+
+type EditorFormType = {
+  description: string;
+};
 
 type PropType = {
   clubDescription: string;
@@ -11,21 +19,14 @@ type PropType = {
 };
 
 const DescriptionEditor = (props: PropType) => {
-  const { clubDescription: originalClubDescription, clubId } = props;
+  const { clubDescription, clubId } = props;
 
-  const [editClubDescription, setEditClubDescription] = useState(
-    originalClubDescription ? originalClubDescription : "",
-  );
+  const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
   const updateDescription =
     api.clubProfileRouter.updateClubProfileDescription.useMutation({
-      onMutate() {
-        if (editClubDescription.trim() === "") {
-          toast.error("Please Enter a Description!");
-        }
-      },
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Updated Club Description!");
@@ -39,25 +40,63 @@ const DescriptionEditor = (props: PropType) => {
 
   return (
     <EditController
-      saveAction={() =>
-        updateDescription.mutate({
-          id: clubId,
-          description: editClubDescription,
-        })
-      }
-      closeAction={() => setEditClubDescription(originalClubDescription)}
       dialogDescription={"Update the Club Description"}
+      editType="update"
+      openDialog={openDialog}
+      setOpenDialog={setOpenDialog}
     >
-      <main className="grid grid-cols-4">
-        <span className="col-span-1 font-semibold underline">Description</span>
-        <Textarea
-          className="col-span-3 bg-white"
-          placeholder="Type your message here."
-          value={editClubDescription}
-          onChange={(e) => setEditClubDescription(e.currentTarget.value)}
-          rows={15}
-        />
-      </main>
+      <Form<EditorFormType>
+        onSubmit={(values, errors) => {
+          if (errors.errors.length === 0) {
+            updateDescription.mutate({
+              id: clubId,
+              description: values.description,
+            });
+            setOpenDialog(false);
+            toast.dismiss();
+            toast.success("Success submitting the form!");
+          } else {
+            toast.dismiss();
+            toast.error("There are errors with the form");
+          }
+        }}
+        submitWhenInvalid
+      >
+        {({ submit }) => (
+          <main className="gap-4">
+            <Field
+              name="description"
+              initialValue={clubDescription}
+              onSubmitValidate={z.string().min(50)}
+            >
+              {({ value, setValue, onBlur, errors }) => (
+                <div>
+                  <span className="font-semibold">Description</span>
+                  <Textarea
+                    className="bg-white"
+                    placeholder="Type your description here."
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    onBlur={onBlur}
+                    rows={15}
+                  />
+                  {errors.length !== 0 && (
+                    <ErrorMessage alternateMessage="Must be longer than 50 characters" />
+                  )}
+                </div>
+              )}
+            </Field>
+            <Button
+              onClick={() => {
+                submit().catch((e) => console.log(e));
+              }}
+              className="my-4"
+            >
+              Submit
+            </Button>
+          </main>
+        )}
+      </Form>
     </EditController>
   );
 };

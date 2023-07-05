@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 
 import Applications from "./dashboard/applications/applications";
 import Events from "./dashboard/clubEvents/events";
+import Events from "./dashboard/clubEvents/events";
 import Contact from "./dashboard/contact/contact";
 import Description from "./dashboard/description/description";
 import Header from "./dashboard/header/header";
@@ -35,7 +36,7 @@ const DashboardPage = (props: PropType) => {
   return (
     <>
       <Toaster />
-      <Header name={name} />
+      <Header name={name} edit={true} />
 
       <main className="relative flex justify-center">
         <Tab>
@@ -53,7 +54,11 @@ const DashboardPage = (props: PropType) => {
                 />
               </div>
               <div className="col-span-2 py-6 lg:col-span-1 xl:col-span-2">
-                <Contact contactInfos={contactInfos} />
+                <Contact
+                  contactInfos={contactInfos}
+                  clubProfileId={clubProfile.id}
+                  edit={true}
+                />
               </div>
             </div>
           </TabContent>
@@ -67,7 +72,7 @@ const DashboardPage = (props: PropType) => {
         </Tab>
       </main>
 
-      <Events events={events} />
+      <Events events={events} clubId={clubId} edit={true} />
     </>
   );
 };
