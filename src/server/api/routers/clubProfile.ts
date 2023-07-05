@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const clubProfileRouter = createTRPCRouter({
   getClubProfileById: protectedProcedure
@@ -13,6 +13,21 @@ export const clubProfileRouter = createTRPCRouter({
         },
         include: {
           clubContactInfo: true,
+        },
+      });
+
+      return clubProfile;
+    }),
+  updateClubProfileDescription: adminProcedure
+    .input(z.object({ id: z.string(), description: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id, description } = input;
+      const clubProfile = await ctx.prisma.clubProfile.update({
+        where: {
+          id,
+        },
+        data: {
+          description,
         },
       });
 

@@ -9,10 +9,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../../shadcn_ui/card";
 
 type PropType = {
   clubApplication: ClubApplication;
+  clubId: string;
+  edit: boolean;
 };
 
 const ApplicationCard = (props: PropType) => {
@@ -20,7 +22,7 @@ const ApplicationCard = (props: PropType) => {
 
   return (
     <>
-      <Card className="mb-0 mr-4 mt-6 w-[17.5rem] rounded-xl bg-white shadow-xl">
+      <Card className="relative my-6 mb-0 mr-4 w-[17.5rem] rounded-xl bg-white shadow-xl">
         <CardHeader>
           <CardTitle>{clubApplication.name}</CardTitle>
           <CardDescription>{clubApplication.description}</CardDescription>
