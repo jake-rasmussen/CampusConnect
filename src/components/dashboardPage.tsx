@@ -4,7 +4,6 @@ import { Toaster } from "react-hot-toast";
 
 import Applications from "./dashboard/applications/applications";
 import Events from "./dashboard/clubEvents/events";
-import Events from "./dashboard/clubEvents/events";
 import Contact from "./dashboard/contact/contact";
 import Description from "./dashboard/description/description";
 import Header from "./dashboard/header/header";
