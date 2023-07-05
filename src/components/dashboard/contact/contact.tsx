@@ -7,14 +7,12 @@ const Contact = ({ contactInfos }: { contactInfos: ClubContactInfo[] }) => {
   return (
     <>
       <ContactOutline>
-        {contactInfos.map(
-          (clubContactInfo: ClubContactInfo, index: number) => (
-            <ContactCard
-              clubContactInfo={clubContactInfo}
-              key={`clubContact${index}`}
-            />
-          ),
-        )}
+        {contactInfos.map((clubContactInfo: ClubContactInfo, index: number) => (
+          <ContactCard
+            clubContactInfo={clubContactInfo}
+            key={`clubContact${index}`}
+          />
+        ))}
       </ContactOutline>
     </>
   );

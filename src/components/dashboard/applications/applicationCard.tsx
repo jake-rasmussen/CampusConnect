@@ -23,7 +23,7 @@ const ApplicationCard = (props: PropType) => {
 
   return (
     <>
-      <Card className="relative mb-0 mr-4 my-6 w-[17.5rem] rounded-xl bg-white shadow-xl">
+      <Card className="relative my-6 mb-0 mr-4 w-[17.5rem] rounded-xl bg-white shadow-xl">
         <CardHeader>
           <CardTitle>{clubApplication.name}</CardTitle>
           <CardDescription>{clubApplication.description}</CardDescription>

@@ -32,7 +32,7 @@ const generateRandomSocialMedia = () => {
 
 const generateRandomEvents = () => {
   const numEvents = randomNumberBetweenInclusive(0, 10);
-  const events: Array<Prisma.ClubEventCreateWithoutClubInput>= [];
+  const events: Array<Prisma.ClubEventCreateWithoutClubInput> = [];
 
   for (let i = 0; i < numEvents; i++) {
     const inPerson = randomNumberBetweenInclusive(0, 40) > 5;

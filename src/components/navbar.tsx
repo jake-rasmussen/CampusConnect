@@ -32,7 +32,7 @@ const Navbar = () => {
               </h1>
             </Link>
           </ul>
-          <div className="items-center flex grow justify-center md:space-x-4 lg:flex-none">
+          <div className="flex grow items-center justify-center md:space-x-4 lg:flex-none">
             <UserButton afterSignOutUrl="/" />
           </div>
 

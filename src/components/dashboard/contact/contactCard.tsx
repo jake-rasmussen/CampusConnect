@@ -12,7 +12,7 @@ const ContactCard = (props: PropType) => {
   return (
     <>
       <div className="relative my-6 max-w-sm border-l-2 border-primary px-6 py-2 pr-28">
-        <Badge className="translate-x-[-0.2rem] bg-secondary text-white shadow-xl md:absolute md:right-0 md:top-[-0.2rem] mr-4">
+        <Badge className="mr-4 translate-x-[-0.2rem] bg-secondary text-white shadow-xl md:absolute md:right-0 md:top-[-0.2rem]">
           {clubContactInfo.role}
         </Badge>
         <h1 className="my-2 font-bold underline">

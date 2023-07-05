@@ -9,9 +9,7 @@ const ContactOutline = ({
         <h1 className="text-center text-2xl font-semibold underline lg:text-left">
           Contact
         </h1>
-        <div className="mx-auto lg:mx-0 flex flex-col">
-          {children}
-        </div>
+        <div className="mx-auto flex flex-col lg:mx-0">{children}</div>
       </div>
     </>
   );

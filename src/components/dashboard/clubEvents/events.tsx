@@ -8,9 +8,7 @@ const Events = ({ events }: { events: ClubEvent[] }) => {
     <>
       <EventsOutline>
         {events.map((clubEvent: ClubEvent, index: number) => {
-          return (
-            <EventCard clubEvent={clubEvent} key={`clubEvent${index}`} />
-          );
+          return <EventCard clubEvent={clubEvent} key={`clubEvent${index}`} />;
         })}
       </EventsOutline>
     </>
