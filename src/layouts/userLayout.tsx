@@ -4,7 +4,7 @@ import Navbar from "~/components/navbar";
 
 type Layout = ({ children }: { children: ReactElement }) => ReactElement;
 
-const MainLayout: Layout = ({ children }) => {
+const UserLayout: Layout = ({ children }) => {
   return (
     <>
       <Navbar />
@@ -13,4 +13,4 @@ const MainLayout: Layout = ({ children }) => {
   );
 };
 
-export default MainLayout;
+export default UserLayout;

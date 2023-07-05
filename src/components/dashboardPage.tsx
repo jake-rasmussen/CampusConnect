@@ -7,10 +7,10 @@ import Events from "./dashboard/clubEvents/events";
 import Contact from "./dashboard/contact/contact";
 import Description from "./dashboard/description/description";
 import Header from "./dashboard/header/header";
-import Tab from "./tab/tab";
-import TabContent from "./tab/tabContent";
-import TabHeader from "./tab/tabHeader";
-import TabList from "./tab/tabList";
+import Tab from "./Tab/tab";
+import TabContent from "./Tab/tabContent";
+import TabHeader from "./Tab/tabHeader";
+import TabList from "./Tab/tabList";
 
 import type {
   ClubApplication,

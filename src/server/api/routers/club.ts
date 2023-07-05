@@ -24,4 +24,28 @@ export const clubRouter = createTRPCRouter({
 
       return club;
     }),
+
+  getAllClubs: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.club.findMany({});
+  }),
+
+  searchForClubs: protectedProcedure
+    .input(
+      z.object({
+        query: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { query } = input;
+      const clubs = await ctx.prisma.club.findMany({
+        where: {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+      });
+
+      return clubs;
+    }),
 });
