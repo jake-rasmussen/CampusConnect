@@ -137,12 +137,12 @@ const EventForm = (props: PropType) => {
               <div className="col-span-4">
                 <span className="font-semibold">Description</span>
                 <Textarea
-                  className="h-[3rem] rounded-xl bg-white"
+                  className="rounded-xl bg-white"
                   placeholder="Enter Event Description"
                   value={value}
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
-                  rows={4}
+                  rows={8}
                 />
                 {errors.length !== 0 && <ErrorMessage />}
               </div>

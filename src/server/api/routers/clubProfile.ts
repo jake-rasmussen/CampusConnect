@@ -12,7 +12,11 @@ export const clubProfileRouter = createTRPCRouter({
           id: clubProfileId,
         },
         include: {
-          clubContactInfo: true,
+          clubContactInfo: {
+            orderBy: {
+              firstName: "asc"
+            }
+          },
         },
       });
 
