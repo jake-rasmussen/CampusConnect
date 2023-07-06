@@ -6,12 +6,12 @@ import ContactsEditor from "./contactsEditor";
 
 type PropType = {
   contactInfos: ClubContactInfo[];
-  clubProfileId: string;
+  clubId: string;
   edit: boolean;
 };
 
 const Contact = (props: PropType) => {
-  const { contactInfos, clubProfileId, edit } = props;
+  const { contactInfos, clubId: clubProfileId, edit } = props;
 
   return (
     <>

@@ -7,29 +7,28 @@ import Events from "./dashboard/clubEvents/events";
 import Contact from "./dashboard/contact/contact";
 import Description from "./dashboard/description/description";
 import Header from "./dashboard/header/header";
-import Tab from "./Tab/tab";
-import TabContent from "./Tab/tabContent";
-import TabHeader from "./Tab/tabHeader";
-import TabList from "./Tab/tabList";
+import Tab from "./tab/tab";
+import TabContent from "./tab/tabContent";
+import TabHeader from "./tab/tabHeader";
+import TabList from "./tab/tabList";
 
 import type {
   ClubApplication,
   ClubContactInfo,
   ClubEvent,
-  ClubProfile,
 } from "@prisma/client";
 
 type PropType = {
   name: string;
   clubId: string;
-  clubProfile: ClubProfile & { clubContactInfo: ClubContactInfo[] };
+  description: string;
   events: ClubEvent[];
   contactInfos: ClubContactInfo[];
   applications: ClubApplication[];
 };
 
 const DashboardPage = (props: PropType) => {
-  const { name, clubId, clubProfile, events, contactInfos, applications } =
+  const { name, clubId, description, events, contactInfos, applications } =
     props;
 
   return (
@@ -47,15 +46,15 @@ const DashboardPage = (props: PropType) => {
             <div className="mx-10 grid w-full grid-cols-2 py-6 xl:grid-cols-5">
               <div className="col-span-2 lg:col-span-1 lg:pr-10 xl:col-span-3">
                 <Description
-                  clubId={clubProfile.id}
-                  clubDescription={clubProfile.description}
+                  clubId={clubId}
+                  clubDescription={description}
                   edit={true}
                 />
               </div>
               <div className="col-span-2 py-6 lg:col-span-1 xl:col-span-2">
                 <Contact
                   contactInfos={contactInfos}
-                  clubProfileId={clubProfile.id}
+                  clubId={clubId}
                   edit={true}
                 />
               </div>

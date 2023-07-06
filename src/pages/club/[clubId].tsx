@@ -29,16 +29,16 @@ const ClubDashboard: NextPageWithLayout = () => {
 
   if (isLoading) {
     return <ClubDashBoardSkeleton />;
-  } else if (isError || !club.clubProfile) {
+  } else if (isError) {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else {
     return (
       <ClubDashboardPage
         name={club.name}
         clubId={club.id}
-        clubProfile={club.clubProfile}
+        description={club.description}
         events={club.events}
-        contactInfos={club.clubProfile.clubContactInfo}
+        contactInfos={club.clubContactInfo}
         applications={club.clubApplications}
       />
     );
