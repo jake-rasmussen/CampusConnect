@@ -41,6 +41,7 @@ enum ClubApplicationStatus {
 model User {
     userId       String   @id @default(cuid())
     externalId   String   @unique
+    isAdmin      Boolean
     firstName    String
     lastName     String
     emailAddress String

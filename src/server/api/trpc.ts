@@ -59,6 +59,7 @@ const getOrCreateUser = async (
     },
     create: {
       externalId,
+      isAdmin: false,
       emailAddress,
       firstName,
       lastName,
@@ -148,7 +149,7 @@ const isAuthed = t.middleware(({ next, ctx }) => {
 export const protectedProcedure = t.procedure.use(isAuthed);
 
 const isAdmin = t.middleware(({ next, ctx }) => {
-  if (!ctx.user) {
+  if (!ctx.user?.isAdmin) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({

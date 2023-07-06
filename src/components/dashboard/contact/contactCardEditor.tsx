@@ -72,7 +72,7 @@ const ContactCardEditor = (props: PropType) => {
       editType="update"
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
-      className="scale-y-110 rounded-none"
+      className="rounded-none"
     >
       <ContactForm
         firstName={firstName}

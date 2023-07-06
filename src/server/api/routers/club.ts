@@ -21,12 +21,12 @@ export const clubRouter = createTRPCRouter({
           events: {
             where: {
               date: {
-                gte: new Date()
-              }
+                gte: new Date(),
+              },
             },
             orderBy: {
-              date: "asc"
-            }
+              date: "asc",
+            },
           },
         },
       });
@@ -50,8 +50,8 @@ export const clubRouter = createTRPCRouter({
           clubApplications: true,
           events: {
             orderBy: {
-              date: "asc"
-            }
+              date: "asc",
+            },
           },
         },
       });
@@ -62,8 +62,8 @@ export const clubRouter = createTRPCRouter({
   getAllClubs: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.club.findMany({
       orderBy: {
-        name: "asc"
-      }
+        name: "asc",
+      },
     });
   }),
 

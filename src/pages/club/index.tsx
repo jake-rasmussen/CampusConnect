@@ -1,4 +1,4 @@
-import { Club } from "@prisma/client";
+import { type Club } from "@prisma/client";
 import Error from "next/error";
 import { useEffect, useState } from "react";
 
