@@ -52,13 +52,15 @@ model User {
 model Club {
     id               String            @id @default(cuid())
     name             String            @unique
+    description      String            @default("")
+    timelineDesc     String            @default("") @db.VarChar(500)
     socialMedia      SocialMedia[]
+    clubContactInfo  ClubContactInfo[]
     // members          ClubMember[]
     clubApplications ClubApplication[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
     events           ClubEvent[]
-    clubProfile      ClubProfile?
 }
 
 // model ClubMember {
@@ -73,24 +75,15 @@ model Club {
 //     @@id([clubId, userId])
 // }
 
-model ClubProfile {
-    id              String            @id @default(cuid())
-    clubId          String            @unique
-    club            Club              @relation(fields: [clubId], references: [id], onDelete: Cascade)
-    description     String            @default("")
-    timelineDesc    String            @default("") @db.VarChar(500)
-    clubContactInfo ClubContactInfo[]
-}
-
 model ClubContactInfo {
-    id            String      @id @default(cuid())
-    clubProfile   ClubProfile @relation(fields: [clubProfileId], references: [id])
-    clubProfileId String
-    firstName     String
-    lastName      String
-    email         String
-    phone         String?
-    role          String
+    id        String  @id @default(cuid())
+    firstName String
+    lastName  String
+    email     String
+    phone     String?
+    role      String
+    club      Club    @relation(fields: [clubId], references: [id], onDelete: Cascade)
+    clubId    String
 }
 
 model SocialMedia {
@@ -119,7 +112,7 @@ model ClubEvent {
 model ClubApplication {
     id              String                           @id @default(cuid())
     clubId          String
-    name            String                           @unique
+    name            String                  
     description     String                           @default("")
     club            Club                             @relation(fields: [clubId], references: [id], onDelete: Cascade)
     deadline        DateTime?
@@ -133,6 +126,7 @@ model ClubApplication {
 model ClubApplicationQuestion {
     id                String                      @id @default(cuid())
     clubApplication   ClubApplication             @relation(fields: [clubApplicationId], references: [id], onDelete: Cascade)
+    required          Boolean                     
     orderNumber       Int
     clubApplicationId String
     question          String
