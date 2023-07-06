@@ -9,11 +9,11 @@ import HeaderOutline from "./headerOutline";
 
 type PropType = {
   name: string;
-  edit: boolean;
+  editable: boolean;
 };
 
 const Header = (props: PropType) => {
-  const { name, edit } = props;
+  const { name, editable: edit } = props;
 
   return (
     <>
