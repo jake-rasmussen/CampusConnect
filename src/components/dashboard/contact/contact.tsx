@@ -7,11 +7,11 @@ import ContactsEditor from "./contactsEditor";
 type PropType = {
   contactInfos: ClubContactInfo[];
   clubId: string;
-  edit: boolean;
+  editable: boolean;
 };
 
 const Contact = (props: PropType) => {
-  const { contactInfos, clubId: clubProfileId, edit } = props;
+  const { contactInfos, clubId: clubProfileId, editable: edit } = props;
 
   return (
     <>

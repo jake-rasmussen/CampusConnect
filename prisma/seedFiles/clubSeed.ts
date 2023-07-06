@@ -10,6 +10,10 @@ import { randomNumberBetweenInclusive } from "~/utils/helpers";
 
 import type { Prisma } from "@prisma/client";
 
+
+//TODO: Break this file up into smaller files
+
+
 const generateRandomSocialMedia = (numSocialMedias?: number) => {
   const socialMediaPlatforms: Array<SocialMediaPlatformType> = Object.values(
     SocialMediaPlatformType,
@@ -49,8 +53,8 @@ const generateRandomEvents = (
     const inPerson = randomNumberBetweenInclusive(0, 40) > 5;
     const date =
       randomNumberBetweenInclusive(0, 40) > 10
-        ? new Date()
-        : new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
+        ? faker.date.future()
+        : faker.date.past();
     const event = {
       name: `Event ${i}`,
       description: `Description for event ${i}`,
@@ -66,6 +70,26 @@ const generateRandomEvents = (
 //TODO: implement later
 //const generateRandomClubMembers = () => {return []};
 
+const generateRandomClubContactInfos = (
+  numContactInfos: number = randomNumberBetweenInclusive(0, 5),
+) => {
+  const contactInfos: Array<Prisma.ClubContactInfoCreateWithoutClubInput> = [];
+
+  for (let i = 0; i < numContactInfos; i++) {
+    const contactInfo = {
+      email: faker.internet.email(),
+      phone:
+        randomNumberBetweenInclusive(0, 100) > 50 ? faker.phone.number() : null,
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      role: faker.person.jobType(),
+    };
+    contactInfos.push(contactInfo);
+  }
+
+  return contactInfos;
+};
+
 const generateRandomQuestions = (
   numQuestions: number = randomNumberBetweenInclusive(0, 5),
 ) => {
@@ -75,7 +99,7 @@ const generateRandomQuestions = (
   for (let i = 0; i < numQuestions; i++) {
     const question = {
       orderNumber: i,
-      question : faker.lorem.words({ min: 10, max: 25 }),
+      question: faker.lorem.words({ min: 10, max: 25 }),
       required: randomNumberBetweenInclusive(0, 100) > 50,
       type: ClubApplicationQuestionType.TEXT_FIELD,
     };
@@ -109,7 +133,7 @@ const generateRandomClubApplications = (
       status,
       deadline,
       questions: { create: generateRandomQuestions() },
-      scoringCriteria: {},
+      scoringCriteria: {}, //TODO: Generate scoring criteria same way as questions
     };
     applications.push(application);
   }
@@ -138,8 +162,9 @@ const createMockClubArray = () => {
       socialMedia: { create: generateRandomSocialMedia() },
       timelineDesc: faker.lorem.words({ min: 5, max: 10 }),
       description: faker.lorem.paragraph({ min: 0, max: 3 }),
-      clubApplications: { create: generateRandomClubApplications() },
+      applications: { create: generateRandomClubApplications() },
       events: { create: generateRandomEvents() },
+      contactInfo: { create: generateRandomClubContactInfos() },
     };
     mockClubs.push(club);
   }
@@ -152,7 +177,7 @@ export const seedClubs = async () => {
   for (const club of mockClubs) {
     await prisma.club.create({
       data: {
-        ...club
+        ...club,
       },
     });
   }

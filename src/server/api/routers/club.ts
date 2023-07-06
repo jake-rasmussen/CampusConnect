@@ -12,9 +12,9 @@ export const clubRouter = createTRPCRouter({
           id: clubId,
         },
         include: {
-          clubApplications: true,
+          applications: true,
           events: true,
-          clubContactInfo: true,
+          contactInfo: true,
         },
       });
 

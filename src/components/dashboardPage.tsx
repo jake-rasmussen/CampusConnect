@@ -25,16 +25,17 @@ type PropType = {
   events: ClubEvent[];
   contactInfos: ClubContactInfo[];
   applications: ClubApplication[];
+  isAdminPage: boolean;
 };
 
 const DashboardPage = (props: PropType) => {
-  const { name, clubId, description, events, contactInfos, applications } =
+  const { name, clubId, description, events, contactInfos, applications, isAdminPage } =
     props;
 
   return (
     <>
       <Toaster />
-      <Header name={name} edit={true} />
+      <Header name={name} editable={isAdminPage} />
 
       <main className="relative flex justify-center">
         <Tab>
@@ -48,14 +49,14 @@ const DashboardPage = (props: PropType) => {
                 <Description
                   clubId={clubId}
                   clubDescription={description}
-                  edit={true}
+                  editable={isAdminPage}
                 />
               </div>
               <div className="col-span-2 py-6 lg:col-span-1 xl:col-span-2">
                 <Contact
                   contactInfos={contactInfos}
                   clubId={clubId}
-                  edit={true}
+                  editable={isAdminPage}
                 />
               </div>
             </div>
@@ -64,13 +65,13 @@ const DashboardPage = (props: PropType) => {
             <Applications
               applications={applications}
               clubId={clubId}
-              edit={true}
+              editable={isAdminPage}
             />
           </TabContent>
         </Tab>
       </main>
 
-      <Events events={events} clubId={clubId} edit={true} />
+      <Events events={events} clubId={clubId} editable={isAdminPage} />
     </>
   );
 };
