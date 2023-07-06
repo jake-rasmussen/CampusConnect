@@ -35,61 +35,48 @@ const DashboardPage = (props: PropType) => {
   const { name, clubId, clubProfile, events, contactInfos, applications } =
     props;
 
-  const {
-    data: isAdmin,
-    isLoading,
-    isError,
-    error,
-  } = api.userRouter.isUserAdmin.useQuery();
+  return (
+    <>
+      <Toaster />
+      <Header name={name} edit={false} />
 
-  if (isLoading) {
-    return <ClubDashBoardSkeleton />;
-  } else if (isError) {
-    return <Error statusCode={error?.data?.httpStatus || 500} />;
-  } else {
-    return (
-      <>
-        <Toaster />
-        <Header name={name} edit={isAdmin} />
-
-        <main className="relative flex justify-center">
-          <Tab>
-            <TabList>
-              <TabHeader>About Us</TabHeader>
-              <TabHeader>Applications</TabHeader>
-            </TabList>
-            <TabContent>
-              <div className="mx-10 grid w-full grid-cols-2 py-6 xl:grid-cols-5">
-                <div className="col-span-2 lg:col-span-1 lg:pr-10 xl:col-span-3">
-                  <Description
-                    clubId={clubProfile.id}
-                    clubDescription={clubProfile.description}
-                    edit={isAdmin}
-                  />
-                </div>
-                <div className="col-span-2 py-6 lg:col-span-1 xl:col-span-2">
-                  <Contact
-                    contactInfos={contactInfos}
-                    clubProfileId={clubProfile.id}
-                    edit={isAdmin}
-                  />
-                </div>
+      <main className="relative flex justify-center">
+        <Tab>
+          <TabList>
+            <TabHeader>About Us</TabHeader>
+            <TabHeader>Applications</TabHeader>
+          </TabList>
+          <TabContent>
+            <div className="mx-10 grid w-full grid-cols-2 py-6 xl:grid-cols-5">
+              <div className="col-span-2 lg:col-span-1 lg:pr-10 xl:col-span-3">
+                <Description
+                  clubId={clubProfile.id}
+                  clubDescription={clubProfile.description}
+                  edit={true}
+                />
               </div>
-            </TabContent>
-            <TabContent>
-              <Applications
-                applications={applications}
-                clubId={clubId}
-                edit={isAdmin}
-              />
-            </TabContent>
-          </Tab>
-        </main>
+              <div className="col-span-2 py-6 lg:col-span-1 xl:col-span-2">
+                <Contact
+                  contactInfos={contactInfos}
+                  clubProfileId={clubProfile.id}
+                  edit={true}
+                />
+              </div>
+            </div>
+          </TabContent>
+          <TabContent>
+            <Applications
+              applications={applications}
+              clubId={clubId}
+              edit={true}
+            />
+          </TabContent>
+        </Tab>
+      </main>
 
-        <Events events={events} clubId={clubId} edit={isAdmin} />
-      </>
-    );
-  }
+      <Events events={events} clubId={clubId} edit={true} />
+    </>
+  );
 };
 
 export default DashboardPage;

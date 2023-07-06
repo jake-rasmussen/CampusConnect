@@ -16,7 +16,6 @@ export const seedUsers = async () => {
 
     const userObj = {
       externalId: id,
-      isAdmin: false,
       firstName: firstName || "",
       lastName: lastName || "",
       emailAddress: emailAddress || "",
