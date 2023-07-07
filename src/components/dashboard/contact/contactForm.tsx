@@ -40,8 +40,8 @@ const ContactForm = (props: PropType) => {
 
   return (
     <Form<ContactFormType>
-      onSubmit={(values, errors) => {
-        if (errors.errors.length === 0) {
+      onSubmit={(values, isValid) => {
+        if (isValid) {
           onSubmit(values);
           setOpenDialog(false);
           toast.dismiss();

@@ -46,15 +46,14 @@ const DescriptionEditor = (props: PropType) => {
       setOpenDialog={setOpenDialog}
     >
       <Form<EditorFormType>
-        onSubmit={(values, errors) => {
-          if (errors.errors.length === 0) {
+        onSubmit={(values, isValid) => {
+          if (isValid) {
+            const { description } = values;
             updateDescription.mutate({
               id: clubId,
-              description: values.description,
+              description: description,
             });
             setOpenDialog(false);
-            toast.dismiss();
-            toast.success("Success submitting the form!");
           } else {
             toast.dismiss();
             toast.error("There are errors with the form");
@@ -67,7 +66,7 @@ const DescriptionEditor = (props: PropType) => {
             <Field
               name="description"
               initialValue={clubDescription}
-              onSubmitValidate={z.string().min(50)}
+              onSubmitValidate={z.string().min(1)}
             >
               {({ value, setValue, onBlur, errors }) => (
                 <div>
