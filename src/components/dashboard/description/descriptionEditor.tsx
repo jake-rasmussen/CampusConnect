@@ -47,17 +47,12 @@ const DescriptionEditor = (props: PropType) => {
     >
       <Form<EditorFormType>
         onSubmit={(values, isValid) => {
-          if (isValid) {
-            const { description } = values;
-            updateDescription.mutate({
-              id: clubId,
-              description: description,
-            });
-            setOpenDialog(false);
-          } else {
-            toast.dismiss();
-            toast.error("There are errors with the form");
-          }
+          const { description } = values;
+          updateDescription.mutate({
+            id: clubId,
+            description: description,
+          });
+          setOpenDialog(false);
         }}
       >
         {({ submit }) => (
