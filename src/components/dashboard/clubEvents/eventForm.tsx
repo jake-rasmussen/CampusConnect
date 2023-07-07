@@ -95,8 +95,8 @@ const EventForm = (props: PropType) => {
             name="inPerson"
             initialValue={eventInPerson}
             onChangeValidate={z.boolean({
-              required_error: "Enter in person option",
-              invalid_type_error: "Enter in person option"
+              required_error: "Choose in person",
+              invalid_type_error: "Choose in person",
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
@@ -151,7 +151,7 @@ const EventForm = (props: PropType) => {
             initialValue={eventDate}
             onBlurValidate={z.date({
               required_error: "Enter a date",
-              invalid_type_error: "Enter a date"
+              invalid_type_error: "Enter a date",
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
@@ -198,7 +198,7 @@ const EventForm = (props: PropType) => {
             initialValue={eventDate}
             onChangeValidate={z.date({
               required_error: "Enter a time",
-              invalid_type_error: "Enter a time"
+              invalid_type_error: "Enter a time",
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (

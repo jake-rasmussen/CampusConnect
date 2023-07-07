@@ -1,15 +1,12 @@
 import "@prisma/client";
 
-import Error from "next/error";
 import { Toaster } from "react-hot-toast";
 
-import { api } from "~/utils/api";
 import Applications from "./dashboard/applications/applications";
 import Events from "./dashboard/clubEvents/events";
 import Contact from "./dashboard/contact/contact";
 import Description from "./dashboard/description/description";
 import Header from "./dashboard/header/header";
-import ClubDashBoardSkeleton from "./skeletons/clubDashboardSkeleton";
 import Tab from "./tab/tab";
 import TabContent from "./tab/tabContent";
 import TabHeader from "./tab/tabHeader";
@@ -47,21 +44,17 @@ const DashboardPage = (props: PropType) => {
             <TabHeader>Applications</TabHeader>
           </TabList>
           <TabContent>
-            <div className="mx-10 grid w-full grid-cols-2 py-6 xl:grid-cols-5">
-              <div className="col-span-2 lg:col-span-1 lg:pr-10 xl:col-span-3">
-                <Description
-                  clubId={clubProfile.id}
-                  clubDescription={clubProfile.description}
-                  edit={true}
-                />
-              </div>
-              <div className="col-span-2 py-6 lg:col-span-1 xl:col-span-2">
-                <Contact
-                  contactInfos={contactInfos}
-                  clubProfileId={clubProfile.id}
-                  edit={true}
-                />
-              </div>
+            <div className="mx-10 flex flex-col gap-10">
+              <Description
+                clubId={clubProfile.id}
+                clubDescription={clubProfile.description}
+                edit={true}
+              />
+              <Contact
+                contactInfos={contactInfos}
+                clubProfileId={clubProfile.id}
+                edit={true}
+              />
             </div>
           </TabContent>
           <TabContent>

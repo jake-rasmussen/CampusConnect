@@ -20,13 +20,17 @@ const ClubDashBoardSkeleton = () => {
             <TabHeader>Applications</TabHeader>
           </TabList>
           <TabContent>
-            <DescriptionSkeleton />
+            <div className="mx-10 grid w-full grid-cols-2 py-6 lg:grid-cols-5">
+              <div className="col-span-2 lg:col-span-1 lg:pr-10 xl:col-span-3">
+                <DescriptionSkeleton />
+              </div>
+              <div className="col-span-2 py-6 lg:col-span-1 xl:col-span-2">
+                <ContactSkeleton />
+              </div>
+            </div>
           </TabContent>
           <TabContent>
-            <div className="mx-10 grid w-full grid-cols-2 py-6 lg:grid-cols-5">
-              <ApplicationsSkeleton />
-              <ContactSkeleton />
-            </div>
+            <ApplicationsSkeleton />
           </TabContent>
         </Tab>
       </main>

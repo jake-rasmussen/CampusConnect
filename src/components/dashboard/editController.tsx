@@ -32,8 +32,6 @@ const EditController = (props: PropType) => {
     children,
   } = props;
 
-  console.log(openDialog);
-
   return (
     <>
       <Dialog open={openDialog}>
@@ -56,12 +54,7 @@ const EditController = (props: PropType) => {
               </div>
             )}
             {editType === "create" && (
-              <div
-                className={twMerge(
-                  "absolute bottom-0 translate-y-24",
-                  className,
-                )}
-              >
+              <div className={twMerge("", className)}>
                 <button
                   className="group flex flex-row items-center"
                   onClick={() => setOpenDialog(true)}

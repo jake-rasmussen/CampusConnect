@@ -15,14 +15,22 @@ const Applications = (props: PropType) => {
   return (
     <>
       <ApplicationsOutline>
-        {applications.map((clubApplication: ClubApplication, index: number) => (
-          <ApplicationCard
-            clubApplication={clubApplication}
-            clubId={clubId}
-            edit={edit}
-            key={`clubApplication${index}`}
-          />
-        ))}
+        {applications.length == 0 ? (
+          <h1 className="tracking-none text-sm font-black uppercase text-red-600">
+            There are no applications listed
+          </h1>
+        ) : (
+          applications.map(
+            (clubApplication: ClubApplication, index: number) => (
+              <ApplicationCard
+                clubApplication={clubApplication}
+                clubId={clubId}
+                edit={edit}
+                key={`clubApplication${index}`}
+              />
+            ),
+          )
+        )}
       </ApplicationsOutline>
     </>
   );

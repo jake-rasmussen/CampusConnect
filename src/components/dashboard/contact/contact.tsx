@@ -14,22 +14,28 @@ const Contact = (props: PropType) => {
   const { contactInfos, clubProfileId, edit } = props;
 
   return (
-    <>
+    <section className="flex flex-col items-center">
       <ContactOutline>
         <>
-          {contactInfos.map(
-            (clubContactInfo: ClubContactInfo, index: number) => (
-              <ContactCard
-                clubContactInfo={clubContactInfo}
-                edit={edit}
-                key={`clubContact${index}`}
-              />
-            ),
+          {contactInfos.length == 0 ? (
+            <h1 className="tracking-none text-sm font-black uppercase text-red-600">
+              There are no contacts listed
+            </h1>
+          ) : (
+            contactInfos.map(
+              (clubContactInfo: ClubContactInfo, index: number) => (
+                <ContactCard
+                  clubContactInfo={clubContactInfo}
+                  edit={edit}
+                  key={`clubContact${index}`}
+                />
+              ),
+            )
           )}
-          {edit && <ContactsEditor clubProfileId={clubProfileId} />}
         </>
       </ContactOutline>
-    </>
+      {edit && <ContactsEditor clubProfileId={clubProfileId} />}
+    </section>
   );
 };
 

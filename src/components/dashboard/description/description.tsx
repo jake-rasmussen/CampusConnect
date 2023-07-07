@@ -13,7 +13,7 @@ const Description = (props: PropType) => {
   return (
     <>
       <DescriptionOutline>
-        <p className="flex flex-col justify-center space-y-2 p-4 px-8 text-center">
+        <p className="flex flex-col justify-center px-8 text-center">
           {clubDescription}
         </p>
         {edit ? (

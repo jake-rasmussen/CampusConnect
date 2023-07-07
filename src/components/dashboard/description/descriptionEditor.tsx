@@ -46,7 +46,7 @@ const DescriptionEditor = (props: PropType) => {
       setOpenDialog={setOpenDialog}
     >
       <Form<EditorFormType>
-        onSubmit={(values, isValid) => {
+        onSubmit={(values) => {
           const { description } = values;
           updateDescription.mutate({
             id: clubId,
