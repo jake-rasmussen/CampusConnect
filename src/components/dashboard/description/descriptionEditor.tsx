@@ -81,7 +81,7 @@ const DescriptionEditor = (props: PropType) => {
                     rows={15}
                   />
                   {errors.length !== 0 && (
-                    <ErrorMessage alternateMessage="Must be longer than 50 characters" />
+                    <ErrorMessage message="Must be longer than 50 characters" />
                   )}
                 </div>
               )}

@@ -115,7 +115,7 @@ const ContactForm = (props: PropType) => {
                     {errors[0] !== "email" ? (
                       <ErrorMessage />
                     ) : (
-                      <ErrorMessage alternateMessage="Invalid" />
+                      <ErrorMessage message="Invalid" />
                     )}
                   </>
                 )}

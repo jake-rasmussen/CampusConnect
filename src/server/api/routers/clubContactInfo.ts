@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { adminProcedure, createTRPCRouter } from "../trpc";
-
+//TODO: fix up this file where clubProfile still used
 export const clubContactInfoRouter = createTRPCRouter({
   updateClubContactInfoById: adminProcedure
     .input(

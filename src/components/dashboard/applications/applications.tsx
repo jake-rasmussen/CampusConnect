@@ -1,6 +1,9 @@
 import { type ClubApplication } from "@prisma/client";
+import { SetStateAction, useState } from "react";
 
+import EditController from "../editController";
 import ApplicationCard from "./applicationCard";
+import ApplicationCreator from "./applicationCreator";
 import ApplicationsOutline from "./applicationsOutline";
 
 type PropType = {
@@ -10,19 +13,25 @@ type PropType = {
 };
 
 const Applications = (props: PropType) => {
-  const { applications, clubId, editable: edit } = props;
+  const { applications, clubId, editable } = props;
 
   return (
     <>
       <ApplicationsOutline>
-        {applications.map((clubApplication: ClubApplication, index: number) => (
-          <ApplicationCard
-            clubApplication={clubApplication}
-            clubId={clubId}
-            edit={edit}
-            key={`clubApplication${index}`}
-          />
-        ))}
+        <>
+          {applications.map(
+            (clubApplication: ClubApplication, index: number) => (
+              <ApplicationCard
+                clubApplication={clubApplication}
+                clubId={clubId}
+                editable={editable}
+                key={`clubApplication${index}`}
+              />
+            ),
+          )}
+
+          {editable && <ApplicationCreator clubId={clubId} />}
+        </>
       </ApplicationsOutline>
     </>
   );
