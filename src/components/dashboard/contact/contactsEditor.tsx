@@ -49,7 +49,7 @@ const ContactsEditor = (props: PropType) => {
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
     >
-      <ContactForm onSubmit={handleSubmit} />
+      <ContactForm onSubmit={handleSubmit} setOpenDialog={setOpenDialog} />
     </EditController>
   );
 };

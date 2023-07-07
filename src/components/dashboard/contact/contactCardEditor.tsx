@@ -42,6 +42,7 @@ const ContactCardEditor = (props: PropType) => {
         toast.dismiss();
         toast.success("Successfully Deleted Contact Info!");
         queryClient.invalidate().catch((e) => console.log(e));
+        setOpenDialog(false);
       },
       onError() {
         toast.dismiss();

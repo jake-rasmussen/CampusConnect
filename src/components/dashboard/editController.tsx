@@ -32,6 +32,8 @@ const EditController = (props: PropType) => {
     children,
   } = props;
 
+  console.log(openDialog);
+
   return (
     <>
       <Dialog open={openDialog}>

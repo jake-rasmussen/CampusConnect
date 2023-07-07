@@ -1,8 +1,8 @@
 import "@prisma/client";
 
+import Error from "next/error";
 import { Toaster } from "react-hot-toast";
 
-import Error from "next/error";
 import { api } from "~/utils/api";
 import Applications from "./dashboard/applications/applications";
 import Events from "./dashboard/clubEvents/events";

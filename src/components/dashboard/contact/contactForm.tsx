@@ -40,27 +40,21 @@ const ContactForm = (props: PropType) => {
 
   return (
     <Form<ContactFormType>
-      onSubmit={(values, isValid) => {
-        if (isValid) {
-          onSubmit(values);
-          setOpenDialog(false);
-          toast.dismiss();
-          toast.success("Success submitting the form!");
-        } else {
-          toast.dismiss();
-          toast.error("There are errors with the form");
-        }
+      onSubmit={(values) => {
+        onSubmit(values);
+        setOpenDialog(false);
+        toast.dismiss();
+        toast.success("Success submitting the form!");
       }}
-      submitWhenInvalid
     >
       {({ submit }) => (
         <main className="grid grid-cols-4 gap-4 py-4">
           <Field
             name="firstName"
             initialValue={firstName}
-            onChangeValidate={z.string().min(1)}
+            onBlurValidate={z.string().min(1, "Enter a first name")}
           >
-            {({ value, setValue, onBlur, errors }) => (
+            {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-2">
                 <span className="font-semibold">First Name</span>
                 <Input
@@ -70,7 +64,7 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
-                {errors.length !== 0 && <ErrorMessage />}
+                {!isValid && <ErrorMessage message={errors[0]} />}
               </div>
             )}
           </Field>
@@ -78,9 +72,9 @@ const ContactForm = (props: PropType) => {
           <Field
             name="lastName"
             initialValue={lastName}
-            onChangeValidate={z.string().min(1, "Please enter a last name")}
+            onBlurValidate={z.string().min(1, "Enter a last name")}
           >
-            {({ value, setValue, onBlur, errors }) => (
+            {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-2">
                 <span className="font-semibold">Last Name</span>
                 <Input
@@ -90,7 +84,7 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
-                {errors.length !== 0 && <ErrorMessage />}
+                {!isValid && <ErrorMessage message={errors[0]} />}
               </div>
             )}
           </Field>
@@ -98,9 +92,9 @@ const ContactForm = (props: PropType) => {
           <Field
             name="email"
             initialValue={email}
-            onChangeValidate={z.string().min(1).email("email")}
+            onBlurValidate={z.string().min(1, "Enter an email").email("email")}
           >
-            {({ value, setValue, onBlur, errors }) => (
+            {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-2">
                 <span className="font-semibold">Email</span>
                 <Input
@@ -110,12 +104,12 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
-                {errors.length !== 0 && (
+                {!isValid && (
                   <>
                     {errors[0] !== "email" ? (
-                      <ErrorMessage />
+                      <ErrorMessage message={errors[0]} />
                     ) : (
-                      <ErrorMessage alternateMessage="Invalid" />
+                      <ErrorMessage message={"Enter a valid email"} />
                     )}
                   </>
                 )}
@@ -126,9 +120,13 @@ const ContactForm = (props: PropType) => {
           <Field
             name="phone"
             initialValue={phone ? phone : ""}
-            onChangeValidate={z.string().min(10).optional().or(z.literal(""))}
+            onBlurValidate={z
+              .string()
+              .min(10, "Enter a valid phone number")
+              .optional()
+              .or(z.literal(""))}
           >
-            {({ value, setValue, onBlur, errors }) => (
+            {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-2">
                 <span className="font-semibold">Phone Number</span>
                 <Input
@@ -138,7 +136,7 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
-                {errors.length !== 0 && <ErrorMessage />}
+                {!isValid && <ErrorMessage message={errors[0]} />}
               </div>
             )}
           </Field>
@@ -146,9 +144,9 @@ const ContactForm = (props: PropType) => {
           <Field
             name="role"
             initialValue={role}
-            onChangeValidate={z.string().min(1)}
+            onBlurValidate={z.string().min(1, "Enter a role")}
           >
-            {({ value, setValue, onBlur, errors }) => (
+            {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-4">
                 <span className="font-semibold">Role</span>
                 <Input
@@ -158,7 +156,7 @@ const ContactForm = (props: PropType) => {
                   onChange={(e) => setValue(e.currentTarget.value)}
                   onBlur={onBlur}
                 />
-                {errors.length !== 0 && <ErrorMessage />}
+                {!isValid && <ErrorMessage message={errors[0]} />}
               </div>
             )}
           </Field>

@@ -59,16 +59,15 @@ const DescriptionEditor = (props: PropType) => {
             toast.error("There are errors with the form");
           }
         }}
-        submitWhenInvalid
       >
         {({ submit }) => (
           <main className="gap-4">
             <Field
               name="description"
               initialValue={clubDescription}
-              onSubmitValidate={z.string().min(1)}
+              onBlurValidate={z.string().min(1, "Enter a description")}
             >
-              {({ value, setValue, onBlur, errors }) => (
+              {({ value, setValue, onBlur, isValid, errors }) => (
                 <div>
                   <span className="font-semibold">Description</span>
                   <Textarea
@@ -79,9 +78,7 @@ const DescriptionEditor = (props: PropType) => {
                     onBlur={onBlur}
                     rows={15}
                   />
-                  {errors.length !== 0 && (
-                    <ErrorMessage alternateMessage="Must be longer than 50 characters" />
-                  )}
+                  {!isValid && <ErrorMessage message={errors[0]} />}
                 </div>
               )}
             </Field>
