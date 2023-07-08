@@ -8,11 +8,11 @@ import ContactForm from "./contactForm";
 import type { ContactFormType } from "./contactForm";
 
 type PropType = {
-  clubProfileId: string;
+  clubId: string;
 };
 
 const ContactsEditor = (props: PropType) => {
-  const { clubProfileId } = props;
+  const { clubId } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -33,7 +33,7 @@ const ContactsEditor = (props: PropType) => {
 
   const handleSubmit = (values: ContactFormType) => {
     createContactInfo.mutate({
-      clubProfileId,
+      clubId: clubId,
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
@@ -49,7 +49,7 @@ const ContactsEditor = (props: PropType) => {
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
     >
-      <ContactForm onSubmit={handleSubmit} />
+      <ContactForm onSubmit={handleSubmit} setOpenDialog={setOpenDialog} />
     </EditController>
   );
 };

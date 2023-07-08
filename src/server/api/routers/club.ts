@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const clubRouter = createTRPCRouter({
   getClubByIdForUsers: protectedProcedure
@@ -20,11 +20,9 @@ export const clubRouter = createTRPCRouter({
 
       return club;
     }),
-
   getAllClubs: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.club.findMany({});
   }),
-
   searchForClubs: protectedProcedure
     .input(
       z.object({
@@ -43,5 +41,17 @@ export const clubRouter = createTRPCRouter({
       });
 
       return clubs;
+    }),
+  getClubByIdForAdmin: adminProcedure
+    .input(z.object({ clubId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { clubId } = input;
+      const club = await ctx.prisma.club.findUniqueOrThrow({
+        where: {
+          id: clubId,
+        },
+      });
+
+      return club;
     }),
 });

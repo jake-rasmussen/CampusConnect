@@ -10,32 +10,55 @@ import { api } from "~/utils/api";
 const AdminClubDashboard = () => {
   const router = useRouter();
   const clubId = router.query.clubId as string;
-  //TODO: all the data fields should be fetched seperately as opposed to in one big query to allow for better caching/invalidate
+
   const {
     data: club,
-    isLoading,
-    isError,
-    error,
-  } = api.clubRouter.getClubByIdForUsers.useQuery(
+    isLoading: isLoadingClub,
+    isError: isErrorClub,
+  } = api.clubRouter.getClubByIdForAdmin.useQuery(
     {
       clubId,
     },
     { enabled: !!clubId },
   );
 
-  if (isLoading) {
+  const {
+    data: clubEvents,
+    isLoading: isLoadingEvents,
+    isError: isErrorEvents
+  } = api.clubEventsRouter.getClubEventsByClubId.useQuery({
+    clubId
+  });
+
+  const {
+    data: clubContactInfos,
+    isLoading: isLoadingContacts,
+    isError: isErrorContacts
+  } = api.clubContactInfoRouter.getClubContactInfosByClubId.useQuery({
+    clubId
+  });
+
+  const {
+    data: clubApplications,
+    isLoading: isLoadingApplications,
+    isError: isErrorApplications
+  } = api.clubApplicationRouter.getClubApplicationsByClubId.useQuery({
+    clubId
+  });
+
+  if (isLoadingClub || isLoadingEvents || isLoadingContacts || isLoadingApplications) {
     return <ClubDashBoardSkeleton />;
-  } else if (isError) {
-    return <Error statusCode={error?.data?.httpStatus || 500} />;
+  } else if (isErrorClub || isErrorEvents || isErrorContacts || isErrorApplications) {
+    return <Error statusCode={500} />;
   } else {
     return (
       <ClubDashboardPage
         name={club.name}
         clubId={club.id}
         description={club.description}
-        events={club.events}
-        contactInfos={club.contactInfo}
-        applications={club.applications}
+        events={clubEvents}
+        contactInfos={clubContactInfos}
+        applications={clubApplications}
         isAdminPage={true}
       />
     );

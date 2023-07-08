@@ -23,7 +23,7 @@ export const appRouter = createTRPCRouter({
   clubRouter,
   clubEventsRouter,
   clubContactInfoRouter,
-  clubApplicationRouter
+  clubApplicationRouter,
 });
 
 // export type definition of API

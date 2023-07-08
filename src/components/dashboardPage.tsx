@@ -29,8 +29,15 @@ type PropType = {
 };
 
 const DashboardPage = (props: PropType) => {
-  const { name, clubId, description, events, contactInfos, applications, isAdminPage } =
-    props;
+  const {
+    name,
+    clubId,
+    description,
+    events,
+    contactInfos,
+    applications,
+    isAdminPage,
+  } = props;
 
   return (
     <>

@@ -1,8 +1,23 @@
 import { z } from "zod";
 
 import { adminProcedure, createTRPCRouter } from "../trpc";
-//TODO: fix up this file where clubProfile still used
+
 export const clubContactInfoRouter = createTRPCRouter({
+  getClubContactInfosByClubId: adminProcedure
+    .input(
+      z.object({
+        clubId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { clubId } = input;
+      const clubContactInfos = await ctx.prisma.clubContactInfo.findMany({
+        where: {
+          clubId,
+        },
+      });
+      return clubContactInfos;
+    }),
   updateClubContactInfoById: adminProcedure
     .input(
       z.object({
@@ -34,7 +49,7 @@ export const clubContactInfoRouter = createTRPCRouter({
   createClubContactInfo: adminProcedure
     .input(
       z.object({
-        clubProfileId: z.string(),
+        clubId: z.string(),
         firstName: z.string(),
         lastName: z.string(),
         email: z.string(),
@@ -43,11 +58,11 @@ export const clubContactInfoRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubProfileId, firstName, lastName, email, phone, role } = input;
-  
+      const { clubId, firstName, lastName, email, phone, role } = input;
+
       const clubContactInfo = await ctx.prisma.clubContactInfo.create({
         data: {
-          clubProfileId,
+          clubId,
           firstName,
           lastName,
           email,

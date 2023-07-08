@@ -3,6 +3,38 @@ import { z } from "zod";
 import { adminProcedure, createTRPCRouter } from "../trpc";
 
 export const clubEventsRouter = createTRPCRouter({
+  getClubEventById: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+      const event = await ctx.prisma.clubEvent.findUniqueOrThrow({
+        where: {
+          id,
+        },
+      });
+
+      return event;
+    }),
+  getClubEventsByClubId: adminProcedure
+    .input(
+      z.object({
+        clubId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { clubId } = input;
+      const events = await ctx.prisma.clubEvent.findMany({
+        where: {
+          clubId,
+        },
+      });
+
+      return events;
+    }),
   updateClubEventById: adminProcedure
     .input(
       z.object({

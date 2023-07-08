@@ -1,8 +1,25 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const clubApplicationRouter = createTRPCRouter({
+  getClubApplicationsByClubId: adminProcedure
+    .input(
+      z.object({
+        clubId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { clubId } = input;
+
+      const clubApplications = await ctx.prisma.clubApplication.findMany({
+        where: {
+          clubId,
+        },
+      });
+      
+      return clubApplications;
+    }),
   createClubApplication: protectedProcedure
     .input(
       z.object({

@@ -11,7 +11,7 @@ type PropType = {
 };
 
 const Contact = (props: PropType) => {
-  const { contactInfos, clubId: clubProfileId, editable: edit } = props;
+  const { contactInfos, clubId, editable: edit } = props;
 
   return (
     <>
@@ -26,7 +26,7 @@ const Contact = (props: PropType) => {
               />
             ),
           )}
-          {edit && <ContactsEditor clubProfileId={clubProfileId} />}
+          {edit && <ContactsEditor clubId={clubId} />}
         </>
       </ContactOutline>
     </>

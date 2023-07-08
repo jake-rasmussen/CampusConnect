@@ -10,9 +10,7 @@ import { randomNumberBetweenInclusive } from "~/utils/helpers";
 
 import type { Prisma } from "@prisma/client";
 
-
 //TODO: Break this file up into smaller files
-
 
 const generateRandomSocialMedia = (numSocialMedias?: number) => {
   const socialMediaPlatforms: Array<SocialMediaPlatformType> = Object.values(
