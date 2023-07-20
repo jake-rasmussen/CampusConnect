@@ -17,22 +17,16 @@ const Events = (props: PropType) => {
     <section>
       <EventsOutline>
         <>
-          {events.length == 0 ? (
-            <h1 className="tracking-none text-md font-black uppercase text-red-600">
-              There are no events listed
-            </h1>
-          ) : (
-            events.map((clubEvent: ClubEvent, index: number) => {
-              return (
-                <EventCard
-                  clubEvent={clubEvent}
-                  clubId={clubId}
-                  edit={edit}
-                  key={`clubEvent${index}`}
-                />
-              );
-            })
-          )}
+          {events.map((clubEvent: ClubEvent, index: number) => {
+            return (
+              <EventCard
+                clubEvent={clubEvent}
+                clubId={clubId}
+                edit={edit}
+                key={`clubEvent${index}`}
+              />
+            );
+          })}
           {edit && <EventsEditor clubId={clubId} />}
         </>
       </EventsOutline>

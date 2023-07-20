@@ -1,8 +1,8 @@
-import { type ClubContactInfo } from "@prisma/client";
-
 import ContactCard from "./contactCard";
 import ContactOutline from "./contactOutline";
 import ContactsEditor from "./contactsEditor";
+
+import type { ClubContactInfo } from "@prisma/client";
 
 type PropType = {
   contactInfos: ClubContactInfo[];
@@ -17,20 +17,14 @@ const Contact = (props: PropType) => {
     <section className="flex flex-col items-center">
       <ContactOutline>
         <>
-          {contactInfos.length == 0 ? (
-            <h1 className="tracking-none text-sm font-black uppercase text-red-600">
-              There are no contacts listed
-            </h1>
-          ) : (
-            contactInfos.map(
-              (clubContactInfo: ClubContactInfo, index: number) => (
-                <ContactCard
-                  clubContactInfo={clubContactInfo}
-                  edit={edit}
-                  key={`clubContact${index}`}
-                />
-              ),
-            )
+          {contactInfos.map(
+            (clubContactInfo: ClubContactInfo, index: number) => (
+              <ContactCard
+                clubContactInfo={clubContactInfo}
+                edit={edit}
+                key={`clubContact${index}`}
+              />
+            ),
           )}
         </>
       </ContactOutline>

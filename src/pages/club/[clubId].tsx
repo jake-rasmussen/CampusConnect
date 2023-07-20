@@ -40,6 +40,7 @@ const ClubDashboard: NextPageWithLayout = () => {
         events={club.events}
         contactInfos={club.clubProfile.clubContactInfo}
         applications={club.clubApplications}
+        socialMedias={club.clubSocialMedia}
       />
     );
   }

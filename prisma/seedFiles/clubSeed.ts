@@ -9,7 +9,7 @@ const generateRandomSocialMedia = () => {
   const socialMediaPlatforms: Array<SocialMediaPlatformType> = Object.values(
     SocialMediaPlatformType,
   );
-  const socialMediaObjects: Array<Prisma.SocialMediaCreateWithoutClubInput> =
+  const socialMediaObjects: Array<Prisma.ClubSocialMediaCreateWithoutClubInput> =
     [];
 
   const numSocialMedias = randomNumberBetweenInclusive(
@@ -58,70 +58,70 @@ const generateRandomEvents = () => {
 const mockClubs: Array<Prisma.ClubCreateInput> = [
   {
     name: "Tech Wizards",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },
   },
   {
     name: "Artistic Expression",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },
   },
   {
     name: "Eco Warriors",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },
   },
   {
     name: "Adventure Seekers",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },
   },
   {
     name: "Health and Fitness Enthusiasts",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },
   },
   {
     name: "Debate and Discourse Society",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },
   },
   {
     name: "Music and Melodies",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },
   },
   {
     name: "Culinary Explorers",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },
   },
   {
     name: "Film Fanatics",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },
   },
   {
     name: "Literary Society",
-    socialMedia: { create: generateRandomSocialMedia() },
+    clubSocialMedia: { create: generateRandomSocialMedia() },
     clubApplications: {},
     events: { create: generateRandomEvents() },
     clubProfile: { create: {} },

@@ -28,6 +28,7 @@ export const clubRouter = createTRPCRouter({
               date: "asc",
             },
           },
+          clubSocialMedia: true,
         },
       });
 

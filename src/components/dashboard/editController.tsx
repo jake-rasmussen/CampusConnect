@@ -15,6 +15,7 @@ import {
 
 type PropType = {
   dialogDescription: string;
+  createDescription?: string;
   editType: "update" | "create";
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,6 +26,7 @@ type PropType = {
 const EditController = (props: PropType) => {
   const {
     dialogDescription,
+    createDescription,
     editType,
     openDialog,
     setOpenDialog,
@@ -49,7 +51,7 @@ const EditController = (props: PropType) => {
                       className,
                     )}
                   />
-                  <Edit className="mx-auto h-24 w-24 text-gray opacity-0 duration-300 group-hover:text-secondary group-hover:opacity-100" />
+                  <Edit className="mx-auto h-24 w-24 text-gray opacity-0 duration-300 group-hover:text-primary group-hover:opacity-100" />
                 </button>
               </div>
             )}
@@ -61,7 +63,7 @@ const EditController = (props: PropType) => {
                 >
                   <SquarePlus className="mx-auto h-14 w-14 text-gray duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
                   <h1 className="tracking-none text-2xl font-black uppercase text-gray group-hover:cursor-pointer group-hover:text-secondary">
-                    Add New Item
+                    {createDescription}
                   </h1>
                 </button>
               </div>

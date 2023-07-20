@@ -52,7 +52,7 @@ model User {
 model Club {
     id               String            @id @default(cuid())
     name             String            @unique
-    socialMedia      SocialMedia[]
+    clubSocialMedia  ClubSocialMedia[]
     // members          ClubMember[]
     clubApplications ClubApplication[]
     createdAt        DateTime          @default(now())
@@ -93,7 +93,7 @@ model ClubContactInfo {
     role          String
 }
 
-model SocialMedia {
+model ClubSocialMedia {
     id        String                  @id @default(cuid())
     clubId    String
     club      Club                    @relation(fields: [clubId], references: [id], onDelete: Cascade)

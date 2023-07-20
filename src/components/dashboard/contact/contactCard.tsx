@@ -1,5 +1,4 @@
 import { type ClubContactInfo } from "@prisma/client";
-import { Triangle } from "tabler-icons-react";
 
 import { Badge } from "../../shadcn_ui/badge";
 import ContactCardEditor from "./contactCardEditor";
@@ -32,7 +31,7 @@ const ContactCard = (props: PropType) => {
           </div>
         </div>
 
-        {edit ? (
+        {edit && (
           <ContactCardEditor
             firstName={clubContactInfo.firstName}
             lastName={clubContactInfo.lastName}
@@ -41,8 +40,6 @@ const ContactCard = (props: PropType) => {
             role={clubContactInfo.role}
             contactInfoId={clubContactInfo.id}
           />
-        ) : (
-          <></>
         )}
       </div>
     </>

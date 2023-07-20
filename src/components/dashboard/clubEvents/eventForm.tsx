@@ -196,7 +196,7 @@ const EventForm = (props: PropType) => {
           <Field
             name="time"
             initialValue={eventDate}
-            onChangeValidate={z.date({
+            onBlurValidate={z.date({
               required_error: "Enter a time",
               invalid_type_error: "Enter a time",
             })}

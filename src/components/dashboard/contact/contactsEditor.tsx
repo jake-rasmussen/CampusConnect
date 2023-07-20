@@ -44,8 +44,9 @@ const ContactsEditor = (props: PropType) => {
 
   return (
     <EditController
-      dialogDescription={"Create Contact Info"}
-      editType={"create"}
+      dialogDescription="Create Contact Info"
+      createDescription="Create New Contact"
+      editType="create"
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
     >
