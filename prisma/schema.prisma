@@ -3,7 +3,7 @@
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["jsonProtocol"]
+    previewFeatures = ["fullTextSearch", "jsonProtocol"]
 }
 
 datasource db {
@@ -11,10 +11,10 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-// enum ClubMemberType {
-//     ADMIN
-//     GRADER
-// }
+enum ClubMemberType {
+    ADMIN
+    GRADER
+}
 
 enum SocialMediaPlatformType {
     TWITTER
@@ -46,14 +46,14 @@ model User {
     emailAddress String
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
-    // clubMemberships ClubMember[]
+    clubMemberships ClubMember[]
 }
 
 model Club {
     id               String            @id @default(cuid())
     name             String            @unique
     clubSocialMedia  ClubSocialMedia[]
-    // members          ClubMember[]
+    members          ClubMember[]
     clubApplications ClubApplication[]
     createdAt        DateTime          @default(now())
     updatedAt        DateTime          @updatedAt
@@ -61,17 +61,17 @@ model Club {
     clubProfile      ClubProfile?
 }
 
-// model ClubMember {
-//     clubId    String
-//     club      Club           @relation(fields: [clubId], references: [id], onDelete: Cascade)
-//     userId    String
-//     user      User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
-//     type      ClubMemberType
-//     createdAt DateTime       @default(now())
-//     updatedAt DateTime       @updatedAt
+model ClubMember {
+    clubId    String
+    club      Club           @relation(fields: [clubId], references: [id], onDelete: Cascade)
+    userId    String
+    user      User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+    type      ClubMemberType
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
 
-//     @@id([clubId, userId])
-// }
+    @@id([clubId, userId])
+}
 
 model ClubProfile {
     id              String            @id @default(cuid())

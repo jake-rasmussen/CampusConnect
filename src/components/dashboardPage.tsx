@@ -7,6 +7,7 @@ import Events from "./dashboard/clubEvents/events";
 import Contact from "./dashboard/contact/contact";
 import Description from "./dashboard/description/description";
 import Header from "./dashboard/header/header";
+import Members from "./dashboard/members/members";
 import SocialMedia from "./dashboard/socialMedia/socialMedia";
 import Tab from "./tab/tab";
 import TabContent from "./tab/tabContent";
@@ -17,8 +18,10 @@ import type {
   ClubApplication,
   ClubContactInfo,
   ClubEvent,
+  ClubMember,
   ClubProfile,
   ClubSocialMedia,
+  User,
 } from "@prisma/client";
 
 type PropType = {
@@ -29,6 +32,9 @@ type PropType = {
   contactInfos: ClubContactInfo[];
   applications: ClubApplication[];
   socialMedias: ClubSocialMedia[];
+  members: (ClubMember & {
+    user: User;
+  })[];
 };
 
 const DashboardPage = (props: PropType) => {
@@ -40,6 +46,7 @@ const DashboardPage = (props: PropType) => {
     contactInfos,
     applications,
     socialMedias,
+    members,
   } = props;
 
   return (
@@ -52,6 +59,7 @@ const DashboardPage = (props: PropType) => {
           <TabList>
             <TabHeader>About Us</TabHeader>
             <TabHeader>Applications</TabHeader>
+            <TabHeader>Members</TabHeader>
           </TabList>
           <TabContent>
             <div className="mx-10 flex flex-col gap-10">
@@ -78,6 +86,9 @@ const DashboardPage = (props: PropType) => {
               clubId={clubId}
               edit={true}
             />
+          </TabContent>
+          <TabContent>
+            <Members clubId={clubId} members={members} />
           </TabContent>
         </Tab>
       </main>
