@@ -7,6 +7,7 @@ import ContactSkeleton from "./contactSkeleton";
 import DescriptionSkeleton from "./descriptionSkeleton";
 import EventSkeleton from "./eventSkeleton";
 import HeaderSkeleton from "./headerSkeleton";
+import MemberSkeleton from "./memberSkeleton";
 
 const ClubDashBoardSkeleton = () => {
   return (
@@ -18,6 +19,7 @@ const ClubDashBoardSkeleton = () => {
           <TabList>
             <TabHeader>About Us</TabHeader>
             <TabHeader>Applications</TabHeader>
+            <TabHeader>Members</TabHeader>
           </TabList>
           <TabContent>
             <div className="mx-10 grid w-full grid-cols-2 py-6 lg:grid-cols-5">
@@ -32,9 +34,12 @@ const ClubDashBoardSkeleton = () => {
           <TabContent>
             <ApplicationsSkeleton />
           </TabContent>
+          <TabContent>
+            <MemberSkeleton />
+          </TabContent>
         </Tab>
       </main>
-
+      
       <EventSkeleton />
     </>
   );
