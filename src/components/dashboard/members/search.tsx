@@ -1,8 +1,10 @@
 import { ClubMember, User } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { api } from "~/utils/api";
 import { Input } from "../../shadcn_ui/input";
+import { debounce } from "lodash";
+import React from "react";
 
 type PropType = {
   clubId: string;
@@ -14,17 +16,15 @@ type PropType = {
 const Search = (props: PropType) => {
   const { clubId, members } = props;
 
+  const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [registeredUserIds, setRegisteredUserIds] = useState<string[]>(
     Array.from(members, (member) => member.user.userId),
   );
-  const [selectedInput, setSelectedInput] = useState(false);
-
-  const { data: users } = api.usersRouter.getUsersByQuery.useQuery({ query });
+  const { data: users } = api.usersRouter.getUsersByQuery.useQuery({ query: search });
 
   const queryClient = api.useContext();
 
-  // TODO: add debounce functionality
   const addMember = api.clubMemberRouter.createClubMember.useMutation({
     onSuccess() {
       queryClient.invalidate();
@@ -33,7 +33,14 @@ const Search = (props: PropType) => {
 
   const [queryResult, setQueryResult] = useState<User[]>([]);
 
+  const debouncedSearch = useRef(
+    debounce(async (input) => {
+      setSearch(input)
+    }, 200)
+  ).current;
+
   useEffect(() => {
+    setQueryResult([]);
     if (users !== undefined) {
       setQueryResult(
         users.filter((user) => !registeredUserIds.includes(user.userId)),
@@ -42,11 +49,18 @@ const Search = (props: PropType) => {
     }
   }, [users]);
 
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
   const handleAddMember = (userId: string) => {
     addMember.mutate({
       clubId,
       userId,
     });
+    setSearch("");
     setQuery("");
   };
 
@@ -54,11 +68,14 @@ const Search = (props: PropType) => {
     <div className="relative flex max-w-sm flex-col items-center justify-center">
       <Input
         value={query}
-        onChange={(e) => setQuery(e.currentTarget.value)}
+        onChange={(e) => {
+          debouncedSearch(e.currentTarget.value);
+          setQuery(e.currentTarget.value);
+        }}
         placeholder="ADD A USER"
         className="tracking-none border border-2 text-xl font-black uppercase text-secondary"
       />
-      {queryResult && queryResult.length > 0 && query.length > 0 && (
+      {queryResult && queryResult.length > 0 && search.length > 0 && (
         <div className="absolute top-0 z-20 flex max-h-48 translate-y-12 flex-col overflow-y-scroll rounded-xl border border-2 border-secondary bg-white p-4 shadow-xl">
           {queryResult.map((query: User, index: number) => {
             return (

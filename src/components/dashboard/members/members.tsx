@@ -5,7 +5,6 @@ import { TrashX } from "tabler-icons-react";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -21,6 +20,7 @@ import {
 import { api } from "~/utils/api";
 import MemberOutline from "./memberOutline";
 import Search from "./search";
+
 
 type PropType = {
   clubId: string;
