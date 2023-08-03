@@ -1,5 +1,3 @@
-import "@prisma/client";
-
 import Error from "next/error";
 import { useRouter } from "next/router";
 import React from "react";
@@ -9,12 +7,10 @@ import ClubDashBoardSkeleton from "~/components/skeletons/clubDashboardSkeleton"
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-import type { NextPageWithLayout } from "~/pages/_app";
-
-const ClubDashboard: NextPageWithLayout = () => {
+const AdminClubDashboard = () => {
   const router = useRouter();
   const clubId = router.query.clubId as string;
-
+  //TODO: all the data fields should be fetched seperately as opposed to in one big query to allow for better caching/invalidate
   const {
     data: club,
     isLoading,
@@ -38,17 +34,19 @@ const ClubDashboard: NextPageWithLayout = () => {
         clubId={club.id}
         description={club.description}
         events={club.events}
-        contactInfos={club.clubProfile.clubContactInfo}
-        applications={club.clubApplications}
-        socialMedias={club.clubSocialMedia}
-        members={club.members}
+        contactInfos={club.contactInfo}
+        applications={club.applications}
+        isAdminPage={true}
       />
     );
   }
 };
 
-ClubDashboard.getLayout = (page) => {
+AdminClubDashboard.getLayout = (
+  page: React.ReactElement<any, string | React.JSXElementConstructor<any>>,
+) => {
+  //TODO: add admin layout
   return <UserLayout>{page}</UserLayout>;
 };
 
-export default ClubDashboard;
+export default AdminClubDashboard;

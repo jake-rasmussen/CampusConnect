@@ -7,6 +7,7 @@ import { Input } from "~/components/shadcn_ui/input";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
+import type { Club } from "@prisma/client";
 import type { NextPageWithLayout } from "~/pages/_app";
 
 const AllClubs: NextPageWithLayout = () => {

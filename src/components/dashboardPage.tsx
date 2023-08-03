@@ -19,7 +19,6 @@ import type {
   ClubContactInfo,
   ClubEvent,
   ClubMember,
-  ClubProfile,
   ClubSocialMedia,
   User,
 } from "@prisma/client";
@@ -27,7 +26,7 @@ import type {
 type PropType = {
   name: string;
   clubId: string;
-  clubProfile: ClubProfile & { clubContactInfo: ClubContactInfo[] };
+  description: string;
   events: ClubEvent[];
   contactInfos: ClubContactInfo[];
   applications: ClubApplication[];
@@ -41,7 +40,7 @@ const DashboardPage = (props: PropType) => {
   const {
     name,
     clubId,
-    clubProfile,
+    description,
     events,
     contactInfos,
     applications,
@@ -52,7 +51,7 @@ const DashboardPage = (props: PropType) => {
   return (
     <>
       <Toaster />
-      <Header name={name} edit={false} />
+      <Header name={name} editable={true} />
 
       <main className="relative flex justify-center">
         <Tab>
@@ -64,14 +63,14 @@ const DashboardPage = (props: PropType) => {
           <TabContent>
             <div className="mx-10 flex flex-col gap-10">
               <Description
-                clubId={clubProfile.id}
-                clubDescription={clubProfile.description}
-                edit={true}
+                clubId={clubId}
+                clubDescription={description}
+                editable={true}
               />
               <Contact
                 contactInfos={contactInfos}
-                clubProfileId={clubProfile.id}
-                edit={true}
+                clubId={clubId}
+                editable={true}
               />
               <SocialMedia
                 socialMedias={socialMedias}
@@ -84,7 +83,7 @@ const DashboardPage = (props: PropType) => {
             <Applications
               applications={applications}
               clubId={clubId}
-              edit={true}
+              editable={true}
             />
           </TabContent>
           <TabContent>
@@ -93,7 +92,7 @@ const DashboardPage = (props: PropType) => {
         </Tab>
       </main>
 
-      <Events events={events} clubId={clubId} edit={true} />
+      <Events events={events} clubId={clubId} editable={true} />
     </>
   );
 };

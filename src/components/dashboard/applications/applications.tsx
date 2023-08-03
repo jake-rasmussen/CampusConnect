@@ -6,11 +6,11 @@ import ApplicationsOutline from "./applicationsOutline";
 type PropType = {
   applications: ClubApplication[];
   clubId: string;
-  edit: boolean;
+  editable: boolean;
 };
 
 const Applications = (props: PropType) => {
-  const { applications, clubId, edit } = props;
+  const { applications, clubId, editable: edit } = props;
 
   return (
     <>

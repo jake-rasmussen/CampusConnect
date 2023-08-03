@@ -7,11 +7,11 @@ import EventsOutline from "./eventsOutline";
 type PropType = {
   events: ClubEvent[];
   clubId: string;
-  edit: boolean;
+  editable: boolean;
 };
 
 const Events = (props: PropType) => {
-  const { events, clubId, edit } = props;
+  const { events, clubId, editable: edit } = props;
 
   return (
     <section>

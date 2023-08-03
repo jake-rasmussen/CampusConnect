@@ -6,12 +6,12 @@ import type { ClubContactInfo } from "@prisma/client";
 
 type PropType = {
   contactInfos: ClubContactInfo[];
-  clubProfileId: string;
-  edit: boolean;
+  clubId: string;
+  editable: boolean;
 };
 
 const Contact = (props: PropType) => {
-  const { contactInfos, clubProfileId, edit } = props;
+  const { contactInfos, clubId: clubProfileId, editable: edit } = props;
 
   return (
     <section className="flex flex-col items-center">

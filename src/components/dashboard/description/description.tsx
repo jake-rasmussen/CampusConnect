@@ -4,11 +4,11 @@ import DescriptionOutline from "./descriptionOutline";
 type PropType = {
   clubId: string;
   clubDescription: string;
-  edit: boolean;
+  editable: boolean;
 };
 
 const Description = (props: PropType) => {
-  const { clubId, clubDescription, edit } = props;
+  const { clubId, clubDescription, editable: edit } = props;
 
   return (
     <>
