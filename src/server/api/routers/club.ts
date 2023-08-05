@@ -12,27 +12,14 @@ export const clubRouter = createTRPCRouter({
           id: clubId,
         },
         include: {
-          clubProfile: {
-            include: {
-              clubContactInfo: true,
-            },
-          },
           clubApplications: true,
-          events: {
-            where: {
-              date: {
-                gte: new Date(),
-              },
-            },
-            orderBy: {
-              date: "asc",
-            },
-          },
+          events: true,
+          clubContactInfo: true,
           clubSocialMedia: true,
           members: {
             include: {
-              user: true,
-            },
+              user: true
+            }
           },
         },
       });
@@ -48,11 +35,6 @@ export const clubRouter = createTRPCRouter({
           id: clubId,
         },
         include: {
-          clubProfile: {
-            include: {
-              clubContactInfo: true,
-            },
-          },
           clubApplications: true,
           events: {
             orderBy: {

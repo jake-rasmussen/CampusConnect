@@ -53,7 +53,7 @@ const DashboardPage = (props: PropType) => {
       <Toaster />
       <Header name={name} editable={true} />
 
-      <main className="relative flex justify-center">
+      <main className="relative flex flex-col justify-center">
         <Tab>
           <TabList>
             <TabHeader>About Us</TabHeader>
@@ -61,7 +61,7 @@ const DashboardPage = (props: PropType) => {
             <TabHeader>Members</TabHeader>
           </TabList>
           <TabContent>
-            <div className="mx-10 flex flex-col gap-10">
+            <div className="mx-10 flex flex-col gap-10 justify-center items-center">
               <Description
                 clubId={clubId}
                 clubDescription={description}
@@ -90,9 +90,8 @@ const DashboardPage = (props: PropType) => {
             <Members clubId={clubId} members={members} />
           </TabContent>
         </Tab>
+        <Events events={events} clubId={clubId} editable={true} />
       </main>
-
-      <Events events={events} clubId={clubId} editable={true} />
     </>
   );
 };
