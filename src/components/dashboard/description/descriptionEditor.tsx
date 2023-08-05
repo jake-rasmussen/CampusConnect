@@ -46,30 +46,23 @@ const DescriptionEditor = (props: PropType) => {
       setOpenDialog={setOpenDialog}
     >
       <Form<EditorFormType>
-        onSubmit={(values, errors) => {
-          if (errors.errors.length === 0) {
-            updateDescription.mutate({
-              id: clubId,
-              description: values.description,
-            });
-            setOpenDialog(false);
-            toast.dismiss();
-            toast.success("Success submitting the form!");
-          } else {
-            toast.dismiss();
-            toast.error("There are errors with the form");
-          }
+        onSubmit={(values) => {
+          const { description } = values;
+          updateDescription.mutate({
+            id: clubId,
+            description: description,
+          });
+          setOpenDialog(false);
         }}
-        submitWhenInvalid
       >
         {({ submit }) => (
           <main className="gap-4">
             <Field
               name="description"
               initialValue={clubDescription}
-              onSubmitValidate={z.string().min(50)}
+              onBlurValidate={z.string().min(1, "Enter a description")}
             >
-              {({ value, setValue, onBlur, errors }) => (
+              {({ value, setValue, onBlur, isValid, errors }) => (
                 <div>
                   <span className="font-semibold">Description</span>
                   <Textarea
@@ -80,9 +73,7 @@ const DescriptionEditor = (props: PropType) => {
                     onBlur={onBlur}
                     rows={15}
                   />
-                  {errors.length !== 0 && (
-                    <ErrorMessage alternateMessage="Must be longer than 50 characters" />
-                  )}
+                  {!isValid && <ErrorMessage message={errors[0]} />}
                 </div>
               )}
             </Field>

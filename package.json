@@ -35,13 +35,16 @@
     "@radix-ui/react-tooltip": "^1.0.6",
     "@t3-oss/env-nextjs": "^0.3.1",
     "@tanstack/react-query": "^4.29.7",
+    "@tanstack/react-table": "^8.9.3",
     "@trpc/client": "^10.26.0",
     "@trpc/next": "^10.26.0",
     "@trpc/react-query": "^10.26.0",
     "@trpc/server": "^10.26.0",
+    "@types/lodash": "^4.14.196",
     "date-fns": "^2.30.0",
     "dotenv-cli": "^7.2.1",
     "houseform": "^1.11.0",
+    "lodash": "^4.17.21",
     "next": "^13.4.2",
     "react": "18.2.0",
     "react-day-picker": "^8.8.0",
@@ -81,5 +84,9 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.13.2"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/d-drozdov/hopkins-club-connect.git",
+  "author": "jrasmus6 <89819505+jrasmus6@users.noreply.github.com>",
+  "license": "MIT"
 }

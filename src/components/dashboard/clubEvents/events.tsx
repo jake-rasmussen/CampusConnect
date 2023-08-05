@@ -14,7 +14,7 @@ const Events = (props: PropType) => {
   const { events, clubId, editable: edit } = props;
 
   return (
-    <>
+    <section>
       <EventsOutline>
         <>
           {events.map((clubEvent: ClubEvent, index: number) => {
@@ -30,7 +30,7 @@ const Events = (props: PropType) => {
           {edit && <EventsEditor clubId={clubId} />}
         </>
       </EventsOutline>
-    </>
+    </section>
   );
 };
 

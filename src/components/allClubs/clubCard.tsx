@@ -1,7 +1,6 @@
 import Link from "next/link";
 import React from "react";
 
-import Button from "../button";
 import { Card } from "../shadcn_ui/card";
 
 type PropTypes = {

@@ -7,6 +7,8 @@ import Events from "./dashboard/clubEvents/events";
 import Contact from "./dashboard/contact/contact";
 import Description from "./dashboard/description/description";
 import Header from "./dashboard/header/header";
+import Members from "./dashboard/members/members";
+import SocialMedia from "./dashboard/socialMedia/socialMedia";
 import Tab from "./tab/tab";
 import TabContent from "./tab/tabContent";
 import TabHeader from "./tab/tabHeader";
@@ -16,6 +18,9 @@ import type {
   ClubApplication,
   ClubContactInfo,
   ClubEvent,
+  ClubMember,
+  ClubSocialMedia,
+  User,
 } from "@prisma/client";
 
 type PropType = {
@@ -25,53 +30,69 @@ type PropType = {
   events: ClubEvent[];
   contactInfos: ClubContactInfo[];
   applications: ClubApplication[];
-  isAdminPage: boolean;
+  socialMedias: ClubSocialMedia[];
+  members: (ClubMember & {
+    user: User;
+  })[];
 };
 
 const DashboardPage = (props: PropType) => {
-  const { name, clubId, description, events, contactInfos, applications, isAdminPage } =
-    props;
+  const {
+    name,
+    clubId,
+    description,
+    events,
+    contactInfos,
+    applications,
+    socialMedias,
+    members,
+  } = props;
 
   return (
     <>
       <Toaster />
-      <Header name={name} editable={isAdminPage} />
+      <Header name={name} editable={true} />
 
       <main className="relative flex justify-center">
         <Tab>
           <TabList>
             <TabHeader>About Us</TabHeader>
             <TabHeader>Applications</TabHeader>
+            <TabHeader>Members</TabHeader>
           </TabList>
           <TabContent>
-            <div className="mx-10 grid w-full grid-cols-2 py-6 xl:grid-cols-5">
-              <div className="col-span-2 lg:col-span-1 lg:pr-10 xl:col-span-3">
-                <Description
-                  clubId={clubId}
-                  clubDescription={description}
-                  editable={isAdminPage}
-                />
-              </div>
-              <div className="col-span-2 py-6 lg:col-span-1 xl:col-span-2">
-                <Contact
-                  contactInfos={contactInfos}
-                  clubId={clubId}
-                  editable={isAdminPage}
-                />
-              </div>
+            <div className="mx-10 flex flex-col gap-10">
+              <Description
+                clubId={clubId}
+                clubDescription={description}
+                editable={true}
+              />
+              <Contact
+                contactInfos={contactInfos}
+                clubId={clubId}
+                editable={true}
+              />
+              <SocialMedia
+                socialMedias={socialMedias}
+                clubId={clubId}
+                edit={true}
+              />
             </div>
           </TabContent>
           <TabContent>
             <Applications
               applications={applications}
               clubId={clubId}
-              editable={isAdminPage}
+              editable={true}
             />
+          </TabContent>
+          <TabContent>
+            <Members clubId={clubId} members={members} />
           </TabContent>
         </Tab>
       </main>
 
-      <Events events={events} clubId={clubId} editable={isAdminPage} />
+      <Events events={events} clubId={clubId} editable={true} />
     </>
   );
 };

@@ -1,33 +1,31 @@
+import { SocialMediaPlatformType } from "@prisma/client";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
 import EditController from "../editController";
-import ContactForm from "./contactForm";
+import SocialMediaForm from "./socialMediaForm";
 
-import type { ContactFormType } from "./contactForm";
+import type { SocialMediaFormType } from "./socialMediaForm";
 
 type PropType = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  role: string;
-  contactInfoId: string;
+  url: string;
+  platform: SocialMediaPlatformType;
+  socialMediaId: string;
 };
 
-const ContactCardEditor = (props: PropType) => {
-  const { firstName, lastName, email, phone, role, contactInfoId } = props;
+const SocialMediaCardEditor = (props: PropType) => {
+  const { url, platform, socialMediaId } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
-  const updateContactInfo =
-    api.clubContactInfoRouter.updateClubContactInfoById.useMutation({
+  const updateSocialMedia =
+    api.clubSocialMediaRouter.updateClubSocialMediaById.useMutation({
       onSuccess() {
         toast.dismiss();
-        toast.success("Successfully Updated Contact!");
+        toast.success("Successfully Updated Social Media!");
         queryClient.invalidate().catch((e) => console.log(e));
       },
       onError() {
@@ -36,11 +34,11 @@ const ContactCardEditor = (props: PropType) => {
       },
     });
 
-  const deleteContactInfo =
-    api.clubContactInfoRouter.deleteClubContactInfoById.useMutation({
+  const deleteSocialMedia =
+    api.clubSocialMediaRouter.deleteClubSocialMediaById.useMutation({
       onSuccess() {
         toast.dismiss();
-        toast.success("Successfully Deleted Contact Info!");
+        toast.success("Successfully Deleted Social Media!");
         queryClient.invalidate().catch((e) => console.log(e));
         setOpenDialog(false);
       },
@@ -50,20 +48,17 @@ const ContactCardEditor = (props: PropType) => {
       },
     });
 
-  const handleUpdate = (values: ContactFormType) => {
-    updateContactInfo.mutate({
-      id: contactInfoId,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      email: values.email,
-      phone: values.phone,
-      role: values.role,
+  const handleUpdate = (values: SocialMediaFormType) => {
+    updateSocialMedia.mutate({
+      id: socialMediaId,
+      url: values.url,
+      platform: values.platform,
     });
   };
 
   const handleDelete = () => {
-    deleteContactInfo.mutate({
-      id: contactInfoId,
+    deleteSocialMedia.mutate({
+      id: socialMediaId,
     });
   };
 
@@ -75,12 +70,9 @@ const ContactCardEditor = (props: PropType) => {
       setOpenDialog={setOpenDialog}
       className="rounded-xl"
     >
-      <ContactForm
-        firstName={firstName}
-        lastName={lastName}
-        email={email}
-        phone={phone}
-        role={role}
+      <SocialMediaForm
+        url={url}
+        platform={platform}
         setOpenDialog={setOpenDialog}
         onSubmit={handleUpdate}
         handleDelete={handleDelete}
@@ -89,4 +81,4 @@ const ContactCardEditor = (props: PropType) => {
   );
 };
 
-export default ContactCardEditor;
+export default SocialMediaCardEditor;

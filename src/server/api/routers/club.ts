@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const clubRouter = createTRPCRouter({
   getClubByIdForUsers: protectedProcedure
@@ -12,9 +12,53 @@ export const clubRouter = createTRPCRouter({
           id: clubId,
         },
         include: {
-          applications: true,
-          events: true,
-          contactInfo: true,
+          clubProfile: {
+            include: {
+              clubContactInfo: true,
+            },
+          },
+          clubApplications: true,
+          events: {
+            where: {
+              date: {
+                gte: new Date(),
+              },
+            },
+            orderBy: {
+              date: "asc",
+            },
+          },
+          clubSocialMedia: true,
+          members: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      });
+
+      return club;
+    }),
+  getClubByIdForAdmin: adminProcedure
+    .input(z.object({ clubId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { clubId } = input;
+      const club = await ctx.prisma.club.findUniqueOrThrow({
+        where: {
+          id: clubId,
+        },
+        include: {
+          clubProfile: {
+            include: {
+              clubContactInfo: true,
+            },
+          },
+          clubApplications: true,
+          events: {
+            orderBy: {
+              date: "asc",
+            },
+          },
         },
       });
 
@@ -22,7 +66,11 @@ export const clubRouter = createTRPCRouter({
     }),
 
   getAllClubs: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.club.findMany({});
+    return await ctx.prisma.club.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
   }),
 
   searchForClubs: protectedProcedure

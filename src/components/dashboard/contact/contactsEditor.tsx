@@ -44,12 +44,13 @@ const ContactsEditor = (props: PropType) => {
 
   return (
     <EditController
-      dialogDescription={"Create Contact Info"}
-      editType={"create"}
+      dialogDescription="Create Contact Info"
+      createDescription="Create New Contact"
+      editType="create"
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
     >
-      <ContactForm onSubmit={handleSubmit} />
+      <ContactForm onSubmit={handleSubmit} setOpenDialog={setOpenDialog} />
     </EditController>
   );
 };

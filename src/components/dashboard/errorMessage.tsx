@@ -1,13 +1,13 @@
 type PropType = {
-  alternateMessage?: string;
+  message?: string;
 };
 
 const ErrorMessage = (props: PropType) => {
-  const { alternateMessage } = props;
+  const { message } = props;
 
   return (
     <h5 className="text-sm font-semibold text-red-600">
-      {alternateMessage ? alternateMessage : "Required"}
+      {message ? message : "Required"}
     </h5>
   );
 };

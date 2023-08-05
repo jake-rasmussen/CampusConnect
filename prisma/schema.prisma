@@ -2,146 +2,144 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["jsonProtocol"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "jsonProtocol"]
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-// enum ClubMemberType {
-//     ADMIN
-//     GRADER
-// }
+enum ClubMemberType {
+  ADMIN
+  GRADER
+}
 
 enum SocialMediaPlatformType {
-    TWITTER
-    INSTAGRAM
-    FACEBOOK
-    LINKEDIN
-    WEBSITE
+  TWITTER
+  INSTAGRAM
+  FACEBOOK
+  LINKEDIN
+  WEBSITE
 }
 
 enum ClubApplicationQuestionType {
-    TEXT_INPUT
-    TEXT_FIELD
-    MULTIPLE_CHOICE
-    MULTIPLE_SELECT
-    FILE_UPLOAD
+  TEXT_INPUT
+  TEXT_FIELD
+  MULTIPLE_CHOICE
+  MULTIPLE_SELECT
+  FILE_UPLOAD
 }
 
 enum ClubApplicationStatus {
-    DRAFT
-    OPEN
-    CLOSED
+  DRAFT
+  OPEN
+  CLOSED
 }
 
 model User {
-    userId       String   @id @default(cuid())
-    externalId   String   @unique
-    firstName    String
-    lastName     String
-    emailAddress String
-    createdAt    DateTime @default(now())
-    updatedAt    DateTime @updatedAt
-    // clubMemberships ClubMember[]
+  userId          String       @id @default(cuid())
+  externalId      String       @unique
+  firstName       String
+  lastName        String
+  emailAddress    String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  clubMemberships ClubMember[]
 }
 
 model Club {
-    id           String            @id @default(cuid())
-    name         String            @unique
-    description  String            @default("")
-    timelineDesc String            @default("") @db.VarChar(500)
-    socialMedia  SocialMedia[]
-    contactInfo  ClubContactInfo[]
-    // members          ClubMember[]
-    applications ClubApplication[]
-    createdAt    DateTime          @default(now())
-    updatedAt    DateTime          @updatedAt
-    events       ClubEvent[]
+  id               String            @id @default(cuid())
+  name             String            @unique
+  clubSocialMedia  ClubSocialMedia[]
+  members          ClubMember[]
+  clubApplications ClubApplication[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  events           ClubEvent[]
+  ClubContactInfo  ClubContactInfo[]
 }
 
-// model ClubMember {
-//     clubId    String
-//     club      Club           @relation(fields: [clubId], references: [id], onDelete: Cascade)
-//     userId    String
-//     user      User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
-//     type      ClubMemberType
-//     createdAt DateTime       @default(now())
-//     updatedAt DateTime       @updatedAt
+model ClubMember {
+  clubId    String
+  club      Club           @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  type      ClubMemberType
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
-//     @@id([clubId, userId])
-// }
+  @@id([clubId, userId])
+}
 
 model ClubContactInfo {
-    id        String  @id @default(cuid())
-    firstName String
-    lastName  String
-    email     String
-    phone     String?
-    role      String
-    club      Club    @relation(fields: [clubId], references: [id], onDelete: Cascade)
-    clubId    String
+  id        String  @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  role      String
+  club      Club    @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId    String
 }
 
-model SocialMedia {
-    id        String                  @id @default(cuid())
-    clubId    String
-    club      Club                    @relation(fields: [clubId], references: [id], onDelete: Cascade)
-    platform  SocialMediaPlatformType
-    url       String
-    createdAt DateTime                @default(now())
-    updatedAt DateTime                @updatedAt
+model ClubSocialMedia {
+  id        String                  @id @default(cuid())
+  clubId    String
+  club      Club                    @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  platform  SocialMediaPlatformType
+  url       String
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
 }
 
 model ClubEvent {
-    id          String   @id @default(cuid())
-    club        Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
-    clubId      String
-    name        String
-    date        DateTime
-    description String
-    inPerson    Boolean
-    location    String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+  id          String   @id @default(cuid())
+  club        Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  clubId      String
+  name        String
+  date        DateTime
+  description String
+  inPerson    Boolean
+  location    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model ClubApplication {
-    id              String                           @id @default(cuid())
-    clubId          String
-    name            String
-    description     String                           @default("")
-    club            Club                             @relation(fields: [clubId], references: [id], onDelete: Cascade)
-    deadline        DateTime?
-    status          ClubApplicationStatus            @default(DRAFT)
-    questions       ClubApplicationQuestion[]
-    scoringCriteria ClubApplicationScoringCriteria[]
-    createdAt       DateTime                         @default(now())
-    updatedAt       DateTime                         @updatedAt
+  id              String                           @id @default(cuid())
+  clubId          String
+  name            String
+  description     String                           @default("")
+  club            Club                             @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  deadline        DateTime?
+  status          ClubApplicationStatus            @default(DRAFT)
+  questions       ClubApplicationQuestion[]
+  scoringCriteria ClubApplicationScoringCriteria[]
+  createdAt       DateTime                         @default(now())
+  updatedAt       DateTime                         @updatedAt
 }
 
 model ClubApplicationQuestion {
-    id                String                      @id @default(cuid())
-    clubApplication   ClubApplication             @relation(fields: [clubApplicationId], references: [id], onDelete: Cascade)
-    required          Boolean
-    orderNumber       Int
-    clubApplicationId String
-    question          String
-    type              ClubApplicationQuestionType
-    createdAt         DateTime                    @default(now())
-    updatedAt         DateTime                    @updatedAt
+  id                String                      @id @default(cuid())
+  clubApplication   ClubApplication             @relation(fields: [clubApplicationId], references: [id], onDelete: Cascade)
+  required          Boolean
+  orderNumber       Int
+  clubApplicationId String
+  question          String
+  type              ClubApplicationQuestionType
+  createdAt         DateTime                    @default(now())
+  updatedAt         DateTime                    @updatedAt
 }
 
 model ClubApplicationScoringCriteria {
-    id                String          @id @default(cuid())
-    clubApplication   ClubApplication @relation(fields: [clubApplicationId], references: [id], onDelete: Cascade)
-    clubApplicationId String
-    weight            Int             @default(1)
-    orderNumber       Int
-    criteria          String
-    createdAt         DateTime        @default(now())
-    updatedAt         DateTime        @updatedAt
+  id                String          @id @default(cuid())
+  clubApplication   ClubApplication @relation(fields: [clubApplicationId], references: [id], onDelete: Cascade)
+  clubApplicationId String
+  weight            Int             @default(1)
+  orderNumber       Int
+  criteria          String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 }

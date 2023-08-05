@@ -38,9 +38,10 @@ const ClubDashboard: NextPageWithLayout = () => {
         clubId={club.id}
         description={club.description}
         events={club.events}
-        contactInfos={club.contactInfo}
-        applications={club.applications}
-        isAdminPage={false}
+        contactInfos={club.clubProfile.clubContactInfo}
+        applications={club.clubApplications}
+        socialMedias={club.clubSocialMedia}
+        members={club.members}
       />
     );
   }
