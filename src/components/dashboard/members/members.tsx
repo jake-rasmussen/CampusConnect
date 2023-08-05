@@ -85,7 +85,7 @@ const Members = (props: PropType) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {members.map((member, index: number) => (
+                {members.map((member: (ClubMember & { user: User; }), index: number) => (
                   <TableRow key={`member${index}`} className="border-b">
                     <TableCell className="font-medium">
                       {member.user.firstName} {member.user.lastName}

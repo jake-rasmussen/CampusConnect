@@ -5,7 +5,7 @@ const EventsOutline = ({
 }) => {
   return (
     <>
-      <section className="pb-40">
+      <section>
         <h1 className="w-full pb-10 text-center text-4xl font-black uppercase">
           Events
         </h1>

@@ -1,5 +1,3 @@
-import Search from "~/components/dashboard/members/search";
-
 const MemberOutline = ({
   search,
   children,

@@ -158,12 +158,11 @@ const createMockClubArray = () => {
   for (const name of names) {
     const club = {
       name,
-      socialMedia: { create: generateRandomSocialMedia() },
-      timelineDesc: faker.lorem.words({ min: 5, max: 10 }),
+      clubSocialMedia: { create: generateRandomSocialMedia() },
       description: faker.lorem.paragraph({ min: 0, max: 3 }),
-      applications: { create: generateRandomClubApplications() },
+      clubApplications: { create: generateRandomClubApplications() },
       events: { create: generateRandomEvents() },
-      contactInfo: { create: generateRandomClubContactInfos() },
+      clubContactInfo: { create: generateRandomClubContactInfos() },
     };
     mockClubs.push(club);
   }

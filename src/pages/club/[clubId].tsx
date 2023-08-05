@@ -38,7 +38,7 @@ const ClubDashboard: NextPageWithLayout = () => {
         clubId={club.id}
         description={club.description}
         events={club.events}
-        contactInfos={club.clubProfile.clubContactInfo}
+        contactInfos={club.clubContactInfo}
         applications={club.clubApplications}
         socialMedias={club.clubSocialMedia}
         members={club.members}

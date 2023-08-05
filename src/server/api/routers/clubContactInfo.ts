@@ -34,7 +34,7 @@ export const clubContactInfoRouter = createTRPCRouter({
   createClubContactInfo: adminProcedure
     .input(
       z.object({
-        clubProfileId: z.string(),
+        clubId: z.string(),
         firstName: z.string(),
         lastName: z.string(),
         email: z.string(),
@@ -43,11 +43,11 @@ export const clubContactInfoRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubProfileId, firstName, lastName, email, phone, role } = input;
+      const { clubId, firstName, lastName, email, phone, role } = input;
   
       const clubContactInfo = await ctx.prisma.clubContactInfo.create({
         data: {
-          clubProfileId,
+          clubId,
           firstName,
           lastName,
           email,

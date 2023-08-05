@@ -8,9 +8,7 @@ import React from "react";
 
 type PropType = {
   clubId: string;
-  members: (ClubMember & {
-    user: User;
-  })[];
+  members: ClubMember[];
 };
 
 const Search = (props: PropType) => {
@@ -19,7 +17,7 @@ const Search = (props: PropType) => {
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [registeredUserIds, setRegisteredUserIds] = useState<string[]>(
-    Array.from(members, (member) => member.user.userId),
+    Array.from(members, (member) => member.userId),
   );
   const { data: users } = api.usersRouter.getUsersByQuery.useQuery({ query: search });
 
@@ -45,7 +43,7 @@ const Search = (props: PropType) => {
       setQueryResult(
         users.filter((user) => !registeredUserIds.includes(user.userId)),
       );
-      setRegisteredUserIds(Array.from(members, (member) => member.user.userId));
+      setRegisteredUserIds(Array.from(members, (member) => member.userId));
     }
   }, [users]);
 

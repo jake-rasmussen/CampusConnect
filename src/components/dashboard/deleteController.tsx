@@ -3,7 +3,6 @@ import { Trash } from "tabler-icons-react";
 import Button from "../button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,

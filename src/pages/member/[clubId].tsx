@@ -34,9 +34,10 @@ const AdminClubDashboard = () => {
         clubId={club.id}
         description={club.description}
         events={club.events}
-        contactInfos={club.contactInfo}
-        applications={club.applications}
-        isAdminPage={true}
+        contactInfos={club.clubContactInfo}
+        applications={club.clubApplications}
+        socialMedias={club.clubSocialMedia}
+        members={club.members}
       />
     );
   }
