@@ -18,7 +18,7 @@ const generateRandomSocialMedia = (numSocialMedias?: number) => {
   const socialMediaPlatforms: Array<SocialMediaPlatformType> = Object.values(
     SocialMediaPlatformType,
   );
-
+  
   if (numSocialMedias && numSocialMedias < 0) {
     throw new Error("Cannot less than 0");
   }
@@ -28,7 +28,7 @@ const generateRandomSocialMedia = (numSocialMedias?: number) => {
     randomNumberBetweenInclusive(0, socialMediaPlatforms.length * 2);
 
   const socialMediaObjects: Array<Prisma.ClubSocialMediaCreateWithoutClubInput> = [];
-
+  
   for (let i = 0; i < numSocialMedias; i++) {
     const randomPlatform = socialMediaPlatforms[
       randomNumberBetweenInclusive(0, socialMediaPlatforms.length - 1)
