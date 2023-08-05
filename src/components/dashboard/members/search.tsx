@@ -34,7 +34,7 @@ const Search = (props: PropType) => {
   const [queryResult, setQueryResult] = useState<User[]>([]);
 
   const debouncedSearch = useRef(
-    debounce(async (input) => {
+    debounce(async (input: string) => {
       setSearch(input)
     }, 200)
   ).current;
