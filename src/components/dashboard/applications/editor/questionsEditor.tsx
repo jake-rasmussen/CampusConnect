@@ -1,13 +1,15 @@
-import {
-  type ClubApplicationQuestion,
-  type ClubApplicationQuestionType,
-} from "@prisma/client";
+import "@prisma/client";
 import update from "immutability-helper"; // TODO: look into this
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { SquarePlus } from "tabler-icons-react";
 
 import Button from "~/components/button";
 import QuestionCard from "./questionCard";
+
+import type {
+  ClubApplicationQuestion,
+  ClubApplicationQuestionType,
+} from "@prisma/client";
 
 export type ClubApplicationQuestionForForm = {
   id: string | undefined;
@@ -80,7 +82,7 @@ const QuestionsEditor = (props: PropType) => {
           },
         )}
         <button
-          className="group flex flex-row items-center py-10 justify-center w-full"
+          className="group flex w-full flex-row items-center justify-center py-10"
           onClick={() => {
             setQuestionsForm([
               ...questionsForm,
@@ -99,20 +101,7 @@ const QuestionsEditor = (props: PropType) => {
               Create Question
             </h1>
           </div>
-
         </button>
-        {/* <div className="flex flex-row justify-end">
-          <div className="flex justify-end">
-            <Button
-              onClick={() => {
-                console.log(questionsForm);
-              }}
-              className="bg-white/20 backdrop-invert"
-            >
-              Apply Changes
-            </Button>
-          </div>
-        </div> */}
       </section>
     </>
   );

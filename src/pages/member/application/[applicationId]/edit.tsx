@@ -1,13 +1,14 @@
+import { ClubApplicationQuestion } from "@prisma/client";
+import Error from "next/error";
 import { useRouter } from "next/router";
 
-import ApplicationEditor from "~/components/dashboard/applications/editor/applicationEditor";
+import ApplicationEditForm from "~/components/dashboard/applications/editor/applicationEditForm";
 import HeaderOutline from "~/components/dashboard/header/headerOutline";
+import EditApplicationSkeleton from "~/components/skeletons/editApplicationSkeleton";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
-import Error from "next/error";
 
 import type { JSXElementConstructor, ReactElement } from "react";
-import EditApplicationSkeleton from "~/components/skeletons/editApplicationSkeleton";
 
 const EditApplication = () => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const EditApplication = () => {
     data: application,
     isLoading,
     isError,
-    error
+    error,
   } = api.clubApplicationRouter.getClubApplicationById.useQuery(
     {
       applicationId,
@@ -25,8 +26,42 @@ const EditApplication = () => {
     { enabled: !!applicationId },
   );
 
+  const deleteAllApplicaitonQuestions =
+    api.clubApplicationQuestionRouter.deleteAllClubApplicationQuestionsByClubApplicationId.useMutation();
+  const createApplicationQuestion =
+    api.clubApplicationQuestionRouter.createClubApplicationQuestion.useMutation();
+  const updateApplication =
+    api.clubApplicationRouter.updateClubApplication.useMutation({});
+
+  const handleSubmit = (
+    name: string,
+    description: string,
+    questions: ClubApplicationQuestion[],
+  ) => {
+    updateApplication.mutate({
+      clubApplicationId: applicationId,
+      name,
+      description,
+    });
+
+    deleteAllApplicaitonQuestions.mutate({
+      clubApplicationId: applicationId,
+    });
+
+    questions.forEach((question: ClubApplicationQuestion, index: number) => {
+      console.log(question);
+      createApplicationQuestion.mutate({
+        clubApplicationId: applicationId,
+        required: question.required,
+        orderNumber: index,
+        question: question.question,
+        type: question.type,
+      });
+    });
+  };
+
   if (isLoading) {
-    return <EditApplicationSkeleton />; // TODO: change this to skeleton
+    return <EditApplicationSkeleton />;
   } else if (isError) {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else {
@@ -40,12 +75,11 @@ const EditApplication = () => {
 
         <main className="py-10">
           <div className="mx-20">
-            <ApplicationEditor
+            <ApplicationEditForm
               name={application.name}
               description={application.description}
               questions={application.questions}
-              applicationId={applicationId}
-              onSubmit={() => console.log("Submit!")}
+              onSubmit={handleSubmit}
             />
           </div>
         </main>

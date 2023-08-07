@@ -12,7 +12,7 @@ import SocialMediaSkeleton from "./socialMediaSkeleton";
 
 type PropType = {
   isAdminPage: boolean;
-}
+};
 
 const ClubDashBoardSkeleton = (props: PropType) => {
   const { isAdminPage } = props;

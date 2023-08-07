@@ -46,8 +46,8 @@ export const clubApplicationRouter = createTRPCRouter({
         },
         data: {
           name,
-          description
-        }
+          description,
+        },
       });
 
       return clubApplication;
@@ -69,8 +69,8 @@ export const clubApplicationRouter = createTRPCRouter({
           include: {
             questions: {
               orderBy: {
-                orderNumber: "asc"
-              }
+                orderNumber: "asc",
+              },
             },
           },
         });

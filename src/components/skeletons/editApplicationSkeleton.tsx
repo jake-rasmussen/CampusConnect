@@ -13,6 +13,6 @@ const EditApplicationSkeleton = () => {
       </main>
     </>
   );
-}
+};
 
 export default EditApplicationSkeleton;

@@ -1,10 +1,8 @@
-import {
-  type ClubApplicationQuestion,
-  ClubApplicationQuestionType,
-} from "@prisma/client";
+import { ClubApplicationQuestionType } from "@prisma/client";
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { DotsVertical, X } from "tabler-icons-react";
+import { twMerge } from "tailwind-merge";
 
 import {
   Select,
@@ -16,8 +14,8 @@ import {
 import { clubApplicationMemberTypeToString } from "~/utils/helpers";
 import { Input } from "../../../shadcn_ui/input";
 
+import type { ClubApplicationQuestion } from "@prisma/client";
 import type { Identifier, XYCoord } from "dnd-core";
-import { twMerge } from "tailwind-merge";
 
 type PropType = {
   question: ClubApplicationQuestion;
@@ -72,7 +70,8 @@ const QuestionCard = (props: PropType) => {
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
 
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
@@ -102,12 +101,15 @@ const QuestionCard = (props: PropType) => {
 
   return (
     <section
-      className={twMerge("border-1 my-4 flex flex-row gap-4 items-center rounded-xl border border-white p-4", isDragging ? "opacity-25" : "")}
+      className={twMerge(
+        "border-1 my-4 flex flex-row items-center gap-4 rounded-xl border border-white p-4",
+        isDragging ? "opacity-25" : "",
+      )}
       data-handler-id={handlerId}
       ref={ref}
     >
-      <div className="text-gray hover:text-white hover:cursor-pointer">
-        <DotsVertical className="object-none h-20 w-8" />
+      <div className="text-gray hover:cursor-pointer hover:text-white">
+        <DotsVertical className="h-20 w-8 object-none" />
       </div>
       <div className="grow">
         <span className="font-semibold text-white">Question</span>
@@ -124,7 +126,6 @@ const QuestionCard = (props: PropType) => {
             );
           }}
         />
-        {/* {!isValid && <ErrorMessage message={errors[0]} />} */}
       </div>
 
       <div>
@@ -132,15 +133,10 @@ const QuestionCard = (props: PropType) => {
         <Select
           defaultValue={question.type}
           onValueChange={(input: ClubApplicationQuestionType) => {
-            updateQuestionsForm(
-              "type",
-              input ,
-              index,
-              question,
-            );
+            updateQuestionsForm("type", input, index, question);
           }}
         >
-          <SelectTrigger className="col-span-3 h-[3rem] rounded-xl bg-white w-[10rem]">
+          <SelectTrigger className="col-span-3 h-[3rem] w-[10rem] rounded-xl bg-white">
             <SelectValue placeholder="" />
           </SelectTrigger>
           <SelectContent className="bg-white">
@@ -155,7 +151,6 @@ const QuestionCard = (props: PropType) => {
             )}
           </SelectContent>
         </Select>
-        {/* {!isValid && <ErrorMessage message={errors[0]} />} */}
       </div>
 
       <div>
@@ -175,7 +170,7 @@ const QuestionCard = (props: PropType) => {
             updateQuestionsForm("required", isRequired, index, question);
           }}
         >
-          <SelectTrigger className="col-span-3 h-[3rem] rounded-xl bg-white w-[5rem]">
+          <SelectTrigger className="col-span-3 h-[3rem] w-[5rem] rounded-xl bg-white">
             <SelectValue placeholder="" />
           </SelectTrigger>
           <SelectContent className="bg-white">
@@ -183,7 +178,6 @@ const QuestionCard = (props: PropType) => {
             <SelectItem value="no">No</SelectItem>
           </SelectContent>
         </Select>
-        {/* {!isValid && <ErrorMessage message={errors[0]} />} */}
       </div>
       <button
         className="flex items-end justify-end"

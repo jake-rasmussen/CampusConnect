@@ -1,7 +1,7 @@
+import { ClubApplicationQuestionType } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { ClubApplicationQuestionType } from "@prisma/client";
 
 export const clubApplicationQuestionRouter = createTRPCRouter({
   createClubApplicationQuestion: protectedProcedure
@@ -17,25 +17,27 @@ export const clubApplicationQuestionRouter = createTRPCRouter({
           ClubApplicationQuestionType.MULTIPLE_SELECT,
           ClubApplicationQuestionType.TEXT_FIELD,
           ClubApplicationQuestionType.TEXT_INPUT,
-        ])
-      })
+        ]),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubApplicationId, required, orderNumber, question, type } = input;
+      const { clubApplicationId, required, orderNumber, question, type } =
+        input;
 
-      const clubApplicationQuestion = await ctx.prisma.clubApplicationQuestion.create({
-        data: {
-          clubApplication: {
-            connect: {
-              id: clubApplicationId
-            }
+      const clubApplicationQuestion =
+        await ctx.prisma.clubApplicationQuestion.create({
+          data: {
+            clubApplication: {
+              connect: {
+                id: clubApplicationId,
+              },
+            },
+            required,
+            orderNumber,
+            question,
+            type,
           },
-          required,
-          orderNumber,
-          question,
-          type
-        }
-      });
+        });
 
       return clubApplicationQuestion;
     }),
@@ -52,41 +54,49 @@ export const clubApplicationQuestionRouter = createTRPCRouter({
           ClubApplicationQuestionType.MULTIPLE_SELECT,
           ClubApplicationQuestionType.TEXT_FIELD,
           ClubApplicationQuestionType.TEXT_INPUT,
-        ])
-      })
+        ]),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubApplicaitonQuestionId, required, orderNumber, question, type } = input;
+      const {
+        clubApplicaitonQuestionId,
+        required,
+        orderNumber,
+        question,
+        type,
+      } = input;
 
-      const clubApplicationQuestion = await ctx.prisma.clubApplicationQuestion.update({
-        where: {
-          id: clubApplicaitonQuestionId
-        },
-        data: {
-          required,
-          orderNumber,
-          question,
-          type,
-        }
-      });
+      const clubApplicationQuestion =
+        await ctx.prisma.clubApplicationQuestion.update({
+          where: {
+            id: clubApplicaitonQuestionId,
+          },
+          data: {
+            required,
+            orderNumber,
+            question,
+            type,
+          },
+        });
 
       return clubApplicationQuestion;
     }),
   deleteAllClubApplicationQuestionsByClubApplicationId: protectedProcedure
     .input(
       z.object({
-        clubApplicationId: z.string()
-      })
+        clubApplicationId: z.string(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { clubApplicationId } = input;
 
-      const clubApplicationQuestions = await ctx.prisma.clubApplicationQuestion.deleteMany({
-        where: {
-          clubApplicationId
-        }
-      });
+      const clubApplicationQuestions =
+        await ctx.prisma.clubApplicationQuestion.deleteMany({
+          where: {
+            clubApplicationId,
+          },
+        });
 
       return clubApplicationQuestions;
-    })
-})
+    }),
+});

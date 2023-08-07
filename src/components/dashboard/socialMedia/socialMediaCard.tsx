@@ -1,4 +1,4 @@
-import { type ClubSocialMedia, SocialMediaPlatformType } from "@prisma/client";
+import { SocialMediaPlatformType } from "@prisma/client";
 import Link from "next/link";
 import {
   BrandFacebook,
@@ -9,6 +9,8 @@ import {
 } from "tabler-icons-react";
 
 import SocialMediaCardEditor from "./socialMediaCardEditor";
+
+import type { ClubSocialMedia } from "@prisma/client";
 
 type PropType = {
   clubSocialMedia: ClubSocialMedia;

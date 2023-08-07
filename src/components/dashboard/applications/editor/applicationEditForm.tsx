@@ -1,5 +1,6 @@
 import { type ClubApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
@@ -7,27 +8,33 @@ import { Textarea } from "~/components/shadcn_ui/textarea";
 import Button from "../../../button";
 import { Input } from "../../../shadcn_ui/input";
 import ErrorMessage from "../../errorMessage";
-import QuestionsEditor, { ClubApplicationQuestionForForm } from "./questionsEditor";
-import { api } from "~/utils/api";
-import { useState } from "react";
+import QuestionsEditor, {
+  ClubApplicationQuestionForForm,
+} from "./questionsEditor";
 
 type ApplicationFormType = {
   name: string;
   description: string;
-  questions: ClubApplicationQuestion[];
 };
 
 type PropType = {
   name?: string;
   description?: string;
   questions: ClubApplicationQuestion[];
-  applicationId: string;
-  onSubmit: (values: ApplicationFormType) => void;
-  // handleDelete?: () => void;
+  onSubmit: (
+    name: string,
+    description: string,
+    questions: ClubApplicationQuestion[],
+  ) => void;
 };
 
-const ApplicationEditor = (props: PropType) => {
-  const { name, description, questions, applicationId: clubApplicationId, onSubmit } = props;
+const ApplicationEditForm = (props: PropType) => {
+  const {
+    name,
+    description,
+    questions,
+    onSubmit,
+  } = props;
 
   const [questionsForm, setQuestionsForm] = useState<
     ClubApplicationQuestionForForm[]
@@ -47,42 +54,14 @@ const ApplicationEditor = (props: PropType) => {
     ),
   );
 
-  const queryClient = api.useContext();
-
-  const deleteAllApplicaitonQuestions = api.clubApplicationQuestionRouter.deleteAllClubApplicationQuestionsByClubApplicationId.useMutation({});
-  const createApplicationQuestion = api.clubApplicationQuestionRouter.createClubApplicationQuestion.useMutation({});
-  const updateApplication = api.clubApplicationRouter.updateClubApplication.useMutation({});
-
-  const handleSubmitQuestions = () => {
-    deleteAllApplicaitonQuestions.mutate({
-      clubApplicationId
-    });
-
-    questionsForm.forEach((question: ClubApplicationQuestionForForm, index: number) => {
-      const questionAsClubApplicationQuestion = question as ClubApplicationQuestion;
-      
-      createApplicationQuestion.mutate({
-        clubApplicationId,
-        required: questionAsClubApplicationQuestion.required,
-        orderNumber: index,
-        question: questionAsClubApplicationQuestion.question,
-        type: questionAsClubApplicationQuestion.type,
-      })
-    })
-  }
-
   return (
     <Form<ApplicationFormType>
       onSubmit={(values) => {
-        updateApplication.mutate({
-          clubApplicationId,
-          name: values.name,
-          description: values.description,
-        });
-        handleSubmitQuestions();
-        
-        toast.dismiss();
-        toast.success("Success submitting the form!");
+        onSubmit(
+          values.name,
+          values.description,
+          questionsForm as ClubApplicationQuestion[]
+        );
       }}
     >
       {({ submit }) => (
@@ -140,7 +119,10 @@ const ApplicationEditor = (props: PropType) => {
             <span className="text-center text-4xl font-semibold ">
               Questions
             </span>
-            <QuestionsEditor questionsForm={questionsForm} setQuestionsForm={setQuestionsForm} />
+            <QuestionsEditor
+              questionsForm={questionsForm}
+              setQuestionsForm={setQuestionsForm}
+            />
           </section>
 
           <div className="flex flex-row justify-end">
@@ -161,4 +143,4 @@ const ApplicationEditor = (props: PropType) => {
   );
 };
 
-export default ApplicationEditor;
+export default ApplicationEditForm;

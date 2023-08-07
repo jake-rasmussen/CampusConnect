@@ -1,4 +1,4 @@
-import { type ClubMember, type ClubMemberType, type User } from "@prisma/client";
+import "@prisma/client";
 import lodash from "lodash";
 import toast from "react-hot-toast";
 import { TrashX } from "tabler-icons-react";
@@ -21,6 +21,8 @@ import {
 import { api } from "~/utils/api";
 import MemberOutline from "./memberOutline";
 import Search from "./search";
+
+import type { ClubMember, ClubMemberType, User } from "@prisma/client";
 
 type PropType = {
   clubId: string;

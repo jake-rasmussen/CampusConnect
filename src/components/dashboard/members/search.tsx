@@ -1,9 +1,11 @@
-import { type ClubMember, type User } from "@prisma/client";
+import "@prisma/client";
 import { debounce } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 
 import { api } from "~/utils/api";
 import { Input } from "../../shadcn_ui/input";
+
+import type { ClubMember, User } from "@prisma/client";
 
 type PropType = {
   clubId: string;
