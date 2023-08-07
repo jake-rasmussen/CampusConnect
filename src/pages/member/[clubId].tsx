@@ -38,6 +38,7 @@ const AdminClubDashboard = () => {
         applications={club.clubApplications}
         socialMedias={club.clubSocialMedia}
         members={club.members}
+        isAdminPage={true}
       />
     );
   }

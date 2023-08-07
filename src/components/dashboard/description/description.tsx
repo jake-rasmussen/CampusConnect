@@ -8,7 +8,7 @@ type PropType = {
 };
 
 const Description = (props: PropType) => {
-  const { clubId, clubDescription, editable: edit } = props;
+  const { clubId, clubDescription, editable } = props;
 
   return (
     <>
@@ -16,7 +16,7 @@ const Description = (props: PropType) => {
         <p className="flex flex-col justify-center px-8 text-center">
           {clubDescription}
         </p>
-        {edit ? (
+        {editable ? (
           <DescriptionEditor
             clubDescription={clubDescription}
             clubId={clubId}

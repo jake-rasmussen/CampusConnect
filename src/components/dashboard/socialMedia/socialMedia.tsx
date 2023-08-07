@@ -1,4 +1,4 @@
-import { ClubSocialMedia } from "@prisma/client";
+import { type ClubSocialMedia } from "@prisma/client";
 
 import SocialMediaCard from "./socialMediaCard";
 import SocialMediaOutline from "./socialMediaOutline";
@@ -7,11 +7,11 @@ import SocialMediasEditor from "./socialMediasEditor";
 type PropType = {
   socialMedias: ClubSocialMedia[];
   clubId: string;
-  edit: boolean;
+  editable: boolean;
 };
 
 const SocialMedia = (props: PropType) => {
-  const { socialMedias, clubId, edit } = props;
+  const { socialMedias, clubId, editable } = props;
 
   return (
     socialMedias !== undefined && (
@@ -23,7 +23,7 @@ const SocialMedia = (props: PropType) => {
                 (clubSocialMedia: ClubSocialMedia, index: number) => (
                   <SocialMediaCard
                     clubSocialMedia={clubSocialMedia}
-                    edit={edit}
+                    editable={editable}
                     key={`socialMediaCard${index}`}
                   />
                 ),
@@ -31,7 +31,7 @@ const SocialMedia = (props: PropType) => {
             </SocialMediaOutline>
           )}
         </section>
-        {edit && <SocialMediasEditor clubId={clubId} />}
+        {editable && <SocialMediasEditor clubId={clubId} />}
       </>
     )
   );

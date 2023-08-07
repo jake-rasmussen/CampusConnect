@@ -1,4 +1,5 @@
-import { ClubMember, ClubMemberType, User } from "@prisma/client";
+import { type ClubMember, type ClubMemberType, type User } from "@prisma/client";
+import lodash from "lodash";
 import toast from "react-hot-toast";
 import { TrashX } from "tabler-icons-react";
 
@@ -21,16 +22,16 @@ import { api } from "~/utils/api";
 import MemberOutline from "./memberOutline";
 import Search from "./search";
 
-
 type PropType = {
   clubId: string;
   members: (ClubMember & {
     user: User;
   })[];
+  editable: boolean;
 };
 
 const Members = (props: PropType) => {
-  const { clubId, members } = props;
+  const { clubId, members, editable } = props;
 
   const queryClient = api.useContext();
 
@@ -66,7 +67,10 @@ const Members = (props: PropType) => {
   };
 
   return (
-    <MemberOutline search={<Search clubId={clubId} members={members} />}>
+    <MemberOutline
+      search={<Search clubId={clubId} members={members} />}
+      displaySearch={editable}
+    >
       <>
         {members.length !== 0 && (
           <section className="min-w-screen rounded-xl bg-white p-4 shadow-xl md:min-w-[40rem]">
@@ -85,42 +89,50 @@ const Members = (props: PropType) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {members.map((member: (ClubMember & { user: User; }), index: number) => (
-                  <TableRow key={`member${index}`} className="border-b">
-                    <TableCell className="font-medium">
-                      {member.user.firstName} {member.user.lastName}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {member.user.emailAddress}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      <div className="h-full w-32">
-                        <Select
-                          defaultValue={member.type}
-                          onValueChange={(input: ClubMemberType) => {
-                            handleUpdateMemberType(member.userId, input);
-                          }}
-                        >
-                          <SelectTrigger className="h-[2rem] rounded-xl bg-white">
-                            <SelectValue placeholder="" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white">
-                            <SelectItem value="ADMIN">Admin</SelectItem>
-                            <SelectItem value="GRADER">Grader</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right font-medium">
-                      <button
-                        className="h-8 w-8"
-                        onClick={() => handleDeleteMember(member.userId)}
-                      >
-                        <TrashX className="h-full w-full text-secondary transition duration-300 ease-in-out hover:text-primary" />
-                      </button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {members.map(
+                  (member: ClubMember & { user: User }, index: number) => (
+                    <TableRow key={`member${index}`} className="border-b">
+                      <TableCell className="font-medium">
+                        {member.user.firstName} {member.user.lastName}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {member.user.emailAddress}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {editable ? (
+                          <div className="h-full w-32">
+                            <Select // TODO: create confirmation modal
+                              defaultValue={member.type}
+                              onValueChange={(input: ClubMemberType) => {
+                                handleUpdateMemberType(member.userId, input);
+                              }}
+                            >
+                              <SelectTrigger className="h-[2rem] rounded-xl bg-white">
+                                <SelectValue placeholder="" />
+                              </SelectTrigger>
+                              <SelectContent className="bg-white">
+                                <SelectItem value="ADMIN">Admin</SelectItem>
+                                <SelectItem value="GRADER">Grader</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        ) : (
+                          lodash.upperFirst(member.type.toLowerCase())
+                        )}
+                      </TableCell>
+                      {editable && (
+                        <TableCell className="text-right font-medium">
+                          <button
+                            className="h-8 w-8"
+                            onClick={() => handleDeleteMember(member.userId)}
+                          >
+                            <TrashX className="h-full w-full text-secondary transition duration-300 ease-in-out hover:text-primary" />
+                          </button>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ),
+                )}
               </TableBody>
             </Table>
           </section>

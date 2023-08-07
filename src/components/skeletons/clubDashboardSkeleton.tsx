@@ -39,7 +39,7 @@ const ClubDashBoardSkeleton = () => {
           </TabContent>
         </Tab>
       </main>
-      
+
       <EventSkeleton />
     </>
   );

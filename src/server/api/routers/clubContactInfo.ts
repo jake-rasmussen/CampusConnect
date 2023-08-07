@@ -44,7 +44,7 @@ export const clubContactInfoRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { clubId, firstName, lastName, email, phone, role } = input;
-  
+
       const clubContactInfo = await ctx.prisma.clubContactInfo.create({
         data: {
           clubId,

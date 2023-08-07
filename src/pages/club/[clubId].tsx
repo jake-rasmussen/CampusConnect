@@ -42,6 +42,7 @@ const ClubDashboard: NextPageWithLayout = () => {
         applications={club.clubApplications}
         socialMedias={club.clubSocialMedia}
         members={club.members}
+        isAdminPage={false}
       />
     );
   }

@@ -14,7 +14,7 @@ import {
 type PropType = {
   clubApplication: ClubApplication;
   clubId: string;
-  edit: boolean;
+  editable: boolean;
 };
 
 const ApplicationCard = (props: PropType) => {

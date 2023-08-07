@@ -1,4 +1,4 @@
-import { ClubSocialMedia, SocialMediaPlatformType } from "@prisma/client";
+import { type ClubSocialMedia, SocialMediaPlatformType } from "@prisma/client";
 import Link from "next/link";
 import {
   BrandFacebook,
@@ -12,11 +12,11 @@ import SocialMediaCardEditor from "./socialMediaCardEditor";
 
 type PropType = {
   clubSocialMedia: ClubSocialMedia;
-  edit: boolean;
+  editable: boolean;
 };
 
 const SocialMediaCard = (props: PropType) => {
-  const { clubSocialMedia, edit } = props;
+  const { clubSocialMedia, editable } = props;
 
   const iconClassName =
     "w-full h-full text-secondary transition duration-300 ease-in-out hover:text-primary";
@@ -40,7 +40,7 @@ const SocialMediaCard = (props: PropType) => {
           {icon}
         </Link>
 
-        {edit && (
+        {editable && (
           <SocialMediaCardEditor
             url={clubSocialMedia.url}
             platform={clubSocialMedia.platform}

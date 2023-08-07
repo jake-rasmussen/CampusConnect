@@ -34,6 +34,7 @@ type PropType = {
   members: (ClubMember & {
     user: User;
   })[];
+  isAdminPage: boolean;
 };
 
 const DashboardPage = (props: PropType) => {
@@ -46,36 +47,37 @@ const DashboardPage = (props: PropType) => {
     applications,
     socialMedias,
     members,
+    isAdminPage,
   } = props;
 
   return (
     <>
       <Toaster />
-      <Header name={name} editable={true} />
+      <Header name={name} editable={isAdminPage} />
 
       <main className="relative flex flex-col justify-center">
         <Tab>
           <TabList>
             <TabHeader>About Us</TabHeader>
             <TabHeader>Applications</TabHeader>
-            <TabHeader>Members</TabHeader>
+            {isAdminPage ? <TabHeader>Members</TabHeader> : <></>}
           </TabList>
           <TabContent>
-            <div className="mx-10 flex flex-col gap-10 justify-center items-center">
+            <div className="mx-10 flex flex-col items-center justify-center gap-10">
               <Description
                 clubId={clubId}
                 clubDescription={description}
-                editable={true}
+                editable={isAdminPage}
               />
               <Contact
                 contactInfos={contactInfos}
                 clubId={clubId}
-                editable={true}
+                editable={isAdminPage}
               />
               <SocialMedia
                 socialMedias={socialMedias}
                 clubId={clubId}
-                edit={true}
+                editable={isAdminPage}
               />
             </div>
           </TabContent>
@@ -83,14 +85,22 @@ const DashboardPage = (props: PropType) => {
             <Applications
               applications={applications}
               clubId={clubId}
-              editable={true}
+              editable={isAdminPage}
             />
           </TabContent>
-          <TabContent>
-            <Members clubId={clubId} members={members} />
-          </TabContent>
+          {isAdminPage ? (
+            <TabContent>
+              <Members
+                clubId={clubId}
+                members={members}
+                editable={isAdminPage}
+              />
+            </TabContent>
+          ) : (
+            <></>
+          )}
         </Tab>
-        <Events events={events} clubId={clubId} editable={true} />
+        <Events events={events} clubId={clubId} editable={isAdminPage} />
       </main>
     </>
   );

@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
 import EditController from "../editController";
-import SocialMediaForm, { SocialMediaFormType } from "./socialMediaForm";
+import SocialMediaForm, { type SocialMediaFormType } from "./socialMediaForm";
 
 type PropType = {
   clubId: string;
