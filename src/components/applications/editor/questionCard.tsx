@@ -117,7 +117,7 @@ const QuestionCard = (props: PropType) => {
           className="h-[3rem]"
           placeholder="Enter the Question"
           defaultValue={question.question}
-          onChange={(e) => {
+          onBlur={(e) => {
             updateQuestionsForm(
               "question",
               e.currentTarget.value,

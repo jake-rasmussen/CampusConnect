@@ -1,9 +1,8 @@
 import "@prisma/client";
 import update from "immutability-helper"; // TODO: look into this
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import { SquarePlus } from "tabler-icons-react";
 
-import Button from "~/components/button";
 import QuestionCard from "./questionCard";
 
 import type {
