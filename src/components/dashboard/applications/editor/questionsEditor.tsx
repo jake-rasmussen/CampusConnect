@@ -81,27 +81,31 @@ const QuestionsEditor = (props: PropType) => {
             );
           },
         )}
-        <button
-          className="group flex w-full flex-row items-center justify-center py-10"
-          onClick={() => {
-            setQuestionsForm([
-              ...questionsForm,
-              {
-                id: undefined,
-                required: undefined,
-                question: "",
-                type: undefined,
-              },
-            ]);
-          }}
-        >
-          <div className="flex flex-row items-center">
-            <SquarePlus className="mx-auto h-14 w-14 text-white duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
-            <h1 className="tracking-none text-2xl font-black uppercase text-white group-hover:cursor-pointer group-hover:text-gray">
-              Create Question
-            </h1>
-          </div>
-        </button>
+
+        <div className="py-10">
+          <button
+            className="group flex flex-row items-center justify-center"
+            onClick={() => {
+              setQuestionsForm([
+                ...questionsForm,
+                {
+                  id: undefined,
+                  required: undefined,
+                  question: "",
+                  type: undefined,
+                },
+              ]);
+            }}
+          >
+            <div className="flex flex-row items-center">
+              <SquarePlus className="mx-auto h-14 w-14 text-white duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
+              <h1 className="tracking-none text-2xl font-black uppercase text-white group-hover:cursor-pointer group-hover:text-gray">
+                Create Question
+              </h1>
+            </div>
+          </button>
+        </div>
+
       </section>
     </>
   );
