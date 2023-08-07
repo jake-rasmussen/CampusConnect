@@ -24,7 +24,7 @@ const AdminClubDashboard = () => {
   );
 
   if (isLoading) {
-    return <ClubDashBoardSkeleton />;
+    return <ClubDashBoardSkeleton isAdminPage={true} />;
   } else if (isError) {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else {

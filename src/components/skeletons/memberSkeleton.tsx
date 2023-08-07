@@ -4,6 +4,7 @@ import { Skeleton } from "../shadcn_ui/skeleton";
 const MemberSkeleton = () => (
   <MemberOutline
     search={<Skeleton className="h-[3rem] w-[25rem] rounded-xl" />}
+    displaySearch={true}
   >
     <div>
       <Skeleton className="h-[15rem] w-[30rem] rounded-xl" />
