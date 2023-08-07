@@ -40,7 +40,7 @@ const QuestionsEditor = (props: PropType) => {
       question: question.question,
       [field]: value,
     };
-    setQuestionsForm(newQuestionsForm);
+    setQuestionsForm([...newQuestionsForm]);
   };
 
   const deleteQuestionFormElement = (index: number) => {

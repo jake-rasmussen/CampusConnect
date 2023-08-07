@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "~/components/shadcn_ui/select";
 import { clubApplicationMemberTypeToString } from "~/utils/helpers";
-import { Input } from "../../../shadcn_ui/input";
+import { Input } from "../../shadcn_ui/input";
 
 import type { ClubApplicationQuestion } from "@prisma/client";
 import type { Identifier, XYCoord } from "dnd-core";

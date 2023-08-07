@@ -2,7 +2,7 @@ import { ClubApplicationQuestion } from "@prisma/client";
 import Error from "next/error";
 import { useRouter } from "next/router";
 
-import ApplicationEditForm from "~/components/dashboard/applications/editor/applicationEditForm";
+import ApplicationEditForm from "~/components/applications/editor/applicationEditForm";
 import HeaderOutline from "~/components/dashboard/header/headerOutline";
 import EditApplicationSkeleton from "~/components/skeletons/editApplicationSkeleton";
 import UserLayout from "~/layouts/userLayout";
@@ -38,6 +38,7 @@ const EditApplication = () => {
     description: string,
     questions: ClubApplicationQuestion[],
   ) => {
+    console.log(name, description, questions);
     updateApplication.mutate({
       clubApplicationId: applicationId,
       name,
@@ -49,7 +50,6 @@ const EditApplication = () => {
     });
 
     questions.forEach((question: ClubApplicationQuestion, index: number) => {
-      console.log(question);
       createApplicationQuestion.mutate({
         clubApplicationId: applicationId,
         required: question.required,

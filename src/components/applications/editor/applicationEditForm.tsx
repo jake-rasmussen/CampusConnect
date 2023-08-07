@@ -1,13 +1,13 @@
 import { type ClubApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { Textarea } from "~/components/shadcn_ui/textarea";
-import Button from "../../../button";
-import { Input } from "../../../shadcn_ui/input";
-import ErrorMessage from "../../errorMessage";
+import Button from "../../button";
+import { Input } from "../../shadcn_ui/input";
+import ErrorMessage from "../../dashboard/errorMessage";
 import QuestionsEditor, {
   ClubApplicationQuestionForForm,
 } from "./questionsEditor";
@@ -45,7 +45,7 @@ const ApplicationEditForm = (props: PropType) => {
         return {
           id: question.id,
           required: question.required,
-          orderNumber: index, // TODO: make sure questions come in ascending order
+          orderNumber: index,
           question: question.question,
           type: question.type,
           clubApplicationId: "",
@@ -53,6 +53,10 @@ const ApplicationEditForm = (props: PropType) => {
       },
     ),
   );
+
+  useEffect(() => {
+    console.log(questionsForm);
+  }, [questionsForm])
 
   return (
     <Form<ApplicationFormType>

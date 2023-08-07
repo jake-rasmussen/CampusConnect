@@ -22,7 +22,7 @@ type ApplicationFormType = {
   description: string;
 };
 
-const ApplicationEditor = ({ clubId }: Props) => {
+const ApplicationCreator = ({ clubId }: Props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const createApplication =
     api.clubApplicationRouter.createClubApplication.useMutation({
@@ -119,4 +119,4 @@ const ApplicationEditor = ({ clubId }: Props) => {
     </EditController>
   );
 };
-export default ApplicationEditor;
+export default ApplicationCreator;
