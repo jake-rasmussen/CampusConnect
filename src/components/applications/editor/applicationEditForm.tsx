@@ -163,7 +163,9 @@ const ApplicationEditForm = (props: PropType) => {
           </div>
 
           <ErrorDialog
-            dialogDescription={"Please make sure that all question fields are filled out!"}
+            dialogDescription={
+              "Please make sure that all question fields are filled out!"
+            }
             openDialog={openErrorDialog}
             setOpenDialog={setOpenErrorDialog}
           />

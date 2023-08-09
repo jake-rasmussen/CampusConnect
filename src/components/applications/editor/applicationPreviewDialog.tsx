@@ -3,6 +3,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { SquarePlus } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
+import Button from "~/components/button";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./shadcn_ui/dialog";
+} from "../../shadcn_ui/dialog";
 
 type PropType = {
   children?: JSX.Element | JSX.Element[];
@@ -19,15 +20,23 @@ type PropType = {
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ErrorDialog = (props: PropType) => {
+const ApplicationPreviewDialog = (props: PropType) => {
   const { children, dialogDescription, openDialog, setOpenDialog } = props;
 
   return (
     <>
       <Dialog open={openDialog}>
-        <DialogContent className="max-w-2xl">
+        <DialogTrigger>
+          <Button
+            className="bg-white/10 backdrop-invert"
+            onClick={() => setOpenDialog(true)}
+          >
+            Preview
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="min-w-max">
           <DialogHeader>
-            <DialogTitle>Error</DialogTitle>
+            <DialogTitle>Application Preview</DialogTitle>
             <DialogDescription className="py-4">
               {dialogDescription}
             </DialogDescription>
@@ -46,4 +55,4 @@ const ErrorDialog = (props: PropType) => {
   );
 };
 
-export default ErrorDialog;
+export default ApplicationPreviewDialog;

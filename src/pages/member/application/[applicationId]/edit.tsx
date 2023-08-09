@@ -28,7 +28,10 @@ const EditApplication = () => {
     {
       applicationId,
     },
-    { enabled: !!applicationId },
+    {
+      enabled: !!applicationId,
+      refetchOnWindowFocus: false
+    },
   );
 
   const createApplicationQuestion =

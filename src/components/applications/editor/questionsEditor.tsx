@@ -4,6 +4,8 @@ import update from "immutability-helper";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { SquarePlus } from "tabler-icons-react";
 
+import Application from "../application";
+import ApplicationPreviewDialog from "./applicationPreviewDialog";
 import QuestionCard from "./questionCard";
 
 import type {
@@ -29,6 +31,7 @@ type PropType = {
 const QuestionsEditor = (props: PropType) => {
   const { questionsForm, setQuestionsForm, setQuestionsFormToDelete } = props;
 
+  const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
   const updateQuestionsForm = (
     field: string,
     value: boolean | string | ClubApplicationQuestionType,
@@ -91,7 +94,7 @@ const QuestionsEditor = (props: PropType) => {
           },
         )}
 
-        <div className="py-10">
+        <div className="flex flex-row py-10">
           <button
             className="group flex flex-row items-center justify-center"
             onClick={() => {
@@ -108,11 +111,23 @@ const QuestionsEditor = (props: PropType) => {
           >
             <div className="flex flex-row items-center">
               <SquarePlus className="mx-auto h-14 w-14 text-white duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
-              <h1 className="tracking-none text-2xl font-black uppercase text-white group-hover:cursor-pointer group-hover:text-gray">
+              <h1 className="tracking-none whitespace-nowrap text-2xl font-black uppercase text-white group-hover:cursor-pointer group-hover:text-gray">
                 Create Question
               </h1>
             </div>
           </button>
+
+          <div className="flex w-full grow justify-end">
+            <ApplicationPreviewDialog
+              dialogDescription={""}
+              openDialog={openPreviewDialog}
+              setOpenDialog={setOpenPreviewDialog}
+            >
+              <Application
+                questions={questionsForm as ClubApplicationQuestion[]}
+              />
+            </ApplicationPreviewDialog>
+          </div>
         </div>
       </section>
     </>
