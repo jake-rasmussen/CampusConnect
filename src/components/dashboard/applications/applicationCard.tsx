@@ -1,5 +1,8 @@
 import { type ClubApplication } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Edit } from "tabler-icons-react";
+import { twMerge } from "tailwind-merge";
 
 import { dateToStringFormatted } from "~/utils/helpers";
 import {
@@ -10,9 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../shadcn_ui/card";
-import { twMerge } from "tailwind-merge";
-import { Edit } from "tabler-icons-react";
-import Link from "next/link";
 
 type PropType = {
   clubApplication: ClubApplication;

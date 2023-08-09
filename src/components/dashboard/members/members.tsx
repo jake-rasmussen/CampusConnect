@@ -1,4 +1,5 @@
 import "@prisma/client";
+
 import lodash from "lodash";
 import toast from "react-hot-toast";
 import { TrashX } from "tabler-icons-react";

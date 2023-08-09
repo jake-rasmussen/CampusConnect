@@ -41,7 +41,7 @@ export const clubApplicationQuestionRouter = createTRPCRouter({
 
       return clubApplicationQuestion;
     }),
-  updateClubApplicationQuestion: protectedProcedure
+  updateClubApplicationQuestionById: protectedProcedure
     .input(
       z.object({
         clubApplicaitonQuestionId: z.string(),
@@ -81,19 +81,19 @@ export const clubApplicationQuestionRouter = createTRPCRouter({
 
       return clubApplicationQuestion;
     }),
-  deleteAllClubApplicationQuestionsByClubApplicationId: protectedProcedure
+  deleteClubApplicationById: protectedProcedure
     .input(
       z.object({
-        clubApplicationId: z.string(),
+        clubApplicationQuestionId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubApplicationId } = input;
+      const { clubApplicationQuestionId } = input;
 
       const clubApplicationQuestions =
-        await ctx.prisma.clubApplicationQuestion.deleteMany({
+        await ctx.prisma.clubApplicationQuestion.delete({
           where: {
-            clubApplicationId,
+            id: clubApplicationQuestionId,
           },
         });
 

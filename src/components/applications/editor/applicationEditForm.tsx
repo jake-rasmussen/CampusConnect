@@ -1,13 +1,14 @@
 import { type ClubApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
+import ErrorDialog from "~/components/errorDialog";
 import { Textarea } from "~/components/shadcn_ui/textarea";
 import Button from "../../button";
-import { Input } from "../../shadcn_ui/input";
 import ErrorMessage from "../../dashboard/errorMessage";
+import { Input } from "../../shadcn_ui/input";
 import QuestionsEditor, {
   ClubApplicationQuestionForForm,
 } from "./questionsEditor";
@@ -25,38 +26,51 @@ type PropType = {
     name: string,
     description: string,
     questions: ClubApplicationQuestion[],
+    questionsToDelete: ClubApplicationQuestion[],
   ) => void;
 };
 
 const ApplicationEditForm = (props: PropType) => {
-  const {
-    name,
-    description,
-    questions,
-    onSubmit,
-  } = props;
+  const { name, description, questions, onSubmit } = props;
 
   const [questionsForm, setQuestionsForm] = useState<
     ClubApplicationQuestionForForm[]
-  >(
-    Array.from(
-      questions,
-      (question: ClubApplicationQuestion, index: number) => {
-        return {
-          id: question.id,
-          required: question.required,
-          orderNumber: index,
-          question: question.question,
-          type: question.type,
-          clubApplicationId: "",
-        } as ClubApplicationQuestion;
-      },
-    ),
-  );
+  >([]);
+  const [questionsFormToDelete, setQuestionsFormToDelete] = useState<
+    ClubApplicationQuestionForForm[]
+  >([]);
+  const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
   useEffect(() => {
-    console.log(questionsForm);
-  }, [questionsForm])
+    setQuestionsForm(
+      Array.from(
+        questions,
+        (question: ClubApplicationQuestion, index: number) => {
+          return {
+            id: question.id,
+            required: question.required,
+            orderNumber: index,
+            question: question.question,
+            type: question.type,
+            clubApplicationId: "",
+          } as ClubApplicationQuestion;
+        },
+      ),
+    );
+  }, [questions]);
+
+  const isQuestionsFormValid = () => {
+    for (let question of questionsForm) {
+      if (
+        question.question === "" ||
+        question.type === undefined ||
+        question.required === undefined
+      ) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   return (
     <Form<ApplicationFormType>
@@ -64,7 +78,8 @@ const ApplicationEditForm = (props: PropType) => {
         onSubmit(
           values.name,
           values.description,
-          questionsForm as ClubApplicationQuestion[]
+          questionsForm as ClubApplicationQuestion[],
+          questionsFormToDelete as ClubApplicationQuestion[],
         );
       }}
     >
@@ -126,6 +141,7 @@ const ApplicationEditForm = (props: PropType) => {
             <QuestionsEditor
               questionsForm={questionsForm}
               setQuestionsForm={setQuestionsForm}
+              setQuestionsFormToDelete={setQuestionsFormToDelete}
             />
           </section>
 
@@ -133,7 +149,11 @@ const ApplicationEditForm = (props: PropType) => {
             <div className="flex justify-end">
               <Button
                 onClick={() => {
-                  submit().catch((e) => console.log(e));
+                  if (isQuestionsFormValid()) {
+                    submit().catch((e) => console.log(e));
+                  } else {
+                    setOpenErrorDialog(true);
+                  }
                 }}
                 className="my-4"
               >
@@ -141,6 +161,12 @@ const ApplicationEditForm = (props: PropType) => {
               </Button>
             </div>
           </div>
+
+          <ErrorDialog
+            dialogDescription={"Please make sure that all question fields are filled out!"}
+            openDialog={openErrorDialog}
+            setOpenDialog={setOpenErrorDialog}
+          />
         </main>
       )}
     </Form>

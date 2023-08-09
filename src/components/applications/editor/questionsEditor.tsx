@@ -1,6 +1,7 @@
 import "@prisma/client";
-import update from "immutability-helper"; // TODO: look into this
-import { Dispatch, SetStateAction, useCallback } from "react";
+
+import update from "immutability-helper";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { SquarePlus } from "tabler-icons-react";
 
 import QuestionCard from "./questionCard";
@@ -20,10 +21,13 @@ export type ClubApplicationQuestionForForm = {
 type PropType = {
   questionsForm: ClubApplicationQuestionForForm[];
   setQuestionsForm: Dispatch<SetStateAction<ClubApplicationQuestionForForm[]>>;
+  setQuestionsFormToDelete: Dispatch<
+    SetStateAction<ClubApplicationQuestionForForm[]>
+  >;
 };
 
 const QuestionsEditor = (props: PropType) => {
-  const { questionsForm, setQuestionsForm } = props;
+  const { questionsForm, setQuestionsForm, setQuestionsFormToDelete } = props;
 
   const updateQuestionsForm = (
     field: string,
@@ -44,8 +48,14 @@ const QuestionsEditor = (props: PropType) => {
 
   const deleteQuestionFormElement = (index: number) => {
     const newQuestionsForm = questionsForm;
+    const questionToDelete = newQuestionsForm[index]!;
     newQuestionsForm.splice(index, 1);
+
     setQuestionsForm([...newQuestionsForm]);
+    setQuestionsFormToDelete((prev: ClubApplicationQuestionForForm[]) => [
+      ...prev,
+      questionToDelete,
+    ]);
   };
 
   const moveQuestions = useCallback((dragIndex: number, hoverIndex: number) => {
@@ -104,7 +114,6 @@ const QuestionsEditor = (props: PropType) => {
             </div>
           </button>
         </div>
-
       </section>
     </>
   );
