@@ -30,7 +30,7 @@ const EditApplication = () => {
     },
     {
       enabled: !!applicationId,
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
     },
   );
 

@@ -117,7 +117,7 @@ const QuestionsEditor = (props: PropType) => {
             </div>
           </button>
 
-          <div className="flex w-full grow justify-end">
+          <div className="flex grow justify-end">
             <ApplicationPreviewDialog
               dialogDescription={""}
               openDialog={openPreviewDialog}

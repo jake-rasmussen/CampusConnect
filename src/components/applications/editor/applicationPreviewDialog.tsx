@@ -34,7 +34,7 @@ const ApplicationPreviewDialog = (props: PropType) => {
             Preview
           </Button>
         </DialogTrigger>
-        <DialogContent className="min-w-max">
+        <DialogContent className="max-w-5xl">
           <DialogHeader>
             <DialogTitle>Application Preview</DialogTitle>
             <DialogDescription className="py-4">
@@ -48,7 +48,7 @@ const ApplicationPreviewDialog = (props: PropType) => {
             <Cross2Icon className="h-8 w-8" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
-          {children}
+            {children}
         </DialogContent>
       </Dialog>
     </>
