@@ -1,4 +1,4 @@
-import { ClubApplicationAnswer } from "@prisma/client";
+import { ClubApplicationAnswerChoice } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useEffect, useState } from "react";
 import { z } from "zod";
@@ -8,9 +8,7 @@ import { Textarea } from "~/components/shadcn_ui/textarea";
 import Button from "../../button";
 import ErrorMessage from "../../dashboard/errorMessage";
 import { Input } from "../../shadcn_ui/input";
-import QuestionsEditor, {
-  ClubApplicationQuestionForForm,
-} from "./questionsEditor";
+import QuestionsEditor from "./questionsEditor";
 
 import type { ClubApplicationQuestion } from "@prisma/client";
 
@@ -23,36 +21,38 @@ type PropType = {
   name?: string;
   description?: string;
   questions: (ClubApplicationQuestion & {
-    clubApplicationAnswers: ClubApplicationAnswer[];
+    clubApplicationAnswers: ClubApplicationAnswerChoice[];
   })[];
   onSubmit: (
     name: string,
     description: string,
     questions: (ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswer[];
+      clubApplicationAnswers: ClubApplicationAnswerChoice[];
     })[],
     questionsToDelete: ClubApplicationQuestion[],
-    answersToDelete: ClubApplicationAnswer[]
+    answersToDelete: ClubApplicationAnswerChoice[],
   ) => void;
 };
 
 const ApplicationEditForm = (props: PropType) => {
   const { name, description, questions, onSubmit } = props;
 
-  const [questionsForm, setQuestionsForm] = useState<
-    ClubApplicationQuestionForForm[]
+  const [questionsState, setQuestionsState] = useState<
+    (ClubApplicationQuestion & {
+      clubApplicationAnswers: ClubApplicationAnswerChoice[];
+    })[]
   >([]);
-  const [questionsFormToDelete, setQuestionsFormToDelete] = useState<
-    ClubApplicationQuestionForForm[]
+  const [questionsToDelete, setQuestionsToDelete] = useState<
+    ClubApplicationQuestion[]
   >([]);
   const [answerChoicesToDelete, setAnswerChoicesToDelete] = useState<
-    ClubApplicationAnswer[]
+    ClubApplicationAnswerChoice[]
   >([]);
 
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
   useEffect(() => {
-    setQuestionsForm(
+    setQuestionsState(
       Array.from(questions, (question, index: number) => {
         return {
           id: question.id,
@@ -62,18 +62,20 @@ const ApplicationEditForm = (props: PropType) => {
           type: question.type,
           clubApplicationAnswers: question.clubApplicationAnswers,
           clubApplicationId: "",
+          createdAt: question.createdAt,
+          updatedAt: question.updatedAt,
         };
       }),
     );
   }, []);
 
   useEffect(() => {
-    setQuestionsFormToDelete([]);
+    setQuestionsToDelete([]);
     setAnswerChoicesToDelete([]);
-  }, [questions])
+  }, [questions]);
 
   const isQuestionsFormValid = () => {
-    for (let question of questionsForm) {
+    for (let question of questionsState) {
       if (
         question.question === "" ||
         question.type === undefined ||
@@ -91,13 +93,13 @@ const ApplicationEditForm = (props: PropType) => {
         onSubmit(
           values.name,
           values.description,
-          questionsForm as (ClubApplicationQuestion & {
-            clubApplicationAnswers: ClubApplicationAnswer[];
+          questionsState as (ClubApplicationQuestion & {
+            clubApplicationAnswers: ClubApplicationAnswerChoice[];
           })[],
-          questionsFormToDelete as (ClubApplicationQuestion & {
-            clubApplicationAnswers: ClubApplicationAnswer[];
+          questionsToDelete as (ClubApplicationQuestion & {
+            clubApplicationAnswers: ClubApplicationAnswerChoice[];
           })[],
-          answerChoicesToDelete as ClubApplicationAnswer[]
+          answerChoicesToDelete as ClubApplicationAnswerChoice[],
         );
       }}
     >
@@ -157,9 +159,9 @@ const ApplicationEditForm = (props: PropType) => {
               Questions
             </span>
             <QuestionsEditor
-              questionsForm={questionsForm}
-              setQuestionsForm={setQuestionsForm}
-              setQuestionsFormToDelete={setQuestionsFormToDelete}
+              questionsState={questionsState}
+              setQuestionsState={setQuestionsState}
+              setQuestionsStateToDelete={setQuestionsToDelete}
               setAnswerChoicesToDelete={setAnswerChoicesToDelete}
             />
           </section>

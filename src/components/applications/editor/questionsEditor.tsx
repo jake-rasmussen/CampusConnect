@@ -1,7 +1,7 @@
 import "@prisma/client";
 
 import {
-  ClubApplicationAnswer,
+  ClubApplicationAnswerChoice,
   ClubApplicationQuestion,
   ClubApplicationQuestionType,
 } from "@prisma/client";
@@ -13,138 +13,159 @@ import Application from "../application";
 import AnswerChoicesEditor from "./answerChoicesEditor";
 import ApplicationPreviewDialog from "./applicationPreviewDialog";
 import QuestionCard from "./questionCard";
-
-export type ClubApplicationQuestionForForm = {
-  id: string | undefined;
-  required: boolean | undefined;
-  question: string;
-  clubApplicationAnswers: ClubApplicationAnswer[];
-  type: ClubApplicationQuestionType | undefined;
-};
+import DraggableCard from "~/components/draggableCard";
 
 type PropType = {
-  questionsForm: ClubApplicationQuestionForForm[];
-  setQuestionsForm: Dispatch<SetStateAction<ClubApplicationQuestionForForm[]>>;
-  setQuestionsFormToDelete: Dispatch<
-    SetStateAction<ClubApplicationQuestionForForm[]>
+  questionsState: (ClubApplicationQuestion & {
+    clubApplicationAnswers: ClubApplicationAnswerChoice[];
+  })[];
+  setQuestionsState: Dispatch<
+    SetStateAction<
+      (ClubApplicationQuestion & {
+        clubApplicationAnswers: ClubApplicationAnswerChoice[];
+      })[]
+    >
+  >;
+  setQuestionsStateToDelete: Dispatch<
+    SetStateAction<ClubApplicationQuestion[]>
   >;
   setAnswerChoicesToDelete: Dispatch<
-    SetStateAction<ClubApplicationAnswer[]>
+    SetStateAction<ClubApplicationAnswerChoice[]>
   >;
 };
 
 const QuestionsEditor = (props: PropType) => {
-  const { questionsForm, setQuestionsForm, setQuestionsFormToDelete, setAnswerChoicesToDelete} = props;
+  const {
+    questionsState,
+    setQuestionsState,
+    setQuestionsStateToDelete,
+    setAnswerChoicesToDelete,
+  } = props;
 
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
 
-  const updateQuestionsForm = (
+  const updateQuestionsState = (
     field: string,
     value:
       | boolean
       | string
-      | ClubApplicationAnswer[]
+      | ClubApplicationAnswerChoice[]
       | ClubApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestionForForm,
+    question: ClubApplicationQuestion & {
+      clubApplicationAnswers: ClubApplicationAnswerChoice[];
+    },
   ) => {
-    const newQuestionsForm = questionsForm;
+    const newQuestionsForm = questionsState;
     newQuestionsForm[index] = {
       id: question.id,
       required: question.required,
       type: question.type,
       question: question.question,
+      orderNumber: question.orderNumber,
       clubApplicationAnswers: question.clubApplicationAnswers,
+      createdAt: question.createdAt,
+      updatedAt: question.updatedAt,
       [field]: value,
+    } as unknown as ClubApplicationQuestion & {
+      clubApplicationAnswers: ClubApplicationAnswerChoice[];
     };
-    setQuestionsForm([...newQuestionsForm]);
+    setQuestionsState([...newQuestionsForm]);
   };
 
   const deleteQuestion = (index: number) => {
-    const newQuestionsForm = questionsForm;
+    const newQuestionsForm = questionsState;
     const questionToDelete = newQuestionsForm[index]!;
     newQuestionsForm.splice(index, 1);
 
-    setQuestionsForm([...newQuestionsForm]);
-    setQuestionsFormToDelete((prev: ClubApplicationQuestionForForm[]) => [
+    setQuestionsState([...newQuestionsForm]);
+    setQuestionsStateToDelete((prev: ClubApplicationQuestion[]) => [
       ...prev,
       questionToDelete,
     ]);
   };
 
   const moveQuestions = useCallback((dragIndex: number, hoverIndex: number) => {
-    setQuestionsForm((prevQuestions: ClubApplicationQuestionForForm[]) =>
-      update(prevQuestions, {
-        $splice: [
-          [dragIndex, 1],
-          [
-            hoverIndex,
-            0,
-            prevQuestions[dragIndex] as ClubApplicationQuestionForForm,
+    setQuestionsState(
+      (
+        prevQuestions: (ClubApplicationQuestion & {
+          clubApplicationAnswers: ClubApplicationAnswerChoice[];
+        })[],
+      ) =>
+        update(prevQuestions, {
+          $splice: [
+            [dragIndex, 1],
+            [
+              hoverIndex,
+              0,
+              prevQuestions[dragIndex] as ClubApplicationQuestion & {
+                clubApplicationAnswers: ClubApplicationAnswerChoice[];
+              },
+            ],
           ],
-        ],
-      }),
+        }),
     );
   }, []);
 
   return (
     <>
       <section className="border-1 w-[75rem] rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
-        {questionsForm.map(
-          (question: ClubApplicationQuestionForForm, index: number) => {
-            return (
-              <div
-                className="border-1  my-4 rounded-xl  border  border-white p-4"
-                key={`question${index}${question.question}`}
-              >
-                <QuestionCard
-                  question={
-                    question as ClubApplicationQuestion & {
-                      clubApplicationAnswers: ClubApplicationAnswer[];
-                    }
+        {questionsState.map((question, index: number) => {
+          return (
+            <DraggableCard
+              className="border-1 my-4 rounded-xl border border-white p-4"
+              key={`question${index}${question.question}`}
+              index={index}
+              moveCard={moveQuestions}
+            >
+              <QuestionCard
+                question={
+                  question as ClubApplicationQuestion & {
+                    clubApplicationAnswers: ClubApplicationAnswerChoice[];
                   }
-                  index={index}
-                  updateQuestionsForm={updateQuestionsForm}
-                  deleteQuestion={deleteQuestion}
-                  moveQuestions={moveQuestions}
-                />
+                }
+                index={index}
+                updateQuestionsState={updateQuestionsState}
+                deleteQuestion={deleteQuestion}
+              />
 
-                <div className="ml-20">
-                  {question.type ===
-                    ClubApplicationQuestionType.MULTIPLE_CHOICE ||
-                    question.type ===
-                    ClubApplicationQuestionType.MULTIPLE_SELECT ? (
-                    <AnswerChoicesEditor
-                      question={
-                        question as ClubApplicationQuestion & {
-                          clubApplicationAnswers: ClubApplicationAnswer[];
-                        }
+              <div className="ml-20">
+                {question.type ===
+                  ClubApplicationQuestionType.MULTIPLE_CHOICE ||
+                  question.type ===
+                  ClubApplicationQuestionType.MULTIPLE_SELECT ? (
+                  <AnswerChoicesEditor
+                    question={
+                      question as ClubApplicationQuestion & {
+                        clubApplicationAnswers: ClubApplicationAnswerChoice[];
                       }
-                      questinIndex={index}
-                      updateQuestionsForm={updateQuestionsForm}
-                      setAnswerChoicesToDelete={setAnswerChoicesToDelete}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                </div>
+                    }
+                    questionIndex={index}
+                    updateQuestionsState={updateQuestionsState}
+                    setAnswerChoicesToDelete={setAnswerChoicesToDelete}
+                  />
+                ) : (
+                  <></>
+                )}
               </div>
-            );
-          },
-        )}
+            </DraggableCard>
+          );
+        })}
 
         <div className="flex flex-row py-10">
           <button
             className="group flex flex-row items-center justify-center"
             onClick={() => {
-              setQuestionsForm([
-                ...questionsForm,
+              setQuestionsState([
+                ...questionsState,
                 {
                   id: undefined,
                   required: undefined,
                   question: "",
                   type: undefined,
                   clubApplicationAnswers: [],
+                } as unknown as ClubApplicationQuestion & {
+                  clubApplicationAnswers: ClubApplicationAnswerChoice[];
                 },
               ]);
             }}
@@ -165,8 +186,8 @@ const QuestionsEditor = (props: PropType) => {
             >
               <Application
                 questions={
-                  questionsForm as (ClubApplicationQuestion & {
-                    clubApplicationAnswers: ClubApplicationAnswer[];
+                  questionsState as (ClubApplicationQuestion & {
+                    clubApplicationAnswers: ClubApplicationAnswerChoice[];
                   })[]
                 }
               />

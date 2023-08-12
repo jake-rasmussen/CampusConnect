@@ -1,5 +1,5 @@
 import {
-  ClubApplicationAnswer,
+  ClubApplicationAnswerChoice,
   ClubApplicationQuestion,
   ClubApplicationQuestionType,
 } from "@prisma/client";
@@ -7,33 +7,39 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Circle, SquarePlus, X } from "tabler-icons-react";
 
 import { Input } from "~/components/shadcn_ui/input";
-import { ClubApplicationQuestionForForm } from "./questionsEditor";
 
 type PropType = {
   question: ClubApplicationQuestion & {
-    clubApplicationAnswers: ClubApplicationAnswer[];
+    clubApplicationAnswers: ClubApplicationAnswerChoice[];
   };
-  questinIndex: number;
-  updateQuestionsForm: (
+  questionIndex: number;
+  updateQuestionsState: (
     field: string,
     value:
       | boolean
       | string
-      | ClubApplicationAnswer[]
+      | ClubApplicationAnswerChoice[]
       | ClubApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestionForForm,
+    question: ClubApplicationQuestion & {
+      clubApplicationAnswers: ClubApplicationAnswerChoice[];
+    },
   ) => void;
   setAnswerChoicesToDelete: Dispatch<
-    SetStateAction<ClubApplicationAnswer[]>
+    SetStateAction<ClubApplicationAnswerChoice[]>
   >;
 };
 
 const AnswerChoicesEditor = (props: PropType) => {
-  const { question, questinIndex, updateQuestionsForm, setAnswerChoicesToDelete } = props;
+  const {
+    question,
+    questionIndex,
+    updateQuestionsState,
+    setAnswerChoicesToDelete,
+  } = props;
 
   const createAnswerChoice = () => {
-    updateQuestionsForm(
+    updateQuestionsState(
       "clubApplicationAnswers",
       [
         ...question.clubApplicationAnswers,
@@ -41,26 +47,27 @@ const AnswerChoicesEditor = (props: PropType) => {
           id: undefined,
           answerChoice: "",
           clubApplicationQuestionId: question.id,
-        } as unknown as ClubApplicationAnswer,
+        } as unknown as ClubApplicationAnswerChoice,
       ],
-      questinIndex,
+      questionIndex,
       question,
     );
   };
 
   const deleteAnswerChoice = (answerChoiceIndex: number) => {
     const newAnswerChocies = question.clubApplicationAnswers;
-    const answerChoiceToDelete = question.clubApplicationAnswers[answerChoiceIndex]!;
+    const answerChoiceToDelete =
+      question.clubApplicationAnswers[answerChoiceIndex]!;
     newAnswerChocies.splice(answerChoiceIndex, 1);
 
-    updateQuestionsForm(
+    updateQuestionsState(
       "clubApplicationAnswers",
       newAnswerChocies,
-      questinIndex,
+      questionIndex,
       question,
     );
 
-    setAnswerChoicesToDelete((prev: ClubApplicationAnswer[]) => [
+    setAnswerChoicesToDelete((prev: ClubApplicationAnswerChoice[]) => [
       ...prev,
       answerChoiceToDelete,
     ]);
@@ -69,7 +76,7 @@ const AnswerChoicesEditor = (props: PropType) => {
   const updateAnswerChoice = (
     answerChoiceIndex: number,
     value: string,
-    answerChoice: ClubApplicationAnswer,
+    answerChoice: ClubApplicationAnswerChoice,
   ) => {
     const newAnswerChocies = question.clubApplicationAnswers;
     newAnswerChocies[answerChoiceIndex] = {
@@ -77,10 +84,10 @@ const AnswerChoicesEditor = (props: PropType) => {
       answerChoice: value,
       clubApplicationQuestionId: answerChoice.clubApplicationQuestionId,
     };
-    updateQuestionsForm(
+    updateQuestionsState(
       "clubApplicationAnswers",
       newAnswerChocies,
-      questinIndex,
+      questionIndex,
       question,
     );
   };
@@ -106,7 +113,7 @@ const AnswerChoicesEditor = (props: PropType) => {
               className="flex items-end justify-end"
               onClick={() => deleteAnswerChoice(index)}
             >
-              <X className="h-[2rem] w-auto text-white transition duration-500 ease-in-out hover:rotate-90 hover:scale-110 hover:text-red-800" />
+              <X className="h-[2rem] w-auto text-white transition duration-500 ease-in-out hover:rotate-90 hover:scale-110 hover:text-red-600" />
             </button>
           </div>
         ))}

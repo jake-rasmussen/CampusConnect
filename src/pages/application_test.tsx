@@ -1,10 +1,7 @@
 import Application from "~/components/applications/application";
 
-
 const ApplicationTest = () => {
-
-  <Application questions={[]} />
-
-}
+  <Application questions={[]} />;
+};
 
 export default ApplicationTest;

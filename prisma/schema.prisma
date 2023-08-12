@@ -132,10 +132,10 @@ model ClubApplicationQuestion {
   type                   ClubApplicationQuestionType
   createdAt              DateTime                    @default(now())
   updatedAt              DateTime                    @updatedAt
-  clubApplicationAnswers ClubApplicationAnswer[]
+  clubApplicationAnswers ClubApplicationAnswerChoice[]
 }
 
-model ClubApplicationAnswer {
+model ClubApplicationAnswerChoice {
   id                        String                  @id @default(cuid())
   answerChoice              String
   clubApplicationQuestionId String

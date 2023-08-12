@@ -1,12 +1,12 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { clubRouter } from "./routers/club";
 import { clubApplicationRouter } from "./routers/clubApplication";
+import { clubApplicationAnswerRouter } from "./routers/clubApplicationAnswerChoice";
 import { clubApplicationQuestionRouter } from "./routers/clubApplicationQuestion";
 import { clubContactInfoRouter } from "./routers/clubContactInfo";
 import { clubEventsRouter } from "./routers/clubEvents";
 import { clubMemberRouter } from "./routers/clubMember";
 import { clubSocialMediaRouter } from "./routers/clubSocialMedia";
-import { clubApplicationAnswerRouter } from "./routers/clubApplicationAnswer";
 import { usersRouter } from "./routers/users";
 
 /**

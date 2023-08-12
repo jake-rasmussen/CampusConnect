@@ -13,111 +13,43 @@ import {
 } from "~/components/shadcn_ui/select";
 import { clubApplicationMemberTypeToString } from "~/utils/helpers";
 import { Input } from "../../shadcn_ui/input";
-import { ClubApplicationQuestionForForm } from "./questionsEditor";
 
 import type {
-  ClubApplicationAnswer,
+  ClubApplicationAnswerChoice,
   ClubApplicationQuestion,
 } from "@prisma/client";
 import type { Identifier, XYCoord } from "dnd-core";
 
 type PropType = {
   question: ClubApplicationQuestion & {
-    clubApplicationAnswers: ClubApplicationAnswer[];
+    clubApplicationAnswers: ClubApplicationAnswerChoice[];
   };
   index: number;
-  updateQuestionsForm: (
+  updateQuestionsState: (
     field: string,
     value:
       | boolean
       | string
-      | ClubApplicationAnswer[]
+      | ClubApplicationAnswerChoice[]
       | ClubApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestionForForm,
+    question: ClubApplicationQuestion & {
+      clubApplicationAnswers: ClubApplicationAnswerChoice[];
+    },
   ) => void;
   deleteQuestion: (index: number) => void;
-  moveQuestions: (dragIndex: number, hoverIndex: number) => void;
-};
-
-type DragItem = {
-  index: number;
-  id: string;
-  type: string;
 };
 
 const QuestionCard = (props: PropType) => {
   const {
     question,
     index,
-    updateQuestionsForm,
+    updateQuestionsState,
     deleteQuestion,
-    moveQuestions,
   } = props;
 
-  const ref = useRef<HTMLDivElement>(null);
-  const [{ handlerId }, drop] = useDrop<
-    DragItem,
-    void,
-    { handlerId: Identifier | null }
-  >({
-    accept: "question",
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      };
-    },
-    hover(item: DragItem, monitor) {
-      if (!ref.current) {
-        return;
-      }
-      const dragIndex = item.index;
-      const hoverIndex = index;
-
-      if (dragIndex === hoverIndex) {
-        return;
-      }
-
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
-
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
-      }
-
-      moveQuestions(dragIndex, hoverIndex);
-      item.index = hoverIndex;
-    },
-  });
-
-  const [{ isDragging }, drag] = useDrag({
-    type: "question",
-    item: () => {
-      return { id: index, index };
-    },
-    collect: (monitor: any) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-
-  drag(drop(ref));
-
   return (
-    <section
-      className={twMerge(
-        "flex flex-row items-center gap-4",
-        isDragging ? "opacity-25" : "",
-      )}
-      data-handler-id={handlerId}
-      ref={ref}
-    >
+    <section className="flex flex-row items-center gap-4">
       <div className="text-gray hover:cursor-pointer hover:text-white">
         <DotsVertical className="h-20 w-8 object-none" />
       </div>
@@ -128,7 +60,7 @@ const QuestionCard = (props: PropType) => {
           placeholder="Enter the Question"
           defaultValue={question.question}
           onBlur={(e) => {
-            updateQuestionsForm(
+            updateQuestionsState(
               "question",
               e.currentTarget.value,
               index,
@@ -143,7 +75,7 @@ const QuestionCard = (props: PropType) => {
         <Select
           defaultValue={question.type}
           onValueChange={(input: ClubApplicationQuestionType) => {
-            updateQuestionsForm("type", input, index, question);
+            updateQuestionsState("type", input, index, question);
           }}
         >
           <SelectTrigger className="col-span-3 h-[3rem] w-[10rem] rounded-xl bg-white">
@@ -177,7 +109,7 @@ const QuestionCard = (props: PropType) => {
           }
           onValueChange={(input) => {
             const isRequired = input === "yes";
-            updateQuestionsForm("required", isRequired, index, question);
+            updateQuestionsState("required", isRequired, index, question);
           }}
         >
           <SelectTrigger className="col-span-3 h-[3rem] w-[5rem] rounded-xl bg-white">

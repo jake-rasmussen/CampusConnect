@@ -1,6 +1,10 @@
-import { ClubApplicationAnswer, ClubApplicationQuestion } from "@prisma/client";
+import {
+  ClubApplicationAnswerChoice,
+  ClubApplicationQuestion,
+} from "@prisma/client";
 import Error from "next/error";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 import ApplicationEditForm from "~/components/applications/editor/applicationEditForm";
 import HeaderOutline from "~/components/dashboard/header/headerOutline";
@@ -8,7 +12,7 @@ import EditApplicationSkeleton from "~/components/skeletons/editApplicationSkele
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-import { useEffect, type JSXElementConstructor, type ReactElement } from "react";
+import type { JSXElementConstructor, ReactElement } from "react";
 
 const EditApplication = () => {
   const router = useRouter();
@@ -39,11 +43,11 @@ const EditApplication = () => {
     api.clubApplicationQuestionRouter.deleteClubApplicationById.useMutation();
 
   const createApplicationAnswer =
-    api.clubApplicationAnswerRouter.createClubApplicationAnswer.useMutation();
+    api.clubApplicationAnswerRouter.createClubApplicationAnswerChoice.useMutation();
   const updateApplicationAnswer =
-    api.clubApplicationAnswerRouter.updateClubApplicationAnswerById.useMutation();
+    api.clubApplicationAnswerRouter.updateClubApplicationAnswerChoiceById.useMutation();
   const deleteApplicationAnswer =
-    api.clubApplicationAnswerRouter.deleteClubApplicationAnswerById.useMutation();
+    api.clubApplicationAnswerRouter.deleteClubApplicationAnswerChoiceById.useMutation();
 
   const updateApplication =
     api.clubApplicationRouter.updateClubApplication.useMutation({
@@ -56,15 +60,18 @@ const EditApplication = () => {
     name: string,
     description: string,
     questions: (ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswer[];
+      clubApplicationAnswers: ClubApplicationAnswerChoice[];
     })[],
     questionsToDelete: ClubApplicationQuestion[],
-    answerChoicesToDelete: ClubApplicationAnswer[],
+    answerChoicesToDelete: ClubApplicationAnswerChoice[],
   ) => {
     questions.forEach(
-      async (question: (ClubApplicationQuestion & {
-        clubApplicationAnswers: ClubApplicationAnswer[];
-      }), index: number) => {
+      async (
+        question: ClubApplicationQuestion & {
+          clubApplicationAnswers: ClubApplicationAnswerChoice[];
+        },
+        index: number,
+      ) => {
         if (question.id === undefined) {
           await createApplicationQuestion.mutateAsync({
             clubApplicationId: applicationId,
@@ -83,19 +90,21 @@ const EditApplication = () => {
           });
         }
 
-        question.clubApplicationAnswers.forEach(async (answer: ClubApplicationAnswer) => {
-          if (answer.id === undefined) {
-            await createApplicationAnswer.mutateAsync({
-              answerChoice: answer.answerChoice,
-              clubApplicationQuestionId: answer.clubApplicationQuestionId
-            })
-          } else {
-            await updateApplicationAnswer.mutateAsync({
-              clubApplicationAnswerId: answer.id,
-              answerChoice: answer.answerChoice
-            })
-          }
-        })
+        question.clubApplicationAnswers.forEach(
+          async (answer: ClubApplicationAnswerChoice) => {
+            if (answer.id === undefined) {
+              await createApplicationAnswer.mutateAsync({
+                answerChoice: answer.answerChoice,
+                clubApplicationQuestionId: answer.clubApplicationQuestionId,
+              });
+            } else {
+              await updateApplicationAnswer.mutateAsync({
+                clubApplicationAnswerId: answer.id,
+                answerChoice: answer.answerChoice,
+              });
+            }
+          },
+        );
       },
     );
 
@@ -107,13 +116,15 @@ const EditApplication = () => {
       }
     });
 
-    answerChoicesToDelete.forEach(async (answer: ClubApplicationAnswer) => {
-      if (answer.id !== undefined) {
-        await deleteApplicationAnswer.mutateAsync({
-          clubApplicationAnswerId: answer.id
-        });
-      }
-    });
+    answerChoicesToDelete.forEach(
+      async (answer: ClubApplicationAnswerChoice) => {
+        if (answer.id !== undefined) {
+          await deleteApplicationAnswer.mutateAsync({
+            clubApplicationAnswerId: answer.id,
+          });
+        }
+      },
+    );
 
     await updateApplication.mutateAsync({
       clubApplicationId: applicationId,
@@ -121,7 +132,7 @@ const EditApplication = () => {
       description,
     });
   };
-  
+
   if (isLoading) {
     return <EditApplicationSkeleton />;
   } else if (isError) {

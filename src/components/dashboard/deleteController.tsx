@@ -24,7 +24,7 @@ const DeleteController = (props: PropType) => {
       <Dialog>
         <DialogTrigger asChild>
           <button className="my-4">
-            <Trash className="h-full w-full transition duration-300 ease-in-out hover:rotate-12 hover:scale-110 hover:text-red-800" />
+            <Trash className="h-full w-full transition duration-300 ease-in-out hover:rotate-12 hover:scale-110 hover:text-red-600" />
           </button>
         </DialogTrigger>
         <DialogContent>

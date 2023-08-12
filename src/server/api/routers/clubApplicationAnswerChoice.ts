@@ -6,60 +6,60 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 // TODO: if application is live make sure you cannot make edits to it
 
 export const clubApplicationAnswerRouter = createTRPCRouter({
-  createClubApplicationAnswer: protectedProcedure
+  createClubApplicationAnswerChoice: protectedProcedure
     .input(
       z.object({
         answerChoice: z.string(),
         clubApplicationQuestionId: z.string(),
-      })
+      }),
     )
-    .mutation((async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { answerChoice, clubApplicationQuestionId } = input;
 
-      const clubApplicationAnswer = 
-        await ctx.prisma.clubApplicationAnswer.create({
+      const clubApplicationAnswer =
+        await ctx.prisma.clubApplicationAnswerChoice.create({
           data: {
             answerChoice,
-            clubApplicationQuestionId
-          }
+            clubApplicationQuestionId,
+          },
         });
 
       return clubApplicationAnswer;
-    })),
-  updateClubApplicationAnswerById: protectedProcedure
+    }),
+  updateClubApplicationAnswerChoiceById: protectedProcedure
     .input(
       z.object({
         clubApplicationAnswerId: z.string(),
         answerChoice: z.string(),
-      })
+      }),
     )
-    .mutation((async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { clubApplicationAnswerId, answerChoice } = input;
 
-      const clubApplicationAnswer = 
-        await ctx.prisma.clubApplicationAnswer.update({
+      const clubApplicationAnswer =
+        await ctx.prisma.clubApplicationAnswerChoice.update({
           where: {
-            id: clubApplicationAnswerId
-          }, 
+            id: clubApplicationAnswerId,
+          },
           data: {
             answerChoice,
-          }
-        })
-    })),
-  deleteClubApplicationAnswerById: protectedProcedure
+          },
+        });
+    }),
+  deleteClubApplicationAnswerChoiceById: protectedProcedure
     .input(
       z.object({
         clubApplicationAnswerId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { clubApplicationAnswerId } = input;
 
-      const clubApplicationAnswer = 
-        await ctx.prisma.clubApplicationAnswer.delete({
+      const clubApplicationAnswer =
+        await ctx.prisma.clubApplicationAnswerChoice.delete({
           where: {
-            id: clubApplicationAnswerId
-          }
-        })
-    })
-})
+            id: clubApplicationAnswerId,
+          },
+        });
+    }),
+});

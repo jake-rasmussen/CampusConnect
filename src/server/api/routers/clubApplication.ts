@@ -74,7 +74,11 @@ export const clubApplicationRouter = createTRPCRouter({
                 orderNumber: "asc",
               },
               include: {
-                clubApplicationAnswers: true,
+                clubApplicationAnswers: {
+                  orderBy: {
+                    answerChoice: "asc",
+                  },
+                },
               },
             },
           },

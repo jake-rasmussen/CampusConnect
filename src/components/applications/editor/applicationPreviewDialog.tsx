@@ -28,10 +28,12 @@ const ApplicationPreviewDialog = (props: PropType) => {
       <Dialog open={openDialog}>
         <DialogTrigger asChild>
           <button
-            className="bg-white/10 backdrop-invert max-w-xs rounded-xl px-4 py-4 transition duration-300 ease-in-out hover:scale-110"
+            className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110"
             onClick={() => setOpenDialog(true)}
           >
-            <h1 className="tracking-none font-black uppercase text-white">Preview</h1>
+            <h1 className="tracking-none font-black uppercase text-white">
+              Preview
+            </h1>
           </button>
         </DialogTrigger>
         <DialogContent className="max-w-5xl">
