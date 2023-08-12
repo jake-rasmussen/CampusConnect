@@ -2,6 +2,8 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
+// TODO: if application is live make sure you cannot make edits to it
+
 export const clubApplicationRouter = createTRPCRouter({
   createClubApplication: protectedProcedure
     .input(
@@ -70,6 +72,9 @@ export const clubApplicationRouter = createTRPCRouter({
             questions: {
               orderBy: {
                 orderNumber: "asc",
+              },
+              include: {
+                clubApplicationAnswers: true,
               },
             },
           },

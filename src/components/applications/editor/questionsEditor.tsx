@@ -1,22 +1,24 @@
 import "@prisma/client";
 
+import {
+  ClubApplicationAnswer,
+  ClubApplicationQuestion,
+  ClubApplicationQuestionType,
+} from "@prisma/client";
 import update from "immutability-helper";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { SquarePlus } from "tabler-icons-react";
 
 import Application from "../application";
+import AnswerChoicesEditor from "./answerChoicesEditor";
 import ApplicationPreviewDialog from "./applicationPreviewDialog";
 import QuestionCard from "./questionCard";
-
-import type {
-  ClubApplicationQuestion,
-  ClubApplicationQuestionType,
-} from "@prisma/client";
 
 export type ClubApplicationQuestionForForm = {
   id: string | undefined;
   required: boolean | undefined;
   question: string;
+  clubApplicationAnswers: ClubApplicationAnswer[];
   type: ClubApplicationQuestionType | undefined;
 };
 
@@ -26,15 +28,23 @@ type PropType = {
   setQuestionsFormToDelete: Dispatch<
     SetStateAction<ClubApplicationQuestionForForm[]>
   >;
+  setAnswerChoicesToDelete: Dispatch<
+    SetStateAction<ClubApplicationAnswer[]>
+  >;
 };
 
 const QuestionsEditor = (props: PropType) => {
-  const { questionsForm, setQuestionsForm, setQuestionsFormToDelete } = props;
+  const { questionsForm, setQuestionsForm, setQuestionsFormToDelete, setAnswerChoicesToDelete} = props;
 
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
+
   const updateQuestionsForm = (
     field: string,
-    value: boolean | string | ClubApplicationQuestionType,
+    value:
+      | boolean
+      | string
+      | ClubApplicationAnswer[]
+      | ClubApplicationQuestionType,
     index: number,
     question: ClubApplicationQuestionForForm,
   ) => {
@@ -44,12 +54,13 @@ const QuestionsEditor = (props: PropType) => {
       required: question.required,
       type: question.type,
       question: question.question,
+      clubApplicationAnswers: question.clubApplicationAnswers,
       [field]: value,
     };
     setQuestionsForm([...newQuestionsForm]);
   };
 
-  const deleteQuestionFormElement = (index: number) => {
+  const deleteQuestion = (index: number) => {
     const newQuestionsForm = questionsForm;
     const questionToDelete = newQuestionsForm[index]!;
     newQuestionsForm.splice(index, 1);
@@ -82,14 +93,42 @@ const QuestionsEditor = (props: PropType) => {
         {questionsForm.map(
           (question: ClubApplicationQuestionForForm, index: number) => {
             return (
-              <QuestionCard
-                question={question as ClubApplicationQuestion}
-                index={index}
-                updateQuestionsForm={updateQuestionsForm}
-                deleteQuestionFormElement={deleteQuestionFormElement}
-                moveQuestions={moveQuestions}
+              <div
+                className="border-1  my-4 rounded-xl  border  border-white p-4"
                 key={`question${index}${question.question}`}
-              />
+              >
+                <QuestionCard
+                  question={
+                    question as ClubApplicationQuestion & {
+                      clubApplicationAnswers: ClubApplicationAnswer[];
+                    }
+                  }
+                  index={index}
+                  updateQuestionsForm={updateQuestionsForm}
+                  deleteQuestion={deleteQuestion}
+                  moveQuestions={moveQuestions}
+                />
+
+                <div className="ml-20">
+                  {question.type ===
+                    ClubApplicationQuestionType.MULTIPLE_CHOICE ||
+                    question.type ===
+                    ClubApplicationQuestionType.MULTIPLE_SELECT ? (
+                    <AnswerChoicesEditor
+                      question={
+                        question as ClubApplicationQuestion & {
+                          clubApplicationAnswers: ClubApplicationAnswer[];
+                        }
+                      }
+                      questinIndex={index}
+                      updateQuestionsForm={updateQuestionsForm}
+                      setAnswerChoicesToDelete={setAnswerChoicesToDelete}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
             );
           },
         )}
@@ -105,6 +144,7 @@ const QuestionsEditor = (props: PropType) => {
                   required: undefined,
                   question: "",
                   type: undefined,
+                  clubApplicationAnswers: [],
                 },
               ]);
             }}
@@ -124,7 +164,11 @@ const QuestionsEditor = (props: PropType) => {
               setOpenDialog={setOpenPreviewDialog}
             >
               <Application
-                questions={questionsForm as ClubApplicationQuestion[]}
+                questions={
+                  questionsForm as (ClubApplicationQuestion & {
+                    clubApplicationAnswers: ClubApplicationAnswer[];
+                  })[]
+                }
               />
             </ApplicationPreviewDialog>
           </div>

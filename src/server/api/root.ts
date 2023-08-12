@@ -6,6 +6,7 @@ import { clubContactInfoRouter } from "./routers/clubContactInfo";
 import { clubEventsRouter } from "./routers/clubEvents";
 import { clubMemberRouter } from "./routers/clubMember";
 import { clubSocialMediaRouter } from "./routers/clubSocialMedia";
+import { clubApplicationAnswerRouter } from "./routers/clubApplicationAnswer";
 import { usersRouter } from "./routers/users";
 
 /**
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
   clubMemberRouter,
   clubApplicationRouter,
   clubApplicationQuestionRouter,
+  clubApplicationAnswerRouter,
   usersRouter,
 });
 

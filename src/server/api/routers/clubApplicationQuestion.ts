@@ -3,6 +3,8 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
+// TODO: if application is live make sure you cannot make edits to it
+
 export const clubApplicationQuestionRouter = createTRPCRouter({
   createClubApplicationQuestion: protectedProcedure
     .input(

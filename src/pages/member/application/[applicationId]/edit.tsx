@@ -1,17 +1,14 @@
-import { ClubApplicationQuestion } from "@prisma/client";
+import { ClubApplicationAnswer, ClubApplicationQuestion } from "@prisma/client";
 import Error from "next/error";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { Toaster } from "react-hot-toast";
 
 import ApplicationEditForm from "~/components/applications/editor/applicationEditForm";
-import { ClubApplicationQuestionForForm } from "~/components/applications/editor/questionsEditor";
 import HeaderOutline from "~/components/dashboard/header/headerOutline";
 import EditApplicationSkeleton from "~/components/skeletons/editApplicationSkeleton";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-import type { JSXElementConstructor, ReactElement } from "react";
+import { useEffect, type JSXElementConstructor, type ReactElement } from "react";
 
 const EditApplication = () => {
   const router = useRouter();
@@ -35,43 +32,39 @@ const EditApplication = () => {
   );
 
   const createApplicationQuestion =
-    api.clubApplicationQuestionRouter.createClubApplicationQuestion.useMutation(
-      {
-        onSuccess() {
-          console.log("Created Question");
-        },
-      },
-    );
+    api.clubApplicationQuestionRouter.createClubApplicationQuestion.useMutation();
   const updateApplicationQuestion =
-    api.clubApplicationQuestionRouter.updateClubApplicationQuestionById.useMutation(
-      {
-        onSuccess() {
-          console.log("Updated Question");
-        },
-      },
-    );
+    api.clubApplicationQuestionRouter.updateClubApplicationQuestionById.useMutation();
   const deleteApplicationQuestion =
-    api.clubApplicationQuestionRouter.deleteClubApplicationById.useMutation({
-      onSuccess() {
-        console.log("Deleted Question");
-      },
-    });
+    api.clubApplicationQuestionRouter.deleteClubApplicationById.useMutation();
+
+  const createApplicationAnswer =
+    api.clubApplicationAnswerRouter.createClubApplicationAnswer.useMutation();
+  const updateApplicationAnswer =
+    api.clubApplicationAnswerRouter.updateClubApplicationAnswerById.useMutation();
+  const deleteApplicationAnswer =
+    api.clubApplicationAnswerRouter.deleteClubApplicationAnswerById.useMutation();
+
   const updateApplication =
     api.clubApplicationRouter.updateClubApplication.useMutation({
       onSuccess() {
         queryClient.invalidate();
-        console.log("Invalidated Queries");
       },
     });
 
   const handleSubmit = async (
     name: string,
     description: string,
-    questions: ClubApplicationQuestion[],
+    questions: (ClubApplicationQuestion & {
+      clubApplicationAnswers: ClubApplicationAnswer[];
+    })[],
     questionsToDelete: ClubApplicationQuestion[],
+    answerChoicesToDelete: ClubApplicationAnswer[],
   ) => {
     questions.forEach(
-      async (question: ClubApplicationQuestion, index: number) => {
+      async (question: (ClubApplicationQuestion & {
+        clubApplicationAnswers: ClubApplicationAnswer[];
+      }), index: number) => {
         if (question.id === undefined) {
           await createApplicationQuestion.mutateAsync({
             clubApplicationId: applicationId,
@@ -89,6 +82,20 @@ const EditApplication = () => {
             type: question.type,
           });
         }
+
+        question.clubApplicationAnswers.forEach(async (answer: ClubApplicationAnswer) => {
+          if (answer.id === undefined) {
+            await createApplicationAnswer.mutateAsync({
+              answerChoice: answer.answerChoice,
+              clubApplicationQuestionId: answer.clubApplicationQuestionId
+            })
+          } else {
+            await updateApplicationAnswer.mutateAsync({
+              clubApplicationAnswerId: answer.id,
+              answerChoice: answer.answerChoice
+            })
+          }
+        })
       },
     );
 
@@ -100,13 +107,21 @@ const EditApplication = () => {
       }
     });
 
+    answerChoicesToDelete.forEach(async (answer: ClubApplicationAnswer) => {
+      if (answer.id !== undefined) {
+        await deleteApplicationAnswer.mutateAsync({
+          clubApplicationAnswerId: answer.id
+        });
+      }
+    });
+
     await updateApplication.mutateAsync({
       clubApplicationId: applicationId,
       name,
       description,
     });
   };
-
+  
   if (isLoading) {
     return <EditApplicationSkeleton />;
   } else if (isError) {
@@ -127,7 +142,6 @@ const EditApplication = () => {
               description={application.description}
               questions={application.questions}
               onSubmit={handleSubmit}
-              key={`1`}
             />
           </div>
         </main>

@@ -13,20 +13,30 @@ import {
 } from "~/components/shadcn_ui/select";
 import { clubApplicationMemberTypeToString } from "~/utils/helpers";
 import { Input } from "../../shadcn_ui/input";
+import { ClubApplicationQuestionForForm } from "./questionsEditor";
 
-import type { ClubApplicationQuestion } from "@prisma/client";
+import type {
+  ClubApplicationAnswer,
+  ClubApplicationQuestion,
+} from "@prisma/client";
 import type { Identifier, XYCoord } from "dnd-core";
 
 type PropType = {
-  question: ClubApplicationQuestion;
+  question: ClubApplicationQuestion & {
+    clubApplicationAnswers: ClubApplicationAnswer[];
+  };
   index: number;
   updateQuestionsForm: (
     field: string,
-    value: boolean | string | ClubApplicationQuestionType,
+    value:
+      | boolean
+      | string
+      | ClubApplicationAnswer[]
+      | ClubApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestion,
+    question: ClubApplicationQuestionForForm,
   ) => void;
-  deleteQuestionFormElement: (index: number) => void;
+  deleteQuestion: (index: number) => void;
   moveQuestions: (dragIndex: number, hoverIndex: number) => void;
 };
 
@@ -41,7 +51,7 @@ const QuestionCard = (props: PropType) => {
     question,
     index,
     updateQuestionsForm,
-    deleteQuestionFormElement,
+    deleteQuestion,
     moveQuestions,
   } = props;
 
@@ -102,7 +112,7 @@ const QuestionCard = (props: PropType) => {
   return (
     <section
       className={twMerge(
-        "border-1 my-4 flex flex-row items-center gap-4 rounded-xl border border-white p-4",
+        "flex flex-row items-center gap-4",
         isDragging ? "opacity-25" : "",
       )}
       data-handler-id={handlerId}
@@ -182,10 +192,10 @@ const QuestionCard = (props: PropType) => {
       <button
         className="flex items-end justify-end"
         onClick={() => {
-          deleteQuestionFormElement(index);
+          deleteQuestion(index);
         }}
       >
-        <X className="h-[3rem] w-auto text-white transition duration-500 ease-in-out hover:rotate-90 hover:scale-110 hover:text-red-800" />
+        <X className="h-[3rem] w-auto text-white transition duration-500 ease-in-out hover:rotate-90 hover:scale-110 hover:text-red-600" />
       </button>
     </section>
   );

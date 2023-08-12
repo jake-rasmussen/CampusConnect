@@ -8,14 +8,22 @@ import FileUpload from "../fileUpload";
 import MultipleChoice from "../multipleChoice";
 import { Input } from "../shadcn_ui/input";
 import { Textarea } from "../shadcn_ui/textarea";
+import { useState } from "react";
+
+// TODO: add id field to fetch user answers
 
 type PropType = {
   questions: ClubApplicationQuestion[];
+  applicationId?: string
 };
 
 const Application = (props: PropType) => {
   const { questions } = props;
 
+  // TODO: if applicaiton id is passed down fetch questions from application id instead of using questions
+
+  const [questionsMap, setQuestionsMap] = useState<ClubApplicationQuestion[]>(questions); // TODO: fetch if id is provided
+ 
   return (
     <>
       <div className="border-1 flex flex-col gap-y-8 rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
@@ -48,6 +56,8 @@ const Application = (props: PropType) => {
           </div>
         ))}
       </div>
+      
+      {/* TODO: add buttons for submit / save */}
     </>
   );
 };

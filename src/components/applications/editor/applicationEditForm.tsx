@@ -1,7 +1,6 @@
-import { type ClubApplicationQuestion } from "@prisma/client";
+import { ClubApplicationAnswer } from "@prisma/client";
 import { Field, Form } from "houseform";
-import { SetStateAction, useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
 import ErrorDialog from "~/components/errorDialog";
@@ -13,6 +12,8 @@ import QuestionsEditor, {
   ClubApplicationQuestionForForm,
 } from "./questionsEditor";
 
+import type { ClubApplicationQuestion } from "@prisma/client";
+
 type ApplicationFormType = {
   name: string;
   description: string;
@@ -21,12 +22,17 @@ type ApplicationFormType = {
 type PropType = {
   name?: string;
   description?: string;
-  questions: ClubApplicationQuestion[];
+  questions: (ClubApplicationQuestion & {
+    clubApplicationAnswers: ClubApplicationAnswer[];
+  })[];
   onSubmit: (
     name: string,
     description: string,
-    questions: ClubApplicationQuestion[],
+    questions: (ClubApplicationQuestion & {
+      clubApplicationAnswers: ClubApplicationAnswer[];
+    })[],
     questionsToDelete: ClubApplicationQuestion[],
+    answersToDelete: ClubApplicationAnswer[]
   ) => void;
 };
 
@@ -39,25 +45,32 @@ const ApplicationEditForm = (props: PropType) => {
   const [questionsFormToDelete, setQuestionsFormToDelete] = useState<
     ClubApplicationQuestionForForm[]
   >([]);
+  const [answerChoicesToDelete, setAnswerChoicesToDelete] = useState<
+    ClubApplicationAnswer[]
+  >([]);
+
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
   useEffect(() => {
     setQuestionsForm(
-      Array.from(
-        questions,
-        (question: ClubApplicationQuestion, index: number) => {
-          return {
-            id: question.id,
-            required: question.required,
-            orderNumber: index,
-            question: question.question,
-            type: question.type,
-            clubApplicationId: "",
-          } as ClubApplicationQuestion;
-        },
-      ),
+      Array.from(questions, (question, index: number) => {
+        return {
+          id: question.id,
+          required: question.required,
+          orderNumber: index,
+          question: question.question,
+          type: question.type,
+          clubApplicationAnswers: question.clubApplicationAnswers,
+          clubApplicationId: "",
+        };
+      }),
     );
-  }, [questions]);
+  }, []);
+
+  useEffect(() => {
+    setQuestionsFormToDelete([]);
+    setAnswerChoicesToDelete([]);
+  }, [questions])
 
   const isQuestionsFormValid = () => {
     for (let question of questionsForm) {
@@ -78,8 +91,13 @@ const ApplicationEditForm = (props: PropType) => {
         onSubmit(
           values.name,
           values.description,
-          questionsForm as ClubApplicationQuestion[],
-          questionsFormToDelete as ClubApplicationQuestion[],
+          questionsForm as (ClubApplicationQuestion & {
+            clubApplicationAnswers: ClubApplicationAnswer[];
+          })[],
+          questionsFormToDelete as (ClubApplicationQuestion & {
+            clubApplicationAnswers: ClubApplicationAnswer[];
+          })[],
+          answerChoicesToDelete as ClubApplicationAnswer[]
         );
       }}
     >
@@ -142,6 +160,7 @@ const ApplicationEditForm = (props: PropType) => {
               questionsForm={questionsForm}
               setQuestionsForm={setQuestionsForm}
               setQuestionsFormToDelete={setQuestionsFormToDelete}
+              setAnswerChoicesToDelete={setAnswerChoicesToDelete}
             />
           </section>
 

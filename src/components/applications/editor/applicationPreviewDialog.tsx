@@ -26,13 +26,13 @@ const ApplicationPreviewDialog = (props: PropType) => {
   return (
     <>
       <Dialog open={openDialog}>
-        <DialogTrigger>
-          <Button
-            className="bg-white/10 backdrop-invert"
+        <DialogTrigger asChild>
+          <button
+            className="bg-white/10 backdrop-invert max-w-xs rounded-xl px-4 py-4 transition duration-300 ease-in-out hover:scale-110"
             onClick={() => setOpenDialog(true)}
           >
-            Preview
-          </Button>
+            <h1 className="tracking-none font-black uppercase text-white">Preview</h1>
+          </button>
         </DialogTrigger>
         <DialogContent className="max-w-5xl">
           <DialogHeader>
@@ -48,7 +48,7 @@ const ApplicationPreviewDialog = (props: PropType) => {
             <Cross2Icon className="h-8 w-8" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
-            {children}
+          {children}
         </DialogContent>
       </Dialog>
     </>
