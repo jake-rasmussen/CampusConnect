@@ -1,7 +1,7 @@
-
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { twMerge } from "tailwind-merge";
+
 import type { Identifier, XYCoord } from "dnd-core";
 
 type PropType = {
@@ -9,7 +9,7 @@ type PropType = {
   className: string;
   moveCard: (dragIndex: number, hoverIndex: number) => void;
   children: JSX.Element | JSX.Element[];
-}
+};
 
 type DragItem = {
   index: number;
@@ -17,9 +17,8 @@ type DragItem = {
   type: string;
 };
 
-
 const DraggableCard = (props: PropType) => {
-  const { index, className, children, moveCard, } = props;
+  const { index, className, children, moveCard } = props;
 
   const ref = useRef<HTMLDivElement>(null);
   const [{ handlerId }, drop] = useDrop<
@@ -77,16 +76,13 @@ const DraggableCard = (props: PropType) => {
 
   return (
     <section
-      className={twMerge(
-        isDragging ? "opacity-25" : "", className
-      )}
+      className={twMerge(isDragging ? "opacity-25" : "", className)}
       data-handler-id={handlerId}
       ref={ref}
     >
       {children}
     </section>
-  )
-
-}
+  );
+};
 
 export default DraggableCard;

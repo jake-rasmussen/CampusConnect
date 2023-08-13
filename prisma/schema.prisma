@@ -139,7 +139,7 @@ model ClubApplicationAnswerChoice {
   id                        String                  @id @default(cuid())
   answerChoice              String
   clubApplicationQuestionId String
-  clubApplicationQuestion   ClubApplicationQuestion @relation(fields: [clubApplicationQuestionId], references: [id])
+  clubApplicationQuestion   ClubApplicationQuestion @relation(fields: [clubApplicationQuestionId], references: [id], onDelete: Cascade)
 }
 
 model ClubApplicationScoringCriteria {

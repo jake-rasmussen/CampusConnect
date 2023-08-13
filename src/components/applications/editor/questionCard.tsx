@@ -41,12 +41,7 @@ type PropType = {
 };
 
 const QuestionCard = (props: PropType) => {
-  const {
-    question,
-    index,
-    updateQuestionsState,
-    deleteQuestion,
-  } = props;
+  const { question, index, updateQuestionsState, deleteQuestion } = props;
 
   return (
     <section className="flex flex-row items-center gap-4">

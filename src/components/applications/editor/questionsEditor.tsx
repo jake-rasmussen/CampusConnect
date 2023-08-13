@@ -6,14 +6,12 @@ import {
   ClubApplicationQuestionType,
 } from "@prisma/client";
 import update from "immutability-helper";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import { SquarePlus } from "tabler-icons-react";
 
-import Application from "../application";
-import AnswerChoicesEditor from "./answerChoicesEditor";
-import ApplicationPreviewDialog from "./applicationPreviewDialog";
-import QuestionCard from "./questionCard";
 import DraggableCard from "~/components/draggableCard";
+import AnswerChoicesEditor from "./answerChoicesEditor";
+import QuestionCard from "./questionCard";
 
 type PropType = {
   questionsState: (ClubApplicationQuestion & {
@@ -41,8 +39,6 @@ const QuestionsEditor = (props: PropType) => {
     setQuestionsStateToDelete,
     setAnswerChoicesToDelete,
   } = props;
-
-  const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
 
   const updateQuestionsState = (
     field: string,
@@ -132,7 +128,7 @@ const QuestionsEditor = (props: PropType) => {
               <div className="ml-20">
                 {question.type ===
                   ClubApplicationQuestionType.MULTIPLE_CHOICE ||
-                  question.type ===
+                question.type ===
                   ClubApplicationQuestionType.MULTIPLE_SELECT ? (
                   <AnswerChoicesEditor
                     question={
@@ -177,22 +173,6 @@ const QuestionsEditor = (props: PropType) => {
               </h1>
             </div>
           </button>
-
-          <div className="flex grow justify-end">
-            <ApplicationPreviewDialog
-              dialogDescription={""}
-              openDialog={openPreviewDialog}
-              setOpenDialog={setOpenPreviewDialog}
-            >
-              <Application
-                questions={
-                  questionsState as (ClubApplicationQuestion & {
-                    clubApplicationAnswers: ClubApplicationAnswerChoice[];
-                  })[]
-                }
-              />
-            </ApplicationPreviewDialog>
-          </div>
         </div>
       </section>
     </>

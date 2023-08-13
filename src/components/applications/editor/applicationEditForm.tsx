@@ -1,6 +1,6 @@
 import { ClubApplicationAnswerChoice } from "@prisma/client";
 import { Field, Form } from "houseform";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { z } from "zod";
 
 import ErrorDialog from "~/components/errorDialog";
@@ -8,6 +8,8 @@ import { Textarea } from "~/components/shadcn_ui/textarea";
 import Button from "../../button";
 import ErrorMessage from "../../dashboard/errorMessage";
 import { Input } from "../../shadcn_ui/input";
+import ApplicationForm from "../applicationForm";
+import ApplicationPreviewDialog from "./applicationPreviewDialog";
 import QuestionsEditor from "./questionsEditor";
 
 import type { ClubApplicationQuestion } from "@prisma/client";
@@ -29,8 +31,13 @@ type PropType = {
     questions: (ClubApplicationQuestion & {
       clubApplicationAnswers: ClubApplicationAnswerChoice[];
     })[],
-    questionsToDelete: ClubApplicationQuestion[],
+    questionsToDelete: (ClubApplicationQuestion & {
+      clubApplicationAnswers: ClubApplicationAnswerChoice[];
+    })[],
     answersToDelete: ClubApplicationAnswerChoice[],
+    setQuestionsState: Dispatch<SetStateAction<(ClubApplicationQuestion & {
+      clubApplicationAnswers: ClubApplicationAnswerChoice[];
+    })[]>>
   ) => void;
 };
 
@@ -42,7 +49,7 @@ const ApplicationEditForm = (props: PropType) => {
       clubApplicationAnswers: ClubApplicationAnswerChoice[];
     })[]
   >([]);
-  const [questionsToDelete, setQuestionsToDelete] = useState<
+  const [questionsToDelete, setQuestionsStateToDelete] = useState<
     ClubApplicationQuestion[]
   >([]);
   const [answerChoicesToDelete, setAnswerChoicesToDelete] = useState<
@@ -50,6 +57,7 @@ const ApplicationEditForm = (props: PropType) => {
   >([]);
 
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
+  const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
 
   useEffect(() => {
     setQuestionsState(
@@ -70,9 +78,9 @@ const ApplicationEditForm = (props: PropType) => {
   }, []);
 
   useEffect(() => {
-    setQuestionsToDelete([]);
+    setQuestionsStateToDelete([]);
     setAnswerChoicesToDelete([]);
-  }, [questions]);
+  }, [questions])
 
   const isQuestionsFormValid = () => {
     for (let question of questionsState) {
@@ -82,6 +90,12 @@ const ApplicationEditForm = (props: PropType) => {
         question.required === undefined
       ) {
         return false;
+      }
+
+      for (let answerChoice of question.clubApplicationAnswers) {
+        if (answerChoice.answerChoice === "") {
+          return false;
+        }
       }
     }
     return true;
@@ -100,6 +114,7 @@ const ApplicationEditForm = (props: PropType) => {
             clubApplicationAnswers: ClubApplicationAnswerChoice[];
           })[],
           answerChoicesToDelete as ClubApplicationAnswerChoice[],
+          setQuestionsState
         );
       }}
     >
@@ -161,26 +176,37 @@ const ApplicationEditForm = (props: PropType) => {
             <QuestionsEditor
               questionsState={questionsState}
               setQuestionsState={setQuestionsState}
-              setQuestionsStateToDelete={setQuestionsToDelete}
+              setQuestionsStateToDelete={setQuestionsStateToDelete}
               setAnswerChoicesToDelete={setAnswerChoicesToDelete}
             />
           </section>
 
-          <div className="flex flex-row justify-end">
-            <div className="flex justify-end">
-              <Button
-                onClick={() => {
-                  if (isQuestionsFormValid()) {
-                    submit().catch((e) => console.log(e));
-                  } else {
-                    setOpenErrorDialog(true);
-                  }
-                }}
-                className="my-4"
-              >
-                Submit
-              </Button>
-            </div>
+          <div className="flex grow flex-row justify-end gap-4">
+            <Button
+              onClick={() => {
+                if (isQuestionsFormValid()) {
+                  submit().catch((e) => console.log(e));
+                } else {
+                  setOpenErrorDialog(true);
+                }
+              }}
+            >
+              Save
+            </Button>
+
+            <ApplicationPreviewDialog
+              dialogDescription={""}
+              openDialog={openPreviewDialog}
+              setOpenDialog={setOpenPreviewDialog}
+            >
+              <ApplicationForm
+                questions={
+                  questionsState as (ClubApplicationQuestion & {
+                    clubApplicationAnswers: ClubApplicationAnswerChoice[];
+                  })[]
+                }
+              />
+            </ApplicationPreviewDialog>
           </div>
 
           <ErrorDialog

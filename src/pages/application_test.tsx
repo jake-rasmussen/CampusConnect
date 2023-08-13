@@ -1,4 +1,4 @@
-import Application from "~/components/applications/application";
+import Application from "~/components/applications/applicationForm";
 
 const ApplicationTest = () => {
   <Application questions={[]} />;

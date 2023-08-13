@@ -20,7 +20,7 @@ type PropType = {
   applicationId?: string;
 };
 
-const Application = (props: PropType) => {
+const ApplicationForm = (props: PropType) => {
   const { questions } = props;
 
   // TODO: if applicaiton id is passed down fetch questions from application id instead of using questions
@@ -38,7 +38,7 @@ const Application = (props: PropType) => {
             },
             index: number,
           ) => (
-            <div key={`question${index}`} className="">
+            <div key={`applicationQuestion${index}${question.question}`} className="">
               <div className="flex flex-row items-start">
                 {question.required && (
                   <h1 className="mx-1 my-0.5 font-black text-red-600">*</h1>
@@ -80,4 +80,4 @@ const Application = (props: PropType) => {
   );
 };
 
-export default Application;
+export default ApplicationForm;

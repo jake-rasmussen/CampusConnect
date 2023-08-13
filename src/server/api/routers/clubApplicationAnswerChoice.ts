@@ -16,7 +16,7 @@ export const clubApplicationAnswerRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { answerChoice, clubApplicationQuestionId } = input;
 
-      const clubApplicationAnswer =
+      const clubApplicationAnswerChoice =
         await ctx.prisma.clubApplicationAnswerChoice.create({
           data: {
             answerChoice,
@@ -24,19 +24,19 @@ export const clubApplicationAnswerRouter = createTRPCRouter({
           },
         });
 
-      return clubApplicationAnswer;
+      return clubApplicationAnswerChoice;
     }),
   updateClubApplicationAnswerChoiceById: protectedProcedure
     .input(
       z.object({
-        clubApplicationAnswerId: z.string(),
+        clubApplicationAnswerChoiceId: z.string(),
         answerChoice: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubApplicationAnswerId, answerChoice } = input;
+      const { clubApplicationAnswerChoiceId: clubApplicationAnswerId, answerChoice } = input;
 
-      const clubApplicationAnswer =
+      const clubApplicationAnswerChoice =
         await ctx.prisma.clubApplicationAnswerChoice.update({
           where: {
             id: clubApplicationAnswerId,
@@ -45,20 +45,22 @@ export const clubApplicationAnswerRouter = createTRPCRouter({
             answerChoice,
           },
         });
+      
+      return clubApplicationAnswerChoice;
     }),
   deleteClubApplicationAnswerChoiceById: protectedProcedure
     .input(
       z.object({
-        clubApplicationAnswerId: z.string(),
+        clubApplicationAnswerChoiceId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubApplicationAnswerId } = input;
+      const { clubApplicationAnswerChoiceId: clubApplicationAnswerChoiceId } = input;
 
-      const clubApplicationAnswer =
+      const clubApplicationAnswerChoice =
         await ctx.prisma.clubApplicationAnswerChoice.delete({
           where: {
-            id: clubApplicationAnswerId,
+            id: clubApplicationAnswerChoiceId,
           },
         });
     }),
