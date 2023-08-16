@@ -4,7 +4,6 @@ import {
 } from "@prisma/client";
 import Error from "next/error";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 import ApplicationEditForm from "~/components/applications/editor/applicationEditForm";
 import HeaderOutline from "~/components/dashboard/header/headerOutline";
@@ -12,7 +11,12 @@ import EditApplicationSkeleton from "~/components/skeletons/editApplicationSkele
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-import type { Dispatch, JSXElementConstructor, ReactElement, SetStateAction } from "react";
+import type {
+  Dispatch,
+  JSXElementConstructor,
+  ReactElement,
+  SetStateAction,
+} from "react";
 
 const EditApplication = () => {
   const router = useRouter();
@@ -52,11 +56,11 @@ const EditApplication = () => {
   const updateApplication =
     api.clubApplicationRouter.updateClubApplication.useMutation({
       onSuccess() {
-        queryClient.invalidate();
+        void queryClient.invalidate();
       },
     });
 
-  const handleSubmit = async (
+  const saveApplication = async (
     name: string,
     description: string,
     questions: (ClubApplicationQuestion & {
@@ -66,89 +70,83 @@ const EditApplication = () => {
       clubApplicationAnswers: ClubApplicationAnswerChoice[];
     })[],
     answerChoicesToDelete: ClubApplicationAnswerChoice[],
-    setQuestionsState: Dispatch<SetStateAction<(ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-    })[]>>
+    setQuestionsState: Dispatch<
+      SetStateAction<
+        (ClubApplicationQuestion & {
+          clubApplicationAnswers: ClubApplicationAnswerChoice[];
+        })[]
+      >
+    >,
   ) => {
-    questions.forEach(
-      async (
-        question: ClubApplicationQuestion & {
+    for (const question of questions) {
+      const index: number = questions.indexOf(question);
+      let updatedQuestion: ClubApplicationQuestion & {
+        clubApplicationAnswers: ClubApplicationAnswerChoice[];
+      };
+      if (question.id === undefined) {
+        updatedQuestion = (await createApplicationQuestion.mutateAsync({
+          clubApplicationId: applicationId,
+          required: question.required,
+          orderNumber: index,
+          question: question.question,
+          type: question.type,
+        })) as ClubApplicationQuestion & {
           clubApplicationAnswers: ClubApplicationAnswerChoice[];
-        },
-        index: number,
-      ) => {
-        let updatedQuestion: (ClubApplicationQuestion & {
+        };
+      } else {
+        updatedQuestion = (await updateApplicationQuestion.mutateAsync({
+          clubApplicaitonQuestionId: question.id,
+          required: question.required,
+          orderNumber: index,
+          question: question.question,
+          type: question.type,
+        })) as ClubApplicationQuestion & {
           clubApplicationAnswers: ClubApplicationAnswerChoice[];
-        });
-        if (question.id === undefined) {
-          updatedQuestion = (await createApplicationQuestion.mutateAsync({
-            clubApplicationId: applicationId,
-            required: question.required,
-            orderNumber: index,
-            question: question.question,
-            type: question.type,
-          })) as ClubApplicationQuestion & {
-            clubApplicationAnswers: ClubApplicationAnswerChoice[];
-          };
+        };
+      }
+
+      const updatedAnswers: ClubApplicationAnswerChoice[] = [];
+      for (const answer of question.clubApplicationAnswers || []) {
+        if (answer.id === undefined) {
+          updatedAnswers.push(
+            await createApplicationAnswerChoice.mutateAsync({
+              answerChoice: answer.answerChoice,
+              clubApplicationQuestionId: question.id
+                ? question.id
+                : updatedQuestion.id,
+            }),
+          );
         } else {
-          updatedQuestion = (await updateApplicationQuestion.mutateAsync({
-            clubApplicaitonQuestionId: question.id,
-            required: question.required,
-            orderNumber: index,
-            question: question.question,
-            type: question.type,
-          })) as ClubApplicationQuestion & {
-            clubApplicationAnswers: ClubApplicationAnswerChoice[];
-          };
+          updatedAnswers.push(
+            await updateApplicationAnswerChoice.mutateAsync({
+              clubApplicationAnswerChoiceId: answer.id,
+              answerChoice: answer.answerChoice,
+            }),
+          );
         }
+      }
 
-        let updatedAnswers: ClubApplicationAnswerChoice[] = [];
-        (question.clubApplicationAnswers || []).forEach(
-          async (answer: ClubApplicationAnswerChoice) => {
-            if (answer.id === undefined) {
-              updatedAnswers.push(await createApplicationAnswerChoice.mutateAsync({
-                answerChoice: answer.answerChoice,
-                clubApplicationQuestionId: question.id ? question.id : updatedQuestion.id,
-              }));
-            } else {
-              updatedAnswers.push(await updateApplicationAnswerChoice.mutateAsync({
-                clubApplicationAnswerChoiceId: answer.id,
-                answerChoice: answer.answerChoice,
-              }));
-            }
-          },
-        );
-        
-        updatedQuestion.clubApplicationAnswers = updatedAnswers;
-        let questionsCopy = [...questions] 
-        questionsCopy[index] = updatedQuestion
-        setQuestionsState(questionsCopy);
-      },
-    );
+      updatedQuestion.clubApplicationAnswers = updatedAnswers;
+      const questionsCopy = [...questions];
+      questionsCopy[index] = updatedQuestion;
+      setQuestionsState(questionsCopy);
+    }
 
-    questionsToDelete.forEach(
-      async (
-        question: ClubApplicationQuestion & {
-          clubApplicationAnswers: ClubApplicationAnswerChoice[];
-        },
-      ) => {
-        if (question.id !== undefined) {
-          await deleteApplicationQuestion.mutateAsync({
-            clubApplicationQuestionId: question.id
-          })
-        }
-      },
-    );
+    for (const question of questionsToDelete) {
+      if (question.id !== undefined) {
+        await deleteApplicationQuestion.mutateAsync({
+          clubApplicationQuestionId: question.id,
+        });
+      }
+    }
 
-    answerChoicesToDelete.forEach(
-      async (answer: ClubApplicationAnswerChoice) => {
-        if (answer.id !== undefined) {
-          await deleteApplicationAnswerChoice.mutateAsync({
-            clubApplicationAnswerChoiceId: answer.id,
-          });
-        }
-      },
-    );
+    for (const answer of answerChoicesToDelete) {
+      if (answer.id !== undefined) {
+        await deleteApplicationAnswerChoice.mutateAsync({
+          clubApplicationAnswerChoiceId: answer.id,
+        });
+      }
+    }
 
     await updateApplication.mutateAsync({
       clubApplicationId: applicationId,
@@ -173,10 +171,11 @@ const EditApplication = () => {
         <main className="py-10">
           <div className="mx-20">
             <ApplicationEditForm
+              applicationId={applicationId}
               name={application.name}
               description={application.description}
               questions={application.questions}
-              onSubmit={handleSubmit}
+              saveApplication={saveApplication}
             />
           </div>
         </main>

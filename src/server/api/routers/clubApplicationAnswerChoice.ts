@@ -34,7 +34,10 @@ export const clubApplicationAnswerRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubApplicationAnswerChoiceId: clubApplicationAnswerId, answerChoice } = input;
+      const {
+        clubApplicationAnswerChoiceId: clubApplicationAnswerId,
+        answerChoice,
+      } = input;
 
       const clubApplicationAnswerChoice =
         await ctx.prisma.clubApplicationAnswerChoice.update({
@@ -45,7 +48,7 @@ export const clubApplicationAnswerRouter = createTRPCRouter({
             answerChoice,
           },
         });
-      
+
       return clubApplicationAnswerChoice;
     }),
   deleteClubApplicationAnswerChoiceById: protectedProcedure
@@ -55,7 +58,8 @@ export const clubApplicationAnswerRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubApplicationAnswerChoiceId: clubApplicationAnswerChoiceId } = input;
+      const { clubApplicationAnswerChoiceId: clubApplicationAnswerChoiceId } =
+        input;
 
       const clubApplicationAnswerChoice =
         await ctx.prisma.clubApplicationAnswerChoice.delete({

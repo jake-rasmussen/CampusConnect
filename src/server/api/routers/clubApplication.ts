@@ -1,3 +1,4 @@
+import { application } from "express";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -53,6 +54,21 @@ export const clubApplicationRouter = createTRPCRouter({
       });
 
       return clubApplication;
+    }),
+  publishClubApplication: protectedProcedure
+    .input(z.object({ applicationId: z.string(), deadline: z.date() }))
+    .mutation(async ({ ctx, input }) => {
+      const { applicationId, deadline } = input;
+
+      await ctx.prisma.clubApplication.update({
+        where: {
+          id: applicationId,
+        },
+        data: {
+          deadline,
+          status: "OPEN",
+        },
+      });
     }),
   getClubApplicationById: protectedProcedure
     .input(

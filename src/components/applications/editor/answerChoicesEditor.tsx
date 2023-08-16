@@ -124,7 +124,7 @@ const AnswerChoicesEditor = (props: PropType) => {
           ))}
         <div>
           <button
-            className="group flex flex-row items-center shrink"
+            className="group flex shrink flex-row items-center"
             onClick={() => createAnswerChoice()}
           >
             <SquarePlus className="h-10 w-10 text-white duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />

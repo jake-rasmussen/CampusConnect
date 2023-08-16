@@ -1,9 +1,9 @@
-import { ClubApplicationAnswer } from "@prisma/client";
+import { ClubApplicationAnswerChoice } from "@prisma/client";
 
 import { Checkbox } from "./shadcn_ui/checkbox";
 
 type PropType = {
-  answerChoices: ClubApplicationAnswer[];
+  answerChoices: ClubApplicationAnswerChoice[];
 };
 
 const Checklist = (props: PropType) => {

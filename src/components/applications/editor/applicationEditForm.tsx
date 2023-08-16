@@ -1,10 +1,19 @@
 import { ClubApplicationAnswerChoice } from "@prisma/client";
+import { useQueryClient } from "@tanstack/react-query";
 import { Field, Form } from "houseform";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { values } from "lodash";
+import router from "next/router";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import applicationId from "src/pages/member/[clubId]/[applicationId]";
 import { z } from "zod";
 
+import ApplicationPublishConfirmationDialog, {
+  ConfirmationFormType,
+} from "~/components/applications/editor/ApplicationPublishConfirmationDialog";
 import ErrorDialog from "~/components/errorDialog";
 import { Textarea } from "~/components/shadcn_ui/textarea";
+import { api } from "~/utils/api";
 import Button from "../../button";
 import ErrorMessage from "../../dashboard/errorMessage";
 import { Input } from "../../shadcn_ui/input";
@@ -20,12 +29,13 @@ type ApplicationFormType = {
 };
 
 type PropType = {
+  applicationId: string;
   name?: string;
   description?: string;
   questions: (ClubApplicationQuestion & {
     clubApplicationAnswers: ClubApplicationAnswerChoice[];
   })[];
-  onSubmit: (
+  saveApplication: (
     name: string,
     description: string,
     questions: (ClubApplicationQuestion & {
@@ -35,15 +45,19 @@ type PropType = {
       clubApplicationAnswers: ClubApplicationAnswerChoice[];
     })[],
     answersToDelete: ClubApplicationAnswerChoice[],
-    setQuestionsState: Dispatch<SetStateAction<(ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-    })[]>>
-  ) => void;
+    setQuestionsState: Dispatch<
+      SetStateAction<
+        (ClubApplicationQuestion & {
+          clubApplicationAnswers: ClubApplicationAnswerChoice[];
+        })[]
+      >
+    >,
+  ) => Promise<void>;
 };
 
 const ApplicationEditForm = (props: PropType) => {
-  const { name, description, questions, onSubmit } = props;
-
+  const { name, description, questions, applicationId, saveApplication } =
+    props;
   const [questionsState, setQuestionsState] = useState<
     (ClubApplicationQuestion & {
       clubApplicationAnswers: ClubApplicationAnswerChoice[];
@@ -55,9 +69,20 @@ const ApplicationEditForm = (props: PropType) => {
   const [answerChoicesToDelete, setAnswerChoicesToDelete] = useState<
     ClubApplicationAnswerChoice[]
   >([]);
+  const { clubId } = router.query;
 
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
+  const queryClient = useQueryClient();
+
+  const publishApplicationMutation =
+    api.clubApplicationRouter.publishClubApplication.useMutation({
+      onSuccess() {
+        toast.success("Application published!");
+        void queryClient.invalidateQueries();
+        void router.push(`/member/${clubId as string}/`);
+      },
+    });
 
   useEffect(() => {
     setQuestionsState(
@@ -80,10 +105,13 @@ const ApplicationEditForm = (props: PropType) => {
   useEffect(() => {
     setQuestionsStateToDelete([]);
     setAnswerChoicesToDelete([]);
-  }, [questions])
+  }, [questions]);
 
-  const isQuestionsFormValid = () => {
-    for (let question of questionsState) {
+  const isApplicationFormValid = (name: string, description: string) => {
+    if (name.trim() === "" || description.trim() === "") {
+      return false;
+    }
+    for (const question of questionsState) {
       if (
         question.question === "" ||
         question.type === undefined ||
@@ -92,7 +120,7 @@ const ApplicationEditForm = (props: PropType) => {
         return false;
       }
 
-      for (let answerChoice of question.clubApplicationAnswers) {
+      for (const answerChoice of question.clubApplicationAnswers) {
         if (answerChoice.answerChoice === "") {
           return false;
         }
@@ -101,124 +129,162 @@ const ApplicationEditForm = (props: PropType) => {
     return true;
   };
 
+  const publishApplication = async (
+    name: string,
+    description: string,
+    values: ConfirmationFormType,
+  ) => {
+    await saveApplication(
+      name,
+      description,
+      questionsState as (ClubApplicationQuestion & {
+        clubApplicationAnswers: ClubApplicationAnswerChoice[];
+      })[],
+      questionsToDelete as (ClubApplicationQuestion & {
+        clubApplicationAnswers: ClubApplicationAnswerChoice[];
+      })[],
+      answerChoicesToDelete,
+      setQuestionsState,
+    );
+    const deadline = new Date(values.date);
+    deadline.setTime(values.time.getTime());
+
+    publishApplicationMutation.mutate({
+      applicationId,
+      deadline,
+    });
+  };
   return (
-    <Form<ApplicationFormType>
-      onSubmit={(values) => {
-        onSubmit(
-          values.name,
-          values.description,
-          questionsState as (ClubApplicationQuestion & {
-            clubApplicationAnswers: ClubApplicationAnswerChoice[];
-          })[],
-          questionsToDelete as (ClubApplicationQuestion & {
-            clubApplicationAnswers: ClubApplicationAnswerChoice[];
-          })[],
-          answerChoicesToDelete as ClubApplicationAnswerChoice[],
-          setQuestionsState
-        );
-      }}
-    >
-      {({ submit }) => (
-        <main className="flex flex-col items-center gap-4 py-4">
-          <section className="mx-10 flex w-[50rem] flex-col gap-4">
-            <Field
-              name="name"
-              initialValue={name}
-              onBlurValidate={z.string().min(1, "Enter an application name")}
-            >
-              {({ value, setValue, onBlur, isValid, errors }) => (
-                <>
-                  <span className="text-xl font-semibold">
-                    Application Name
-                  </span>
-                  <Input
-                    className="h-[4rem]"
-                    placeholder="Enter Application Name"
-                    value={value}
-                    onChange={(e) => setValue(e.currentTarget.value)}
-                    onBlur={onBlur}
-                  />
-                  {!isValid && <ErrorMessage message={errors[0]} />}
-                </>
-              )}
-            </Field>
+    <>
+      <Form<ApplicationFormType>
+        onSubmit={(values) => {
+          if (!isApplicationFormValid(values.name, values.description)) {
+            setOpenErrorDialog(true);
+            return;
+          }
+          saveApplication(
+            values.name,
+            values.description,
+            questionsState as (ClubApplicationQuestion & {
+              clubApplicationAnswers: ClubApplicationAnswerChoice[];
+            })[],
+            questionsToDelete as (ClubApplicationQuestion & {
+              clubApplicationAnswers: ClubApplicationAnswerChoice[];
+            })[],
+            answerChoicesToDelete,
+            setQuestionsState,
+          ).finally(() => {
+            return;
+          });
+        }}
+      >
+        {({ submit, getFieldValue, recomputeErrors }) => (
+          <main className="flex flex-col items-center gap-4 py-4">
+            <section className="mx-10 flex w-[50rem] flex-col gap-4">
+              <Field
+                name="name"
+                initialValue={name}
+                // onBlurValidate={z.string().min(1, "Enter an application name")}
+              >
+                {({ value, setValue, onBlur, isValid, errors }) => (
+                  <>
+                    <span className="text-xl font-semibold">
+                      Application Name
+                    </span>
+                    <Input
+                      className="h-[4rem]"
+                      placeholder="Enter Application Name"
+                      value={value}
+                      onChange={(e) => setValue(e.currentTarget.value)}
+                      onBlur={onBlur}
+                    />
+                    {!isValid && <ErrorMessage message={errors[0]} />}
+                  </>
+                )}
+              </Field>
 
-            <Field
-              name="description"
-              initialValue={description}
-              onBlurValidate={z
-                .string()
-                .min(1, "Enter an application description")}
-            >
-              {({ value, setValue, onBlur, isValid, errors }) => (
-                <>
-                  <span className="text-xl font-semibold">
-                    Application Description
-                  </span>
-                  <Textarea
-                    className="h-[3rem] rounded-xl bg-white p-4"
-                    placeholder={"Enter an application description"}
-                    onChange={(e) => setValue(e.target.value)}
-                    value={value}
-                    onBlur={onBlur}
-                    rows={4}
-                  />
-                  {!isValid && <ErrorMessage message={errors[0]} />}
-                </>
-              )}
-            </Field>
-          </section>
-
-          <section className="flex flex-col items-center gap-4 py-8">
-            <span className="text-center text-4xl font-semibold ">
-              Questions
-            </span>
-            <QuestionsEditor
-              questionsState={questionsState}
-              setQuestionsState={setQuestionsState}
-              setQuestionsStateToDelete={setQuestionsStateToDelete}
-              setAnswerChoicesToDelete={setAnswerChoicesToDelete}
-            />
-          </section>
-
-          <div className="flex grow flex-row justify-end gap-4">
-            <Button
-              onClick={() => {
-                if (isQuestionsFormValid()) {
-                  submit().catch((e) => console.log(e));
-                } else {
-                  setOpenErrorDialog(true);
-                }
-              }}
-            >
-              Save
-            </Button>
-
-            <ApplicationPreviewDialog
-              dialogDescription={""}
-              openDialog={openPreviewDialog}
-              setOpenDialog={setOpenPreviewDialog}
-            >
-              <ApplicationForm
-                questions={
-                  questionsState as (ClubApplicationQuestion & {
-                    clubApplicationAnswers: ClubApplicationAnswerChoice[];
-                  })[]
-                }
+              <Field
+                name="description"
+                initialValue={description}
+                // onBlurValidate={z
+                //   .string()
+                //   .min(1, "Enter an application description")}
+              >
+                {({ value, setValue, onBlur, isValid, errors }) => (
+                  <>
+                    <span className="text-xl font-semibold">
+                      Application Description
+                    </span>
+                    <Textarea
+                      className="rounded-xl bg-white p-4"
+                      placeholder={"Enter an application description"}
+                      onChange={(e) => setValue(e.target.value)}
+                      value={value}
+                      onBlur={onBlur}
+                      rows={4}
+                    />
+                    {!isValid && <ErrorMessage message={errors[0]} />}
+                  </>
+                )}
+              </Field>
+            </section>
+            <section className="flex flex-col items-center gap-4 py-8">
+              <span className="text-center text-4xl font-semibold ">
+                Questions
+              </span>
+              <QuestionsEditor
+                questionsState={questionsState}
+                setQuestionsState={setQuestionsState}
+                setQuestionsStateToDelete={setQuestionsStateToDelete}
+                setAnswerChoicesToDelete={setAnswerChoicesToDelete}
               />
-            </ApplicationPreviewDialog>
-          </div>
+            </section>
 
-          <ErrorDialog
-            dialogDescription={
-              "Please make sure that all question fields are filled out!"
-            }
-            openDialog={openErrorDialog}
-            setOpenDialog={setOpenErrorDialog}
-          />
-        </main>
-      )}
-    </Form>
+            <div className="flex grow flex-row justify-end gap-4">
+              <Button
+                onClick={() => {
+                  submit().catch((e) => console.log(e));
+                }}
+              >
+                Save
+              </Button>
+
+              <ApplicationPreviewDialog
+                dialogDescription={""}
+                openDialog={openPreviewDialog}
+                setOpenDialog={setOpenPreviewDialog}
+              >
+                <ApplicationForm
+                  name={getFieldValue("name")?.value}
+                  description={getFieldValue("description")?.value}
+                  questions={
+                    questionsState as (ClubApplicationQuestion & {
+                      clubApplicationAnswers: ClubApplicationAnswerChoice[];
+                    })[]
+                  }
+                  applicationId={null}
+                />
+              </ApplicationPreviewDialog>
+            </div>
+
+            <ErrorDialog
+              dialogDescription={
+                "Please make sure that all fields are filled out!"
+              }
+              openDialog={openErrorDialog}
+              setOpenDialog={setOpenErrorDialog}
+            />
+            <ApplicationPublishConfirmationDialog
+              name={getFieldValue("name")?.value}
+              description={getFieldValue("description")?.value}
+              isApplicationFormValid={isApplicationFormValid}
+              publishApplication={publishApplication}
+              setErrorDialogOpen={setOpenErrorDialog}
+            />
+          </main>
+        )}
+      </Form>
+    </>
   );
 };
 
