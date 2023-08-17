@@ -3,8 +3,12 @@ import {
   ClubApplicationQuestion,
   ClubApplicationQuestionType,
 } from "@prisma/client";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
 import Button from "~/components/button";
+import { DATE_TIME_FORMAT_OPTS } from "~/constants";
+import { api } from "~/utils/api";
 import Checklist from "../checklist";
 import FileUpload from "../fileUpload";
 import MultipleChoice from "../multipleChoice";
@@ -24,23 +28,60 @@ type PropType = {
   applicationId: string | null;
 };
 
+type ApplicationFormParms = {
+  name: string;
+  description: string;
+  questions: (ClubApplicationQuestion & {
+    clubApplicationAnswers: ClubApplicationAnswerChoice[];
+  })[];
+  deadline: Date | null;
+};
+
 const ApplicationForm = (props: PropType) => {
-  const { questions, description, name, applicationId } = props;
+  const [applicationFormState, setApplicationFormState] =
+    useState<ApplicationFormParms>({
+      name: props.name || "",
+      description: props.description || "",
+      questions: props.questions || [],
+      deadline: null,
+    });
 
-  // TODO: if application id is passed down fetch questions from application id instead of using questions
+  console.log(applicationFormState);
+  const { applicationId } = props;
+  const { data, isLoading } =
+    api.clubApplicationRouter.getClubApplicationById.useQuery(
+      {
+        applicationId: applicationId || "",
+      },
+      { enabled: !!applicationId },
+    );
 
-  // TODO: fetch if id is provided
+  useEffect(() => {
+    if(applicationId && data){
+      setApplicationFormState({
+        name: data?.name || "",
+        description: data?.description || "",
+        questions: data?.questions || [],
+        deadline: data?.deadline || null,
+      });
+    }
+  }, [data, applicationId]);
+
+  if (applicationId && isLoading) return <div>Loading...</div>;
 
   return (
     <>
-      <h1 className="text-center text-3xl font-black text-black">{name}</h1>
+      <h1 className="text-center text-3xl font-black text-black">{applicationFormState.name}</h1>
       <h2 className="text-center text-lg font-bold text-black">
-        Deadline:{applicationId ? " 10/10/2021" : " TDB"}
+        Deadline:
+        {applicationFormState.deadline
+          ? `${applicationFormState.deadline?.toLocaleDateString(undefined, DATE_TIME_FORMAT_OPTS)}`
+          : " TDB"}
       </h2>
-      <p className="text-center text-black">{description}</p>
+      <p className="text-center text-black">{applicationFormState.description}</p>
 
       <div className="border-1 flex flex-col gap-y-8 rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
-        {questions?.map(
+        {applicationFormState.questions.map(
           (
             question: ClubApplicationQuestion & {
               clubApplicationAnswers: ClubApplicationAnswerChoice[];
@@ -94,8 +135,6 @@ const ApplicationForm = (props: PropType) => {
           </h1>
         </button>
       </div>
-
-      {/* TODO: add buttons for submit / save */}
     </>
   );
 };

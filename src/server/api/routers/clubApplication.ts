@@ -1,10 +1,10 @@
 import { application } from "express";
 import { z } from "zod";
 
+import { DATE_TIME_FORMAT_OPTS } from "~/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 // TODO: if application is live make sure you cannot make edits to it
-
 export const clubApplicationRouter = createTRPCRouter({
   createClubApplication: protectedProcedure
     .input(
@@ -59,7 +59,6 @@ export const clubApplicationRouter = createTRPCRouter({
     .input(z.object({ applicationId: z.string(), deadline: z.date() }))
     .mutation(async ({ ctx, input }) => {
       const { applicationId, deadline } = input;
-
       await ctx.prisma.clubApplication.update({
         where: {
           id: applicationId,

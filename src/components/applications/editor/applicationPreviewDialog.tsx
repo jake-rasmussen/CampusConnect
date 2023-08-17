@@ -7,10 +7,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "../../shadcn_ui/dialog";
 
 type PropType = {
+  triggerButton: JSX.Element;
   children?: JSX.Element | JSX.Element[];
   dialogDescription: string;
   openDialog: boolean;
@@ -18,20 +19,16 @@ type PropType = {
 };
 
 const ApplicationPreviewDialog = (props: PropType) => {
-  const { children, dialogDescription, openDialog, setOpenDialog } = props;
+  const { children, dialogDescription, openDialog, setOpenDialog, triggerButton } = props;
 
   return (
     <>
-      <Dialog open={openDialog}>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
-          <button
-            className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110"
-            onClick={() => setOpenDialog(true)}
-          >
-            <h1 className="tracking-none font-black uppercase text-white">
-              Preview
-            </h1>
-          </button>
+          <div onClick={() => setOpenDialog(true)}>
+            {triggerButton}
+          </div>
+
         </DialogTrigger>
         <DialogContent className="max-w-5xl">
           <DialogHeader>
@@ -42,7 +39,6 @@ const ApplicationPreviewDialog = (props: PropType) => {
           </DialogHeader>
           <DialogPrimitive.Close
             className="focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none"
-            onClick={() => setOpenDialog(false)}
           >
             <Cross2Icon className="h-8 w-8" />
             <span className="sr-only">Close</span>

@@ -13,6 +13,7 @@ import ApplicationPublishConfirmationDialog, {
 } from "~/components/applications/editor/ApplicationPublishConfirmationDialog";
 import ErrorDialog from "~/components/errorDialog";
 import { Textarea } from "~/components/shadcn_ui/textarea";
+import { DATE_TIME_FORMAT_OPTS } from "~/constants";
 import { api } from "~/utils/api";
 import Button from "../../button";
 import ErrorMessage from "../../dashboard/errorMessage";
@@ -146,8 +147,8 @@ const ApplicationEditForm = (props: PropType) => {
       answerChoicesToDelete,
       setQuestionsState,
     );
-    const deadline = new Date(values.date);
-    deadline.setTime(values.time.getTime());
+    const deadline = new Date(values.date.getTime());
+    deadline.setHours(values.time.getHours(), values.time.getMinutes(), 0, 0);
 
     publishApplicationMutation.mutate({
       applicationId,
@@ -250,6 +251,15 @@ const ApplicationEditForm = (props: PropType) => {
               </Button>
 
               <ApplicationPreviewDialog
+                triggerButton={
+                  <button
+                    className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110"
+                  >
+                    <h1 className="tracking-none font-black uppercase text-white">
+                      Preview
+                    </h1>
+                  </button>
+                }
                 dialogDescription={""}
                 openDialog={openPreviewDialog}
                 setOpenDialog={setOpenPreviewDialog}
