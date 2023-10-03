@@ -29,7 +29,6 @@ const Applications = (props: PropType) => {
               />
             ),
           )}
-          {editable && <ApplicationCreator clubId={clubId} />}
         </>
       </ApplicationsOutline>
       {editable && <ApplicationCreator clubId={clubId} />}

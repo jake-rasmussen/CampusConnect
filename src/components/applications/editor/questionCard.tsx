@@ -1,8 +1,5 @@
 import { ClubApplicationQuestionType } from "@prisma/client";
-import { useRef } from "react";
-import { useDrag, useDrop } from "react-dnd";
 import { DotsVertical, X } from "tabler-icons-react";
-import { twMerge } from "tailwind-merge";
 
 import {
   Select,
@@ -18,7 +15,6 @@ import type {
   ClubApplicationAnswerChoice,
   ClubApplicationQuestion,
 } from "@prisma/client";
-import type { Identifier, XYCoord } from "dnd-core";
 
 type PropType = {
   question: ClubApplicationQuestion & {

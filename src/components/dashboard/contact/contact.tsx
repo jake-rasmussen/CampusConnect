@@ -11,7 +11,7 @@ type PropType = {
 };
 
 const Contact = (props: PropType) => {
-  const { contactInfos, clubId, editable: edit } = props;
+  const { contactInfos, clubId, editable } = props;
 
   return (
     <section className="flex flex-col items-center">
@@ -26,7 +26,6 @@ const Contact = (props: PropType) => {
               />
             ),
           )}
-          {edit && <ContactsEditor clubId={clubId} />}
         </>
       </ContactOutline>
       {editable && <ContactsEditor clubId={clubId} />}

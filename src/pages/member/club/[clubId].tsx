@@ -46,9 +46,17 @@ const AdminClubDashboard = () => {
     clubId
   });
 
-  if (isLoadingClub || isLoadingEvents || isLoadingContacts || isLoadingApplications) {
-    return <ClubDashBoardSkeleton />;
-  } else if (isErrorClub || isErrorEvents || isErrorContacts || isErrorApplications) {
+  const {
+    data: clubSocialMedia,
+    isLoading: isLoadingSocialMedia,
+    isError: isErrorSocialMedia
+  } = api.clubSocialMediaRouter.getClubSocialMediaByClubId.useQuery({
+    clubId
+  });
+
+  if (isLoadingClub || isLoadingEvents || isLoadingContacts || isLoadingApplications || isLoadingSocialMedia) {
+    return <ClubDashBoardSkeleton isAdminPage={true} />;
+  } else if (isErrorClub || isErrorEvents || isErrorContacts || isErrorApplications || isErrorSocialMedia) {
     return <Error statusCode={500} />;
   } else {
     return (
@@ -59,7 +67,9 @@ const AdminClubDashboard = () => {
         events={clubEvents}
         contactInfos={clubContactInfos}
         applications={clubApplications}
-        isAdminPage={true}
+        socialMedias={clubSocialMedia} 
+        members={[]}
+        isAdminPage={true}       
       />
     );
   }

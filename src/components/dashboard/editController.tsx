@@ -56,7 +56,7 @@ const EditController = (props: PropType) => {
               </div>
             )}
             {editType === "create" && (
-              <div className={twMerge("", className)}>
+              <div className={className}>
                 <button
                   className="group flex flex-row items-center"
                   onClick={() => setOpenDialog(true)}

@@ -3,7 +3,6 @@ import {
   ClubApplicationQuestion,
   ClubApplicationQuestionType,
 } from "@prisma/client";
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
 import Button from "~/components/button";

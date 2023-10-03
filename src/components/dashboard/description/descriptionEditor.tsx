@@ -26,7 +26,7 @@ const DescriptionEditor = (props: PropType) => {
   const queryClient = api.useContext();
 
   const updateDescription =
-    api.clubProfileRouter.updateClubProfileDescription.useMutation({
+    api.clubRouter.updateDescriptionByClubId.useMutation({
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Updated Club Description!");
@@ -49,7 +49,7 @@ const DescriptionEditor = (props: PropType) => {
         onSubmit={(values) => {
           const { description } = values;
           updateDescription.mutate({
-            id: clubId,
+            clubId,
             description: description,
           });
           setOpenDialog(false);

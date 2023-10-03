@@ -68,7 +68,7 @@ const ApplicationCard = (props: PropType) => {
                 <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
                   <div className="group flex h-full w-full items-center">
                     <div className="absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10" />
-                    <Eye className="mx-auto h-24 w-24 text-gray opacity-0 duration-300 group-hover:text-primary group-hover:opacity-100" />
+                    <Eye className="mx-auto h-24 w-24 text-gray opacity-0 duration-300 group-hover:text-primary group-hover:opacity-100 group-hover:cursor-pointer" />
                   </div>
                 </div>
               }

@@ -46,6 +46,23 @@ export const clubRouter = createTRPCRouter({
 
       return club;
     }),
+  updateDescriptionByClubId: adminProcedure
+    .input(z.object({ 
+      clubId: z.string(),
+      description: z.string(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const { clubId, description } = input;
+      const club = await ctx.prisma.club.update({
+        where: {
+          id: clubId,
+        },
+        data: {
+          description
+        }
+      });
+      return club;
+    }),
   getAllClubs: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.club.findMany({
       orderBy: {
@@ -71,17 +88,5 @@ export const clubRouter = createTRPCRouter({
       });
 
       return clubs;
-    }),
-  getClubByIdForAdmin: adminProcedure
-    .input(z.object({ clubId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { clubId } = input;
-      const club = await ctx.prisma.club.findUniqueOrThrow({
-        where: {
-          id: clubId,
-        },
-      });
-
-      return club;
     }),
 });

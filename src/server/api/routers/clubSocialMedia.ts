@@ -73,4 +73,19 @@ export const clubSocialMediaRouter = createTRPCRouter({
       });
       return clubSocialMedia;
     }),
+  getClubSocialMediaByClubId: adminProcedure
+    .input(
+      z.object({
+        clubId: z.string()
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { clubId } = input;
+      const clubSocialMedia = ctx.prisma.clubSocialMedia.findMany({
+        where: {
+          clubId,
+        },
+      });
+      return clubSocialMedia;
+    })
 });
