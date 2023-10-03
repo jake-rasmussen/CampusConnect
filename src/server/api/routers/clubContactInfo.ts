@@ -3,6 +3,21 @@ import { z } from "zod";
 import { adminProcedure, createTRPCRouter } from "../trpc";
 
 export const clubContactInfoRouter = createTRPCRouter({
+  getClubContactInfosByClubId: adminProcedure
+    .input(
+      z.object({
+        clubId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { clubId } = input;
+      const clubContactInfos = await ctx.prisma.clubContactInfo.findMany({
+        where: {
+          clubId,
+        },
+      });
+      return clubContactInfos;
+    }),
   updateClubContactInfoById: adminProcedure
     .input(
       z.object({

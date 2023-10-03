@@ -73,7 +73,9 @@ const DescriptionEditor = (props: PropType) => {
                     onBlur={onBlur}
                     rows={15}
                   />
-                  {!isValid && <ErrorMessage message={errors[0]} />}
+                  {errors.length !== 0 && (
+                    <ErrorMessage message="Must be longer than 50 characters" />
+                  )}
                 </div>
               )}
             </Field>

@@ -43,7 +43,6 @@ const ApplicationCreator = ({ clubId }: Props) => {
   return (
     <EditController
       dialogDescription={"Create a new application"}
-      createDescription="Create new application"
       editType={"create"}
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
@@ -119,4 +118,5 @@ const ApplicationCreator = ({ clubId }: Props) => {
     </EditController>
   );
 };
+
 export default ApplicationCreator;

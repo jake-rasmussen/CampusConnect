@@ -109,7 +109,7 @@ const ContactForm = (props: PropType) => {
                     {errors[0] !== "email" ? (
                       <ErrorMessage message={errors[0]} />
                     ) : (
-                      <ErrorMessage message={"Enter a valid email"} />
+                      <ErrorMessage message="Invalid" />
                     )}
                   </>
                 )}

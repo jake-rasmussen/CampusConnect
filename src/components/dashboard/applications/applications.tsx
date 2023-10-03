@@ -1,5 +1,7 @@
 import { type ClubApplication } from "@prisma/client";
+import { SetStateAction, useState } from "react";
 
+import EditController from "../editController";
 import ApplicationCard from "./applicationCard";
 import ApplicationCreator from "./applicationCreator";
 import ApplicationsOutline from "./applicationsOutline";
@@ -27,6 +29,7 @@ const Applications = (props: PropType) => {
               />
             ),
           )}
+          {editable && <ApplicationCreator clubId={clubId} />}
         </>
       </ApplicationsOutline>
       {editable && <ApplicationCreator clubId={clubId} />}

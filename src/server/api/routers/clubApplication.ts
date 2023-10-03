@@ -1,11 +1,25 @@
-import { application } from "express";
 import { z } from "zod";
 
-import { DATE_TIME_FORMAT_OPTS } from "~/constants";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
-// TODO: if application is live make sure you cannot make edits to it
 export const clubApplicationRouter = createTRPCRouter({
+  getClubApplicationsByClubId: adminProcedure
+    .input(
+      z.object({
+        clubId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { clubId } = input;
+
+      const clubApplications = await ctx.prisma.clubApplication.findMany({
+        where: {
+          clubId,
+        },
+      });
+      
+      return clubApplications;
+    }),
   createClubApplication: protectedProcedure
     .input(
       z.object({
