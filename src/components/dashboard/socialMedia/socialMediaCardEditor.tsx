@@ -1,4 +1,4 @@
-import { SocialMediaPlatformType } from "@prisma/client";
+import { type SocialMediaPlatformType } from "@prisma/client";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

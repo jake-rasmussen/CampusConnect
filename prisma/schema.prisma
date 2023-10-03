@@ -123,15 +123,23 @@ model ClubApplication {
 }
 
 model ClubApplicationQuestion {
-  id                String                      @id @default(cuid())
-  clubApplication   ClubApplication             @relation(fields: [clubApplicationId], references: [id], onDelete: Cascade)
-  required          Boolean
-  orderNumber       Int
-  clubApplicationId String
-  question          String
-  type              ClubApplicationQuestionType
-  createdAt         DateTime                    @default(now())
-  updatedAt         DateTime                    @updatedAt
+  id                     String                      @id @default(cuid())
+  clubApplication        ClubApplication             @relation(fields: [clubApplicationId], references: [id], onDelete: Cascade)
+  required               Boolean
+  orderNumber            Int
+  clubApplicationId      String
+  question               String
+  type                   ClubApplicationQuestionType
+  createdAt              DateTime                    @default(now())
+  updatedAt              DateTime                    @updatedAt
+  clubApplicationAnswers ClubApplicationAnswerChoice[]
+}
+
+model ClubApplicationAnswerChoice {
+  id                        String                  @id @default(cuid())
+  answerChoice              String
+  clubApplicationQuestionId String
+  clubApplicationQuestion   ClubApplicationQuestion @relation(fields: [clubApplicationQuestionId], references: [id], onDelete: Cascade)
 }
 
 model ClubApplicationScoringCriteria {

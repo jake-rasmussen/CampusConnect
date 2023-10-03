@@ -18,8 +18,8 @@ export const clubRouter = createTRPCRouter({
           clubSocialMedia: true,
           members: {
             include: {
-              user: true
-            }
+              user: true,
+            },
           },
         },
       });

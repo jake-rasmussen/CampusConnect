@@ -5,11 +5,11 @@ import ContactCardEditor from "./contactCardEditor";
 
 type PropType = {
   clubContactInfo: ClubContactInfo;
-  edit: boolean;
+  editable: boolean;
 };
 
 const ContactCard = (props: PropType) => {
-  const { clubContactInfo, edit } = props;
+  const { clubContactInfo, editable } = props;
 
   return (
     <>
@@ -31,7 +31,7 @@ const ContactCard = (props: PropType) => {
           </div>
         </div>
 
-        {edit && (
+        {editable && (
           <ContactCardEditor
             firstName={clubContactInfo.firstName}
             lastName={clubContactInfo.lastName}

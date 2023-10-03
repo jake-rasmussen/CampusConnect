@@ -20,11 +20,11 @@ import EventCardEditor from "./eventCardEditor";
 type PropType = {
   clubEvent: ClubEvent;
   clubId: string;
-  edit: boolean;
+  editable: boolean;
 };
 
 const EventCard = (props: PropType) => {
-  const { clubEvent, edit } = props;
+  const { clubEvent, editable } = props;
 
   return (
     <>
@@ -54,7 +54,7 @@ const EventCard = (props: PropType) => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {edit ? (
+                {editable ? (
                   <EventCardEditor
                     eventName={clubEvent.name}
                     eventDescription={clubEvent.description}

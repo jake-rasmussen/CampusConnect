@@ -11,10 +11,10 @@ type PropType = {
 };
 
 const Events = (props: PropType) => {
-  const { events, clubId, editable: edit } = props;
+  const { events, clubId, editable } = props;
 
   return (
-    <section className="flex flex-col items-center pb-40 gap-y-8">
+    <section className="flex flex-col items-center gap-y-8 pb-40">
       <EventsOutline>
         <>
           {events.map((clubEvent: ClubEvent, index: number) => {
@@ -22,14 +22,14 @@ const Events = (props: PropType) => {
               <EventCard
                 clubEvent={clubEvent}
                 clubId={clubId}
-                edit={edit}
+                editable={editable}
                 key={`clubEvent${index}`}
               />
             );
           })}
         </>
       </EventsOutline>
-      {edit && <EventsEditor clubId={clubId} />}
+      {editable && <EventsEditor clubId={clubId} />}
     </section>
   );
 };

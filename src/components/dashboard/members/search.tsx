@@ -1,10 +1,12 @@
-import { ClubMember, User } from "@prisma/client";
-import { useEffect, useRef, useState } from "react";
+import "@prisma/client";
+
+import { debounce } from "lodash";
+import React, { useEffect, useRef, useState } from "react";
 
 import { api } from "~/utils/api";
 import { Input } from "../../shadcn_ui/input";
-import { debounce } from "lodash";
-import React from "react";
+
+import type { ClubMember, User } from "@prisma/client";
 
 type PropType = {
   clubId: string;
@@ -12,6 +14,7 @@ type PropType = {
 };
 
 const Search = (props: PropType) => {
+  // TODO: create confirm add user modal -- if user already exists notify using react toast otherwise notify addition
   const { clubId, members } = props;
 
   const [search, setSearch] = useState("");
@@ -19,7 +22,9 @@ const Search = (props: PropType) => {
   const [registeredUserIds, setRegisteredUserIds] = useState<string[]>(
     Array.from(members, (member) => member.userId),
   );
-  const { data: users } = api.usersRouter.getUsersByQuery.useQuery({ query: search });
+  const { data: users } = api.usersRouter.getUsersByQuery.useQuery({
+    query: search,
+  });
 
   const queryClient = api.useContext();
 
@@ -33,15 +38,15 @@ const Search = (props: PropType) => {
 
   const debouncedSearch = useRef(
     debounce(async (input: string) => {
-      setSearch(input)
-    }, 200)
+      setSearch(input);
+    }, 200),
   ).current;
 
   useEffect(() => {
     setQueryResult([]);
     if (users !== undefined) {
       setQueryResult(
-        users.filter((user) => !registeredUserIds.includes(user.userId)),
+        users.filter((user) => !registeredUserIds.includes(user.userId)), // TODO: allow for all users to be found
       );
       setRegisteredUserIds(Array.from(members, (member) => member.userId));
     }
