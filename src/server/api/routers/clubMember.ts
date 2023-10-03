@@ -61,7 +61,7 @@ export const clubMemberRouter = createTRPCRouter({
       });
       return member;
     }),
-  getAllClubMembers: adminProcedure
+  getAllClubMembersByClubId: adminProcedure
     .input(
       z.object({
         clubId: z.string(),

@@ -16,7 +16,7 @@ const month = [
 ];
 
 export const dateToStringFormatted = (date: Date) => {
-  return `${month[date.getMonth()] as string} ${date.getDate() }`;
+  return `${month[date.getMonth()] as string} ${date.getDate()}`;
 };
 
 export const dateToTimeStringFormatted = (date: Date) => {

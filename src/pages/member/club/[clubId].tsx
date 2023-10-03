@@ -25,38 +25,50 @@ const AdminClubDashboard = () => {
   const {
     data: clubEvents,
     isLoading: isLoadingEvents,
-    isError: isErrorEvents
+    isError: isErrorEvents,
   } = api.clubEventsRouter.getClubEventsByClubId.useQuery({
-    clubId
+    clubId,
   });
 
   const {
     data: clubContactInfos,
     isLoading: isLoadingContacts,
-    isError: isErrorContacts
+    isError: isErrorContacts,
   } = api.clubContactInfoRouter.getClubContactInfosByClubId.useQuery({
-    clubId
+    clubId,
   });
 
   const {
     data: clubApplications,
     isLoading: isLoadingApplications,
-    isError: isErrorApplications
+    isError: isErrorApplications,
   } = api.clubApplicationRouter.getClubApplicationsByClubId.useQuery({
-    clubId
+    clubId,
   });
 
   const {
     data: clubSocialMedia,
     isLoading: isLoadingSocialMedia,
-    isError: isErrorSocialMedia
+    isError: isErrorSocialMedia,
   } = api.clubSocialMediaRouter.getClubSocialMediaByClubId.useQuery({
-    clubId
+    clubId,
   });
 
-  if (isLoadingClub || isLoadingEvents || isLoadingContacts || isLoadingApplications || isLoadingSocialMedia) {
+  if (
+    isLoadingClub ||
+    isLoadingEvents ||
+    isLoadingContacts ||
+    isLoadingApplications ||
+    isLoadingSocialMedia
+  ) {
     return <ClubDashBoardSkeleton isAdminPage={true} />;
-  } else if (isErrorClub || isErrorEvents || isErrorContacts || isErrorApplications || isErrorSocialMedia) {
+  } else if (
+    isErrorClub ||
+    isErrorEvents ||
+    isErrorContacts ||
+    isErrorApplications ||
+    isErrorSocialMedia
+  ) {
     return <Error statusCode={500} />;
   } else {
     return (
@@ -67,9 +79,9 @@ const AdminClubDashboard = () => {
         events={clubEvents}
         contactInfos={clubContactInfos}
         applications={clubApplications}
-        socialMedias={clubSocialMedia} 
+        socialMedias={clubSocialMedia}
         members={[]}
-        isAdminPage={true}       
+        isAdminPage={true}
       />
     );
   }

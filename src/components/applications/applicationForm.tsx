@@ -56,7 +56,7 @@ const ApplicationForm = (props: PropType) => {
     );
 
   useEffect(() => {
-    if(applicationId && data){
+    if (applicationId && data) {
       setApplicationFormState({
         name: data?.name || "",
         description: data?.description || "",
@@ -70,14 +70,21 @@ const ApplicationForm = (props: PropType) => {
 
   return (
     <>
-      <h1 className="text-center text-3xl font-black text-black">{applicationFormState.name}</h1>
+      <h1 className="text-center text-3xl font-black text-black">
+        {applicationFormState.name}
+      </h1>
       <h2 className="text-center text-lg font-bold text-black">
         Deadline:
         {applicationFormState.deadline
-          ? `${applicationFormState.deadline?.toLocaleDateString(undefined, DATE_TIME_FORMAT_OPTS)}`
+          ? `${applicationFormState.deadline?.toLocaleDateString(
+              undefined,
+              DATE_TIME_FORMAT_OPTS,
+            )}`
           : " TDB"}
       </h2>
-      <p className="text-center text-black">{applicationFormState.description}</p>
+      <p className="text-center text-black">
+        {applicationFormState.description}
+      </p>
 
       <div className="border-1 flex flex-col gap-y-8 rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
         {applicationFormState.questions.map(

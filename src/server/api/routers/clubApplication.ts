@@ -17,7 +17,7 @@ export const clubApplicationRouter = createTRPCRouter({
           clubId,
         },
       });
-      
+
       return clubApplications;
     }),
   createClubApplication: protectedProcedure
