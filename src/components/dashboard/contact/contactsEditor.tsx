@@ -33,7 +33,7 @@ const ContactsEditor = (props: PropType) => {
 
   const handleSubmit = (values: ContactFormType) => {
     createContactInfo.mutate({
-      clubId: clubId,
+      clubId,
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
@@ -44,8 +44,9 @@ const ContactsEditor = (props: PropType) => {
 
   return (
     <EditController
-      dialogDescription={"Create Contact Info"}
-      editType={"create"}
+      dialogDescription="Create Contact Info"
+      createDescription="Create New Contact"
+      editType="create"
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
     >

@@ -28,7 +28,7 @@ const ClubDashboard: NextPageWithLayout = () => {
   );
 
   if (isLoading) {
-    return <ClubDashBoardSkeleton />;
+    return <ClubDashBoardSkeleton isAdminPage={false} />;
   } else if (isError) {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else {
@@ -38,8 +38,10 @@ const ClubDashboard: NextPageWithLayout = () => {
         clubId={club.id}
         description={club.description}
         events={club.events}
-        contactInfos={club.contactInfo}
-        applications={club.applications}
+        contactInfos={club.clubContactInfo}
+        applications={club.clubApplications}
+        socialMedias={club.clubSocialMedia}
+        members={club.members}
         isAdminPage={false}
       />
     );

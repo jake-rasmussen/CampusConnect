@@ -16,7 +16,7 @@ const Applications = (props: PropType) => {
   const { applications, clubId, editable } = props;
 
   return (
-    <>
+    <section className="flex flex-col items-center gap-y-8">
       <ApplicationsOutline>
         <>
           {applications.map(
@@ -29,11 +29,11 @@ const Applications = (props: PropType) => {
               />
             ),
           )}
-
           {editable && <ApplicationCreator clubId={clubId} />}
         </>
       </ApplicationsOutline>
-    </>
+      {editable && <ApplicationCreator clubId={clubId} />}
+    </section>
   );
 };
 

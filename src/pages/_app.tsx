@@ -5,6 +5,9 @@ import { api } from "~/utils/api";
 import "react";
 import "~/styles/globals.css";
 
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import type { ReactElement, ReactNode } from "react";
@@ -22,7 +25,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <main className="min-h-screen w-screen bg-background">
       <ClerkProvider {...pageProps}>
-        {getLayout(<Component {...pageProps} />)}
+        {/* TODO: see if we should add this to specific admin layout */}
+        <DndProvider backend={HTML5Backend}>
+          {getLayout(<Component {...pageProps} />)}
+        </DndProvider>
       </ClerkProvider>
     </main>
   );

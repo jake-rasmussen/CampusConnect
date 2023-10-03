@@ -46,4 +46,73 @@ export const clubApplicationRouter = createTRPCRouter({
 
       return clubApplication;
     }),
+  updateClubApplication: protectedProcedure
+    .input(
+      z.object({
+        clubApplicationId: z.string(),
+        name: z.string(),
+        description: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { clubApplicationId, name, description } = input;
+
+      const clubApplication = await ctx.prisma.clubApplication.update({
+        where: {
+          id: clubApplicationId,
+        },
+        data: {
+          name,
+          description,
+        },
+      });
+
+      return clubApplication;
+    }),
+  publishClubApplication: protectedProcedure
+    .input(z.object({ applicationId: z.string(), deadline: z.date() }))
+    .mutation(async ({ ctx, input }) => {
+      const { applicationId, deadline } = input;
+      await ctx.prisma.clubApplication.update({
+        where: {
+          id: applicationId,
+        },
+        data: {
+          deadline,
+          status: "OPEN",
+        },
+      });
+    }),
+  getClubApplicationById: protectedProcedure
+    .input(
+      z.object({
+        applicationId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { applicationId } = input;
+
+      const clubApplication =
+        await ctx.prisma.clubApplication.findUniqueOrThrow({
+          where: {
+            id: applicationId,
+          },
+          include: {
+            questions: {
+              orderBy: {
+                orderNumber: "asc",
+              },
+              include: {
+                clubApplicationAnswers: {
+                  orderBy: {
+                    answerChoice: "asc",
+                  },
+                },
+              },
+            },
+          },
+        });
+
+      return clubApplication;
+    }),
 });

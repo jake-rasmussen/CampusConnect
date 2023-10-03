@@ -60,7 +60,6 @@ const TimePicker = (props: PropType) => {
   useEffect(() => {
     if (!date && hour !== "" && minute !== "" && meridiem !== "") {
       setDate(new Date());
-      console.log("New Date");
     }
 
     if (date) {

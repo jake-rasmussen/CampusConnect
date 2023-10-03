@@ -3,6 +3,13 @@ import { clubRouter } from "./routers/club";
 import { clubApplicationRouter } from "./routers/clubApplication";
 import { clubContactInfoRouter } from "./routers/clubContactInfo";
 import { clubEventsRouter } from "./routers/clubEvents";
+import { clubApplicationAnswerRouter } from "./routers/clubApplicationAnswerChoice";
+import { clubApplicationQuestionRouter } from "./routers/clubApplicationQuestion";
+import { clubContactInfoRouter } from "./routers/clubContactInfo";
+import { clubEventsRouter } from "./routers/clubEvents";
+import { clubMemberRouter } from "./routers/clubMember";
+import { clubSocialMediaRouter } from "./routers/clubSocialMedia";
+import { usersRouter } from "./routers/users";
 
 /**
  * This is the primary router for your server.
@@ -10,20 +17,17 @@ import { clubEventsRouter } from "./routers/clubEvents";
  * All routers added in /api/routers should be manually added here.
  */
 
-/**
- * TODO:
- *  - return ClubEvents in ascending order
- *  - on user side, display only events that are still available
- *    - on admin side should still display all events
- *
- *  - alphabetical order for contact information as well
- */
-
 export const appRouter = createTRPCRouter({
   clubRouter,
   clubEventsRouter,
   clubContactInfoRouter,
   clubApplicationRouter,
+  clubSocialMediaRouter,
+  clubMemberRouter,
+  clubApplicationRouter,
+  clubApplicationQuestionRouter,
+  clubApplicationAnswerRouter,
+  usersRouter,
 });
 
 // export type definition of API

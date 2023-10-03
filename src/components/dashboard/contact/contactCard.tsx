@@ -1,29 +1,38 @@
 import { type ClubContactInfo } from "@prisma/client";
 
 import { Badge } from "../../shadcn_ui/badge";
-import ContactUpdateEditor from "./contactCardEditor";
+import ContactCardEditor from "./contactCardEditor";
 
 type PropType = {
   clubContactInfo: ClubContactInfo;
-  edit: boolean;
+  editable: boolean;
 };
 
 const ContactCard = (props: PropType) => {
-  const { clubContactInfo, edit } = props;
+  const { clubContactInfo, editable } = props;
 
   return (
     <>
-      <div className="relative my-6 max-w-sm border-l-2 border-primary px-6 py-2 pr-28">
-        <Badge className="mr-4 translate-x-[-0.2rem] bg-secondary text-white shadow-xl md:absolute md:right-0 md:top-[-0.2rem]">
+      <div className="relative my-6 h-[10rem] w-[20rem] rounded-xl border border-solid bg-white shadow-xl">
+        <Badge className="absolute right-0 ml-4 h-[2rem] translate-x-[-1rem] translate-y-[-0.75rem] bg-secondary text-white shadow-xl">
           {clubContactInfo.role}
         </Badge>
-        <h1 className="my-2 font-bold underline">
-          {clubContactInfo.firstName} {clubContactInfo.lastName}
-        </h1>
-        <p>{clubContactInfo.email}</p>
-        <p>{clubContactInfo.phone}</p>
-        {edit ? (
-          <ContactUpdateEditor
+        <div className="flex h-full flex-row items-center pl-1 pr-4">
+          <div>
+            <div className="rounded-t-full border-b-[4.5rem] border-r-[2.5rem] border-solid border-b-secondary border-r-transparent" />
+            <div className="scale-y-[-1] rounded-t-full border-b-[4.5rem] border-r-[2.5rem] border-solid border-b-secondary border-r-transparent" />
+          </div>
+          <div className="ml-4 overflow-x-scroll">
+            <h1 className="mb-2 text-lg font-bold underline">
+              {clubContactInfo.firstName} {clubContactInfo.lastName}
+            </h1>
+            <p className="text-sm text-gray">{clubContactInfo.email}</p>
+            <p className="text-sm text-gray">{clubContactInfo.phone}</p>
+          </div>
+        </div>
+
+        {editable && (
+          <ContactCardEditor
             firstName={clubContactInfo.firstName}
             lastName={clubContactInfo.lastName}
             email={clubContactInfo.email}
@@ -31,8 +40,6 @@ const ContactCard = (props: PropType) => {
             role={clubContactInfo.role}
             contactInfoId={clubContactInfo.id}
           />
-        ) : (
-          <></>
         )}
       </div>
     </>

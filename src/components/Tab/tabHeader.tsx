@@ -15,7 +15,7 @@ const TabHeader = (props: PropType) => {
   buttonClassName = twMerge(buttonClassName, isActive ? "border-primary" : "");
 
   let textClassName =
-    "items-center flex justify-center transition duration-300 ease-in-out px-2 text-lg font-black tracking-none uppercase";
+    "items-center flex justify-center transition duration-300 ease-in-out px-2 text-2xl font-black tracking-none uppercase";
   textClassName = twMerge(
     textClassName,
     isActive ? "text-primary scale-125" : "",

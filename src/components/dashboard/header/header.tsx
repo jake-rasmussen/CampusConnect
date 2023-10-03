@@ -13,12 +13,12 @@ type PropType = {
 };
 
 const Header = (props: PropType) => {
-  const { name, editable: edit } = props;
+  const { name, editable } = props;
 
   return (
     <>
       <HeaderOutline>
-        {edit ? (
+        {editable ? (
           <HoverCard>
             <HoverCardTrigger className="absolute translate-y-20 rounded-xl px-8 py-2 backdrop-invert">
               <h1 className="tracking-none md:text-md flex flex-row items-center text-sm font-black uppercase">

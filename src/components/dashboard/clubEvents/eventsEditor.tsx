@@ -47,6 +47,7 @@ const EventsEditor = (props: PropType) => {
   return (
     <EditController
       dialogDescription="Create an event"
+      createDescription="Create new event"
       editType="create"
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}

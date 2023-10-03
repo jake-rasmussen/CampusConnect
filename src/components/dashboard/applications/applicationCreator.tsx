@@ -22,17 +22,16 @@ type ApplicationFormType = {
   description: string;
 };
 
-function ApplicationCreator({ clubId }: Props) {
+const ApplicationCreator = ({ clubId }: Props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const createApplication =
     api.clubApplicationRouter.createClubApplication.useMutation({
       onSuccess(clubApplication) {
         toast.dismiss();
-        toast.success(
-          "Successfully Created the Club Application! Redirecting...",
-        );
+        toast.success("Successfully Created the Club Application!");
+        toast.loading("Redirecting...");
         setTimeout(() => {
-          void router.push(`/member/application/edit/${clubApplication.id}`);
+          void router.push(`/member/application/${clubApplication.id}/edit`);
         }, 1000);
       },
       onError() {
@@ -43,7 +42,7 @@ function ApplicationCreator({ clubId }: Props) {
 
   return (
     <EditController
-      dialogDescription={"Create an new application"}
+      dialogDescription={"Create a new application"}
       editType={"create"}
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
@@ -118,5 +117,6 @@ function ApplicationCreator({ clubId }: Props) {
       </Form>
     </EditController>
   );
-}
+};
+
 export default ApplicationCreator;

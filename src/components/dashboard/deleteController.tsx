@@ -3,7 +3,6 @@ import { Trash } from "tabler-icons-react";
 import Button from "../button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -25,7 +24,7 @@ const DeleteController = (props: PropType) => {
       <Dialog>
         <DialogTrigger asChild>
           <button className="my-4">
-            <Trash className="h-full w-full transition duration-300 ease-in-out hover:rotate-12 hover:scale-110 hover:text-red-800" />
+            <Trash className="h-full w-full transition duration-300 ease-in-out hover:rotate-12 hover:scale-110 hover:text-red-600" />
           </button>
         </DialogTrigger>
         <DialogContent>
@@ -34,11 +33,9 @@ const DeleteController = (props: PropType) => {
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <DialogClose>
-              <Button className="mx-2" onClick={handleDelete}>
-                Confirm
-              </Button>
-            </DialogClose>
+            <Button className="mx-2" onClick={handleDelete}>
+              Confirm
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

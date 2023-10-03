@@ -47,6 +47,7 @@ const EventCardEditor = (props: PropType) => {
       toast.dismiss();
       toast.success("Successfully Deleted the Club Event!");
       queryClient.invalidate().catch((e) => console.log(e));
+      setOpenDialog(false);
     },
     onError() {
       toast.dismiss();

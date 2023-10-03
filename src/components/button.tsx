@@ -1,14 +1,13 @@
 import { twMerge } from "tailwind-merge";
 
-const Button = ({
-  onClick,
-  children,
-  className,
-}: {
+type PropTypes = {
   onClick?: () => void;
   children: string;
   className?: string;
-}) => {
+  disabled?: boolean;
+};
+
+const Button = ({ disabled, onClick, children, className }: PropTypes) => {
   return (
     <>
       <button
@@ -17,6 +16,7 @@ const Button = ({
           className,
         )}
         onClick={onClick}
+        disabled={disabled !== undefined ? disabled : false}
       >
         <span className="tracking-none font-black uppercase text-white">
           {children}
