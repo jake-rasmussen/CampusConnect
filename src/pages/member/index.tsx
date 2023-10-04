@@ -6,8 +6,8 @@ import { NextPageWithLayout } from "../_app";
 import { Club } from "@prisma/client";
 import { api } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import ClubCard from "~/components/allClubs/clubCard";
 import UserLayout from "~/layouts/userLayout";
+import ClubMemberCard from "~/components/allClubs/clubMemberCard";
 
 const MemberClubs: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
@@ -57,7 +57,7 @@ const MemberClubs: NextPageWithLayout = () => {
 
         <div className="m-10 flex w-full flex-wrap items-center justify-center">
           {memberClubs.map((club, index) => (
-            <ClubCard clubId={club.id} name={club.name} key={index} />
+            <ClubMemberCard clubId={club.id} name={club.name} key={index} />
           ))}
         </div>
       </div>
