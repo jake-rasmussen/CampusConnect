@@ -76,7 +76,7 @@ export const clubSocialMediaRouter = createTRPCRouter({
   getClubSocialMediaByClubId: adminProcedure
     .input(
       z.object({
-        clubId: z.string()
+        clubId: z.string(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -87,5 +87,5 @@ export const clubSocialMediaRouter = createTRPCRouter({
         },
       });
       return clubSocialMedia;
-    })
+    }),
 });

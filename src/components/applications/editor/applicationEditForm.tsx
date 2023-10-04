@@ -249,9 +249,7 @@ const ApplicationEditForm = (props: PropType) => {
 
               <ApplicationPreviewDialog
                 triggerButton={
-                  <button
-                    className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110"
-                  >
+                  <button className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110">
                     <h1 className="tracking-none font-black uppercase text-white">
                       Preview
                     </h1>
