@@ -7,8 +7,8 @@ import { Separator } from "./shadcn_ui/separator";
 const Navbar = () => {
   return (
     <>
-      <header className="relative top-0 z-50 w-full bg-white p-4 text-black shadow-xl">
-        <div className=" mx-auto flex h-16">
+      <header className="sticky top-0 z-50 w-full bg-white p-4 text-black shadow-xl">
+        <div className="mx-auto flex h-16">
           <Link href="/" className="mr-4 h-16 w-16">
             <Affiliate className="h-full w-full text-primary" />
           </Link>
