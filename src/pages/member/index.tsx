@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import Error from "next/error";
-
-import { Input } from "~/components/shadcn_ui/input";
-import { NextPageWithLayout } from "../_app";
-import { Club } from "@prisma/client";
-import { api } from "~/utils/api";
 import { useUser } from "@clerk/nextjs";
-import UserLayout from "~/layouts/userLayout";
+import Error from "next/error";
+import React, { useState } from "react";
+
 import ClubMemberCard from "~/components/allClubs/clubMemberCard";
+import LoadingPage from "~/components/loadingPage";
+import { Input } from "~/components/shadcn_ui/input";
+import UserLayout from "~/layouts/userLayout";
+import { api } from "~/utils/api";
+import { NextPageWithLayout } from "../_app";
 
 const MemberClubs: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
-  const [clubs, setClubs] = useState<Array<Club>>([]);
 
   const { isLoaded, isSignedIn, user } = useUser();
 
@@ -25,16 +24,9 @@ const MemberClubs: NextPageWithLayout = () => {
   //NOTE: If you are not a member of any clubs return a message saying that you are not a member of any clubs amd then a link to the clubs page
 
   if (memberClubsIsLoading) {
-    return <div>Loading...</div>; // TODO: make generic loading screen
-  }
-  else if (memberClubsError) {
-    return (
-      <Error
-        statusCode={
-          memberClubsError?.data?.httpStatus || 500
-        }
-      />
-    );
+    return <LoadingPage />;
+  } else if (memberClubsError) {
+    return <Error statusCode={memberClubsError?.data?.httpStatus || 500} />;
   } else {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center ">
@@ -67,6 +59,6 @@ const MemberClubs: NextPageWithLayout = () => {
 
 MemberClubs.getLayout = (page) => {
   return <UserLayout>{page}</UserLayout>;
-}
+};
 
 export default MemberClubs;

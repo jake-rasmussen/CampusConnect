@@ -73,25 +73,24 @@ export const clubRouter = createTRPCRouter({
       },
     });
   }),
-  getMemberClubs: adminProcedure
-    .query(async ({ ctx }) => {
-      const userId = ctx.user.userId;
+  getMemberClubs: adminProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.userId;
 
-      const clubMemberships = await ctx.prisma.clubMember.findMany({
-        where: {
-          userId,
-        },
-        include: {
-          club: true
-        }
-      });
+    const clubMemberships = await ctx.prisma.clubMember.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        club: true,
+      },
+    });
 
-      let clubs: Club[] = [];
-      clubMemberships.forEach((clubMembership) => {
-        clubs.push(clubMembership.club);
-      });
-      return clubs;
-    }),
+    let clubs: Club[] = [];
+    clubMemberships.forEach((clubMembership) => {
+      clubs.push(clubMembership.club);
+    });
+    return clubs;
+  }),
   searchForClubs: protectedProcedure
     .input(
       z.object({

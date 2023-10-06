@@ -2,6 +2,7 @@ import Error from "next/error";
 import { useEffect, useState } from "react";
 
 import ClubCard from "~/components/allClubs/clubCard";
+import LoadingPage from "~/components/loadingPage";
 import { Input } from "~/components/shadcn_ui/input";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
@@ -37,9 +38,8 @@ const AllClubs: NextPageWithLayout = () => {
   }, [queryClubs, allClubs, query]);
 
   if (allClubsIsLoading) {
-    return <div>Loading...</div>; // TODO: make generic loading screen
-  }
-  else if (queryError || allClubsError) {
+    return <LoadingPage />;
+  } else if (queryError || allClubsError) {
     return (
       <Error
         statusCode={
