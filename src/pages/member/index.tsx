@@ -12,8 +12,6 @@ import { NextPageWithLayout } from "../_app";
 const MemberClubs: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
 
-  const { isLoaded, isSignedIn, user } = useUser();
-
   const {
     data: memberClubs,
     isLoading: memberClubsIsLoading,

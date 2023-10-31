@@ -1,5 +1,4 @@
 import {
-  ClubApplicationAnswerChoice,
   ClubApplicationQuestion,
   ClubApplicationQuestionType,
 } from "@prisma/client";
@@ -9,83 +8,47 @@ import { Circle, SquarePlus, X } from "tabler-icons-react";
 import { Input } from "~/components/shadcn_ui/input";
 
 type PropType = {
-  question: ClubApplicationQuestion & {
-    clubApplicationAnswers: ClubApplicationAnswerChoice[];
-  };
+  question: ClubApplicationQuestion;
   questionIndex: number;
   updateQuestionsState: (
     field: string,
-    value:
-      | boolean
-      | string
-      | ClubApplicationAnswerChoice[]
-      | ClubApplicationQuestionType,
+    value: boolean | string | string[] | ClubApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-    },
+    question: ClubApplicationQuestion,
   ) => void;
-  setAnswerChoicesToDelete: Dispatch<
-    SetStateAction<ClubApplicationAnswerChoice[]>
-  >;
 };
 
 const AnswerChoicesEditor = (props: PropType) => {
-  const {
-    question,
-    questionIndex,
-    updateQuestionsState,
-    setAnswerChoicesToDelete,
-  } = props;
+  const { question, questionIndex, updateQuestionsState } = props;
 
   const createAnswerChoice = () => {
+    const newClubApplicationAnswerChoices: string[] =
+      question.clubApplicationAnswerChoices.concat([""]);
     updateQuestionsState(
-      "clubApplicationAnswers",
-      [
-        ...question.clubApplicationAnswers,
-        {
-          id: undefined,
-          answerChoice: "",
-          clubApplicationQuestionId: question.id,
-        } as unknown as ClubApplicationAnswerChoice,
-      ],
+      "clubApplicationAnswerChoices",
+      newClubApplicationAnswerChoices,
       questionIndex,
       question,
     );
   };
 
   const deleteAnswerChoice = (answerChoiceIndex: number) => {
-    const newAnswerChocies = question.clubApplicationAnswers;
-    const answerChoiceToDelete =
-      question.clubApplicationAnswers[answerChoiceIndex]!;
+    const newAnswerChocies = question.clubApplicationAnswerChoices;
     newAnswerChocies.splice(answerChoiceIndex, 1);
 
     updateQuestionsState(
-      "clubApplicationAnswers",
+      "clubApplicationAnswerChoices",
       newAnswerChocies,
       questionIndex,
       question,
     );
-
-    setAnswerChoicesToDelete((prev: ClubApplicationAnswerChoice[]) => [
-      ...prev,
-      answerChoiceToDelete,
-    ]);
   };
 
-  const updateAnswerChoice = (
-    answerChoiceIndex: number,
-    value: string,
-    answerChoice: ClubApplicationAnswerChoice,
-  ) => {
-    const newAnswerChocies = question.clubApplicationAnswers;
-    newAnswerChocies[answerChoiceIndex] = {
-      id: answerChoice.id,
-      answerChoice: value,
-      clubApplicationQuestionId: answerChoice.clubApplicationQuestionId,
-    };
+  const updateAnswerChoice = (answerChoiceIndex: number, value: string) => {
+    const newAnswerChocies = question.clubApplicationAnswerChoices;
+    newAnswerChocies[answerChoiceIndex] = value;
     updateQuestionsState(
-      "clubApplicationAnswers",
+      "clubApplicationAnswerChoices",
       newAnswerChocies,
       questionIndex,
       question,
@@ -95,33 +58,31 @@ const AnswerChoicesEditor = (props: PropType) => {
   return (
     <section className="my-4">
       <div className="flex flex-col gap-y-2">
-        {question.clubApplicationAnswers &&
-          question.clubApplicationAnswers.map((answerChoice, index: number) => (
-            <div
-              className="flex flex-row items-center"
-              key={`answerChoice${index}${answerChoice.id}`}
-            >
-              <Circle className="mr-2 h-2 w-2 rounded-full bg-white/10 text-white backdrop-invert" />
-              <Input
-                className="h-[3rem] max-w-lg"
-                placeholder={"Answer Choice"}
-                defaultValue={answerChoice.answerChoice}
-                onBlur={(e) => {
-                  updateAnswerChoice(
-                    index,
-                    e.currentTarget.value,
-                    answerChoice,
-                  );
-                }}
-              />
-              <button
-                className="flex items-end justify-end"
-                onClick={() => deleteAnswerChoice(index)}
+        {question.clubApplicationAnswerChoices &&
+          question.clubApplicationAnswerChoices.map(
+            (answerChoice: string, index: number) => (
+              <div
+                className="flex flex-row items-center"
+                key={`answerChoice${answerChoice}${index}`}
               >
-                <X className="h-[2rem] w-auto text-white transition duration-500 ease-in-out hover:rotate-90 hover:scale-110 hover:text-red-600" />
-              </button>
-            </div>
-          ))}
+                <Circle className="mr-2 h-2 w-2 rounded-full bg-white/10 text-white backdrop-invert" />
+                <Input
+                  className="h-[3rem] max-w-lg"
+                  placeholder={"Answer Choice"}
+                  defaultValue={answerChoice}
+                  onBlur={(e) => {
+                    updateAnswerChoice(index, e.currentTarget.value);
+                  }}
+                />
+                <button
+                  className="flex items-end justify-end"
+                  onClick={() => deleteAnswerChoice(index)}
+                >
+                  <X className="h-[2rem] w-auto text-white transition duration-500 ease-in-out hover:rotate-90 hover:scale-110 hover:text-red-600" />
+                </button>
+              </div>
+            ),
+          )}
         <div>
           <button
             className="group flex shrink flex-row items-center"

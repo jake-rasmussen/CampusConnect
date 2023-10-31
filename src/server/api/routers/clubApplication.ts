@@ -16,6 +16,9 @@ export const clubApplicationRouter = createTRPCRouter({
         where: {
           clubId,
         },
+        include: {
+          questions: true
+        }
       });
 
       return clubApplications;
@@ -86,28 +89,21 @@ export const clubApplicationRouter = createTRPCRouter({
   getClubApplicationById: protectedProcedure
     .input(
       z.object({
-        applicationId: z.string(),
+        clubApplicationId: z.string(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { applicationId } = input;
+      const { clubApplicationId } = input;
 
       const clubApplication =
         await ctx.prisma.clubApplication.findUniqueOrThrow({
           where: {
-            id: applicationId,
+            id: clubApplicationId,
           },
           include: {
             questions: {
               orderBy: {
                 orderNumber: "asc",
-              },
-              include: {
-                clubApplicationAnswers: {
-                  orderBy: {
-                    answerChoice: "asc",
-                  },
-                },
               },
             },
           },

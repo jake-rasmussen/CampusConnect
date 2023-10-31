@@ -1,8 +1,9 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { clubRouter } from "./routers/club";
 import { clubApplicationRouter } from "./routers/clubApplication";
-import { clubApplicationAnswerRouter } from "./routers/clubApplicationAnswerChoice";
 import { clubApplicationQuestionRouter } from "./routers/clubApplicationQuestion";
+import { clubApplicationSubmissionRouter } from "./routers/clubApplicationSubmission";
+import { clubApplicationSubmissionAnswerRouter } from "./routers/clubApplicationSubmissionAnswer";
 import { clubContactInfoRouter } from "./routers/clubContactInfo";
 import { clubEventsRouter } from "./routers/clubEvents";
 import { clubMemberRouter } from "./routers/clubMember";
@@ -23,7 +24,8 @@ export const appRouter = createTRPCRouter({
   clubSocialMediaRouter,
   clubMemberRouter,
   clubApplicationQuestionRouter,
-  clubApplicationAnswerRouter,
+  clubApplicationSubmissionRouter,
+  clubApplicationSubmissionAnswerRouter,
   usersRouter,
 });
 

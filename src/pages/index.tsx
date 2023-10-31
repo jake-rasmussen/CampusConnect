@@ -25,7 +25,7 @@ const Home = () => {
               </div>
               <div className="flex max-w-2xl flex-col justify-center rounded-sm p-6 text-left">
                 <h1 className="border-b-8 border-black text-8xl font-bold text-secondary">
-                  Club Connect
+                  SWEC Connect
                 </h1>
                 <p className="mb-8 mt-6 text-center text-lg text-black sm:mb-12">
                   Be at the heart of our vibrant community, managing membership

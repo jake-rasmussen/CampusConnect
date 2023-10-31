@@ -1,7 +1,5 @@
 import "@prisma/client";
 
-import { Toaster } from "react-hot-toast";
-
 import Applications from "./dashboard/applications/applications";
 import Events from "./dashboard/clubEvents/events";
 import Contact from "./dashboard/contact/contact";
@@ -16,6 +14,7 @@ import TabList from "./tab/tabList";
 
 import type {
   ClubApplication,
+  ClubApplicationQuestion,
   ClubContactInfo,
   ClubEvent,
   ClubMember,
@@ -29,7 +28,9 @@ type PropType = {
   description: string;
   events: ClubEvent[];
   contactInfos: ClubContactInfo[];
-  applications: ClubApplication[];
+  applications: (ClubApplication & {
+    questions: ClubApplicationQuestion[];
+  })[];
   socialMedias: ClubSocialMedia[];
   members: (ClubMember & {
     user: User;
@@ -52,7 +53,6 @@ const DashboardPage = (props: PropType) => {
 
   return (
     <>
-      <Toaster />
       <Header name={name} editable={isAdminPage} />
 
       <main className="relative flex flex-col justify-center">

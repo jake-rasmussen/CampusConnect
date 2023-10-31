@@ -28,7 +28,7 @@ import { cn } from "../../../../lib/utils";
 type PropTypes = {
   name: string;
   description: string;
-  publishApplication: (
+  confirmPublishApplication: (
     name: string,
     description: string,
     values: ConfirmationFormType,
@@ -41,15 +41,17 @@ export type ConfirmationFormType = {
   date: Date;
   time: Date;
 };
+
 const ApplicationPublishConfirmationDialog = ({
   name,
   description,
-  publishApplication,
+  confirmPublishApplication,
   isApplicationFormValid,
   setErrorDialogOpen,
 }: PropTypes) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [calendarPopoverOpen, setCalendarPopoverOpen] = useState(false);
+  
   const DEFAULT_TIME = new Date(new Date().setHours(0, 0, 0, 0));
 
   return (
@@ -60,9 +62,9 @@ const ApplicationPublishConfirmationDialog = ({
           onClick={() => {
             if (!isApplicationFormValid(name, description)) {
               setErrorDialogOpen(true);
-              return;
+            } else {
+              setDialogOpen(true);
             }
-            setDialogOpen(true);
           }}
         >
           <h1 className="tracking-none font-black uppercase text-white">
@@ -87,7 +89,7 @@ const ApplicationPublishConfirmationDialog = ({
           <div>
             <Form<ConfirmationFormType>
               onSubmit={(values) => {
-                publishApplication(name, description, values);
+                confirmPublishApplication(name, description, values);
               }}
             >
               {({ submit }) => (

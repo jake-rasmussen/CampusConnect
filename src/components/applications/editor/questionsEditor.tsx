@@ -1,7 +1,6 @@
 import "@prisma/client";
 
 import {
-  ClubApplicationAnswerChoice,
   ClubApplicationQuestion,
   ClubApplicationQuestionType,
 } from "@prisma/client";
@@ -14,43 +13,18 @@ import AnswerChoicesEditor from "./answerChoicesEditor";
 import QuestionCard from "./questionCard";
 
 type PropType = {
-  questionsState: (ClubApplicationQuestion & {
-    clubApplicationAnswers: ClubApplicationAnswerChoice[];
-  })[];
-  setQuestionsState: Dispatch<
-    SetStateAction<
-      (ClubApplicationQuestion & {
-        clubApplicationAnswers: ClubApplicationAnswerChoice[];
-      })[]
-    >
-  >;
-  setQuestionsStateToDelete: Dispatch<
-    SetStateAction<ClubApplicationQuestion[]>
-  >;
-  setAnswerChoicesToDelete: Dispatch<
-    SetStateAction<ClubApplicationAnswerChoice[]>
-  >;
+  questionsState: ClubApplicationQuestion[];
+  setQuestionsState: Dispatch<SetStateAction<ClubApplicationQuestion[]>>;
 };
 
 const QuestionsEditor = (props: PropType) => {
-  const {
-    questionsState,
-    setQuestionsState,
-    setQuestionsStateToDelete,
-    setAnswerChoicesToDelete,
-  } = props;
+  const { questionsState, setQuestionsState } = props;
 
   const updateQuestionsState = (
     field: string,
-    value:
-      | boolean
-      | string
-      | ClubApplicationAnswerChoice[]
-      | ClubApplicationQuestionType,
+    value: boolean | string | string[] | ClubApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-    },
+    question: ClubApplicationQuestion,
   ) => {
     const newQuestionsForm = questionsState;
     newQuestionsForm[index] = {
@@ -59,47 +33,28 @@ const QuestionsEditor = (props: PropType) => {
       type: question.type,
       question: question.question,
       orderNumber: question.orderNumber,
-      clubApplicationAnswers: question.clubApplicationAnswers,
+      clubApplicationAnswerChoices: question.clubApplicationAnswerChoices,
       createdAt: question.createdAt,
       updatedAt: question.updatedAt,
       [field]: value,
-    } as unknown as ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-    };
+    } as unknown as ClubApplicationQuestion;
     setQuestionsState([...newQuestionsForm]);
   };
 
   const deleteQuestion = (index: number) => {
     const newQuestionsForm = questionsState;
-    const questionToDelete = newQuestionsForm[index]!;
     newQuestionsForm.splice(index, 1);
-
     setQuestionsState([...newQuestionsForm]);
-    setQuestionsStateToDelete((prev: ClubApplicationQuestion[]) => [
-      ...prev,
-      questionToDelete,
-    ]);
   };
 
   const moveQuestions = useCallback((dragIndex: number, hoverIndex: number) => {
-    setQuestionsState(
-      (
-        prevQuestions: (ClubApplicationQuestion & {
-          clubApplicationAnswers: ClubApplicationAnswerChoice[];
-        })[],
-      ) =>
-        update(prevQuestions, {
-          $splice: [
-            [dragIndex, 1],
-            [
-              hoverIndex,
-              0,
-              prevQuestions[dragIndex] as ClubApplicationQuestion & {
-                clubApplicationAnswers: ClubApplicationAnswerChoice[];
-              },
-            ],
-          ],
-        }),
+    setQuestionsState((prevQuestions: ClubApplicationQuestion[]) =>
+      update(prevQuestions, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, prevQuestions[dragIndex] as ClubApplicationQuestion],
+        ],
+      }),
     );
   }, []);
 
@@ -115,11 +70,7 @@ const QuestionsEditor = (props: PropType) => {
               moveCard={moveQuestions}
             >
               <QuestionCard
-                question={
-                  question as ClubApplicationQuestion & {
-                    clubApplicationAnswers: ClubApplicationAnswerChoice[];
-                  }
-                }
+                question={question as ClubApplicationQuestion}
                 index={index}
                 updateQuestionsState={updateQuestionsState}
                 deleteQuestion={deleteQuestion}
@@ -131,14 +82,9 @@ const QuestionsEditor = (props: PropType) => {
                 question.type ===
                   ClubApplicationQuestionType.MULTIPLE_SELECT ? (
                   <AnswerChoicesEditor
-                    question={
-                      question as ClubApplicationQuestion & {
-                        clubApplicationAnswers: ClubApplicationAnswerChoice[];
-                      }
-                    }
+                    question={question as ClubApplicationQuestion}
                     questionIndex={index}
                     updateQuestionsState={updateQuestionsState}
-                    setAnswerChoicesToDelete={setAnswerChoicesToDelete}
                   />
                 ) : (
                   <></>
@@ -159,10 +105,8 @@ const QuestionsEditor = (props: PropType) => {
                   required: undefined,
                   question: "",
                   type: undefined,
-                  clubApplicationAnswers: [],
-                } as unknown as ClubApplicationQuestion & {
-                  clubApplicationAnswers: ClubApplicationAnswerChoice[];
-                },
+                  clubApplicationAnswerChoices: [],
+                } as unknown as ClubApplicationQuestion,
               ]);
             }}
           >
