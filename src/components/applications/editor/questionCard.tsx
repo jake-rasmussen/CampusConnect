@@ -11,27 +11,16 @@ import {
 import { clubApplicationMemberTypeToString } from "~/utils/helpers";
 import { Input } from "../../shadcn_ui/input";
 
-import type {
-  ClubApplicationAnswerChoice,
-  ClubApplicationQuestion,
-} from "@prisma/client";
+import type { ClubApplicationQuestion } from "@prisma/client";
 
 type PropType = {
-  question: ClubApplicationQuestion & {
-    clubApplicationAnswers: ClubApplicationAnswerChoice[];
-  };
+  question: ClubApplicationQuestion;
   index: number;
   updateQuestionsState: (
     field: string,
-    value:
-      | boolean
-      | string
-      | ClubApplicationAnswerChoice[]
-      | ClubApplicationQuestionType,
+    value: boolean | string | ClubApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-    },
+    question: ClubApplicationQuestion,
   ) => void;
   deleteQuestion: (index: number) => void;
 };

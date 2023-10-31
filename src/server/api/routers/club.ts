@@ -1,4 +1,4 @@
-import { Club, ClubMember } from "@prisma/client";
+import { Club } from "@prisma/client";
 import { z } from "zod";
 
 import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
@@ -13,7 +13,11 @@ export const clubRouter = createTRPCRouter({
           id: clubId,
         },
         include: {
-          clubApplications: true,
+          clubApplications: {
+            include: {
+              questions: true
+            }
+          },
           events: true,
           clubContactInfo: true,
           clubSocialMedia: true,
@@ -24,7 +28,6 @@ export const clubRouter = createTRPCRouter({
           },
         },
       });
-
       return club;
     }),
   getClubByIdForAdmin: adminProcedure
@@ -44,7 +47,6 @@ export const clubRouter = createTRPCRouter({
           },
         },
       });
-
       return club;
     }),
   updateDescriptionByClubId: adminProcedure

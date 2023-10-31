@@ -29,9 +29,12 @@ const ApplicationCreator = ({ clubId }: Props) => {
       onSuccess(clubApplication) {
         toast.dismiss();
         toast.success("Successfully Created the Club Application!");
-        toast.loading("Redirecting...");
+        // toast.loading("Redirecting to application...");
+
         setTimeout(() => {
-          void router.push(`/member/application/${clubApplication.id}/edit`);
+          void router.push(
+            `/member/application/application/${clubApplication.id}/edit`,
+          );
         }, 1000);
       },
       onError() {

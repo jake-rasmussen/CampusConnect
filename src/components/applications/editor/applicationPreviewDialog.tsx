@@ -33,7 +33,7 @@ const ApplicationPreviewDialog = (props: PropType) => {
         <DialogTrigger asChild>
           <div onClick={() => setOpenDialog(true)}>{triggerButton}</div>
         </DialogTrigger>
-        <DialogContent className="max-w-5xl">
+        <DialogContent className="h-[75vh] max-w-5xl">
           <DialogHeader>
             <DialogTitle>Application Preview</DialogTitle>
             <DialogDescription className="py-4">
@@ -44,7 +44,7 @@ const ApplicationPreviewDialog = (props: PropType) => {
             <Cross2Icon className="h-8 w-8" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
-          {children}
+          <section className="overflow-y-scroll">{children}</section>
         </DialogContent>
       </Dialog>
     </>

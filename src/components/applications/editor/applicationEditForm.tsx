@@ -1,16 +1,11 @@
-import { ClubApplicationAnswerChoice } from "@prisma/client";
-import { useQueryClient } from "@tanstack/react-query";
 import { Field, Form } from "houseform";
-import router from "next/router";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 import ApplicationPublishConfirmationDialog, {
   ConfirmationFormType,
 } from "~/components/applications/editor/applicationPublishConfirmationDialog";
 import ErrorDialog from "~/components/errorDialog";
 import { Textarea } from "~/components/shadcn_ui/textarea";
-import { DATE_TIME_FORMAT_OPTS } from "~/constants";
 import { api } from "~/utils/api";
 import Button from "../../button";
 import ErrorMessage from "../../dashboard/errorMessage";
@@ -28,82 +23,36 @@ type ApplicationFormType = {
 
 type PropType = {
   applicationId: string;
+  clubId: string;
   name?: string;
   description?: string;
-  questions: (ClubApplicationQuestion & {
-    clubApplicationAnswers: ClubApplicationAnswerChoice[];
-  })[];
+  questions: ClubApplicationQuestion[];
   saveApplication: (
     name: string,
     description: string,
-    questions: (ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-    })[],
-    questionsToDelete: (ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-    })[],
-    answersToDelete: ClubApplicationAnswerChoice[],
-    setQuestionsState: Dispatch<
-      SetStateAction<
-        (ClubApplicationQuestion & {
-          clubApplicationAnswers: ClubApplicationAnswerChoice[];
-        })[]
-      >
-    >,
+    questions: ClubApplicationQuestion[],
   ) => Promise<void>;
+  publishApplication: (
+    name: string,
+    description: string,
+    values: ConfirmationFormType,
+    questions: ClubApplicationQuestion[]
+  ) => void,
 };
 
 const ApplicationEditForm = (props: PropType) => {
-  const { name, description, questions, applicationId, saveApplication } =
+  const { clubId, name, description, questions, applicationId, saveApplication, publishApplication } =
     props;
+
   const [questionsState, setQuestionsState] = useState<
-    (ClubApplicationQuestion & {
-      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-    })[]
-  >([]);
-  const [questionsToDelete, setQuestionsStateToDelete] = useState<
     ClubApplicationQuestion[]
   >([]);
-  const [answerChoicesToDelete, setAnswerChoicesToDelete] = useState<
-    ClubApplicationAnswerChoice[]
-  >([]);
-  const { clubId } = router.query;
-
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
-  const queryClient = useQueryClient();
-
-  const publishApplicationMutation =
-    api.clubApplicationRouter.publishClubApplication.useMutation({
-      onSuccess() {
-        toast.success("Application published!");
-        void queryClient.invalidateQueries();
-        void router.push(`/member/${clubId as string}/`);
-      },
-    });
 
   useEffect(() => {
-    setQuestionsState(
-      Array.from(questions, (question, index: number) => {
-        return {
-          id: question.id,
-          required: question.required,
-          orderNumber: index,
-          question: question.question,
-          type: question.type,
-          clubApplicationAnswers: question.clubApplicationAnswers,
-          clubApplicationId: "",
-          createdAt: question.createdAt,
-          updatedAt: question.updatedAt,
-        };
-      }),
-    );
+    setQuestionsState(questions);
   }, []);
-
-  useEffect(() => {
-    setQuestionsStateToDelete([]);
-    setAnswerChoicesToDelete([]);
-  }, [questions]);
 
   const isApplicationFormValid = (name: string, description: string) => {
     if (name.trim() === "" || description.trim() === "") {
@@ -118,8 +67,8 @@ const ApplicationEditForm = (props: PropType) => {
         return false;
       }
 
-      for (const answerChoice of question.clubApplicationAnswers) {
-        if (answerChoice.answerChoice === "") {
+      for (const answerChoice of question.clubApplicationAnswerChoices) {
+        if (answerChoice === "") {
           return false;
         }
       }
@@ -127,31 +76,14 @@ const ApplicationEditForm = (props: PropType) => {
     return true;
   };
 
-  const publishApplication = async (
+  const confirmPublishApplication = (
     name: string,
     description: string,
-    values: ConfirmationFormType,
+    values: ConfirmationFormType
   ) => {
-    await saveApplication(
-      name,
-      description,
-      questionsState as (ClubApplicationQuestion & {
-        clubApplicationAnswers: ClubApplicationAnswerChoice[];
-      })[],
-      questionsToDelete as (ClubApplicationQuestion & {
-        clubApplicationAnswers: ClubApplicationAnswerChoice[];
-      })[],
-      answerChoicesToDelete,
-      setQuestionsState,
-    );
-    const deadline = new Date(values.date.getTime());
-    deadline.setHours(values.time.getHours(), values.time.getMinutes(), 0, 0);
+    publishApplication(name, description, values, questionsState);
+  }
 
-    publishApplicationMutation.mutate({
-      applicationId,
-      deadline,
-    });
-  };
   return (
     <>
       <Form<ApplicationFormType>
@@ -160,29 +92,21 @@ const ApplicationEditForm = (props: PropType) => {
             setOpenErrorDialog(true);
             return;
           }
+          
           saveApplication(
             values.name,
             values.description,
-            questionsState as (ClubApplicationQuestion & {
-              clubApplicationAnswers: ClubApplicationAnswerChoice[];
-            })[],
-            questionsToDelete as (ClubApplicationQuestion & {
-              clubApplicationAnswers: ClubApplicationAnswerChoice[];
-            })[],
-            answerChoicesToDelete,
-            setQuestionsState,
-          ).finally(() => {
-            return;
-          });
+            questionsState,
+          );
         }}
       >
-        {({ submit, getFieldValue, recomputeErrors }) => (
+        {({ submit, getFieldValue }) => (
           <main className="flex flex-col items-center gap-4 py-4">
             <section className="mx-10 flex w-[50rem] flex-col gap-4">
               <Field
                 name="name"
                 initialValue={name}
-                // onBlurValidate={z.string().min(1, "Enter an application name")}
+              // onBlurValidate={z.string().min(1, "Enter an application name")}
               >
                 {({ value, setValue, onBlur, isValid, errors }) => (
                   <>
@@ -201,13 +125,7 @@ const ApplicationEditForm = (props: PropType) => {
                 )}
               </Field>
 
-              <Field
-                name="description"
-                initialValue={description}
-                // onBlurValidate={z
-                //   .string()
-                //   .min(1, "Enter an application description")}
-              >
+              <Field name="description" initialValue={description}>
                 {({ value, setValue, onBlur, isValid, errors }) => (
                   <>
                     <span className="text-xl font-semibold">
@@ -233,8 +151,6 @@ const ApplicationEditForm = (props: PropType) => {
               <QuestionsEditor
                 questionsState={questionsState}
                 setQuestionsState={setQuestionsState}
-                setQuestionsStateToDelete={setQuestionsStateToDelete}
-                setAnswerChoicesToDelete={setAnswerChoicesToDelete}
               />
             </section>
 
@@ -260,16 +176,22 @@ const ApplicationEditForm = (props: PropType) => {
                 setOpenDialog={setOpenPreviewDialog}
               >
                 <ApplicationForm
+                  clubId={clubId as string}
                   name={getFieldValue("name")?.value}
                   description={getFieldValue("description")?.value}
-                  questions={
-                    questionsState as (ClubApplicationQuestion & {
-                      clubApplicationAnswers: ClubApplicationAnswerChoice[];
-                    })[]
-                  }
-                  applicationId={null}
+                  questions={questionsState}
+                  clubApplicationId={applicationId}
+                  readonly
                 />
               </ApplicationPreviewDialog>
+
+              <ApplicationPublishConfirmationDialog
+                name={getFieldValue("name")?.value}
+                description={getFieldValue("description")?.value}
+                isApplicationFormValid={isApplicationFormValid}
+                confirmPublishApplication={confirmPublishApplication}
+                setErrorDialogOpen={setOpenErrorDialog}
+              />
             </div>
 
             <ErrorDialog
@@ -278,13 +200,6 @@ const ApplicationEditForm = (props: PropType) => {
               }
               openDialog={openErrorDialog}
               setOpenDialog={setOpenErrorDialog}
-            />
-            <ApplicationPublishConfirmationDialog
-              name={getFieldValue("name")?.value}
-              description={getFieldValue("description")?.value}
-              isApplicationFormValid={isApplicationFormValid}
-              publishApplication={publishApplication}
-              setErrorDialogOpen={setOpenErrorDialog}
             />
           </main>
         )}

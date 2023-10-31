@@ -13,6 +13,7 @@ export const clubApplicationQuestionRouter = createTRPCRouter({
         required: z.boolean(),
         orderNumber: z.number(),
         question: z.string(),
+        clubApplicationAnswerChoices: z.array(z.string()),
         type: z.enum([
           ClubApplicationQuestionType.FILE_UPLOAD,
           ClubApplicationQuestionType.MULTIPLE_CHOICE,
@@ -23,8 +24,14 @@ export const clubApplicationQuestionRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { clubApplicationId, required, orderNumber, question, type } =
-        input;
+      const {
+        clubApplicationId,
+        required,
+        orderNumber,
+        question,
+        clubApplicationAnswerChoices,
+        type,
+      } = input;
 
       const clubApplicationQuestion =
         await ctx.prisma.clubApplicationQuestion.create({
@@ -38,6 +45,7 @@ export const clubApplicationQuestionRouter = createTRPCRouter({
             orderNumber,
             question,
             type,
+            clubApplicationAnswerChoices,
           },
         });
 
@@ -83,7 +91,7 @@ export const clubApplicationQuestionRouter = createTRPCRouter({
 
       return clubApplicationQuestion;
     }),
-  deleteClubApplicationById: protectedProcedure
+  deleteClubApplicationQuestionById: protectedProcedure
     .input(
       z.object({
         clubApplicationQuestionId: z.string(),
@@ -100,5 +108,20 @@ export const clubApplicationQuestionRouter = createTRPCRouter({
         });
 
       return clubApplicationQuestions;
+    }),
+  deleteClubApplicationQuestionByApplicationId: protectedProcedure
+    .input(
+      z.object({
+        clubApplicationId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { clubApplicationId } = input;
+
+      await ctx.prisma.clubApplicationQuestion.deleteMany({
+        where: {
+          clubApplicationId,
+        },
+      });
     }),
 });

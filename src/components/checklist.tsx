@@ -1,29 +1,48 @@
-import { ClubApplicationAnswerChoice } from "@prisma/client";
+import { useState } from "react";
 
 import { Checkbox } from "./shadcn_ui/checkbox";
 
 type PropType = {
-  answerChoices: ClubApplicationAnswerChoice[];
+  answerChoices: string[];
+  savedAnswers: string[];
+  onChange(values: string[]): void;
 };
 
 const Checklist = (props: PropType) => {
-  const { answerChoices } = props;
+  const { answerChoices, savedAnswers, onChange } = props;
+
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
 
   return (
     <>
       <div className="flex flex-col gap-y-2 p-4 text-white">
-        {answerChoices.map((answerChoice) => {
+        {answerChoices.map((answerChoice: string, index: number) => {
           return (
-            <div className="flex items-center space-x-2">
+            <div
+              className="flex items-center space-x-2"
+              key={`checklist${index}${answerChoice}`}
+            >
               <Checkbox
-                id={answerChoice.id}
+                id={`${answerChoice}${index}`}
                 className="bg-white text-black checked:bg-white"
+                onClick={() => {
+                  let updatedAnswers = [...selectedAnswers];
+                  if (selectedAnswers.includes(answerChoice)) {
+                    const targetIndex = selectedAnswers.indexOf(answerChoice);
+                    updatedAnswers.splice(targetIndex, 1);
+                  } else {
+                    updatedAnswers.push(answerChoice);
+                  }
+                  setSelectedAnswers(updatedAnswers);
+                  onChange(updatedAnswers);
+                }}
+                defaultChecked={savedAnswers.includes(answerChoice)}
               />
               <label
-                htmlFor={answerChoice.id}
+                htmlFor={`${answerChoice}${index}`}
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                {answerChoice.answerChoice}
+                {answerChoice}
               </label>
             </div>
           );
