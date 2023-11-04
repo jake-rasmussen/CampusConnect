@@ -1,9 +1,6 @@
 import "@prisma/client";
 
-import {
-  ClubApplicationQuestion,
-  ClubApplicationQuestionType,
-} from "@prisma/client";
+import { ApplicationQuestion, ApplicationQuestionType } from "@prisma/client";
 import update from "immutability-helper";
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { SquarePlus } from "tabler-icons-react";
@@ -13,46 +10,46 @@ import AnswerChoicesEditor from "./answerChoicesEditor";
 import QuestionCard from "./questionCard";
 
 type PropType = {
-  questionsState: ClubApplicationQuestion[];
-  setQuestionsState: Dispatch<SetStateAction<ClubApplicationQuestion[]>>;
+  questions: ApplicationQuestion[];
+  setQuestions: Dispatch<SetStateAction<ApplicationQuestion[]>>;
 };
 
 const QuestionsEditor = (props: PropType) => {
-  const { questionsState, setQuestionsState } = props;
+  const { questions, setQuestions } = props;
 
-  const updateQuestionsState = (
+  const updateQuestion = (
     field: string,
-    value: boolean | string | string[] | ClubApplicationQuestionType,
+    value: boolean | string | string[] | ApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestion,
+    question: ApplicationQuestion,
   ) => {
-    const newQuestionsForm = questionsState;
+    const newQuestionsForm = questions;
     newQuestionsForm[index] = {
       id: question.id,
       required: question.required,
       type: question.type,
       question: question.question,
       orderNumber: question.orderNumber,
-      clubApplicationAnswerChoices: question.clubApplicationAnswerChoices,
+      answerChoices: question.answerChoices,
       createdAt: question.createdAt,
       updatedAt: question.updatedAt,
       [field]: value,
-    } as unknown as ClubApplicationQuestion;
-    setQuestionsState([...newQuestionsForm]);
+    } as ApplicationQuestion;
+    setQuestions([...newQuestionsForm]);
   };
 
   const deleteQuestion = (index: number) => {
-    const newQuestionsForm = questionsState;
+    const newQuestionsForm = questions;
     newQuestionsForm.splice(index, 1);
-    setQuestionsState([...newQuestionsForm]);
+    setQuestions([...newQuestionsForm]);
   };
 
   const moveQuestions = useCallback((dragIndex: number, hoverIndex: number) => {
-    setQuestionsState((prevQuestions: ClubApplicationQuestion[]) =>
+    setQuestions((prevQuestions: ApplicationQuestion[]) =>
       update(prevQuestions, {
         $splice: [
           [dragIndex, 1],
-          [hoverIndex, 0, prevQuestions[dragIndex] as ClubApplicationQuestion],
+          [hoverIndex, 0, prevQuestions[dragIndex] as ApplicationQuestion],
         ],
       }),
     );
@@ -61,7 +58,7 @@ const QuestionsEditor = (props: PropType) => {
   return (
     <>
       <section className="border-1 w-[75rem] rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
-        {questionsState.map((question, index: number) => {
+        {questions.map((question, index: number) => {
           return (
             <DraggableCard
               className="border-1 my-4 rounded-xl border border-white p-4"
@@ -70,21 +67,19 @@ const QuestionsEditor = (props: PropType) => {
               moveCard={moveQuestions}
             >
               <QuestionCard
-                question={question as ClubApplicationQuestion}
+                question={question as ApplicationQuestion}
                 index={index}
-                updateQuestionsState={updateQuestionsState}
+                updateQuestion={updateQuestion}
                 deleteQuestion={deleteQuestion}
               />
 
               <div className="ml-20">
-                {question.type ===
-                  ClubApplicationQuestionType.MULTIPLE_CHOICE ||
-                question.type ===
-                  ClubApplicationQuestionType.MULTIPLE_SELECT ? (
+                {question.type === ApplicationQuestionType.MULTIPLE_CHOICE ||
+                question.type === ApplicationQuestionType.MULTIPLE_SELECT ? (
                   <AnswerChoicesEditor
-                    question={question as ClubApplicationQuestion}
+                    question={question as ApplicationQuestion}
                     questionIndex={index}
-                    updateQuestionsState={updateQuestionsState}
+                    updateQuestions={updateQuestion}
                   />
                 ) : (
                   <></>
@@ -98,15 +93,15 @@ const QuestionsEditor = (props: PropType) => {
           <button
             className="group flex flex-row items-center justify-center"
             onClick={() => {
-              setQuestionsState([
-                ...questionsState,
+              setQuestions([
+                ...questions,
                 {
                   id: undefined,
                   required: undefined,
                   question: "",
                   type: undefined,
-                  clubApplicationAnswerChoices: [],
-                } as unknown as ClubApplicationQuestion,
+                  answerChoices: [],
+                } as unknown as ApplicationQuestion,
               ]);
             }}
           >

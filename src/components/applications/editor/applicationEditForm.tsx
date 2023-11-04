@@ -1,20 +1,18 @@
+import { ApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useEffect, useState } from "react";
 
-import ApplicationPublishConfirmationDialog, {
-  ConfirmationFormType,
-} from "~/components/applications/editor/applicationPublishConfirmationDialog";
 import ErrorDialog from "~/components/errorDialog";
 import { Textarea } from "~/components/shadcn_ui/textarea";
-import { api } from "~/utils/api";
 import Button from "../../button";
 import ErrorMessage from "../../dashboard/errorMessage";
 import { Input } from "../../shadcn_ui/input";
 import ApplicationForm from "../applicationForm";
 import ApplicationPreviewDialog from "./applicationPreviewDialog";
+import ApplicationPublishConfirmationDialog, {
+  ConfirmationFormType,
+} from "./ApplicationPublishConfirmationDialog";
 import QuestionsEditor from "./questionsEditor";
-
-import type { ClubApplicationQuestion } from "@prisma/client";
 
 type ApplicationFormType = {
   name: string;
@@ -23,42 +21,47 @@ type ApplicationFormType = {
 
 type PropType = {
   applicationId: string;
-  clubId: string;
+  projectId: string;
   name?: string;
   description?: string;
-  questions: ClubApplicationQuestion[];
+  savedQuestions: ApplicationQuestion[];
   saveApplication: (
     name: string,
     description: string,
-    questions: ClubApplicationQuestion[],
+    questions: ApplicationQuestion[],
   ) => Promise<void>;
   publishApplication: (
     name: string,
     description: string,
     values: ConfirmationFormType,
-    questions: ClubApplicationQuestion[]
-  ) => void,
+    questions: ApplicationQuestion[],
+  ) => void;
 };
 
 const ApplicationEditForm = (props: PropType) => {
-  const { clubId, name, description, questions, applicationId, saveApplication, publishApplication } =
-    props;
+  const {
+    projectId,
+    name,
+    description,
+    savedQuestions,
+    applicationId,
+    saveApplication,
+    publishApplication,
+  } = props;
 
-  const [questionsState, setQuestionsState] = useState<
-    ClubApplicationQuestion[]
-  >([]);
+  const [questions, setQuestions] = useState<ApplicationQuestion[]>([]);
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
 
   useEffect(() => {
-    setQuestionsState(questions);
+    setQuestions(savedQuestions);
   }, []);
 
   const isApplicationFormValid = (name: string, description: string) => {
     if (name.trim() === "" || description.trim() === "") {
       return false;
     }
-    for (const question of questionsState) {
+    for (const question of questions) {
       if (
         question.question === "" ||
         question.type === undefined ||
@@ -67,7 +70,7 @@ const ApplicationEditForm = (props: PropType) => {
         return false;
       }
 
-      for (const answerChoice of question.clubApplicationAnswerChoices) {
+      for (const answerChoice of question.answerChoices) {
         if (answerChoice === "") {
           return false;
         }
@@ -79,10 +82,10 @@ const ApplicationEditForm = (props: PropType) => {
   const confirmPublishApplication = (
     name: string,
     description: string,
-    values: ConfirmationFormType
+    values: ConfirmationFormType,
   ) => {
-    publishApplication(name, description, values, questionsState);
-  }
+    publishApplication(name, description, values, questions);
+  };
 
   return (
     <>
@@ -92,12 +95,7 @@ const ApplicationEditForm = (props: PropType) => {
             setOpenErrorDialog(true);
             return;
           }
-          
-          saveApplication(
-            values.name,
-            values.description,
-            questionsState,
-          );
+          saveApplication(values.name, values.description, questions);
         }}
       >
         {({ submit, getFieldValue }) => (
@@ -106,7 +104,7 @@ const ApplicationEditForm = (props: PropType) => {
               <Field
                 name="name"
                 initialValue={name}
-              // onBlurValidate={z.string().min(1, "Enter an application name")}
+                // onBlurValidate={z.string().min(1, "Enter an application name")}
               >
                 {({ value, setValue, onBlur, isValid, errors }) => (
                   <>
@@ -149,8 +147,8 @@ const ApplicationEditForm = (props: PropType) => {
                 Questions
               </span>
               <QuestionsEditor
-                questionsState={questionsState}
-                setQuestionsState={setQuestionsState}
+                questions={questions}
+                setQuestions={setQuestions}
               />
             </section>
 
@@ -176,11 +174,11 @@ const ApplicationEditForm = (props: PropType) => {
                 setOpenDialog={setOpenPreviewDialog}
               >
                 <ApplicationForm
-                  clubId={clubId as string}
+                  projectId={projectId as string}
+                  applicationId={applicationId}
                   name={getFieldValue("name")?.value}
                   description={getFieldValue("description")?.value}
-                  questions={questionsState}
-                  clubApplicationId={applicationId}
+                  questions={questions}
                   readonly
                 />
               </ApplicationPreviewDialog>

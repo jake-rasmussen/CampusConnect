@@ -1,13 +1,13 @@
 import { createTRPCRouter } from "~/server/api/trpc";
-import { clubRouter } from "./routers/club";
-import { clubApplicationRouter } from "./routers/clubApplication";
-import { clubApplicationQuestionRouter } from "./routers/clubApplicationQuestion";
-import { clubApplicationSubmissionRouter } from "./routers/clubApplicationSubmission";
-import { clubApplicationSubmissionAnswerRouter } from "./routers/clubApplicationSubmissionAnswer";
-import { clubContactInfoRouter } from "./routers/clubContactInfo";
-import { clubEventsRouter } from "./routers/clubEvents";
-import { clubMemberRouter } from "./routers/clubMember";
-import { clubSocialMediaRouter } from "./routers/clubSocialMedia";
+import { applicationRouter } from "./routers/application";
+import { applicationQuestionRouter } from "./routers/applicationQuestion";
+import { applicationSubmissionRouter } from "./routers/applicationSubmission";
+import { applicationSubmissionAnswerRouter } from "./routers/applicationSubmissionAnswer";
+import { contactInfoRouter } from "./routers/contactInfo";
+import { eventRouter } from "./routers/event";
+import { memberRouter } from "./routers/member";
+import { projectRouter } from "./routers/project";
+import { socialMediaRouter } from "./routers/socialMedia";
 import { usersRouter } from "./routers/users";
 
 /**
@@ -17,15 +17,15 @@ import { usersRouter } from "./routers/users";
  */
 
 export const appRouter = createTRPCRouter({
-  clubRouter,
-  clubEventsRouter,
-  clubContactInfoRouter,
-  clubApplicationRouter,
-  clubSocialMediaRouter,
-  clubMemberRouter,
-  clubApplicationQuestionRouter,
-  clubApplicationSubmissionRouter,
-  clubApplicationSubmissionAnswerRouter,
+  projectRouter,
+  eventRouter,
+  contactInfoRouter,
+  applicationRouter,
+  socialMediaRouter,
+  memberRouter,
+  applicationQuestionRouter,
+  applicationSubmissionRouter,
+  applicationSubmissionAnswerRouter,
   usersRouter,
 });
 

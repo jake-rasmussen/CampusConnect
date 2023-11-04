@@ -1,125 +1,73 @@
 import {
-  ClubApplicationQuestion,
-  ClubApplicationQuestionType,
-  ClubApplicationSubmissionAnswer,
-  ClubApplicationSubmissionStatus,
+  Application,
+  ApplicationQuestion,
+  ApplicationQuestionType,
+  ApplicationSubmission,
+  ApplicationSubmissionAnswer,
+  Prisma,
 } from "@prisma/client";
-import router from "next/router";
+import { Field, FieldArray, FieldArrayItem, Form } from "houseform";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import Button from "~/components/button";
-import { api } from "~/utils/api";
 import { dateToStringFormatted } from "~/utils/helpers";
-import Checklist from "../checklist";
-import FileUpload from "../fileUpload";
+import Button from "../button";
 import LoadingPage from "../loadingPage";
 import MultipleChoice from "../multipleChoice";
 import { Input } from "../shadcn_ui/input";
 import { Textarea } from "../shadcn_ui/textarea";
+import Checklist from "../checklist";
 
 type PropType = {
-  clubId: string;
-  name?: string;
-  description?: string;
+  projectId: string;
+  applicationId: string;
+  name: string;
+  description: string;
   deadline?: Date;
-  questions?: ClubApplicationQuestion[];
-  savedAnswers?: ClubApplicationSubmissionAnswer[];
-  clubApplicationId?: string;
-  clubApplicationSubmissionId?: string;
+  questions: ApplicationQuestion[];
+  savedAnswers?: ApplicationFormSubmissionAnswer[];
   readonly?: boolean;
+  handleSaveAnswers: (answers: ApplicationFormSubmissionAnswer[]) => void;
 };
 
-type AnswerTypes = string | string[] | undefined;
-
-type LocalClubApplicationSubmissionAnswer = Omit<
-  ClubApplicationSubmissionAnswer,
-  "id" | "clubApplicationSubmissionId"
+export type ApplicationFormSubmissionAnswer = Omit<
+  ApplicationSubmissionAnswer,
+  "id" | "applicationSubmissionId"
 >;
 
 type ApplicationForm = {
   name: string;
   description: string;
   deadline?: Date;
-  questions: ClubApplicationQuestion[];
-  answers: LocalClubApplicationSubmissionAnswer[];
+  questions: ApplicationQuestion[];
+  answers: ApplicationFormSubmissionAnswer[];
 };
 
 const ApplicationForm = (props: PropType) => {
   const {
-    clubId,
+    projectId,
+    applicationId,
     name,
     description,
-    deadline,
     questions,
+    deadline,
     savedAnswers,
-    clubApplicationId,
-    clubApplicationSubmissionId,
     readonly,
+    handleSaveAnswers
   } = props;
 
-  const [isSaving, setIsSaving] = useState(false);
-
-  const [applicationFormState, setApplicationFormState] =
-    useState<ApplicationForm>({
-      name: name || "",
-      description: description || "",
-      questions: questions || [],
-      answers: savedAnswers || [],
-    });
-
-  useEffect(() => {
-    if (savedAnswers) {
-      setApplicationFormState({
-        ...applicationFormState,
-        answers: savedAnswers,
-      });
+  const handleSubmitAnswers = (answers: ApplicationSubmissionAnswer[]) => {
+    if (!checkValidAnswers(answers)) {
+      toast.dismiss();
+      toast.error("Please fill out the entire form!");
+    } else {
+      if (applicationId) {
+        handleSaveAnswers(answers);
+      }
     }
-  }, [savedAnswers]);
+  };
 
-  const upsertClubApplicationSubmission =
-    api.clubApplicationSubmissionRouter.upsertClubApplicationSubmission.useMutation(
-      {
-        onSuccess() {
-          toast.dismiss();
-          toast.success("Success!");
-          // toast.loading("Redirecting to club home page...");
-          setTimeout(() => {
-            router.push(`/club/${clubId}`);
-          }, 1000);
-        },
-        onError() {
-          toast.dismiss();
-          toast.error("Error...");
-          setIsSaving(false);
-        },
-      },
-    );
-
-  const createClubApplicationSubmissionAnswer =
-    api.clubApplicationSubmissionAnswerRouter.createClubApplicationSubmissionAnswer.useMutation(
-      {},
-    );
-  const deleteClubApplicationSubmissionAnswerChoices =
-    api.clubApplicationSubmissionAnswerRouter.deleteAllClubApplicationSubmissionAnswersByClubApplicationSubmissionId.useMutation(
-      {},
-    );
-
-  useEffect(() => {
-    if (clubApplicationId) {
-      setApplicationFormState({
-        name: name || "",
-        description: description || "",
-        questions: questions || [],
-        answers: savedAnswers || [],
-        deadline,
-      });
-    }
-  }, [clubApplicationId]);
-
-  const checkValidAnswers = (
-    answers: LocalClubApplicationSubmissionAnswer[],
-  ) => {
+  const checkValidAnswers = (answers: ApplicationFormSubmissionAnswer[]) => {
     if (!questions) return false;
     for (let i = 0; i < answers.length; i++) {
       if (
@@ -132,207 +80,133 @@ const ApplicationForm = (props: PropType) => {
     return true;
   };
 
-  const handleUpdateAnswers = (
-    value: AnswerTypes,
-    questionId: string,
-    index: number,
-  ) => {
-    const updatedAnswers = [...applicationFormState.answers];
-    if (typeof value === "string") {
-      updatedAnswers[index] = {
-        answer: value,
-        selectedAnswers: [],
-        clubApplicationQuestionId: questionId,
-      };
-    } else if (Array.isArray(value)) {
-      updatedAnswers[index] = {
-        answer: null,
-        selectedAnswers: value,
-        clubApplicationQuestionId: questionId,
-      };
-    }
+  const checkSavedAnswer = (question: ApplicationQuestion) => {
+    return savedAnswers &&
+      (savedAnswers.find(
+        (answer) =>
+          answer.applicationQuestionId ===
+          question.id,
+      )?.answer as string | string[]) || ""
+  }
 
-    setApplicationFormState({
-      ...applicationFormState,
-      answers: updatedAnswers,
-    });
-  };
-
-  const handleSubmitAnswers = (
-    answers: LocalClubApplicationSubmissionAnswer[],
-  ) => {
-    if (!checkValidAnswers(answers)) {
-      toast.dismiss();
-      toast.error("Please fill out the entire form!");
-    } else {
-      if (clubApplicationId && !isSaving) {
-        setIsSaving(true);
-        upsertClubApplicationSubmission.mutate({
-          clubApplicationSubmissionId,
-          clubApplicationId,
-          status: ClubApplicationSubmissionStatus.SUBMITTED,
-        });
-      }
-    }
-  };
-
-  const handleSaveAnswers = async (
-    answers: LocalClubApplicationSubmissionAnswer[],
-  ) => {
-    if (clubApplicationId && !isSaving) {
-      setIsSaving(true);
-      const clubApplicationSubmission =
-        await upsertClubApplicationSubmission.mutateAsync({
-          clubApplicationSubmissionId,
-          clubApplicationId,
-          status: ClubApplicationSubmissionStatus.DRAFT,
-        });
-
-      deleteClubApplicationSubmissionAnswerChoices.mutate({
-        clubApplicationSubmissionId: clubApplicationSubmission.id,
-      });
-
-      answers.forEach(
-        (answer: LocalClubApplicationSubmissionAnswer) => {
-          createClubApplicationSubmissionAnswer.mutate({
-            clubApplicationSubmissionId: clubApplicationSubmission.id,
-            clubApplicationQuestionId: applicationFormState.questions.find(
-              (question) => question.id === answer.clubApplicationQuestionId,
-            )?.id as unknown as string,
-            answer: answer.answer || answer.selectedAnswers,
-          });
-        },
-      );
-    }
-  };
-
-  if (!clubApplicationId) {
+  if (!applicationId) {
     return <LoadingPage />;
   } else {
     return (
       <section className="flex flex-col gap-y-4">
         <h1 className="text-center text-4xl font-black uppercase text-black underline">
-          {applicationFormState.name}
+          {name}
         </h1>
         <h2 className="text-center text-lg font-bold text-black">
           Deadline:
-          {applicationFormState.deadline
-            ? dateToStringFormatted(applicationFormState.deadline)
-            : " TBD"}
+          {deadline ? dateToStringFormatted(deadline) : " TBD"}
         </h2>
-        <p className="text-center text-black">
-          {applicationFormState.description}
-        </p>
+        <p className="text-center text-black">{description}</p>
 
         <div className="border-1 flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
-          {applicationFormState.questions.map(
-            (question: ClubApplicationQuestion, index: number) => (
-              <div key={`applicationQuestion${index}${question.question}`}>
-                <div className="flex flex-row items-start">
-                  {question.required && (
-                    <h1 className="mx-1 my-0.5 font-black text-red-600">*</h1>
-                  )}
-                  <h2 className="max-w-2xl capitalize text-white">
-                    {question.question}
-                  </h2>
-                </div>
+          <Form
+            onSubmit={async (values) => {
+              await handleSubmitAnswers(values as ApplicationSubmissionAnswer[]);
+            }}
+          >
+            {({ submit }) => (
+              <form className="flex flex-col gap-y-8">
+                {questions.map((question: ApplicationQuestion, index: number) => (
+                  <Field<ApplicationFormSubmissionAnswer>
+                    name={`answer${index}`}
+                    key={`answer-${index}`}
+                  >
+                    {({ value, setValue }) => {
+                      return (
+                        <div>
+                          <div className="flex flex-row items-start">
+                            {question.required && (
+                              <h1 className="mx-1 my-0.5 font-black text-red-600">*</h1>
+                            )}
+                            <h2 className="max-w-2xl capitalize text-white">
+                              {question.question}
+                            </h2>
+                          </div>
 
-                {question.type === ClubApplicationQuestionType.TEXT_INPUT && (
-                  <Input
-                    value={
-                      applicationFormState.answers.find(
-                        (answer) =>
-                          question.id === answer.clubApplicationQuestionId,
-                      )?.answer || ""
-                    }
-                    onChange={(e) => {
-                      if (e.currentTarget.value.trim() === "") {
-                        handleUpdateAnswers(undefined, question.id, index);
-                      } else {
-                        handleUpdateAnswers(
-                          e.currentTarget.value,
-                          question.id,
-                          index,
-                        );
-                      }
+                          {question.type === ApplicationQuestionType.TEXT_INPUT && (
+                            <Input
+                              defaultValue={checkSavedAnswer(question) as string}
+                              onChange={(e) => setValue({
+                                ...value,
+                                applicationQuestionId: question.id,
+                                answer: e.currentTarget.value
+                              })}
+                            />
+                          )}
+                          {question.type === ApplicationQuestionType.TEXT_FIELD && (
+                            <Textarea
+                              className="h-[3rem] rounded-xl bg-white p-4"
+                              defaultValue={checkSavedAnswer(question) as string}
+                              onChange={(e) => setValue({
+                                ...value,
+                                applicationQuestionId: question.id,
+                                answer: e.currentTarget.value
+                              })}
+                              rows={4}
+                            />
+                          )}
+                          {question.type ===
+                            ApplicationQuestionType.MULTIPLE_CHOICE && (
+                              <MultipleChoice
+                                answerChoices={question.answerChoices}
+                                defaultValue={checkSavedAnswer(question) as string}
+                                value={value.answer as string}
+                                onChange={(e: string) => setValue({
+                                  ...value,
+                                  applicationQuestionId: question.id,
+                                  answer: e
+                                })}
+                              />
+                            )}
+                          {question.type ===
+                            ApplicationQuestionType.MULTIPLE_SELECT && (
+                              <Checklist
+                                answerChoices={question.answerChoices}
+                                defaultValue={checkSavedAnswer(question) as string[]}
+                                value={value.answer as string[]}
+                                onChange={(e: string[]) => setValue({
+                                  ...value,
+                                  applicationQuestionId: question.id,
+                                  answer: e
+                                })
+                                }
+                              />
+                            )}
+                          {/* 
+                          {question.type === ClubApplicationQuestionType.FILE_UPLOAD && (
+                            <FileUpload />
+                          )}
+                          */}
+                        </div>
+                      )
                     }}
-                  />
+                  </Field>
+                )
                 )}
-                {question.type === ClubApplicationQuestionType.TEXT_FIELD && (
-                  <Textarea
-                    className="h-[3rem] rounded-xl bg-white p-4"
-                    value={
-                      applicationFormState.answers.find(
-                        (answer) =>
-                          question.id === answer.clubApplicationQuestionId,
-                      )?.answer || ""
-                    }
-                    onChange={(e) => {
-                      if (e.currentTarget.value.trim() === "") {
-                        handleUpdateAnswers(undefined, question.id, index);
-                      } else {
-                        handleUpdateAnswers(
-                          e.currentTarget.value,
-                          question.id,
-                          index,
-                        );
-                      }
-                    }}
-                    rows={4}
-                  />
+                {!readonly && (
+                  <div className="my-2 flex grow flex-row justify-center gap-4">
+                    <Button
+                      onClick={() => submit()}
+                    >
+                      Save for later
+                    </Button>
+                    <Button
+                      className="bg-white/10 backdrop-invert"
+                      onClick={() => submit()}
+                    >
+                      Submit application
+                    </Button>
+                  </div>
                 )}
-                {question.type ===
-                  ClubApplicationQuestionType.MULTIPLE_CHOICE && (
-                    <MultipleChoice
-                      answerChoices={question.clubApplicationAnswerChoices}
-                      savedAnswer={
-                        applicationFormState.answers.find(
-                          (answer) =>
-                            question.id === answer.clubApplicationQuestionId,
-                        )?.answer || ""
-                      }
-                      onChange={(value: string) =>
-                        handleUpdateAnswers(value, question.id, index)
-                      }
-                    />
-                  )}
-                {question.type === ClubApplicationQuestionType.FILE_UPLOAD && (
-                  <FileUpload />
-                )}
-                {question.type ===
-                  ClubApplicationQuestionType.MULTIPLE_SELECT && (
-                    <Checklist
-                      answerChoices={question.clubApplicationAnswerChoices}
-                      savedAnswers={
-                        applicationFormState.answers.find(
-                          (answer) =>
-                            question.id === answer.clubApplicationQuestionId,
-                        )?.selectedAnswers || []
-                      }
-                      onChange={(values: string[]) =>
-                        handleUpdateAnswers(values, question.id, index)
-                      }
-                    />
-                  )}
-              </div>
-            ),
-          )}
+              </form>
+            )}
+          </Form>
         </div>
-        {!readonly && (
-          <div className="my-2 flex grow flex-row justify-center gap-4">
-            <Button
-              onClick={() => handleSaveAnswers(applicationFormState.answers)}
-            >
-              Save for later
-            </Button>
-            <Button
-              className="bg-white/10 backdrop-invert"
-              onClick={() => handleSubmitAnswers(applicationFormState.answers)}
-            >
-              Submit application
-            </Button>
-          </div>
-        )}
       </section>
     );
   }

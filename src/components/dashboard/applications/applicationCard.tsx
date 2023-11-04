@@ -1,14 +1,13 @@
 import {
-  ClubApplication,
-  ClubApplicationQuestion,
-  ClubApplicationStatus,
-  ClubApplicationSubmissionStatus,
+  Application,
+  ApplicationQuestion,
+  ApplicationStatus,
+  ApplicationSubmissionStatus,
 } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { Check, Edit, Eye } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
@@ -25,23 +24,23 @@ import {
 } from "../../shadcn_ui/card";
 
 type PropType = {
-  clubApplication: ClubApplication & {
-    questions: ClubApplicationQuestion[]
+  application: Application & {
+    questions: ApplicationQuestion[];
   };
-  clubId: string;
+  projectId: string;
   editable: boolean;
-  status: ClubApplicationSubmissionStatus;
+  status: ApplicationSubmissionStatus;
 };
 
 const ApplicationCard = (props: PropType) => {
-  const { clubApplication, editable, status } = props;
+  const { application, editable, status } = props;
   const router = useRouter();
-  const { clubId } = router.query;
+  const { projectId } = router.query;
 
   const displayEditComponent =
-    editable && clubApplication.status === ClubApplicationStatus.DRAFT;
+    editable && application.status === ApplicationStatus.DRAFT;
   const displayPreviewComponent =
-    editable && clubApplication.status !== ClubApplicationStatus.DRAFT;
+    editable && application.status !== ApplicationStatus.DRAFT;
 
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
 
@@ -50,21 +49,20 @@ const ApplicationCard = (props: PropType) => {
       <Card
         className={twMerge(
           "relative my-6 mb-0 mr-4 flex w-[17.5rem] flex-col rounded-xl bg-white shadow-xl",
-          status === ClubApplicationSubmissionStatus.SUBMITTED
-            ? "opacity-50"
-            : "",
+          status === ApplicationSubmissionStatus.SUBMITTED ? "opacity-50" : "",
         )}
       >
         <CardHeader>
-          <CardTitle>{clubApplication.name}</CardTitle>
-          <CardDescription>{clubApplication.description}</CardDescription>
+          <CardTitle>{application.name}</CardTitle>
+          <CardDescription>{application.description}</CardDescription>
         </CardHeader>
         <CardContent>
           {displayEditComponent && (
             <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
               <Link
-                href={`/member/${clubId as string}/application/${clubApplication.id
-                  }/edit/`}
+                href={`/admin/${projectId as string}/application/${
+                  application.id
+                }/edit/`}
                 className="group flex h-full w-full items-center"
               >
                 <div className="absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10" />
@@ -87,24 +85,26 @@ const ApplicationCard = (props: PropType) => {
               setOpenDialog={setOpenPreviewDialog}
             >
               <ApplicationForm
-                clubId={clubId as string}
-                clubApplicationId={clubApplication.id}
-                questions={clubApplication.questions}
+                projectId={projectId as string}
+                applicationId={application.id}
+                questions={application.questions}
                 readonly
+                name={""}
+                description={""}
               />
             </ApplicationPreviewDialog>
           )}
           <p>
             Status:
             <span className="tracking-none font-black text-secondary">
-              {clubApplication.status}
+              {application.status}
             </span>
           </p>
-          {clubApplication.deadline && (
+          {application.deadline && (
             <p>
               Deadline:
               <span className="text-sm font-semibold">
-                {clubApplication.deadline.toLocaleDateString(
+                {application.deadline.toLocaleDateString(
                   undefined,
                   DATE_TIME_FORMAT_OPTS,
                 )}
@@ -114,28 +114,28 @@ const ApplicationCard = (props: PropType) => {
         </CardContent>
         <CardFooter className="flex grow items-end justify-end">
           <div className="flex w-full justify-end">
-            {status === ClubApplicationSubmissionStatus.NEW && (
+            {status === ApplicationSubmissionStatus.NEW && (
               <button
                 className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
                 onClick={() =>
-                  router.push(`/club/${clubId}/apply/${clubApplication.id}`)
+                  router.push(`/project/${projectId}/apply/${application.id}`)
                 }
               >
                 Apply <ArrowRight className="mx-1 h-full" />
               </button>
             )}
-            {status === ClubApplicationSubmissionStatus.DRAFT && (
+            {status === ApplicationSubmissionStatus.DRAFT && (
               <button
                 className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
                 onClick={() =>
-                  router.push(`/club/${clubId}/apply/${clubApplication.id}`)
+                  router.push(`/project/${projectId}/apply/${application.id}`)
                 }
               >
                 Continue <ArrowRight className="mx-1 h-full" />
               </button>
             )}
-            {status === ClubApplicationSubmissionStatus.SUBMITTED && (
-              <p className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2">
+            {status === ApplicationSubmissionStatus.SUBMITTED && (
+              <p className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out">
                 Applied <Check className="mx-1 h-full" />
               </p>
             )}

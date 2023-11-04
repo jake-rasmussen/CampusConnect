@@ -51,7 +51,7 @@ const ApplicationPublishConfirmationDialog = ({
 }: PropTypes) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [calendarPopoverOpen, setCalendarPopoverOpen] = useState(false);
-  
+
   const DEFAULT_TIME = new Date(new Date().setHours(0, 0, 0, 0));
 
   return (

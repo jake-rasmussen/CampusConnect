@@ -10,26 +10,26 @@ import {
 
 import SocialMediaCardEditor from "./socialMediaCardEditor";
 
-import type { ClubSocialMedia } from "@prisma/client";
+import type { SocialMedia } from "@prisma/client";
 
 type PropType = {
-  clubSocialMedia: ClubSocialMedia;
+  socialMedia: SocialMedia;
   editable: boolean;
 };
 
 const SocialMediaCard = (props: PropType) => {
-  const { clubSocialMedia, editable } = props;
+  const { socialMedia, editable } = props;
 
   const iconClassName =
     "w-full h-full text-secondary transition duration-300 ease-in-out hover:text-primary";
   const icon: JSX.Element =
-    clubSocialMedia.platform === SocialMediaPlatformType.FACEBOOK ? (
+    socialMedia.platform === SocialMediaPlatformType.FACEBOOK ? (
       <BrandFacebook className={iconClassName} />
-    ) : clubSocialMedia.platform === SocialMediaPlatformType.INSTAGRAM ? (
+    ) : socialMedia.platform === SocialMediaPlatformType.INSTAGRAM ? (
       <BrandInstagram className={iconClassName} />
-    ) : clubSocialMedia.platform === SocialMediaPlatformType.LINKEDIN ? (
+    ) : socialMedia.platform === SocialMediaPlatformType.LINKEDIN ? (
       <BrandLinkedin className={iconClassName} />
-    ) : clubSocialMedia.platform === SocialMediaPlatformType.TWITTER ? (
+    ) : socialMedia.platform === SocialMediaPlatformType.TWITTER ? (
       <BrandTwitter className={iconClassName} />
     ) : (
       <WorldWww className={iconClassName} />
@@ -38,15 +38,15 @@ const SocialMediaCard = (props: PropType) => {
   return (
     <>
       <div className="relative h-16 w-16">
-        <Link className="h-full w-full" href={clubSocialMedia.url}>
+        <Link className="h-full w-full" href={socialMedia.url}>
           {icon}
         </Link>
 
         {editable && (
           <SocialMediaCardEditor
-            url={clubSocialMedia.url}
-            platform={clubSocialMedia.platform}
-            socialMediaId={clubSocialMedia.id}
+            url={socialMedia.url}
+            platform={socialMedia.platform}
+            socialMediaId={socialMedia.id}
           />
         )}
       </div>

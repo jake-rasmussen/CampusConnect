@@ -4,12 +4,13 @@ import { Checkbox } from "./shadcn_ui/checkbox";
 
 type PropType = {
   answerChoices: string[];
-  savedAnswers: string[];
+  value: string[];
+  defaultValue?: string[];
   onChange(values: string[]): void;
 };
 
 const Checklist = (props: PropType) => {
-  const { answerChoices, savedAnswers, onChange } = props;
+  const { answerChoices, defaultValue, onChange } = props;
 
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
 
@@ -36,7 +37,9 @@ const Checklist = (props: PropType) => {
                   setSelectedAnswers(updatedAnswers);
                   onChange(updatedAnswers);
                 }}
-                defaultChecked={savedAnswers.includes(answerChoice)}
+                defaultChecked={
+                  defaultValue && defaultValue.includes(answerChoice)
+                }
               />
               <label
                 htmlFor={`${answerChoice}${index}`}

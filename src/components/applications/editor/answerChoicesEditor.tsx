@@ -1,88 +1,66 @@
-import {
-  ClubApplicationQuestion,
-  ClubApplicationQuestionType,
-} from "@prisma/client";
-import { Dispatch, SetStateAction } from "react";
+import { ApplicationQuestion, ApplicationQuestionType } from "@prisma/client";
 import { Circle, SquarePlus, X } from "tabler-icons-react";
 
 import { Input } from "~/components/shadcn_ui/input";
 
 type PropType = {
-  question: ClubApplicationQuestion;
+  question: ApplicationQuestion;
   questionIndex: number;
-  updateQuestionsState: (
+  updateQuestions: (
     field: string,
-    value: boolean | string | string[] | ClubApplicationQuestionType,
+    value: boolean | string | string[] | ApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestion,
+    question: ApplicationQuestion,
   ) => void;
 };
 
 const AnswerChoicesEditor = (props: PropType) => {
-  const { question, questionIndex, updateQuestionsState } = props;
+  const { question, questionIndex, updateQuestions } = props;
 
   const createAnswerChoice = () => {
-    const newClubApplicationAnswerChoices: string[] =
-      question.clubApplicationAnswerChoices.concat([""]);
-    updateQuestionsState(
-      "clubApplicationAnswerChoices",
-      newClubApplicationAnswerChoices,
-      questionIndex,
-      question,
-    );
+    const newAnswerChoices: string[] = question.answerChoices.concat([""]);
+    updateQuestions("answerChoices", newAnswerChoices, questionIndex, question);
   };
 
   const deleteAnswerChoice = (answerChoiceIndex: number) => {
-    const newAnswerChocies = question.clubApplicationAnswerChoices;
+    const newAnswerChocies = question.answerChoices;
     newAnswerChocies.splice(answerChoiceIndex, 1);
 
-    updateQuestionsState(
-      "clubApplicationAnswerChoices",
-      newAnswerChocies,
-      questionIndex,
-      question,
-    );
+    updateQuestions("answerChoices", newAnswerChocies, questionIndex, question);
   };
 
   const updateAnswerChoice = (answerChoiceIndex: number, value: string) => {
-    const newAnswerChocies = question.clubApplicationAnswerChoices;
+    const newAnswerChocies = question.answerChoices;
     newAnswerChocies[answerChoiceIndex] = value;
-    updateQuestionsState(
-      "clubApplicationAnswerChoices",
-      newAnswerChocies,
-      questionIndex,
-      question,
-    );
+    updateQuestions("answerChoices", newAnswerChocies, questionIndex, question);
   };
 
   return (
     <section className="my-4">
       <div className="flex flex-col gap-y-2">
-        {question.clubApplicationAnswerChoices &&
-          question.clubApplicationAnswerChoices.map(
-            (answerChoice: string, index: number) => (
-              <div
-                className="flex flex-row items-center"
-                key={`answerChoice${answerChoice}${index}`}
+        {question.answerChoices &&
+          question.answerChoices.map((answerChoice: string, index: number) => (
+            <div
+              className="flex flex-row items-center"
+              key={`answerChoice${answerChoice}${index}`}
+            >
+              <Circle className="mr-2 h-2 w-2 rounded-full bg-white/10 text-white backdrop-invert" />
+              <Input
+                className="h-[3rem] max-w-lg"
+                placeholder={"Answer Choice"}
+                defaultValue={answerChoice}
+                onBlur={(e) => {
+                  updateAnswerChoice(index, e.currentTarget.value);
+                }}
+              />
+              <button
+                className="flex items-end justify-end"
+                onClick={() => deleteAnswerChoice(index)}
               >
-                <Circle className="mr-2 h-2 w-2 rounded-full bg-white/10 text-white backdrop-invert" />
-                <Input
-                  className="h-[3rem] max-w-lg"
-                  placeholder={"Answer Choice"}
-                  defaultValue={answerChoice}
-                  onBlur={(e) => {
-                    updateAnswerChoice(index, e.currentTarget.value);
-                  }}
-                />
-                <button
-                  className="flex items-end justify-end"
-                  onClick={() => deleteAnswerChoice(index)}
-                >
-                  <X className="h-[2rem] w-auto text-white transition duration-500 ease-in-out hover:rotate-90 hover:scale-110 hover:text-red-600" />
-                </button>
-              </div>
-            ),
-          )}
+                <X className="h-[2rem] w-auto text-white transition duration-500 ease-in-out hover:rotate-90 hover:scale-110 hover:text-red-600" />
+              </button>
+            </div>
+          ))}
         <div>
           <button
             className="group flex shrink flex-row items-center"

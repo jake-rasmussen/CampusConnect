@@ -8,32 +8,33 @@ import ContactForm from "./contactForm";
 import type { ContactFormType } from "./contactForm";
 
 type PropType = {
-  clubId: string;
+  projectId: string;
 };
 
 const ContactsEditor = (props: PropType) => {
-  const { clubId } = props;
+  const { projectId } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
-  const createContactInfo =
-    api.clubContactInfoRouter.createClubContactInfo.useMutation({
+  const createContactInfo = api.contactInfoRouter.createContactInfo.useMutation(
+    {
       onSuccess() {
         toast.dismiss();
-        toast.success("Successfully Created the Club Contact Info!");
+        toast.success("Successfully Created the Contact Info!");
         queryClient.invalidate().catch((e) => console.log(e));
       },
       onError() {
         toast.dismiss();
         toast.error("Error...");
       },
-    });
+    },
+  );
 
   const handleSubmit = (values: ContactFormType) => {
     createContactInfo.mutate({
-      clubId,
+      projectId,
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,

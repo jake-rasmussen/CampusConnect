@@ -72,7 +72,7 @@ const EditController = (props: PropType) => {
         </DialogTrigger>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Club Editor</DialogTitle>
+            <DialogTitle>Editor</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
           <DialogPrimitive.Close

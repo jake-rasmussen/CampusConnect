@@ -24,7 +24,7 @@ const ContactCardEditor = (props: PropType) => {
   const queryClient = api.useContext();
 
   const updateContactInfo =
-    api.clubContactInfoRouter.updateClubContactInfoById.useMutation({
+    api.contactInfoRouter.updateContactInfoById.useMutation({
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Updated Contact!");
@@ -37,7 +37,7 @@ const ContactCardEditor = (props: PropType) => {
     });
 
   const deleteContactInfo =
-    api.clubContactInfoRouter.deleteClubContactInfoById.useMutation({
+    api.contactInfoRouter.deleteContactInfoById.useMutation({
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Deleted Contact Info!");

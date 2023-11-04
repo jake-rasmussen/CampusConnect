@@ -1,38 +1,38 @@
 import "@prisma/client";
 
 import Applications from "./dashboard/applications/applications";
-import Events from "./dashboard/clubEvents/events";
-import Contact from "./dashboard/contact/contact";
-import Description from "./dashboard/description/description";
+import ContactSection from "./dashboard/contact/contactSection";
+import DescriptionSection from "./dashboard/description/descriptionSection";
+import Events from "./dashboard/events/events";
 import Header from "./dashboard/header/header";
 import Members from "./dashboard/members/members";
-import SocialMedia from "./dashboard/socialMedia/socialMedia";
+import SocialMediaSection from "./dashboard/socialMedia/socialMediaSection";
 import Tab from "./tab/tab";
 import TabContent from "./tab/tabContent";
 import TabHeader from "./tab/tabHeader";
 import TabList from "./tab/tabList";
 
 import type {
-  ClubApplication,
-  ClubApplicationQuestion,
-  ClubContactInfo,
-  ClubEvent,
-  ClubMember,
-  ClubSocialMedia,
+  Application,
+  ApplicationQuestion,
+  ContactInfo,
+  Event,
+  Member,
+  SocialMedia,
   User,
 } from "@prisma/client";
 
 type PropType = {
   name: string;
-  clubId: string;
+  projectId: string;
   description: string;
-  events: ClubEvent[];
-  contactInfos: ClubContactInfo[];
-  applications: (ClubApplication & {
-    questions: ClubApplicationQuestion[];
+  events: Event[];
+  contactInfos: ContactInfo[];
+  applications: (Application & {
+    questions: ApplicationQuestion[];
   })[];
-  socialMedias: ClubSocialMedia[];
-  members: (ClubMember & {
+  socialMedias: SocialMedia[];
+  members: (Member & {
     user: User;
   })[];
   isAdminPage: boolean;
@@ -41,7 +41,7 @@ type PropType = {
 const DashboardPage = (props: PropType) => {
   const {
     name,
-    clubId,
+    projectId,
     description,
     events,
     contactInfos,
@@ -64,19 +64,19 @@ const DashboardPage = (props: PropType) => {
           </TabList>
           <TabContent>
             <div className="mx-10 flex flex-col items-center justify-center gap-10">
-              <Description
-                clubId={clubId}
-                clubDescription={description}
+              <DescriptionSection
+                projectId={projectId}
+                projectDescription={description}
                 editable={isAdminPage}
               />
-              <Contact
+              <ContactSection
                 contactInfos={contactInfos}
-                clubId={clubId}
+                projectId={projectId}
                 editable={isAdminPage}
               />
-              <SocialMedia
+              <SocialMediaSection
                 socialMedias={socialMedias}
-                clubId={clubId}
+                projectId={projectId}
                 editable={isAdminPage}
               />
             </div>
@@ -84,14 +84,14 @@ const DashboardPage = (props: PropType) => {
           <TabContent>
             <Applications
               applications={applications}
-              clubId={clubId}
+              projectId={projectId}
               editable={isAdminPage}
             />
           </TabContent>
           {isAdminPage ? (
             <TabContent>
               <Members
-                clubId={clubId}
+                projectId={projectId}
                 members={members}
                 editable={isAdminPage}
               />
@@ -100,7 +100,7 @@ const DashboardPage = (props: PropType) => {
             <></>
           )}
         </Tab>
-        <Events events={events} clubId={clubId} editable={isAdminPage} />
+        <Events events={events} projectId={projectId} editable={isAdminPage} />
       </main>
     </>
   );
