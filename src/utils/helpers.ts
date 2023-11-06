@@ -48,7 +48,7 @@ export const randomNumberBetweenInclusive = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-export const clubApplicationMemberTypeToString = (type: string) => {
+export const applicationMemberTypeToString = (type: string) => {
   const arr = type.toLowerCase().split("_");
   let str = "";
 

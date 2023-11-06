@@ -1,14 +1,22 @@
+import { ChangeEvent, useEffect, useState } from "react";
+
 import { Label } from "./shadcn_ui/label";
 import { RadioGroup, RadioGroupItem } from "./shadcn_ui/radio-group";
 
 type PropType = {
   answerChoices: string[];
-  savedAnswer: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange: (e: string) => void;
 };
 
 const MultipleChoice = (props: PropType) => {
-  const { answerChoices, savedAnswer, onChange } = props;
+  const { answerChoices, value, onChange } = props;
+
+  const [selectedAnswer, setSelectedAnswer] = useState<string>();
+
+  useEffect(() => {
+    setSelectedAnswer(value);
+  }, [value]);
 
   return (
     <>
@@ -23,9 +31,11 @@ const MultipleChoice = (props: PropType) => {
                 value={answerChoice}
                 id={`${answerChoice}${index}`}
                 onClick={() => {
+                  setSelectedAnswer(answerChoice);
                   onChange(answerChoice);
                 }}
-                checked={savedAnswer === answerChoice}
+                defaultChecked={selectedAnswer === answerChoice}
+                checked={selectedAnswer === answerChoice}
                 className="bg-white text-primary"
               />
               <Label htmlFor={`${answerChoice}${index}`}>{answerChoice}</Label>

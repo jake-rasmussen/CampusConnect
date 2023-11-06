@@ -23,22 +23,22 @@ import { api } from "~/utils/api";
 import MemberOutline from "./memberOutline";
 import Search from "./search";
 
-import type { ClubMember, ClubMemberType, User } from "@prisma/client";
+import type { Member, ProjectMemberType, User } from "@prisma/client";
 
 type PropType = {
-  clubId: string;
-  members: (ClubMember & {
+  projectId: string;
+  members: (Member & {
     user: User;
   })[];
   editable: boolean;
 };
 
 const Members = (props: PropType) => {
-  const { clubId, members, editable } = props;
+  const { projectId, members, editable } = props;
 
   const queryClient = api.useContext();
 
-  const deleteMember = api.clubMemberRouter.deleteClubMember.useMutation({
+  const deleteMember = api.memberRouter.deleteMember.useMutation({
     onSuccess() {
       toast.dismiss();
       toast.success("Successfully Deleted Member");
@@ -46,7 +46,7 @@ const Members = (props: PropType) => {
     },
   });
 
-  const updateMember = api.clubMemberRouter.updateClubMember.useMutation({
+  const updateMember = api.memberRouter.updateMember.useMutation({
     onSuccess() {
       toast.dismiss();
       toast.success("Successfully Updated Member");
@@ -57,13 +57,13 @@ const Members = (props: PropType) => {
   const handleDeleteMember = (userId: string) => {
     deleteMember.mutate({
       userId,
-      clubId,
+      projectId,
     });
   };
 
-  const handleUpdateMemberType = (userId: string, type: "ADMIN" | "GRADER") => {
+  const handleUpdateMemberType = (userId: string, type: ProjectMemberType) => {
     updateMember.mutate({
-      clubId,
+      projectId,
       userId,
       type,
     });
@@ -71,7 +71,7 @@ const Members = (props: PropType) => {
 
   return (
     <MemberOutline
-      search={<Search clubId={clubId} members={members} />}
+      search={<Search projectId={projectId} members={members} />}
       displaySearch={editable}
     >
       <>
@@ -93,7 +93,7 @@ const Members = (props: PropType) => {
               </TableHeader>
               <TableBody>
                 {members.map(
-                  (member: ClubMember & { user: User }, index: number) => (
+                  (member: Member & { user: User }, index: number) => (
                     <TableRow key={`member${index}`} className="border-b">
                       <TableCell className="font-medium">
                         {member.user.firstName} {member.user.lastName}
@@ -106,7 +106,7 @@ const Members = (props: PropType) => {
                           <div className="h-full w-32">
                             <Select // TODO: create confirmation modal
                               defaultValue={member.type}
-                              onValueChange={(input: ClubMemberType) => {
+                              onValueChange={(input: ProjectMemberType) => {
                                 handleUpdateMemberType(member.userId, input);
                               }}
                             >
@@ -115,7 +115,9 @@ const Members = (props: PropType) => {
                               </SelectTrigger>
                               <SelectContent className="bg-white">
                                 <SelectItem value="ADMIN">Admin</SelectItem>
-                                <SelectItem value="GRADER">Grader</SelectItem>
+                                <SelectItem value="EVALUATOR">
+                                  Evaluator
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           </div>

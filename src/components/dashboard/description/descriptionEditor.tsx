@@ -14,22 +14,22 @@ type EditorFormType = {
 };
 
 type PropType = {
-  clubDescription: string;
-  clubId: string;
+  projectDescription: string;
+  projectId: string;
 };
 
 const DescriptionEditor = (props: PropType) => {
-  const { clubDescription, clubId } = props;
+  const { projectDescription, projectId } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
   const updateDescription =
-    api.clubRouter.updateDescriptionByClubId.useMutation({
+    api.projectRouter.updateDescriptionByProjectId.useMutation({
       onSuccess() {
         toast.dismiss();
-        toast.success("Successfully Updated Club Description!");
+        toast.success("Successfully Updated Description!");
         queryClient.invalidate().catch((e) => console.log(e));
       },
       onError() {
@@ -40,7 +40,7 @@ const DescriptionEditor = (props: PropType) => {
 
   return (
     <EditController
-      dialogDescription={"Update the Club Description"}
+      dialogDescription={"Update the Description"}
       editType="update"
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
@@ -49,7 +49,7 @@ const DescriptionEditor = (props: PropType) => {
         onSubmit={(values) => {
           const { description } = values;
           updateDescription.mutate({
-            clubId,
+            projectId: projectId,
             description: description,
           });
           setOpenDialog(false);
@@ -59,7 +59,7 @@ const DescriptionEditor = (props: PropType) => {
           <main className="gap-4">
             <Field
               name="description"
-              initialValue={clubDescription}
+              initialValue={projectDescription}
               onBlurValidate={z.string().min(1, "Enter a description")}
             >
               {({ value, setValue, onBlur, isValid, errors }) => (

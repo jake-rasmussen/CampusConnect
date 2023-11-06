@@ -1,35 +1,35 @@
-import { ClubApplicationSubmissionStatus } from "@prisma/client";
+import { ApplicationSubmissionStatus } from "@prisma/client";
 import Error from "next/error";
 import { useEffect, useState } from "react";
 
-import LoadingPage from "~/components/loadingPage";
+import LoadingSection from "~/components/loadingSection";
 import { api } from "~/utils/api";
 import ApplicationCard from "./applicationCard";
 import ApplicationCreator from "./applicationCreator";
 import ApplicationsOutline from "./applicationsOutline";
 
-import type { ClubApplication, ClubApplicationQuestion } from "@prisma/client";
+import type { Application, ApplicationQuestion } from "@prisma/client";
 
 type PropType = {
-  applications: (ClubApplication & {
-    questions: ClubApplicationQuestion[];
+  applications: (Application & {
+    questions: ApplicationQuestion[];
   })[];
-  clubId: string;
+  projectId: string;
   editable: boolean;
 };
 
 const Applications = (props: PropType) => {
-  const { applications, clubId, editable } = props;
+  const { applications, projectId, editable } = props;
 
   const {
     data: userApplicationSubmissions,
     isLoading,
     isError,
     error,
-  } = api.clubApplicationSubmissionRouter.getClubApplicationSubmissionsForUser.useQuery();
+  } = api.applicationSubmissionRouter.getApplicationSubmissionsForUser.useQuery();
 
   if (isLoading) {
-    return <LoadingPage />;
+    return <LoadingSection />;
   } else if (isError) {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else {
@@ -38,34 +38,34 @@ const Applications = (props: PropType) => {
         <ApplicationsOutline>
           <>
             {applications.map(
-              (clubApplication: ClubApplication & {
-                questions: ClubApplicationQuestion[];
-              }, index: number) => {
-                const targetClubApplication = userApplicationSubmissions.find(
-                  (clubApplicationSubmission) =>
-                    clubApplicationSubmission.clubApplicationId ===
-                    clubApplication.id,
+              (
+                application: Application & {
+                  questions: ApplicationQuestion[];
+                },
+                index: number,
+              ) => {
+                const savedApplication = userApplicationSubmissions.find(
+                  (applicationSubmission) =>
+                    applicationSubmission.applicationId === application.id,
                 );
-                if (targetClubApplication) {
+                if (savedApplication) {
                   return (
                     <ApplicationCard
-                      clubApplication={clubApplication}
-                      clubId={clubId}
+                      application={application}
+                      projectId={projectId}
                       editable={editable}
-                      status={
-                        targetClubApplication.clubApplicationSubmissionStatus
-                      }
-                      key={`clubApplication${index}`}
+                      status={savedApplication.applicationSubmissionStatus}
+                      key={`application${index}`}
                     />
                   );
                 } else {
                   return (
                     <ApplicationCard
-                      clubApplication={clubApplication}
-                      clubId={clubId}
+                      application={application}
+                      projectId={projectId}
                       editable={editable}
-                      status={ClubApplicationSubmissionStatus.NEW}
-                      key={`clubApplication${index}`}
+                      status={ApplicationSubmissionStatus.NEW}
+                      key={`application${index}`}
                     />
                   );
                 }
@@ -73,7 +73,7 @@ const Applications = (props: PropType) => {
             )}
           </>
         </ApplicationsOutline>
-        {editable && <ApplicationCreator clubId={clubId} />}
+        {editable && <ApplicationCreator projectId={projectId} />}
       </section>
     );
   }

@@ -14,7 +14,7 @@ import ErrorMessage from "../errorMessage";
 import type { FieldInstance } from "houseform";
 
 type Props = {
-  clubId: string;
+  projectId: string;
 };
 
 type ApplicationFormType = {
@@ -22,26 +22,20 @@ type ApplicationFormType = {
   description: string;
 };
 
-const ApplicationCreator = ({ clubId }: Props) => {
+const ApplicationCreator = ({ projectId }: Props) => {
   const [openDialog, setOpenDialog] = useState(false);
-  const createApplication =
-    api.clubApplicationRouter.createClubApplication.useMutation({
-      onSuccess(clubApplication) {
-        toast.dismiss();
-        toast.success("Successfully Created the Club Application!");
-        // toast.loading("Redirecting to application...");
 
-        setTimeout(() => {
-          void router.push(
-            `/member/application/application/${clubApplication.id}/edit`,
-          );
-        }, 1000);
+  const createApplication = api.applicationRouter.createApplication.useMutation(
+    {
+      onSuccess(application) {
+        router.push(`/admin/${projectId}/application/${application.id}`);
       },
       onError() {
         toast.dismiss();
         toast.error("Error...");
       },
-    });
+    },
+  );
 
   return (
     <EditController
@@ -55,7 +49,7 @@ const ApplicationCreator = ({ clubId }: Props) => {
           if (isValid) {
             const { name, description } = values;
             createApplication.mutate({
-              clubId,
+              projectId,
               name,
               description,
             });

@@ -129,7 +129,7 @@ const TimePicker = (props: PropType) => {
             }}
             value={meridiem}
           >
-            <SelectTrigger className="h-full w-full rounded-xl bg-white">
+            <SelectTrigger className="h-[3rem] w-full rounded-xl bg-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-white">

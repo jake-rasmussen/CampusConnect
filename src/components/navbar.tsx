@@ -13,9 +13,9 @@ const Navbar = () => {
             <Affiliate className="h-full w-full text-primary" />
           </Link>
           <ul className="hidden grow items-stretch space-x-3 lg:flex">
-            <Link href="/club" className="flex items-center p-2">
+            <Link href="/project" className="flex items-center p-2">
               <h1 className="tracking-none text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
-                All Clubs
+                All Projects
               </h1>
             </Link>
             <Separator orientation="vertical" className="bg-secondary" />
@@ -25,9 +25,9 @@ const Navbar = () => {
               </h1>
             </Link>
             <Separator orientation="vertical" className="bg-secondary" />
-            <Link href="/member" className="flex items-center p-2">
+            <Link href="/admin" className="flex items-center p-2">
               <h1 className="tracking-none text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
-                My Clubs
+                My Projects
               </h1>
             </Link>
           </ul>

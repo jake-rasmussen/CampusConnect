@@ -28,6 +28,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs"
-, ".prettierrc.cjs", "src/pages/club/[clubId]"  ],
+, ".prettierrc.cjs", "src/pages/project/[projectId]"  ],
   "exclude": ["node_modules"]
 }

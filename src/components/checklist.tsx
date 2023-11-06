@@ -1,17 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Checkbox } from "./shadcn_ui/checkbox";
 
 type PropType = {
   answerChoices: string[];
-  savedAnswers: string[];
+  value?: string[];
   onChange(values: string[]): void;
 };
 
 const Checklist = (props: PropType) => {
-  const { answerChoices, savedAnswers, onChange } = props;
+  const { answerChoices, value, onChange } = props;
+
+  console.log(value);
 
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (value) setSelectedAnswers(value);
+  }, [value]);
 
   return (
     <>
@@ -36,7 +42,7 @@ const Checklist = (props: PropType) => {
                   setSelectedAnswers(updatedAnswers);
                   onChange(updatedAnswers);
                 }}
-                defaultChecked={savedAnswers.includes(answerChoice)}
+                checked={value && value.includes(answerChoice)}
               />
               <label
                 htmlFor={`${answerChoice}${index}`}

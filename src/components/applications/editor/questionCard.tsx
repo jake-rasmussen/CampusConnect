@@ -1,4 +1,4 @@
-import { ClubApplicationQuestionType } from "@prisma/client";
+import { ApplicationQuestionType } from "@prisma/client";
 import { DotsVertical, X } from "tabler-icons-react";
 
 import {
@@ -8,25 +8,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/shadcn_ui/select";
-import { clubApplicationMemberTypeToString } from "~/utils/helpers";
+import { applicationMemberTypeToString } from "~/utils/helpers";
 import { Input } from "../../shadcn_ui/input";
 
-import type { ClubApplicationQuestion } from "@prisma/client";
+import type { ApplicationQuestion } from "@prisma/client";
 
 type PropType = {
-  question: ClubApplicationQuestion;
+  question: ApplicationQuestion;
   index: number;
-  updateQuestionsState: (
+  updateQuestion: (
     field: string,
-    value: boolean | string | ClubApplicationQuestionType,
+    value: boolean | string | ApplicationQuestionType,
     index: number,
-    question: ClubApplicationQuestion,
+    question: ApplicationQuestion,
   ) => void;
   deleteQuestion: (index: number) => void;
 };
 
 const QuestionCard = (props: PropType) => {
-  const { question, index, updateQuestionsState, deleteQuestion } = props;
+  const { question, index, updateQuestion, deleteQuestion } = props;
 
   return (
     <section className="flex flex-row items-center gap-4">
@@ -40,12 +40,7 @@ const QuestionCard = (props: PropType) => {
           placeholder="Enter the Question"
           defaultValue={question.question}
           onBlur={(e) => {
-            updateQuestionsState(
-              "question",
-              e.currentTarget.value,
-              index,
-              question,
-            );
+            updateQuestion("question", e.currentTarget.value, index, question);
           }}
         />
       </div>
@@ -54,19 +49,19 @@ const QuestionCard = (props: PropType) => {
         <span className="font-semibold text-white">Type</span>
         <Select
           defaultValue={question.type}
-          onValueChange={(input: ClubApplicationQuestionType) => {
-            updateQuestionsState("type", input, index, question);
+          onValueChange={(input: ApplicationQuestionType) => {
+            updateQuestion("type", input, index, question);
           }}
         >
           <SelectTrigger className="col-span-3 h-[3rem] w-[10rem] rounded-xl bg-white">
             <SelectValue placeholder="" />
           </SelectTrigger>
           <SelectContent className="bg-white">
-            {Object.values(ClubApplicationQuestionType).map(
-              (type: ClubApplicationQuestionType, index: number) => {
+            {Object.values(ApplicationQuestionType).map(
+              (type: ApplicationQuestionType, index: number) => {
                 return (
                   <SelectItem value={type} key={`type${index}`}>
-                    {clubApplicationMemberTypeToString(type)}
+                    {applicationMemberTypeToString(type)}
                   </SelectItem>
                 );
               },
@@ -89,7 +84,7 @@ const QuestionCard = (props: PropType) => {
           }
           onValueChange={(input) => {
             const isRequired = input === "yes";
-            updateQuestionsState("required", isRequired, index, question);
+            updateQuestion("required", isRequired, index, question);
           }}
         >
           <SelectTrigger className="col-span-3 h-[3rem] w-[5rem] rounded-xl bg-white">
