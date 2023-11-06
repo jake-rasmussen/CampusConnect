@@ -6,10 +6,9 @@ import {
 import Error from "next/error";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-import ApplicationForm, {
-  ApplicationFormSubmissionAnswer,
-} from "~/components/applications/applicationForm";
+import ApplicationForm from "~/components/applications/applicationForm";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
@@ -21,6 +20,8 @@ const Apply: NextPageWithLayout = () => {
   const applicationId = router.query.applicationId as string;
 
   const [isSaving, setIsSaving] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
       applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
@@ -50,43 +51,66 @@ const Apply: NextPageWithLayout = () => {
   } = api.applicationSubmissionRouter.getApplicationSubmissionsForUser.useQuery();
 
   const upsertApplicationSubmission =
-    api.applicationSubmissionRouter.upsertApplicationSubmission.useMutation({});
+    api.applicationSubmissionRouter.upsertApplicationSubmission.useMutation({
+      onSuccess() {
+        if (isSubmitted) router.push(`/project/${projectId}`);
+      },
+      onError() {
+        setIsSaving(false);
+        setIsSubmitted(false);
+      }
+    });
 
   const createApplicationSubmissionAnswer =
     api.applicationSubmissionAnswerRouter.createApplicationSubmissionAnswer.useMutation(
-      {},
-    );
-  const deleteApplicationSubmissionAnswerChoices =
-    api.applicationSubmissionAnswerRouter.deleteAllApplicationSubmissionAnswersByApplicationSubmissionId.useMutation(
-      {},
+      {
+        onSuccess() {
+          setIsSaving(false);
+          if (!isSubmitted) {
+            toast.dismiss();
+            toast.success("Successfully Saved Application!");
+          }
+        },
+        onError() {
+          setIsSaving(false);
+          setIsSubmitted(false);
+
+          toast.dismiss();
+          toast.error("Error...");
+        },
+      },
     );
 
+  const deleteApplicationSubmissionAnswerChoices =
+    api.applicationSubmissionAnswerRouter.deleteAllApplicationSubmissionAnswersByApplicationSubmissionId.useMutation();
+
   const handleSaveAnswers = async (
-    answers: any,
+    answers: ApplicationSubmissionAnswer[],
+    submit?: boolean,
   ) => {
-    if (applicationId) {
-      setIsSaving(true); // && !isSaving
+    if (submit) setIsSubmitted(true);
+
+    if (applicationId && !isSaving) {
+      setIsSaving(true);
       const applicationSubmission =
         await upsertApplicationSubmission.mutateAsync({
           applicationSubmissionId: savedSubmission?.id,
           applicationId,
-          status: ApplicationSubmissionStatus.DRAFT,
+          status: submit ? ApplicationSubmissionStatus.SUBMITTED : ApplicationSubmissionStatus.DRAFT,
         });
 
       deleteApplicationSubmissionAnswerChoices.mutate({
         applicationSubmissionId: applicationSubmission.id,
       });
 
-      console.log(answers);
       if (answers) {
-        for (let [index, answer] of answers) {
-          console.log(answer);
+        answers.forEach((answer) => {
           createApplicationSubmissionAnswer.mutate({
             applicationSubmissionId: applicationSubmission.id,
             applicationQuestionId: answer.applicationQuestionId,
-            answer: answer.answer as (string | string[]),
+            answer: answer.answer as string | string[],
           });
-        }
+        });
       }
     }
   };
@@ -98,7 +122,6 @@ const Apply: NextPageWithLayout = () => {
           (submission) => submission.applicationId === application.id,
         ),
       );
-      // TODO: deal with answer ordering
     }
   }, [application, userSubmissions]);
 
@@ -124,6 +147,7 @@ const Apply: NextPageWithLayout = () => {
             name={application.name}
             description={application.description}
             questions={application.questions}
+            savedAnswers={savedSubmission?.applicationSubmissionAnswers}
             handleSaveAnswers={handleSaveAnswers}
           />
         </div>

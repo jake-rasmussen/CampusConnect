@@ -28,7 +28,7 @@ const ApplicationCreator = ({ projectId }: Props) => {
   const createApplication = api.applicationRouter.createApplication.useMutation(
     {
       onSuccess(application) {
-        router.push(`/admin/application/application/${application.id}/edit`);
+        router.push(`/admin/${projectId}/application/${application.id}`);
       },
       onError() {
         toast.dismiss();

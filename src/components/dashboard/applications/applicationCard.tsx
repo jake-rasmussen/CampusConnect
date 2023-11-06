@@ -62,7 +62,7 @@ const ApplicationCard = (props: PropType) => {
               <Link
                 href={`/admin/${projectId as string}/application/${
                   application.id
-                }/edit/`}
+                }`}
                 className="group flex h-full w-full items-center"
               >
                 <div className="absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10" />

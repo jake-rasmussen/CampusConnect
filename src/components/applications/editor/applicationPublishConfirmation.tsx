@@ -74,9 +74,9 @@ const ApplicationPublishConfirmationDialog = ({
         <DialogContent className="max-w-5xl">
           <DialogHeader>
             <DialogTitle>Publish this Application?</DialogTitle>
-            <DialogDescription className="text-md py-4 text-center">
+            <DialogDescription className="text-md py-4 text-red-500">
               Please note, publishing an application will make it available to
-              all user of Club Connect and cannot be undone. Editing will be
+              all users and cannot be undone. Editing will be
               disabled once published. Before you publish, make sure you have
               completed all the necessary changes and try previewing your
               application.
@@ -93,8 +93,8 @@ const ApplicationPublishConfirmationDialog = ({
               }}
             >
               {({ submit }) => (
-                <main className="flex flex-col items-center gap-4 py-4">
-                  <section className="mx-10 flex w-[50rem] flex-col gap-4">
+                <main className="flex flex-col items-center gap-4">
+                  <section className="mx-10 flex w-[50rem] flex-col gap-4 max-w-md">
                     <Field
                       name="date"
                       initialValue={new Date()}
@@ -178,6 +178,7 @@ const ApplicationPublishConfirmationDialog = ({
                     onClick={() => {
                       submit().catch((e) => console.error(e));
                     }}
+                    className="my-4"
                   >
                     Publish
                   </Button>

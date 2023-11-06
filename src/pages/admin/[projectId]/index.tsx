@@ -2,17 +2,17 @@ import Error from "next/error";
 import { useRouter } from "next/router";
 import React from "react";
 
-import ClubDashboardPage from "~/components/dashboardPage";
+import DashboardPage from "~/components/dashboardPage";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-const AdminClubDashboard = () => {
+const AdminDashboard = () => {
   const router = useRouter();
   const projectId = router.query.projectId as string;
   //TODO: all the data fields should be fetched seperately as opposed to in one big query to allow for better caching/invalidate
   const {
-    data: club,
+    data: project,
     isLoading,
     isError,
     error,
@@ -29,26 +29,26 @@ const AdminClubDashboard = () => {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else {
     return (
-      <ClubDashboardPage
-        name={club.name}
-        projectId={club.id}
-        description={club.description}
-        events={club.events}
-        contactInfos={club.contactInfo}
-        applications={club.applications}
-        socialMedias={club.socialMedia}
-        members={club.members}
+      <DashboardPage
+        name={project.name}
+        projectId={project.id}
+        description={project.description}
+        events={project.events}
+        contactInfos={project.contactInfo}
+        applications={project.applications}
+        socialMedias={project.socialMedia}
+        members={project.members}
         isAdminPage={true}
       />
     );
   }
 };
 
-AdminClubDashboard.getLayout = (
+AdminDashboard.getLayout = (
   page: React.ReactElement<any, string | React.JSXElementConstructor<any>>,
 ) => {
   //TODO: add admin layout
   return <UserLayout>{page}</UserLayout>;
 };
 
-export default AdminClubDashboard;
+export default AdminDashboard;

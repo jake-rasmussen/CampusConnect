@@ -18,7 +18,7 @@ export const applicationSubmissionAnswerRouter = createTRPCRouter({
         data: {
           applicationSubmissionId,
           applicationQuestionId,
-          answer,
+          answer: { answer },
         },
       });
     }),

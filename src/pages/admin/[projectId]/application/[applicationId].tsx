@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 
 import ApplicationEditForm from "~/components/applications/editor/applicationEditForm";
-import { ConfirmationFormType } from "~/components/applications/editor/ApplicationPublishConfirmationDialog";
+import { ConfirmationFormType } from "~/components/applications/editor/applicationPublishConfirmation";
 import HeaderOutline from "~/components/dashboard/header/headerOutline";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
@@ -52,7 +52,7 @@ const EditApplication = () => {
       onSuccess() {
         toast.success("Application published!");
         queryClient.invalidate();
-        router.push(`/admin/${projectId as string}/`);
+        router.push(`/admin/${projectId}/`);
       },
     });
 
