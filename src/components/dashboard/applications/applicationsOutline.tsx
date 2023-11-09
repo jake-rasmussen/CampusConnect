@@ -6,7 +6,7 @@ const ApplicationsOutline = ({
   return (
     <>
       <div className="flex flex-wrap justify-center">
-        <div className="flex flex-wrap justify-center">{children}</div>
+        <div className="flex flex-wrap justify-center max-w-4xl">{children}</div>
       </div>
     </>
   );

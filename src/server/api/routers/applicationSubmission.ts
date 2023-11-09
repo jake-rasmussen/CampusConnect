@@ -63,6 +63,11 @@ export const applicationSubmissionRouter = createTRPCRouter({
           userId,
         },
         include: {
+          application: {
+            include: {
+              questions: true,
+            },
+          },
           applicationSubmissionAnswers: true,
         },
       });

@@ -44,7 +44,6 @@ type ApplicationForm = {
 
 const ApplicationForm = (props: PropType) => {
   const {
-    projectId,
     applicationId,
     name,
     description,
@@ -196,7 +195,7 @@ const ApplicationForm = (props: PropType) => {
                         Array.from(
                           answersMap.values(),
                         ) as ApplicationSubmissionAnswer[],
-                      )
+                      );
                     }
                   }}
                 >

@@ -24,8 +24,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-    })
+        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+      })
     | undefined
   >();
 
@@ -58,7 +58,7 @@ const Apply: NextPageWithLayout = () => {
       onError() {
         setIsSaving(false);
         setIsSubmitted(false);
-      }
+      },
     });
 
   const createApplicationSubmissionAnswer =
@@ -96,7 +96,9 @@ const Apply: NextPageWithLayout = () => {
         await upsertApplicationSubmission.mutateAsync({
           applicationSubmissionId: savedSubmission?.id,
           applicationId,
-          status: submit ? ApplicationSubmissionStatus.SUBMITTED : ApplicationSubmissionStatus.DRAFT,
+          status: submit
+            ? ApplicationSubmissionStatus.SUBMITTED
+            : ApplicationSubmissionStatus.DRAFT,
         });
 
       deleteApplicationSubmissionAnswerChoices.mutate({

@@ -22,7 +22,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../shadcn_ui/card";
+} from "../../components/shadcn_ui/card";
 
 type PropType = {
   application: Application & {
@@ -30,19 +30,18 @@ type PropType = {
   };
   projectId: string;
   editable: boolean;
-  previewable?: boolean;
-  savedAnswers?: ApplicationSubmissionAnswer[];
   status: ApplicationSubmissionStatus;
 };
 
 const ApplicationCard = (props: PropType) => {
-  const { application, editable, status, savedAnswers, previewable, projectId } = props;
+  const { application, editable, status } = props;
+
   const router = useRouter();
-  
+
   const displayEditComponent =
     editable && application.status === ApplicationStatus.DRAFT;
   const displayPreviewComponent =
-    (editable && application.status !== ApplicationStatus.DRAFT) || previewable;
+    editable && application.status !== ApplicationStatus.DRAFT;
 
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
 
@@ -62,7 +61,7 @@ const ApplicationCard = (props: PropType) => {
           {displayEditComponent && (
             <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
               <Link
-                href={`/admin/${projectId as string}/application/${
+                href={`/admin/${application.projectId as string}/application/${
                   application.id
                 }`}
                 className="group flex h-full w-full items-center"
@@ -87,10 +86,9 @@ const ApplicationCard = (props: PropType) => {
               setOpenDialog={setOpenPreviewDialog}
             >
               <ApplicationForm
-                projectId={projectId as string}
+                projectId={application.projectId as string}
                 applicationId={application.id}
                 questions={application.questions}
-                savedAnswers={savedAnswers}
                 readonly
                 name={""}
                 description={""}
@@ -121,7 +119,9 @@ const ApplicationCard = (props: PropType) => {
               <button
                 className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
                 onClick={() =>
-                  router.push(`/project/${projectId}/apply/${application.id}`)
+                  router.push(
+                    `/project/${application.projectId}/apply/${application.id}`,
+                  )
                 }
               >
                 Apply <ArrowRight className="mx-1 h-full" />
@@ -131,7 +131,9 @@ const ApplicationCard = (props: PropType) => {
               <button
                 className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
                 onClick={() =>
-                  router.push(`/project/${projectId}/apply/${application.id}`)
+                  router.push(
+                    `/project/${application.projectId}/apply/${application.id}`,
+                  )
                 }
               >
                 Continue <ArrowRight className="mx-1 h-full" />

@@ -41,6 +41,7 @@ const ApplicationCreator = ({ projectId }: Props) => {
     <EditController
       dialogDescription={"Create a new application"}
       editType={"create"}
+      createDescription={"Create new application"}
       openDialog={openDialog}
       setOpenDialog={setOpenDialog}
     >
