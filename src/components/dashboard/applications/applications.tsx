@@ -1,6 +1,5 @@
 import { ApplicationSubmissionStatus } from "@prisma/client";
 import Error from "next/error";
-import { useEffect, useState } from "react";
 
 import LoadingSection from "~/components/loadingSection";
 import { api } from "~/utils/api";

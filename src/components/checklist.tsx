@@ -11,8 +11,6 @@ type PropType = {
 const Checklist = (props: PropType) => {
   const { answerChoices, value, onChange } = props;
 
-  console.log(value);
-
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
 
   useEffect(() => {

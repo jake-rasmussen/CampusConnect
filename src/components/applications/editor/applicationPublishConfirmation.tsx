@@ -76,10 +76,9 @@ const ApplicationPublishConfirmationDialog = ({
             <DialogTitle>Publish this Application?</DialogTitle>
             <DialogDescription className="text-md py-4 text-red-500">
               Please note, publishing an application will make it available to
-              all users and cannot be undone. Editing will be
-              disabled once published. Before you publish, make sure you have
-              completed all the necessary changes and try previewing your
-              application.
+              all users and cannot be undone. Editing will be disabled once
+              published. Before you publish, make sure you have completed all
+              the necessary changes and try previewing your application.
             </DialogDescription>
           </DialogHeader>
           <DialogPrimitive.Close className="focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none">
@@ -94,7 +93,7 @@ const ApplicationPublishConfirmationDialog = ({
             >
               {({ submit }) => (
                 <main className="flex flex-col items-center gap-4">
-                  <section className="mx-10 flex w-[50rem] flex-col gap-4 max-w-md">
+                  <section className="mx-10 flex w-[50rem] max-w-md flex-col gap-4">
                     <Field
                       name="date"
                       initialValue={new Date()}
