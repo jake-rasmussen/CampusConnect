@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 
 import ApplicationEditForm from "~/components/applications/editor/applicationEditForm";
-import { ConfirmationFormType } from "~/components/applications/editor/applicationPublishConfirmation";
+import { ConfirmationFormType } from "~/components/applications/editor/applicationPublishConfirmationDialog";
 import HeaderOutline from "~/components/dashboard/header/headerOutline";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";

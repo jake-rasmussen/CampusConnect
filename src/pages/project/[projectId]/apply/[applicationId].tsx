@@ -101,13 +101,13 @@ const Apply: NextPageWithLayout = () => {
             : ApplicationSubmissionStatus.DRAFT,
         });
 
-      deleteApplicationSubmissionAnswerChoices.mutate({
+      await deleteApplicationSubmissionAnswerChoices.mutateAsync({
         applicationSubmissionId: applicationSubmission.id,
       });
 
       if (answers) {
-        answers.forEach((answer) => {
-          createApplicationSubmissionAnswer.mutate({
+        answers.forEach(async (answer) => {
+          await createApplicationSubmissionAnswer.mutateAsync({
             applicationSubmissionId: applicationSubmission.id,
             applicationQuestionId: answer.applicationQuestionId,
             answer: answer.answer as string | string[],

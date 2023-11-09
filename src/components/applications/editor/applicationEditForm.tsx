@@ -11,7 +11,7 @@ import ApplicationForm from "../applicationForm";
 import ApplicationPreviewDialog from "./applicationPreviewDialog";
 import ApplicationPublishConfirmationDialog, {
   ConfirmationFormType,
-} from "./applicationPublishConfirmation";
+} from "./applicationPublishConfirmationDialog";
 import QuestionsEditor from "./questionsEditor";
 
 type ApplicationFormType = {

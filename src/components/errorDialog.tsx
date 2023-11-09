@@ -24,7 +24,7 @@ const ErrorDialog = (props: PropType) => {
 
   return (
     <>
-      <Dialog open={openDialog}>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Error</DialogTitle>
