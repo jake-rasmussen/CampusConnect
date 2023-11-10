@@ -8,7 +8,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { Check, Edit, Eye } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
@@ -102,6 +102,7 @@ const ApplicationCard = (props: PropType) => {
                 applicationId={application.id}
                 questions={application.questions}
                 savedAnswers={savedAnswers}
+                deadline={application.deadline || undefined}
                 readonly
                 name={""}
                 description={""}

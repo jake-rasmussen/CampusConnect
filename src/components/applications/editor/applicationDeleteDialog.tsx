@@ -30,12 +30,12 @@ const ApplicationDeleteDialog = (props: PropType) => {
     api.applicationRouter.removeApplicationProject.useMutation({
       onSuccess() {
         toast.dismiss();
-        toast.success("Successfully Removed Application!")
+        toast.success("Successfully Removed Application!");
         queryClient.invalidate();
       },
       onError() {
         toast.dismiss();
-        toast.error("Error...")
+        toast.error("Error...");
       },
     });
 
@@ -57,12 +57,16 @@ const ApplicationDeleteDialog = (props: PropType) => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button onClick={() => {
-            removeApplicationProject.mutate({applicationId});
-            setOpenDialog(false);
-            toast.dismiss();
-            toast.loading("Removing Application...")
-          }}>Yes, I'm Sure</Button>
+          <Button
+            onClick={() => {
+              removeApplicationProject.mutate({ applicationId });
+              setOpenDialog(false);
+              toast.dismiss();
+              toast.loading("Removing Application...");
+            }}
+          >
+            Yes, I'm Sure
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

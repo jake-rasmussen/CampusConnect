@@ -22,7 +22,7 @@ const SocialMediaCardEditor = (props: PropType) => {
   const queryClient = api.useContext();
 
   const updateSocialMedia =
-    api.clubSocialMediaRouter.updateClubSocialMediaById.useMutation({
+    api.socialMediaRouter.updateSocialMediaById.useMutation({
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Updated Social Media!");
@@ -35,7 +35,7 @@ const SocialMediaCardEditor = (props: PropType) => {
     });
 
   const deleteSocialMedia =
-    api.clubSocialMediaRouter.deleteClubSocialMediaById.useMutation({
+    api.socialMediaRouter.deleteSocialMediaById.useMutation({
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Deleted Social Media!");

@@ -14,7 +14,7 @@ const Events = (props: PropType) => {
   const { events, projectId, editable } = props;
 
   return (
-    <section className="flex flex-col items-center gap-y-8 pb-40">
+    <section className="flex flex-col items-center gap-y-4">
       <EventsOutline>
         <>
           {events.map((event: Event, index: number) => {
@@ -28,8 +28,7 @@ const Events = (props: PropType) => {
             );
           })}
         </>
-      </EventsOutline>
-      {editable && <EventsEditor projectId={projectId} />}
+      </EventsOutline>{editable && <EventsEditor projectId={projectId} />}
     </section>
   );
 };

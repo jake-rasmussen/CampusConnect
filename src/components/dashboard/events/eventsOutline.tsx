@@ -6,7 +6,7 @@ const EventsOutline = ({
   return (
     <>
       <section>
-        <h1 className="w-full pb-10 text-center text-4xl font-black uppercase">
+        <h1 className="w-full text-center text-4xl font-black uppercase">
           Events
         </h1>
         <div className="relative mx-14 flex flex-col items-center justify-center lg:mx-20">

@@ -8,21 +8,21 @@ import SocialMediaForm from "./socialMediaForm";
 import type { SocialMediaFormType } from "./socialMediaForm";
 
 type PropType = {
-  clubId: string;
+  projectId: string;
 };
 
 const SocialMediasEditor = (props: PropType) => {
-  const { clubId } = props;
+  const { projectId } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
 
   const queryClient = api.useContext();
 
   const createSocialMedia =
-    api.clubSocialMediaRouter.createClubSocialMedia.useMutation({
+    api.socialMediaRouter.createSocialMedia.useMutation({
       onSuccess() {
         toast.dismiss();
-        toast.success("Successfully Created the Club Contact Info!");
+        toast.success("Successfully Created the Social Media!");
         queryClient.invalidate().catch((e) => console.log(e));
       },
       onError() {
@@ -33,7 +33,7 @@ const SocialMediasEditor = (props: PropType) => {
 
   const handleSubmit = (values: SocialMediaFormType) => {
     createSocialMedia.mutate({
-      clubId,
+      projectId,
       url: values.url,
       platform: values.platform,
     });

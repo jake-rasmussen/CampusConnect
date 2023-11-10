@@ -6,7 +6,7 @@ import {
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import { dateToStringFormatted } from "~/utils/helpers";
+import { dateToStringFormatted, dateToTimeStringFormatted } from "~/utils/helpers";
 import Button from "../button";
 import Checklist from "../checklist";
 import LoadingPage from "../loadingPage";
@@ -119,8 +119,7 @@ const ApplicationForm = (props: PropType) => {
           {name}
         </h1>
         <h2 className="text-center text-lg font-bold text-black">
-          Deadline:
-          {deadline ? dateToStringFormatted(deadline) : " TBD"}
+          {`Deadline: ${deadline ? (dateToStringFormatted(deadline) + " at " + dateToTimeStringFormatted(deadline)): " TBD"}`}
         </h2>
         <p className="text-center text-black">{description}</p>
 

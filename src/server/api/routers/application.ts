@@ -1,7 +1,7 @@
+import { ApplicationStatus, ApplicationSubmissionStatus } from "@prisma/client";
 import { z } from "zod";
 
 import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
-import { ApplicationStatus, ApplicationSubmissionStatus } from "@prisma/client";
 
 export const applicationRouter = createTRPCRouter({
   getApplicationsByProjectId: adminProcedure
@@ -122,31 +122,31 @@ export const applicationRouter = createTRPCRouter({
 
       const application = await ctx.prisma.application.findUniqueOrThrow({
         where: {
-          id: applicationId
+          id: applicationId,
         },
         include: {
-          applicationSubmissions: true
-        }
-      })
+          applicationSubmissions: true,
+        },
+      });
 
       if (application.applicationSubmissions.length > 0) {
         await ctx.prisma.application.update({
           where: {
-            id: applicationId
+            id: applicationId,
           },
           data: {
             project: {
-              disconnect: true
+              disconnect: true,
             },
-            status: ApplicationStatus.CLOSED
-          }
+            status: ApplicationStatus.CLOSED,
+          },
         });
       } else {
         await ctx.prisma.application.delete({
           where: {
-            id: applicationId
-          }
-        })
+            id: applicationId,
+          },
+        });
       }
     }),
 });

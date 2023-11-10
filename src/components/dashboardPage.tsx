@@ -55,7 +55,7 @@ const DashboardPage = (props: PropType) => {
     <>
       <Header name={name} editable={isAdminPage} />
 
-      <main className="relative flex flex-col justify-center">
+      <main className="relative flex flex-col justify-center pb-40">
         <Tab>
           <TabList>
             <TabHeader>About Us</TabHeader>
@@ -63,22 +63,26 @@ const DashboardPage = (props: PropType) => {
             {isAdminPage ? <TabHeader>Members</TabHeader> : <></>}
           </TabList>
           <TabContent>
-            <div className="mx-10 flex flex-col items-center justify-center gap-10">
+            <div className="mx-10 flex flex-col gap-y-8 items-center justify-center">
               <DescriptionSection
                 projectId={projectId}
                 projectDescription={description}
                 editable={isAdminPage}
               />
-              <ContactSection
-                contactInfos={contactInfos}
-                projectId={projectId}
-                editable={isAdminPage}
-              />
-              <SocialMediaSection
-                socialMedias={socialMedias}
-                projectId={projectId}
-                editable={isAdminPage}
-              />
+              {(isAdminPage || contactInfos.length > 0) && (
+                <ContactSection
+                  contactInfos={contactInfos}
+                  projectId={projectId}
+                  editable={isAdminPage}
+                />
+              )}
+              {(isAdminPage || socialMedias.length > 0) && (
+                <SocialMediaSection
+                  socialMedias={socialMedias}
+                  projectId={projectId}
+                  editable={isAdminPage}
+                />
+              )}
             </div>
           </TabContent>
           <TabContent>
@@ -100,7 +104,13 @@ const DashboardPage = (props: PropType) => {
             <></>
           )}
         </Tab>
-        <Events events={events} projectId={projectId} editable={isAdminPage} />
+        {(isAdminPage || events.length > 0) && (
+          <Events
+            events={events}
+            projectId={projectId}
+            editable={isAdminPage}
+          />
+        )}
       </main>
     </>
   );
