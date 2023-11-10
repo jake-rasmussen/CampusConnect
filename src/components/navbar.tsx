@@ -1,7 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Affiliate, Menu2 } from "tabler-icons-react";
-
+import Image from "next/image";
 import { Separator } from "./shadcn_ui/separator";
 
 const Navbar = () => {
@@ -10,7 +10,14 @@ const Navbar = () => {
       <header className="sticky top-0 z-50 w-full bg-white p-4 text-black shadow-xl">
         <div className="mx-auto flex h-16">
           <Link href="/" className="mr-4 h-16 w-16">
-            <Affiliate className="h-full w-full text-primary" />
+            <Image
+              src={"/assets/SWEC Logo.png"}
+              alt={"SWEC Logo"}
+              width="0"
+              height="0" 
+              sizes="100vw"
+              className="h-auto w-full"
+            />
           </Link>
           <ul className="hidden grow items-stretch space-x-3 lg:flex">
             <Link href="/project" className="flex items-center p-2">
