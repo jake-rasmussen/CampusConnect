@@ -36,7 +36,7 @@ const EditController = (props: PropType) => {
 
   return (
     <>
-      <Dialog open={openDialog}>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
           <>
             {editType === "update" && (

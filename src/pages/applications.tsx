@@ -23,16 +23,21 @@ const MyApplications = () => {
     return (
       <main className="w-full">
         <Header name={"My Applications"} editable={false} />
-        <section className="flex justify-center items-center w-full">
-          <div className="max-w-4xl flex flex-wrap justify-center items-center">
-            {applicationSubmissions.map((applicationSubmission, index) => (
+        <section className="flex w-full items-center justify-center">
+          <div className="flex max-w-4xl flex-wrap items-center justify-center">
+            {applicationSubmissions.map((savedApplication, index) => (
               <ApplicationCard
-                application={applicationSubmission.application}
-                projectId={applicationSubmission.application.projectId}
+                application={savedApplication.application}
+                projectId={savedApplication.application.projectId}
                 editable={false}
-                previewable={applicationSubmission.applicationSubmissionStatus !== ApplicationSubmissionStatus.DRAFT}
-                savedAnswers={applicationSubmission.applicationSubmissionAnswers}
-                status={applicationSubmission.applicationSubmissionStatus}
+                previewable={
+                  savedApplication.applicationSubmissionStatus !==
+                  ApplicationSubmissionStatus.DRAFT
+                }
+                savedAnswers={
+                  savedApplication.applicationSubmissionAnswers
+                }
+                status={savedApplication.applicationSubmissionStatus}
                 key={`applicationSubmission${index}`}
               />
             ))}

@@ -117,10 +117,10 @@ model Event {
 
 model Application {
   id                     String                       @id @default(cuid())
-  projectId              String
   name                   String
   description            String                       @default("")
-  project                Project                      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId              String?
+  project                Project?                     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   deadline               DateTime?
   status                 ApplicationStatus            @default(DRAFT)
   questions              ApplicationQuestion[]

@@ -8,11 +8,12 @@ import {
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { Check, Edit, Eye } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
 import ApplicationForm from "~/components/applications/applicationForm";
+import ApplicationDeleteDialog from "~/components/applications/editor/applicationDeleteDialog";
 import ApplicationPreviewDialog from "~/components/applications/editor/applicationPreviewDialog";
 import { DATE_TIME_FORMAT_OPTS } from "~/constants";
 import {
@@ -28,7 +29,7 @@ type PropType = {
   application: Application & {
     questions: ApplicationQuestion[];
   };
-  projectId: string;
+  projectId: string | null;
   editable: boolean;
   previewable?: boolean;
   savedAnswers?: ApplicationSubmissionAnswer[];
@@ -36,29 +37,39 @@ type PropType = {
 };
 
 const ApplicationCard = (props: PropType) => {
-  const { application, editable, status, savedAnswers, previewable, projectId } = props;
+  const {
+    application,
+    editable,
+    status,
+    savedAnswers,
+    previewable,
+    projectId,
+  } = props;
   const router = useRouter();
-  
+
   const displayEditComponent =
     editable && application.status === ApplicationStatus.DRAFT;
   const displayPreviewComponent =
     (editable && application.status !== ApplicationStatus.DRAFT) || previewable;
 
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   return (
     <>
       <Card
         className={twMerge(
           "relative my-6 mb-0 mr-4 flex w-[17.5rem] flex-col rounded-xl bg-white shadow-xl",
-          status === ApplicationSubmissionStatus.SUBMITTED ? "opacity-50" : "",
+          status === ApplicationSubmissionStatus.SUBMITTED && !editable
+            ? "opacity-50"
+            : "",
         )}
       >
         <CardHeader>
           <CardTitle>{application.name}</CardTitle>
           <CardDescription>{application.description}</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="group">
           {displayEditComponent && (
             <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
               <Link
@@ -97,6 +108,16 @@ const ApplicationCard = (props: PropType) => {
               />
             </ApplicationPreviewDialog>
           )}
+          <div className="ease- opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100">
+            {editable && (
+              <ApplicationDeleteDialog
+                applicationId={application.id}
+                openDialog={openDeleteDialog}
+                setOpenDialog={setOpenDeleteDialog}
+              />
+            )}
+          </div>
+
           <p>
             Status:
             <span className="tracking-none font-black text-secondary">

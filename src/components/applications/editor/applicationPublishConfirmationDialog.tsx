@@ -74,7 +74,7 @@ const ApplicationPublishConfirmationDialog = ({
         <DialogContent className="max-w-5xl">
           <DialogHeader>
             <DialogTitle>Publish this Application?</DialogTitle>
-            <DialogDescription className="text-md py-4 text-red-500">
+            <DialogDescription className="text-md py-4">
               Please note, publishing an application will make it available to
               all users and cannot be undone. Editing will be disabled once
               published. Before you publish, make sure you have completed all
@@ -111,9 +111,6 @@ const ApplicationPublishConfirmationDialog = ({
                           >
                             <PopoverTrigger asChild>
                               <ShadCNButton
-                                onClick={() => {
-                                  console.log(calendarPopoverOpen);
-                                }}
                                 variant={"outline"}
                                 className={cn(
                                   "h-[3rem] rounded-xl bg-white text-left font-normal",

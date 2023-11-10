@@ -54,6 +54,13 @@ const Applications = (props: PropType) => {
                       projectId={projectId}
                       editable={editable}
                       status={savedApplication.applicationSubmissionStatus}
+                      previewable={
+                        savedApplication.applicationSubmissionStatus !==
+                        ApplicationSubmissionStatus.DRAFT
+                      }
+                      savedAnswers={
+                        savedApplication.applicationSubmissionAnswers
+                      }
                       key={`application${index}`}
                     />
                   );
