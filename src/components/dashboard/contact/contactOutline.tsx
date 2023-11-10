@@ -5,11 +5,11 @@ const ContactOutline = ({
 }) => {
   return (
     <>
-      <section className="flex flex-col md:pt-0">
+      <section className="flex flex-col md:pt-0 max-w-6xl">
         <h1 className="text-center text-2xl font-semibold underline decoration-secondary">
           Contact
         </h1>
-        <div className="relative flex w-full flex-wrap items-center justify-center gap-x-4 py-4 lg:mx-0">
+        <div className="relative flex w-full flex-wrap items-center justify-center gap-x-4 lg:mx-0">
           {children}
         </div>
       </section>

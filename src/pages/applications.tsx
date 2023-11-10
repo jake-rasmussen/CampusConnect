@@ -23,7 +23,7 @@ const MyApplications = () => {
     return (
       <main className="w-full">
         <Header name={"My Applications"} editable={false} />
-        <section className="flex w-full items-center justify-center">
+        <section className="mt-10 flex w-full items-center justify-center">
           <div className="flex max-w-4xl flex-wrap items-center justify-center">
             {applicationSubmissions.map((savedApplication, index) => (
               <ApplicationCard
@@ -34,9 +34,7 @@ const MyApplications = () => {
                   savedApplication.applicationSubmissionStatus !==
                   ApplicationSubmissionStatus.DRAFT
                 }
-                savedAnswers={
-                  savedApplication.applicationSubmissionAnswers
-                }
+                savedAnswers={savedApplication.applicationSubmissionAnswers}
                 status={savedApplication.applicationSubmissionStatus}
                 key={`applicationSubmission${index}`}
               />

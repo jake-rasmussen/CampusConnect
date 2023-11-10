@@ -37,7 +37,7 @@ const SocialMediaCard = (props: PropType) => {
 
   return (
     <>
-      <div className="relative h-16 w-16">
+      <div className="relative h-16 w-16 my-4">
         <Link className="h-full w-full" href={socialMedia.url}>
           {icon}
         </Link>
