@@ -7,7 +7,7 @@ import Events from "./dashboard/events/events";
 import Header from "./dashboard/header/header";
 import Members from "./dashboard/members/members";
 import SocialMediaSection from "./dashboard/socialMedia/socialMediaSection";
-import Tab from "./tab/tab";
+import Tab from "./tab/tabContainer";
 import TabContent from "./tab/tabContent";
 import TabHeader from "./tab/tabHeader";
 import TabList from "./tab/tabList";
