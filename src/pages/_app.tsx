@@ -1,24 +1,38 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { MantineProvider } from "@mantine/core";
 
 import { api } from "~/utils/api";
 
-import type { AppProps } from "next/app";
+import "react";
+import "~/styles/globals.css";
 
-function MyApp({ Component, pageProps }: AppProps) {
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { Toaster } from "react-hot-toast";
+
+import type { NextPage } from "next";
+import type { AppProps } from "next/app";
+import type { ReactElement, ReactNode } from "react";
+
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
-    <ClerkProvider {...pageProps}>
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          //TODO: Add theme
-          colorScheme: "light",
-        }}
-      >
-        <Component {...pageProps} />
-      </MantineProvider>
-    </ClerkProvider>
+    <main className="min-h-screen w-screen bg-background">
+      <ClerkProvider {...pageProps}>
+        <Toaster />
+        {/* TODO: see if we should add this to specific admin layout */}
+        <DndProvider backend={HTML5Backend}>
+          {getLayout(<Component {...pageProps} />)}
+        </DndProvider>
+      </ClerkProvider>
+    </main>
   );
 }
 
