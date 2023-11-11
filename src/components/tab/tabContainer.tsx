@@ -4,7 +4,7 @@ type PropType = {
   children: JSX.Element[];
 };
 
-const Tab = ({ children }: PropType) => {
+const TabContainer = ({ children }: PropType) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const childrenWithProps = React.Children.map(
@@ -32,4 +32,4 @@ const Tab = ({ children }: PropType) => {
   );
 };
 
-export default Tab;
+export default TabContainer;
