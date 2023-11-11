@@ -20,6 +20,9 @@ const AllProjects: NextPageWithLayout = () => {
     error: projectsError,
   } = api.projectRouter.getAllProjects.useQuery();
 
+  // TODO: remove this
+  const createProject = api.projectRouter.createProject.useMutation({})
+
   useEffect(() => {
     setProjects(projectsData || []);
   }, [projectsData, query]);
@@ -29,6 +32,14 @@ const AllProjects: NextPageWithLayout = () => {
   } else if (projectsError) {
     return <Error statusCode={projectsError?.data?.httpStatus || 500} />;
   } else {
+    if (projectsData.length === 0) {
+      for (let i = 1; i <= 3; i++) {
+        createProject.mutate({
+          name: `Test Project ${i}`
+        });
+      }
+    }
+
     return (
       <div className="flex h-full w-full flex-col items-center justify-center ">
         <section className="mb-14 mt-20">
