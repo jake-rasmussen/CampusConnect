@@ -7,7 +7,7 @@ import Events from "./dashboard/events/events";
 import Header from "./dashboard/header/header";
 import Members from "./dashboard/members/members";
 import SocialMediaSection from "./dashboard/socialMedia/socialMediaSection";
-import TabContainer from "./tab/tabContainer";
+import Tab from "./tab/tab";
 import TabContent from "./tab/tabContent";
 import TabHeader from "./tab/tabHeader";
 import TabList from "./tab/tabList";
@@ -56,7 +56,7 @@ const DashboardPage = (props: PropType) => {
       <Header name={name} editable={isAdminPage} />
 
       <main className="relative flex flex-col justify-center pb-40">
-        <TabContainer>
+        <Tab>
           <TabList>
             <TabHeader>About Us</TabHeader>
             <TabHeader>Applications</TabHeader>
@@ -103,7 +103,7 @@ const DashboardPage = (props: PropType) => {
           ) : (
             <></>
           )}
-        </TabContainer>
+        </Tab>
         {(isAdminPage || events.length > 0) && (
           <Events
             events={events}
