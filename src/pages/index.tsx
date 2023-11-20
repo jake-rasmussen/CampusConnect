@@ -14,7 +14,7 @@ const Home = () => {
   } else {
     return (
       <section>
-        <div className="container flex flex-col items-center justify-center gap-y-8 my-20">
+        <div className="container my-20 flex flex-col items-center justify-center gap-y-8">
           <Image
             src={"/assets/SWEC Logo.png"}
             alt={"SWEC Logo"}

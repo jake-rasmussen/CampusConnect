@@ -19,7 +19,7 @@ const Button = ({
     <>
       <button
         className={twMerge(
-          "max-w-xs rounded-xl bg-secondary px-4 py-4 transition duration-300 ease-in-out hover:scale-110",
+          "max-w-xs rounded-xl bg-secondary px-4 py-4 transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50",
           className,
         )}
         onClick={(e) => {

@@ -21,7 +21,7 @@ const AllProjects: NextPageWithLayout = () => {
   } = api.projectRouter.getAllProjects.useQuery();
 
   // TODO: remove this
-  const createProject = api.projectRouter.createProject.useMutation({})
+  const createProject = api.projectRouter.createProject.useMutation({});
 
   useEffect(() => {
     setProjects(projectsData || []);
@@ -35,7 +35,7 @@ const AllProjects: NextPageWithLayout = () => {
     if (projectsData.length === 0) {
       for (let i = 1; i <= 3; i++) {
         createProject.mutate({
-          name: `Test Project ${i}`
+          name: `Test Project ${i}`,
         });
       }
     }

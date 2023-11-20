@@ -5,7 +5,7 @@ const ContactOutline = ({
 }) => {
   return (
     <>
-      <section className="flex flex-col md:pt-0 max-w-6xl">
+      <section className="flex max-w-6xl flex-col md:pt-0">
         <h1 className="text-center text-2xl font-semibold underline decoration-secondary">
           Contact
         </h1>

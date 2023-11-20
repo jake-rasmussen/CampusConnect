@@ -1,7 +1,8 @@
 import { UserButton } from "@clerk/nextjs";
+import Image from "next/image";
 import Link from "next/link";
 import { Affiliate, Menu2 } from "tabler-icons-react";
-import Image from "next/image";
+
 import { Separator } from "./shadcn_ui/separator";
 
 const Navbar = () => {
@@ -14,7 +15,7 @@ const Navbar = () => {
               src={"/assets/SWEC Logo.png"}
               alt={"SWEC Logo"}
               width="0"
-              height="0" 
+              height="0"
               sizes="100vw"
               className="h-auto w-full"
             />
