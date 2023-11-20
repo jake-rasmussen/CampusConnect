@@ -19,8 +19,8 @@ const Apply: NextPageWithLayout = () => {
   const projectId = router.query.projectId as string;
   const applicationId = router.query.applicationId as string;
 
-  const [isSaving, setIsSaving] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
@@ -56,7 +56,6 @@ const Apply: NextPageWithLayout = () => {
         if (isSubmitted) router.push(`/project/${projectId}`);
       },
       onError() {
-        setIsSaving(false);
         setIsSubmitted(false);
       },
     });
@@ -65,14 +64,12 @@ const Apply: NextPageWithLayout = () => {
     api.applicationSubmissionAnswerRouter.createApplicationSubmissionAnswer.useMutation(
       {
         onSuccess() {
-          setIsSaving(false);
           if (!isSubmitted) {
             toast.dismiss();
             toast.success("Successfully Saved Application!");
           }
         },
         onError() {
-          setIsSaving(false);
           setIsSubmitted(false);
 
           toast.dismiss();
@@ -88,32 +85,41 @@ const Apply: NextPageWithLayout = () => {
     answers: ApplicationSubmissionAnswer[],
     submit?: boolean,
   ) => {
-    if (submit) setIsSubmitted(true);
+    setIsSaving(true);
 
     if (applicationId && !isSaving) {
-      setIsSaving(true);
-      const applicationSubmission =
-        await upsertApplicationSubmission.mutateAsync({
-          applicationSubmissionId: savedSubmission?.id,
-          applicationId,
-          status: submit
-            ? ApplicationSubmissionStatus.SUBMITTED
-            : ApplicationSubmissionStatus.DRAFT,
-        });
+      if (submit) setIsSubmitted(true);
 
-      await deleteApplicationSubmissionAnswerChoices.mutateAsync({
-        applicationSubmissionId: applicationSubmission.id,
-      });
-
-      if (answers) {
-        answers.forEach(async (answer) => {
-          await createApplicationSubmissionAnswer.mutateAsync({
-            applicationSubmissionId: applicationSubmission.id,
-            applicationQuestionId: answer.applicationQuestionId,
-            answer: answer.answer as string | string[],
+      const saveAnswers = async () => {
+        const applicationSubmission =
+          await upsertApplicationSubmission.mutateAsync({
+            applicationSubmissionId: savedSubmission?.id,
+            applicationId,
+            status: submit
+              ? ApplicationSubmissionStatus.SUBMITTED
+              : ApplicationSubmissionStatus.DRAFT,
           });
+
+        await deleteApplicationSubmissionAnswerChoices.mutateAsync({
+          applicationSubmissionId: applicationSubmission.id,
         });
-      }
+
+        if (answers) {
+          for (let answer of answers) {
+            await createApplicationSubmissionAnswer.mutateAsync({
+              applicationSubmissionId: applicationSubmission.id,
+              applicationQuestionId: answer.applicationQuestionId,
+              answer: answer.answer as string | string[],
+            });
+          }
+        }
+      };
+
+      saveAnswers()
+        .then(() => {
+          if (!submit) setTimeout(() => setIsSaving(false), 1000);
+        })
+        .catch(() => setIsSaving(false));
     }
   };
 
@@ -151,6 +157,7 @@ const Apply: NextPageWithLayout = () => {
             questions={application.questions}
             savedAnswers={savedSubmission?.applicationSubmissionAnswers}
             handleSaveAnswers={handleSaveAnswers}
+            isSaving={isSaving}
           />
         </div>
       </section>

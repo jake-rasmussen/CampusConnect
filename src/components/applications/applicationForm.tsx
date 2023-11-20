@@ -3,10 +3,13 @@ import {
   ApplicationQuestionType,
   ApplicationSubmissionAnswer,
 } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import { dateToStringFormatted, dateToTimeStringFormatted } from "~/utils/helpers";
+import {
+  dateToStringFormatted,
+  dateToTimeStringFormatted,
+} from "~/utils/helpers";
 import Button from "../button";
 import Checklist from "../checklist";
 import LoadingPage from "../loadingPage";
@@ -27,6 +30,7 @@ type PropType = {
     answers: ApplicationSubmissionAnswer[],
     submit?: boolean,
   ) => void;
+  isSaving?: boolean;
 };
 
 export type ApplicationFormSubmissionAnswer = Omit<
@@ -52,6 +56,7 @@ const ApplicationForm = (props: PropType) => {
     savedAnswers,
     readonly,
     handleSaveAnswers,
+    isSaving,
   } = props;
 
   const [answersMap, setAnswersMap] = useState<
@@ -78,12 +83,14 @@ const ApplicationForm = (props: PropType) => {
     questionId: string,
     answer: string | string[],
   ) => {
-    const updatedMap = new Map(answersMap);
-    updatedMap.set(questionId, {
-      answer,
-      applicationQuestionId: questionId,
-    });
-    setAnswersMap(updatedMap);
+    if (questionId) {
+      const updatedMap = new Map(answersMap);
+      updatedMap.set(questionId, {
+        answer,
+        applicationQuestionId: questionId,
+      });
+      setAnswersMap(updatedMap);
+    }
   };
 
   const handleSubmitAnswers = (answers: ApplicationSubmissionAnswer[]) => {
@@ -102,7 +109,7 @@ const ApplicationForm = (props: PropType) => {
     for (let i = 0; i < answers.length; i++) {
       if (
         answers[i] !== undefined &&
-        answers[i]?.answer === undefined &&
+        (answers[i]?.answer === undefined || answers[i]?.answer === "") &&
         questions[i]?.required
       )
         return false;
@@ -119,7 +126,13 @@ const ApplicationForm = (props: PropType) => {
           {name}
         </h1>
         <h2 className="text-center text-lg font-bold text-black">
-          {`Deadline: ${deadline ? (dateToStringFormatted(deadline) + " at " + dateToTimeStringFormatted(deadline)): " TBD"}`}
+          {`Deadline: ${
+            deadline
+              ? dateToStringFormatted(deadline) +
+                " at " +
+                dateToTimeStringFormatted(deadline)
+              : " TBD"
+          }`}
         </h2>
         <p className="text-center text-black">{description}</p>
 
@@ -141,9 +154,10 @@ const ApplicationForm = (props: PropType) => {
                     value={
                       (answersMap?.get(question.id)?.answer as string) || ""
                     }
-                    onChange={(e) =>
-                      handleUpdateAnswer(question.id, e.currentTarget.value)
-                    }
+                    onChange={(e) => {
+                      if (!readonly)
+                        handleUpdateAnswer(question.id, e.currentTarget.value);
+                    }}
                   />
                 )}
                 {question.type === ApplicationQuestionType.TEXT_FIELD && (
@@ -152,9 +166,10 @@ const ApplicationForm = (props: PropType) => {
                     value={
                       (answersMap?.get(question.id)?.answer as string) || ""
                     }
-                    onChange={(e) =>
-                      handleUpdateAnswer(question.id, e.currentTarget.value)
-                    }
+                    onChange={(e) => {
+                      if (!readonly)
+                        handleUpdateAnswer(question.id, e.currentTarget.value);
+                    }}
                     rows={4}
                   />
                 )}
@@ -164,7 +179,9 @@ const ApplicationForm = (props: PropType) => {
                     value={
                       (answersMap?.get(question.id)?.answer as string) || ""
                     }
-                    onChange={(e: string) => handleUpdateAnswer(question.id, e)}
+                    onChange={(e: string) => {
+                      if (!readonly) handleUpdateAnswer(question.id, e);
+                    }}
                   />
                 )}
                 {question.type === ApplicationQuestionType.MULTIPLE_SELECT && (
@@ -173,9 +190,9 @@ const ApplicationForm = (props: PropType) => {
                     value={
                       (answersMap?.get(question.id)?.answer as string[]) || []
                     }
-                    onChange={(e: string[]) =>
-                      handleUpdateAnswer(question.id, e)
-                    }
+                    onChange={(e: string[]) => {
+                      if (!readonly) handleUpdateAnswer(question.id, e);
+                    }}
                   />
                 )}
                 {/* 
@@ -189,7 +206,7 @@ const ApplicationForm = (props: PropType) => {
               <div className="my-2 flex grow flex-row justify-center gap-4">
                 <Button
                   onClick={() => {
-                    if (handleSaveAnswers) {
+                    if (handleSaveAnswers && answersMap.size > 0) {
                       handleSaveAnswers(
                         Array.from(
                           answersMap.values(),
@@ -197,6 +214,7 @@ const ApplicationForm = (props: PropType) => {
                       );
                     }
                   }}
+                  disabled={isSaving}
                 >
                   Save for later
                 </Button>
@@ -209,6 +227,7 @@ const ApplicationForm = (props: PropType) => {
                       ) as ApplicationSubmissionAnswer[],
                     )
                   }
+                  disabled={isSaving}
                 >
                   Submit application
                 </Button>

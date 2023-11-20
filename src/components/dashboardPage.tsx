@@ -8,6 +8,7 @@ import Header from "./dashboard/header/header";
 import Members from "./dashboard/members/members";
 import SocialMediaSection from "./dashboard/socialMedia/socialMediaSection";
 import Tab from "./tab/tab";
+import TabContent from "./tab/tabContent";
 import TabHeader from "./tab/tabHeader";
 import TabList from "./tab/tabList";
 
@@ -20,7 +21,6 @@ import type {
   SocialMedia,
   User,
 } from "@prisma/client";
-import TabContent from "./tab/tabContent";
 
 type PropType = {
   name: string;
@@ -63,7 +63,7 @@ const DashboardPage = (props: PropType) => {
             {isAdminPage ? <TabHeader>Members</TabHeader> : <></>}
           </TabList>
           <TabContent>
-            <div className="mx-10 flex flex-col gap-y-8 items-center justify-center">
+            <div className="mx-10 flex flex-col items-center justify-center gap-y-8">
               <DescriptionSection
                 projectId={projectId}
                 projectDescription={description}

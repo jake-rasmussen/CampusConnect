@@ -5,18 +5,20 @@ import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const projectRouter = createTRPCRouter({
   createProject: protectedProcedure
-    .input(z.object({
-      name: z.string()
-    }))
+    .input(
+      z.object({
+        name: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const { name } = input;
 
       await ctx.prisma.project.create({
         data: {
           name,
-          description: "Please edit the description"
-        }
-      })
+          description: "Please edit the description",
+        },
+      });
     }),
   getProjectByIdForUsers: protectedProcedure
     .input(z.object({ projectId: z.string() }))

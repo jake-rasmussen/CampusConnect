@@ -28,7 +28,8 @@ const Events = (props: PropType) => {
             );
           })}
         </>
-      </EventsOutline>{editable && <EventsEditor projectId={projectId} />}
+      </EventsOutline>
+      {editable && <EventsEditor projectId={projectId} />}
     </section>
   );
 };
