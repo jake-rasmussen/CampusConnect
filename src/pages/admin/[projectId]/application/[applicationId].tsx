@@ -95,6 +95,7 @@ const EditApplication = () => {
     handlePublishApplication.mutate({
       applicationId,
       deadline,
+      skills: values.skills,
     });
   };
 

@@ -27,7 +27,13 @@ const Navbar = () => {
               </h1>
             </Link>
             <Separator orientation="vertical" className="bg-secondary" />
-            <Link href="/applications" className="flex items-center p-2">
+            <Link href="/open-applications" className="flex items-center p-2">
+              <h1 className="tracking-none text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
+                Open Applications
+              </h1>
+            </Link>
+            <Separator orientation="vertical" className="bg-secondary" />
+            <Link href="/my-applications" className="flex items-center p-2">
               <h1 className="tracking-none text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
                 My Applications
               </h1>

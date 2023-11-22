@@ -97,4 +97,48 @@ export const applicationSubmissionRouter = createTRPCRouter({
 
       return applicationSubmission;
     }),
+  withdrawApplicationSubmission: protectedProcedure
+    .input(
+      z.object({
+        applicationSubmissionId: z.string(),
+        applicationId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { applicationSubmissionId, applicationId } = input;
+
+      await ctx.prisma.applicationSubmissionAnswer.deleteMany({
+        where: {
+          applicationSubmissionId,
+        },
+      });
+
+      await ctx.prisma.applicationSubmission.delete({
+        where: {
+          id: applicationSubmissionId,
+        },
+      });
+
+      const numSubmissions = await ctx.prisma.applicationSubmission.count({
+        where: {
+          applicationId,
+        },
+      });
+
+      if (numSubmissions === 0) {
+        const application = await ctx.prisma.application.findUnique({
+          where: {
+            id: applicationId,
+          },
+        });
+
+        if (!application?.projectId) {
+          await ctx.prisma.application.delete({
+            where: {
+              id: applicationId,
+            },
+          });
+        }
+      }
+    }),
 });

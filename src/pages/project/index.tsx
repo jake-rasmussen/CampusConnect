@@ -32,14 +32,6 @@ const AllProjects: NextPageWithLayout = () => {
   } else if (projectsError) {
     return <Error statusCode={projectsError?.data?.httpStatus || 500} />;
   } else {
-    if (projectsData.length === 0) {
-      for (let i = 1; i <= 3; i++) {
-        createProject.mutate({
-          name: `Test Project ${i}`,
-        });
-      }
-    }
-
     return (
       <div className="flex h-full w-full flex-col items-center justify-center ">
         <section className="mb-14 mt-20">
@@ -59,7 +51,7 @@ const AllProjects: NextPageWithLayout = () => {
           />
         </section>
 
-        <div className="m-10 flex w-full flex-wrap items-center justify-center">
+        <div className="m-10 flex w-full max-w-6xl flex-wrap items-center justify-center">
           {projects
             .filter((project) =>
               project.name.toLowerCase().includes(query.toLowerCase()),
