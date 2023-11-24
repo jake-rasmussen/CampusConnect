@@ -24,6 +24,18 @@ export const applicationRouter = createTRPCRouter({
 
       return applications;
     }),
+  getAllOpenApplications: protectedProcedure.query(async ({ ctx, input }) => {
+    const applications = await ctx.prisma.application.findMany({
+      where: {
+        status: ApplicationStatus.OPEN,
+      },
+      include: {
+        questions: true,
+        project: true,
+      },
+    });
+    return applications;
+  }),
   createApplication: protectedProcedure
     .input(
       z.object({
@@ -73,15 +85,22 @@ export const applicationRouter = createTRPCRouter({
       return application;
     }),
   publishApplication: protectedProcedure
-    .input(z.object({ applicationId: z.string(), deadline: z.date() }))
+    .input(
+      z.object({
+        applicationId: z.string(),
+        deadline: z.date(),
+        skills: z.string().array().optional(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
-      const { applicationId, deadline } = input;
+      const { applicationId, deadline, skills } = input;
       await ctx.prisma.application.update({
         where: {
           id: applicationId,
         },
         data: {
           deadline,
+          desiredSkills: skills,
           status: "OPEN",
         },
       });

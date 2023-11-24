@@ -23,7 +23,7 @@ type ApplicationFormType = {
 };
 
 const ApplicationCreator = ({ projectId }: Props) => {
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const createApplication = api.applicationRouter.createApplication.useMutation(
     {

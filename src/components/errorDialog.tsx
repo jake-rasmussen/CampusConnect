@@ -1,7 +1,5 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { SquarePlus } from "tabler-icons-react";
-import { twMerge } from "tailwind-merge";
 
 import {
   Dialog,
@@ -9,7 +7,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "./shadcn_ui/dialog";
 
 type PropType = {

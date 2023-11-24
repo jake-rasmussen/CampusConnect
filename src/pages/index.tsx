@@ -33,7 +33,7 @@ const Home = () => {
               </Button>
             </SignInButton>
           ) : (
-            <Link href={"/club"}>
+            <Link href={"/project"}>
               <Button className="px-14 py-6 text-2xl shadow-xl">
                 Get Started
               </Button>

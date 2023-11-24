@@ -28,9 +28,9 @@ const EventCard = (props: PropType) => {
 
   return (
     <>
-      <Card className="relative m-6 mb-0 w-full max-w-[80rem] rounded-2xl bg-white shadow-xl">
-        <div className="flex flex-col md:flex-row">
-          <div className="item flex h-auto w-full justify-center rounded-l-xl bg-primary shadow-2xl md:w-48">
+      <Card className="relative m-6 mb-0 w-full rounded-2xl bg-white shadow-xl">
+        <div className="flex flex-col lg:flex-row">
+          <div className="item flex h-auto w-full justify-center rounded-xl bg-primary shadow-2xl lg:w-48 lg:rounded-l-xl">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -45,10 +45,12 @@ const EventCard = (props: PropType) => {
             </TooltipProvider>
           </div>
 
-          <main className="flex flex-col p-4 md:flex-row">
-            <section className="min-w-[15rem]">
+          <main className="grid w-full grid-cols-1 lg:grid-cols-5">
+            <section className="col-span-2">
               <CardHeader>
-                <CardTitle className="text-xl">{event.name}</CardTitle>
+                <CardTitle className="text-xl capitalize">
+                  {event.name}
+                </CardTitle>
                 <CardDescription className="text-gray">
                   {dateAndTimeToStringFormatted(event.date)}
                 </CardDescription>
@@ -86,11 +88,11 @@ const EventCard = (props: PropType) => {
                 </div>
               </CardContent>
             </section>
-            <section>
+            <section className="col-span-3">
               <CardHeader>
                 <CardTitle className="text-xl">Event Description</CardTitle>
               </CardHeader>
-              <CardContent className="max-w-2xl">
+              <CardContent className="max-w-xl">
                 <p>{event.description}</p>
               </CardContent>
             </section>

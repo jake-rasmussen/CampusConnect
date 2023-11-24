@@ -94,26 +94,28 @@ const ApplicationForm = (props: PropType) => {
   };
 
   const handleSubmitAnswers = (answers: ApplicationSubmissionAnswer[]) => {
-    if (!checkValidAnswers(answers)) {
+    if (!checkValidAnswers()) {
+      console.log("Not valid!")
       toast.dismiss();
       toast.error("Please fill out the entire form!");
     } else {
       if (applicationId && handleSaveAnswers) {
+        console.log("Valid!")
         handleSaveAnswers(answers, true);
       }
     }
   };
 
-  const checkValidAnswers = (answers: ApplicationFormSubmissionAnswer[]) => {
+  const checkValidAnswers = () => {
     if (!questions) return false;
-    for (let i = 0; i < answers.length; i++) {
-      if (
-        answers[i] !== undefined &&
-        (answers[i]?.answer === undefined || answers[i]?.answer === "") &&
-        questions[i]?.required
-      )
-        return false;
+
+    for (const question of questions) {
+      if (question.required) {
+        if (!answersMap.has(question.id)) return false;
+        if (answersMap.get(question.id)?.answer === "") return false;
+      }
     }
+
     return true;
   };
 
@@ -126,13 +128,12 @@ const ApplicationForm = (props: PropType) => {
           {name}
         </h1>
         <h2 className="text-center text-lg font-bold text-black">
-          {`Deadline: ${
-            deadline
-              ? dateToStringFormatted(deadline) +
-                " at " +
-                dateToTimeStringFormatted(deadline)
-              : " TBD"
-          }`}
+          {`Deadline: ${deadline
+            ? dateToStringFormatted(deadline) +
+            " at " +
+            dateToTimeStringFormatted(deadline)
+            : " TBD"
+            }`}
         </h2>
         <p className="text-center text-black">{description}</p>
 

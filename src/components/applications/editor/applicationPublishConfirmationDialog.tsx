@@ -3,10 +3,11 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { Field, Form } from "houseform";
 import { CalendarIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod";
 
 import Button from "~/components/button";
+import SkillsCreator from "~/components/dashboard/applications/skillsCreator";
 import ErrorMessage from "~/components/dashboard/errorMessage";
 import { Button as ShadCNButton } from "~/components/shadcn_ui/button";
 import { Calendar } from "~/components/shadcn_ui/calendar";
@@ -40,6 +41,7 @@ type PropTypes = {
 export type ConfirmationFormType = {
   date: Date;
   time: Date;
+  skills: string[];
 };
 
 const ApplicationPublishConfirmationDialog = ({
@@ -51,6 +53,8 @@ const ApplicationPublishConfirmationDialog = ({
 }: PropTypes) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [calendarPopoverOpen, setCalendarPopoverOpen] = useState(false);
+
+  const [skills, setSkills] = useState<string[]>([]);
 
   const DEFAULT_TIME = new Date(new Date().setHours(0, 0, 0, 0));
 
@@ -74,7 +78,7 @@ const ApplicationPublishConfirmationDialog = ({
         <DialogContent className="max-w-5xl">
           <DialogHeader>
             <DialogTitle>Publish this Application?</DialogTitle>
-            <DialogDescription className="text-md py-4">
+            <DialogDescription className="text-md mx-10 py-4">
               Please note, publishing an application will make it available to
               all users and cannot be undone. Editing will be disabled once
               published. Before you publish, make sure you have completed all
@@ -88,12 +92,13 @@ const ApplicationPublishConfirmationDialog = ({
           <div>
             <Form<ConfirmationFormType>
               onSubmit={(values) => {
+                values.skills = skills;
                 confirmPublishApplication(name, description, values);
               }}
             >
               {({ submit }) => (
-                <main className="flex flex-col items-center gap-4">
-                  <section className="mx-10 flex w-[50rem] max-w-md flex-col gap-4">
+                <main className="flex flex-col items-center gap-8">
+                  <section className="flex w-full flex-row items-center justify-center gap-4">
                     <Field
                       name="date"
                       initialValue={new Date()}
@@ -103,7 +108,7 @@ const ApplicationPublishConfirmationDialog = ({
                       })}
                     >
                       {({ value, setValue, onBlur, isValid, errors }) => (
-                        <>
+                        <div className="flex flex-col">
                           <span className="font-semibold">Date</span>
                           <Popover
                             open={calendarPopoverOpen}
@@ -146,7 +151,7 @@ const ApplicationPublishConfirmationDialog = ({
                             </PopoverContent>
                           </Popover>
                           {!isValid && <ErrorMessage message={errors[0]} />}
-                        </>
+                        </div>
                       )}
                     </Field>
                     <Field
@@ -158,7 +163,7 @@ const ApplicationPublishConfirmationDialog = ({
                       })}
                     >
                       {({ value, setValue, onBlur, isValid, errors }) => (
-                        <div className="col-span-2 flex flex-col">
+                        <div className="flex flex-col">
                           <span className="font-semibold">Time</span>
                           <TimePicker
                             value={value}
@@ -170,6 +175,9 @@ const ApplicationPublishConfirmationDialog = ({
                       )}
                     </Field>
                   </section>
+
+                  <SkillsCreator skills={skills} setSkills={setSkills} />
+
                   <Button
                     onClick={() => {
                       submit().catch((e) => console.error(e));

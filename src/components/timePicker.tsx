@@ -91,8 +91,8 @@ const TimePicker = (props: PropType) => {
     <>
       <div className="flex w-full items-center">
         <div className="grow">
-          <Input
-            className="h-[3rem]"
+          <input
+            className="border-input placeholder:text-muted-foreground h-[3rem] w-[3.3rem]  rounded-xl border px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             onChange={(e) => {
               const input = e.currentTarget.value;
               if (+input <= 12 && +input >= 0 && input.length <= 2) {
@@ -109,8 +109,8 @@ const TimePicker = (props: PropType) => {
         </div>
         <h1 className="px-2 text-xl">:</h1>
         <div className="grow">
-          <Input
-            className="h-[3rem]"
+          <input
+            className="border-input placeholder:text-muted-foreground h-[3rem] w-[3.3rem]  rounded-xl border px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             onChange={(e) => {
               const input = e.currentTarget.value;
               if (+input < 60 && +input >= 0 && input.length <= 2) {
@@ -122,14 +122,14 @@ const TimePicker = (props: PropType) => {
           />
         </div>
         <h1 className="px-2 text-xl">:</h1>
-        <div className="h-full w-44">
+        <div className="h-full">
           <Select
             onValueChange={(input) => {
               setMeridiem(input);
             }}
             value={meridiem}
           >
-            <SelectTrigger className="h-[3rem] w-full rounded-xl bg-white">
+            <SelectTrigger className="h-[3rem] w-[3.75rem] rounded-xl bg-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-white">
