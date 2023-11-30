@@ -42,6 +42,8 @@ const EditApplication = () => {
   const updateApplication = api.applicationRouter.updateApplication.useMutation(
     {
       onSuccess() {
+        toast.dismiss();
+        toast.success("Application saved!");
         queryClient.invalidate();
       },
     },
@@ -50,6 +52,7 @@ const EditApplication = () => {
   const handlePublishApplication =
     api.applicationRouter.publishApplication.useMutation({
       onSuccess() {
+        toast.dismiss();
         toast.success("Application published!");
         queryClient.invalidate();
         router.push(`/admin/${projectId}/`);
@@ -63,6 +66,7 @@ const EditApplication = () => {
   ) => {
     deleteAllApplicationQuestions.mutate({
       applicationId: applicationId,
+      projectId
     });
 
     let count = 0;
@@ -72,6 +76,7 @@ const EditApplication = () => {
         applicationId: applicationId,
         answerChoices: question.answerChoices,
         orderNumber: count++,
+        projectId
       });
     }
 
@@ -79,6 +84,7 @@ const EditApplication = () => {
       applicationId: applicationId,
       name,
       description,
+      projectId,
     });
   };
 
@@ -96,6 +102,7 @@ const EditApplication = () => {
       applicationId,
       deadline,
       skills: values.skills,
+      projectId,
     });
   };
 

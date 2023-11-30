@@ -74,7 +74,7 @@ const ApplicationPreviewCard = (props: PropType) => {
               <DialogFooter>
                 <Button
                   className="mx-auto"
-                  onClick={() =>
+                  onClickFn={() =>
                     router.push(
                       `/project/${application.projectId}/apply/${application.id}`,
                     )

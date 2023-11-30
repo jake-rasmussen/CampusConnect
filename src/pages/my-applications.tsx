@@ -22,7 +22,7 @@ const MyApplications = () => {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else {
     return (
-      <main className="w-full">
+      <main className="w-full py-10">
         <Header name={"My Applications"} editable={false} />
         <section className="mt-10 flex w-full justify-center">
           {applicationSubmissions.length > 0 ? (

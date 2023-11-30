@@ -173,7 +173,7 @@ const ContactForm = (props: PropType) => {
 
             <div className="flex justify-end">
               <Button
-                onClick={() => {
+                onClickFn={() => {
                   submit().catch((e) => console.log(e));
                 }}
                 className="my-4"

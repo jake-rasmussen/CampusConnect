@@ -28,15 +28,20 @@ const Home = () => {
           </h1>
           {!isSignedIn ? (
             <SignInButton mode="modal">
-              <Button className="px-14 py-6 text-2xl shadow-xl">
-                Get Started
-              </Button>
+              <div className="rounded-xl bg-secondary py-4 transition duration-300 ease-in-out hover:scale-110 px-14 py-6 text-2xl shadow-xl hover:cursor-pointer">
+                <span className="tracking-none font-black uppercase text-white">
+                  Get Started
+                </span>
+              </div>
             </SignInButton>
+            // </Button>
           ) : (
             <Link href={"/project"}>
-              <Button className="px-14 py-6 text-2xl shadow-xl">
-                Get Started
-              </Button>
+              <div className="rounded-xl bg-secondary py-4 transition duration-300 ease-in-out hover:scale-110 px-14 py-6 text-2xl shadow-xl hover:cursor-pointer">
+                <span className="tracking-none font-black uppercase text-white">
+                  Get Started
+                </span>
+              </div>
             </Link>
           )}
         </div>

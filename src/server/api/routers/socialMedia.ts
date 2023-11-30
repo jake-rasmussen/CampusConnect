@@ -1,10 +1,10 @@
 import { SocialMediaPlatformType } from "@prisma/client";
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter } from "../trpc";
+import { adminProcedure, createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const socialMediaRouter = createTRPCRouter({
-  updateSocialMediaById: adminProcedure
+  updateSocialMediaById: t.procedure
     .input(
       z.object({
         id: z.string(),
@@ -16,8 +16,10 @@ export const socialMediaRouter = createTRPCRouter({
           SocialMediaPlatformType.LINKEDIN,
           SocialMediaPlatformType.WEBSITE,
         ]),
+        projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { id, url, platform } = input;
       const socialMedia = await ctx.prisma.socialMedia.update({
@@ -46,6 +48,7 @@ export const socialMediaRouter = createTRPCRouter({
         ]),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { projectId, url, platform } = input;
       const socialMedia = await ctx.prisma.socialMedia.create({
@@ -58,12 +61,14 @@ export const socialMediaRouter = createTRPCRouter({
 
       return socialMedia;
     }),
-  deleteSocialMediaById: adminProcedure
+  deleteSocialMediaById: t.procedure
     .input(
       z.object({
         id: z.string(),
+        projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { id } = input;
       const socialMedia = await ctx.prisma.socialMedia.delete({
@@ -73,12 +78,13 @@ export const socialMediaRouter = createTRPCRouter({
       });
       return socialMedia;
     }),
-  getSocialMediaByProjectId: adminProcedure
+  getSocialMediaByProjectId: t.procedure
     .input(
       z.object({
         projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .query(async ({ ctx, input }) => {
       const { projectId } = input;
       const socialMedia = ctx.prisma.socialMedia.findMany({

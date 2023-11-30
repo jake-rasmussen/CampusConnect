@@ -95,12 +95,12 @@ const ApplicationForm = (props: PropType) => {
 
   const handleSubmitAnswers = (answers: ApplicationSubmissionAnswer[]) => {
     if (!checkValidAnswers()) {
-      console.log("Not valid!")
+      console.log("Not valid!");
       toast.dismiss();
       toast.error("Please fill out the entire form!");
     } else {
       if (applicationId && handleSaveAnswers) {
-        console.log("Valid!")
+        console.log("Valid!");
         handleSaveAnswers(answers, true);
       }
     }
@@ -128,12 +128,13 @@ const ApplicationForm = (props: PropType) => {
           {name}
         </h1>
         <h2 className="text-center text-lg font-bold text-black">
-          {`Deadline: ${deadline
-            ? dateToStringFormatted(deadline) +
-            " at " +
-            dateToTimeStringFormatted(deadline)
-            : " TBD"
-            }`}
+          {`Deadline: ${
+            deadline
+              ? dateToStringFormatted(deadline) +
+                " at " +
+                dateToTimeStringFormatted(deadline)
+              : " TBD"
+          }`}
         </h2>
         <p className="text-center text-black">{description}</p>
 
@@ -206,7 +207,7 @@ const ApplicationForm = (props: PropType) => {
             {!readonly && (
               <div className="my-2 flex grow flex-row justify-center gap-4">
                 <Button
-                  onClick={() => {
+                  onClickFn={() => {
                     if (handleSaveAnswers && answersMap.size > 0) {
                       handleSaveAnswers(
                         Array.from(
@@ -221,7 +222,7 @@ const ApplicationForm = (props: PropType) => {
                 </Button>
                 <Button
                   className="bg-white/10 backdrop-invert"
-                  onClick={() =>
+                  onClickFn={() =>
                     handleSubmitAnswers(
                       Array.from(
                         answersMap.values(),

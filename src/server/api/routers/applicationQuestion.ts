@@ -1,12 +1,12 @@
 import { ApplicationQuestionType } from "@prisma/client";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 // TODO: if application is live make sure you cannot make edits to it
 
 export const applicationQuestionRouter = createTRPCRouter({
-  createApplicationQuestion: protectedProcedure
+  createApplicationQuestion: t.procedure
     .input(
       z.object({
         applicationId: z.string(),
@@ -21,8 +21,10 @@ export const applicationQuestionRouter = createTRPCRouter({
           ApplicationQuestionType.TEXT_FIELD,
           ApplicationQuestionType.TEXT_INPUT,
         ]),
+        projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const {
         applicationId,
@@ -50,12 +52,14 @@ export const applicationQuestionRouter = createTRPCRouter({
 
       return applicationQuestion;
     }),
-  deleteApplicationQuestionByApplicationId: protectedProcedure
+  deleteApplicationQuestionByApplicationId: t.procedure
     .input(
       z.object({
         applicationId: z.string(),
+        projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { applicationId } = input;
 

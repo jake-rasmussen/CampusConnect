@@ -16,18 +16,18 @@ import { api } from "~/utils/api";
 
 type PropType = {
   applicationId: string;
-
+  projectId: string;
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ApplicationDeleteDialog = (props: PropType) => {
-  const { applicationId, openDialog, setOpenDialog } = props;
+  const { applicationId, projectId, openDialog, setOpenDialog } = props;
 
   const queryClient = api.useContext();
 
   const removeApplicationProject =
-    api.applicationRouter.removeApplicationProject.useMutation({
+    api.applicationRouter.removeApplicationFromProject.useMutation({
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Removed Application!");
@@ -58,8 +58,8 @@ const ApplicationDeleteDialog = (props: PropType) => {
         </DialogHeader>
         <DialogFooter>
           <Button
-            onClick={() => {
-              removeApplicationProject.mutate({ applicationId });
+            onClickFn={() => {
+              removeApplicationProject.mutate({ applicationId, projectId });
               setOpenDialog(false);
               toast.dismiss();
               toast.loading("Removing Application...");

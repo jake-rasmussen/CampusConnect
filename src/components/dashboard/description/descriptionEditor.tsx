@@ -80,7 +80,7 @@ const DescriptionEditor = (props: PropType) => {
               )}
             </Field>
             <Button
-              onClick={() => {
+              onClickFn={() => {
                 submit().catch((e) => console.log(e));
               }}
               className="my-4"

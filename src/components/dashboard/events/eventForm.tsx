@@ -16,7 +16,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../shadcn_ui/popover";
+} from "../../shadcn_ui/popoverDialog";
 import {
   Select,
   SelectContent,
@@ -70,14 +70,14 @@ const EventForm = (props: PropType) => {
       }}
     >
       {({ submit }) => (
-        <main className="grid grid-cols-4 gap-4 py-4">
+        <main className="grid grid-cols-8 gap-4 py-4">
           <Field
             name="name"
             initialValue={eventName}
             onBlurValidate={z.string().min(1, "Enter a name")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-3">
+              <div className="col-span-6">
                 <span className="font-semibold">Name</span>
                 <Input
                   className="h-[3rem]"
@@ -100,7 +100,7 @@ const EventForm = (props: PropType) => {
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-1">
+              <div className="col-span-2">
                 <span className="whitespace-nowrap font-semibold">
                   In Person?
                 </span>
@@ -131,7 +131,7 @@ const EventForm = (props: PropType) => {
             onBlurValidate={z.string().min(1, "Enter a description")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-4">
+              <div className="col-span-8">
                 <span className="font-semibold">Description</span>
                 <Textarea
                   className="rounded-xl bg-white"
@@ -155,7 +155,7 @@ const EventForm = (props: PropType) => {
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-2 flex flex-col">
+              <div className="col-span-5 flex flex-col">
                 <span className="font-semibold">Date</span>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -174,7 +174,7 @@ const EventForm = (props: PropType) => {
                       )}
                     </ShadCNButton>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto bg-white p-0">
+                  <PopoverContent className="w-full bg-white p-0">
                     <Calendar
                       mode="single"
                       selected={value}
@@ -196,13 +196,13 @@ const EventForm = (props: PropType) => {
           <Field
             name="time"
             initialValue={eventDate}
-            onBlurValidate={z.date({
+            onSubmitValidate={z.date({
               required_error: "Enter a time",
               invalid_type_error: "Enter a time",
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-2 flex flex-col">
+              <div className="col-span-3 flex flex-col">
                 <span className="font-semibold">Time</span>
                 <TimePicker value={value} setValue={setValue} onBlur={onBlur} />
                 {!isValid && <ErrorMessage message={errors[0]} />}
@@ -216,7 +216,7 @@ const EventForm = (props: PropType) => {
             onBlurValidate={z.string().min(1, "Enter a location")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-4">
+              <div className="col-span-8">
                 <span className="font-semibold">Location / Link</span>
                 <Input
                   className="h-[3rem]"
@@ -230,7 +230,7 @@ const EventForm = (props: PropType) => {
             )}
           </Field>
 
-          <div className="col-span-4 flex flex-row justify-end">
+          <div className="col-span-8 flex flex-row justify-end">
             {handleDelete && (
               <div className="mx-8 flex w-auto grow justify-end">
                 <DeleteController
@@ -242,7 +242,7 @@ const EventForm = (props: PropType) => {
 
             <div className="flex justify-end">
               <Button
-                onClick={() => {
+                onClickFn={() => {
                   submit().catch((e) => console.log(e));
                 }}
                 className="my-4"

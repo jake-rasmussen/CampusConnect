@@ -65,7 +65,11 @@ export const applicationSubmissionRouter = createTRPCRouter({
         include: {
           application: {
             include: {
-              questions: true,
+              questions: {
+                orderBy: {
+                  orderNumber: "asc"
+                }
+              },
             },
           },
           applicationSubmissionAnswers: true,

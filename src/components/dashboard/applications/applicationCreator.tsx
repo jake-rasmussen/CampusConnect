@@ -100,7 +100,7 @@ const ApplicationCreator = ({ projectId }: Props) => {
 
             <div className="flex justify-end">
               <Button
-                onClick={() => {
+                onClickFn={() => {
                   submit().catch(() => {
                     return;
                   });

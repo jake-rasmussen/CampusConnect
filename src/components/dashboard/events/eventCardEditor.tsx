@@ -6,6 +6,9 @@ import EditController from "../editController";
 import EventForm from "./eventForm";
 
 import type { EventFormType } from "./eventForm";
+import { Input } from "~/components/shadcn_ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/shadcn_ui/popover";
+import { Button } from "~/components/shadcn_ui/button";
 
 type PropType = {
   eventName: string;
@@ -14,6 +17,7 @@ type PropType = {
   eventInPerson: boolean;
   eventDate: Date;
   eventId: string;
+  projectId: string;
 };
 
 const EventCardEditor = (props: PropType) => {
@@ -24,6 +28,7 @@ const EventCardEditor = (props: PropType) => {
     eventInPerson,
     eventDate,
     eventId,
+    projectId
   } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -65,12 +70,14 @@ const EventCardEditor = (props: PropType) => {
       date: values.date,
       inPerson: values.inPerson,
       location: values.location,
+      projectId
     });
   };
 
   const handleDelete = () => {
     deleteEvent.mutate({
       id: eventId,
+      projectId
     });
   };
 

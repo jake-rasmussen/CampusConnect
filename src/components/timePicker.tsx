@@ -89,7 +89,7 @@ const TimePicker = (props: PropType) => {
 
   return (
     <>
-      <div className="flex w-full items-center">
+      <div className="flex w-44 items-center">
         <div className="grow">
           <input
             className="border-input placeholder:text-muted-foreground h-[3rem] w-[3.3rem]  rounded-xl border px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"

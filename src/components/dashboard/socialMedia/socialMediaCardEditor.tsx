@@ -12,10 +12,11 @@ type PropType = {
   url: string;
   platform: SocialMediaPlatformType;
   socialMediaId: string;
+  projectId: string
 };
 
 const SocialMediaCardEditor = (props: PropType) => {
-  const { url, platform, socialMediaId } = props;
+  const { url, platform, socialMediaId, projectId } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -53,12 +54,14 @@ const SocialMediaCardEditor = (props: PropType) => {
       id: socialMediaId,
       url: values.url,
       platform: values.platform,
+      projectId,
     });
   };
 
   const handleDelete = () => {
     deleteSocialMedia.mutate({
       id: socialMediaId,
+      projectId
     });
   };
 

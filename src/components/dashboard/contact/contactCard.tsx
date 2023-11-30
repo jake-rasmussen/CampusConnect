@@ -6,10 +6,11 @@ import ContactCardEditor from "./contactCardEditor";
 type PropType = {
   contactInfo: ContactInfo;
   editable: boolean;
+  projectId: string;
 };
 
 const ContactCard = (props: PropType) => {
-  const { contactInfo, editable } = props;
+  const { contactInfo, editable, projectId } = props;
 
   return (
     <>
@@ -39,6 +40,7 @@ const ContactCard = (props: PropType) => {
             phone={contactInfo.phone ? contactInfo.phone : undefined}
             role={contactInfo.role}
             contactInfoId={contactInfo.id}
+            projectId={projectId}
           />
         )}
       </div>

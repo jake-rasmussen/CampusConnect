@@ -97,28 +97,27 @@ const OpenApplications = () => {
                   className="my-4 bg-secondary"
                 />
                 <div className="flex flex-wrap justify-center gap-2">
-                  {skills.map((skill) => (
-                    <>
-                      <Badge
-                        className={twMerge(
-                          "h-[2rem] bg-secondary capitalize text-white shadow-xl transition duration-300 hover:cursor-pointer hover:text-white",
-                          !filteredSkills.includes(skill) &&
-                            "border border-primary bg-white text-primary",
-                        )}
-                        onClick={() => {
-                          const updatedFilteredSkills = filteredSkills;
-                          if (!filteredSkills.includes(skill)) {
-                            updatedFilteredSkills.push(skill);
-                          } else {
-                            const index = updatedFilteredSkills.indexOf(skill);
-                            updatedFilteredSkills.splice(index, 1);
-                          }
-                          setFilteredSkills([...updatedFilteredSkills]);
-                        }}
-                      >
-                        {skill}
-                      </Badge>
-                    </>
+                  {skills.map((skill: string, index: number) => (
+                    <Badge
+                      className={twMerge(
+                        "h-[2rem] bg-secondary capitalize text-white shadow-xl transition duration-300 hover:cursor-pointer hover:text-white",
+                        !filteredSkills.includes(skill) &&
+                          "border border-primary bg-white text-primary",
+                      )}
+                      onClick={() => {
+                        const updatedFilteredSkills = filteredSkills;
+                        if (!filteredSkills.includes(skill)) {
+                          updatedFilteredSkills.push(skill);
+                        } else {
+                          const index = updatedFilteredSkills.indexOf(skill);
+                          updatedFilteredSkills.splice(index, 1);
+                        }
+                        setFilteredSkills([...updatedFilteredSkills]);
+                      }}
+                      key={`skillBadge${index}`}
+                    >
+                      {skill}
+                    </Badge>
                   ))}
                 </div>
               </div>
@@ -129,17 +128,16 @@ const OpenApplications = () => {
               <div className="flex max-w-7xl flex-wrap justify-center">
                 <>
                   {applications.map((application, index) => (
-                    <>
+                    <div key={`application${index}`}>
                       {(filteredSkills.length === 0 ||
                         (filteredSkills.length > 0 &&
                           skillInFilter(application))) && (
                         <ApplicationPreviewCard
                           application={application}
                           projectId={application.projectId}
-                          key={`application${index}`}
                         />
                       )}
-                    </>
+                    </div>
                   ))}
                 </>
               </div>

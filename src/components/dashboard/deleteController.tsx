@@ -33,7 +33,7 @@ const DeleteController = (props: PropType) => {
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button className="mx-2" onClick={handleDelete}>
+            <Button className="mx-2" onClickFn={handleDelete}>
               Confirm
             </Button>
           </DialogFooter>

@@ -154,7 +154,7 @@ const ApplicationEditForm = (props: PropType) => {
 
             <div className="flex grow flex-row justify-end gap-4">
               <Button
-                onClick={() => {
+                onClickFn={() => {
                   submit().catch((e) => console.log(e));
                 }}
               >

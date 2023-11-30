@@ -63,7 +63,9 @@ const ApplicationCard = (props: PropType) => {
     <Card
       className={twMerge(
         "relative my-6 mb-0 mr-4 flex w-[17.5rem] flex-col rounded-xl bg-white shadow-xl",
-        status === ApplicationSubmissionStatus.SUBMITTED && !editable && !applicationSubmissionId
+        status === ApplicationSubmissionStatus.SUBMITTED &&
+          !editable &&
+          !applicationSubmissionId
           ? "opacity-50"
           : "",
       )}
@@ -76,8 +78,9 @@ const ApplicationCard = (props: PropType) => {
         {displayEditComponent && (
           <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
             <Link
-              href={`/admin/${projectId as string}/application/${application.id
-                }`}
+              href={`/admin/${projectId as string}/application/${
+                application.id
+              }`}
               className="group flex h-full w-full items-center"
             >
               <div className="absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10" />
@@ -117,19 +120,21 @@ const ApplicationCard = (props: PropType) => {
               applicationId={application.id}
               openDialog={openDeleteDialog}
               setOpenDialog={setOpenDeleteDialog}
+              projectId={projectId || "UNAUTHORIZED"}
             />
           )}
         </div>
 
         <div className="opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100">
-          {applicationSubmissionId && status === ApplicationSubmissionStatus.SUBMITTED && (
-            <ApplicationWithdrawDialog
-              applicationId={application.id}
-              openDialog={openDeleteDialog}
-              setOpenDialog={setOpenDeleteDialog}
-              applicationSubmissionId={applicationSubmissionId}
-            />
-          )}
+          {applicationSubmissionId &&
+            status === ApplicationSubmissionStatus.SUBMITTED && (
+              <ApplicationWithdrawDialog
+                applicationId={application.id}
+                openDialog={openDeleteDialog}
+                setOpenDialog={setOpenDeleteDialog}
+                applicationSubmissionId={applicationSubmissionId}
+              />
+            )}
         </div>
 
         <div className="flex grow flex-col justify-end">
