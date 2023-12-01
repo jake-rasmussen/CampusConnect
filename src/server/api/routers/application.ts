@@ -21,8 +21,8 @@ export const applicationRouter = createTRPCRouter({
         include: {
           questions: {
             orderBy: {
-              orderNumber: "asc"
-            }
+              orderNumber: "asc",
+            },
           },
         },
       });
@@ -37,8 +37,8 @@ export const applicationRouter = createTRPCRouter({
       include: {
         questions: {
           orderBy: {
-            orderNumber: "asc"
-          }
+            orderNumber: "asc",
+          },
         },
         project: true,
       },

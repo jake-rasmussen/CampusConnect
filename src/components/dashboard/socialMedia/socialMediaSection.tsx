@@ -16,7 +16,7 @@ const SocialMediaSection = (props: PropType) => {
   return (
     socialMedias !== undefined && (
       <>
-        <section className="flex flex-col justify-center items-center">
+        <section className="flex flex-col items-center justify-center">
           <SocialMediaOutline>
             <>
               {socialMedias.length !== 0 &&

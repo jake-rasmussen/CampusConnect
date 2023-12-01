@@ -62,7 +62,7 @@ const ApplicationCard = (props: PropType) => {
   return (
     <Card
       className={twMerge(
-        "relative my-6 mb-0 mr-4 flex w-[17.5rem] flex-col rounded-xl bg-white shadow-xl",
+        "relative flex w-[17.5rem] flex-col rounded-xl bg-white shadow-xl",
         status === ApplicationSubmissionStatus.SUBMITTED &&
           !editable &&
           !applicationSubmissionId

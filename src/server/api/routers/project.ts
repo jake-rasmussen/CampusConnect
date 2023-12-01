@@ -23,8 +23,8 @@ export const projectRouter = createTRPCRouter({
             include: {
               questions: {
                 orderBy: {
-                  orderNumber: "asc"
-                }
+                  orderNumber: "asc",
+                },
               },
             },
           },

@@ -12,7 +12,7 @@ type PropType = {
   url: string;
   platform: SocialMediaPlatformType;
   socialMediaId: string;
-  projectId: string
+  projectId: string;
 };
 
 const SocialMediaCardEditor = (props: PropType) => {
@@ -61,7 +61,7 @@ const SocialMediaCardEditor = (props: PropType) => {
   const handleDelete = () => {
     deleteSocialMedia.mutate({
       id: socialMediaId,
-      projectId
+      projectId,
     });
   };
 

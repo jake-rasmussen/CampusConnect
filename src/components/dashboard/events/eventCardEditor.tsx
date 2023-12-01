@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
+import { Button } from "~/components/shadcn_ui/button";
+import { Input } from "~/components/shadcn_ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/shadcn_ui/popover";
 import { api } from "~/utils/api";
 import EditController from "../editController";
 import EventForm from "./eventForm";
 
 import type { EventFormType } from "./eventForm";
-import { Input } from "~/components/shadcn_ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "~/components/shadcn_ui/popover";
-import { Button } from "~/components/shadcn_ui/button";
 
 type PropType = {
   eventName: string;
@@ -28,7 +32,7 @@ const EventCardEditor = (props: PropType) => {
     eventInPerson,
     eventDate,
     eventId,
-    projectId
+    projectId,
   } = props;
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -70,14 +74,14 @@ const EventCardEditor = (props: PropType) => {
       date: values.date,
       inPerson: values.inPerson,
       location: values.location,
-      projectId
+      projectId,
     });
   };
 
   const handleDelete = () => {
     deleteEvent.mutate({
       id: eventId,
-      projectId
+      projectId,
     });
   };
 

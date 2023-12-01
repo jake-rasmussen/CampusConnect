@@ -15,7 +15,7 @@ const Button = ({
   className,
   type,
 }: PropTypes) => {
-  console.log(onClickFn)
+  console.log(onClickFn);
   return (
     <>
       <button
@@ -25,7 +25,7 @@ const Button = ({
         )}
         onClick={(e) => {
           e.preventDefault();
-          console.log(onClickFn)
+          console.log(onClickFn);
           if (onClickFn) onClickFn();
         }}
         disabled={disabled !== undefined ? disabled : false}

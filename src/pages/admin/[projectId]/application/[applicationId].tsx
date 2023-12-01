@@ -66,7 +66,7 @@ const EditApplication = () => {
   ) => {
     deleteAllApplicationQuestions.mutate({
       applicationId: applicationId,
-      projectId
+      projectId,
     });
 
     let count = 0;
@@ -76,7 +76,7 @@ const EditApplication = () => {
         applicationId: applicationId,
         answerChoices: question.answerChoices,
         orderNumber: count++,
-        projectId
+        projectId,
       });
     }
 

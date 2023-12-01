@@ -87,7 +87,7 @@ const ApplicationPreviewCard = (props: PropType) => {
 
         {application.desiredSkills.length > 0 && (
           <div className="mt-4 flex flex-col">
-            <p className="py-px text-sm underline">Desired Skills</p>
+            <p className="py-px text-sm underline pb-2 font-semibold">Desired Skills</p>
             <div className="flex flex-wrap gap-2">
               {application.desiredSkills.map((skill: string, index: number) => (
                 <Badge
