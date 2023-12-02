@@ -24,8 +24,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-      })
+      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+    })
     | undefined
   >();
 
@@ -145,6 +145,24 @@ const Apply: NextPageWithLayout = () => {
         }
       />
     );
+  } else if (savedSubmission?.applicationSubmissionStatus === ApplicationSubmissionStatus.SUBMITTED) {
+    return (
+      <section className="flex justify-center py-10">
+        <div className="min-w-[80vw] max-w-4xl">
+          <ApplicationForm
+            projectId={projectId}
+            applicationId={application.id}
+            name={application.name}
+            description={application.description}
+            questions={application.questions}
+            savedAnswers={savedSubmission?.applicationSubmissionAnswers}
+            handleSaveAnswers={handleSaveAnswers}
+            isSaving={isSaving}
+            readonly
+          />
+        </div>
+      </section>
+    )
   } else {
     return (
       <section className="flex justify-center py-10">

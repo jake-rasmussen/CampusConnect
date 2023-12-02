@@ -26,7 +26,7 @@ const MyApplications = () => {
         <Header name={"My Applications"} editable={false} />
         <section className="mt-10 flex w-full justify-center">
           {applicationSubmissions.length > 0 ? (
-            <div className="flex max-w-4xl flex-wrap">
+            <div className="flex max-w-4xl flex-wrap gap-4">
               {applicationSubmissions.map((savedApplication, index) => (
                 <ApplicationCard
                   application={savedApplication.application}
