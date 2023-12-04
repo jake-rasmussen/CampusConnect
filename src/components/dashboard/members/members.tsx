@@ -48,8 +48,6 @@ const Members = (props: PropType) => {
 
   const updateMember = api.memberRouter.updateMember.useMutation({
     onSuccess() {
-      toast.dismiss();
-      toast.success("Successfully Updated Member");
       queryClient.invalidate().catch((e) => console.log(e));
     },
   });

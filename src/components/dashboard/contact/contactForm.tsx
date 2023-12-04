@@ -43,8 +43,6 @@ const ContactForm = (props: PropType) => {
       onSubmit={(values) => {
         onSubmit(values);
         setOpenDialog(false);
-        toast.dismiss();
-        toast.success("Success submitting the form!");
       }}
     >
       {({ submit }) => (
@@ -174,6 +172,8 @@ const ContactForm = (props: PropType) => {
             <div className="flex justify-end">
               <Button
                 onClickFn={() => {
+                  toast.dismiss();
+                  toast.loading("Saving Contact...")
                   submit().catch((e) => console.log(e));
                 }}
                 className="my-4"

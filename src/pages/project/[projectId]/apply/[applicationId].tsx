@@ -19,7 +19,6 @@ const Apply: NextPageWithLayout = () => {
   const projectId = router.query.projectId as string;
   const applicationId = router.query.applicationId as string;
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   const [savedSubmission, setSavedSubmission] = useState<
@@ -51,27 +50,12 @@ const Apply: NextPageWithLayout = () => {
   } = api.applicationSubmissionRouter.getApplicationSubmissionsForUser.useQuery();
 
   const upsertApplicationSubmission =
-    api.applicationSubmissionRouter.upsertApplicationSubmission.useMutation({
-      onSuccess() {
-        if (isSubmitted) router.push(`/project/${projectId}`);
-      },
-      onError() {
-        setIsSubmitted(false);
-      },
-    });
+    api.applicationSubmissionRouter.upsertApplicationSubmission.useMutation();
 
   const createApplicationSubmissionAnswer =
     api.applicationSubmissionAnswerRouter.createApplicationSubmissionAnswer.useMutation(
       {
-        onSuccess() {
-          if (!isSubmitted) {
-            toast.dismiss();
-            toast.success("Successfully Saved Application!");
-          }
-        },
         onError() {
-          setIsSubmitted(false);
-
           toast.dismiss();
           toast.error("Error...");
         },
@@ -88,7 +72,12 @@ const Apply: NextPageWithLayout = () => {
     setIsSaving(true);
 
     if (applicationId && !isSaving) {
-      if (submit) setIsSubmitted(true);
+      toast.dismiss();
+      if (submit) {
+        toast.loading("Submitting Application...");
+      } else {
+        toast.loading("Saving Application...");
+      }
 
       const saveAnswers = async () => {
         const applicationSubmission =
@@ -99,6 +88,8 @@ const Apply: NextPageWithLayout = () => {
               ? ApplicationSubmissionStatus.SUBMITTED
               : ApplicationSubmissionStatus.DRAFT,
           });
+
+        setSavedSubmission(applicationSubmission);
 
         await deleteApplicationSubmissionAnswerChoices.mutateAsync({
           applicationSubmissionId: applicationSubmission.id,
@@ -113,6 +104,16 @@ const Apply: NextPageWithLayout = () => {
             });
           }
         }
+
+        if (submit) {
+          toast.loading("Redirecting...");
+          toast.dismiss();
+          router.push(`/project/${projectId}`);
+        } else {
+          toast.dismiss();
+          toast.success("Successfully Saved Application!");
+        }
+
       };
 
       saveAnswers()
@@ -156,8 +157,6 @@ const Apply: NextPageWithLayout = () => {
             description={application.description}
             questions={application.questions}
             savedAnswers={savedSubmission?.applicationSubmissionAnswers}
-            handleSaveAnswers={handleSaveAnswers}
-            isSaving={isSaving}
             readonly
           />
         </div>

@@ -13,6 +13,7 @@ import ApplicationPublishConfirmationDialog, {
   ConfirmationFormType,
 } from "./applicationPublishConfirmationDialog";
 import QuestionsEditor from "./questionsEditor";
+import toast from "react-hot-toast";
 
 type ApplicationFormType = {
   name: string;

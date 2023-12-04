@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge";
 
 type PropTypes = {
   onClickFn?: () => void;
-  children: string;
+  children: string | JSX.Element;
   className?: string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
@@ -15,7 +15,6 @@ const Button = ({
   className,
   type,
 }: PropTypes) => {
-  console.log(onClickFn);
   return (
     <>
       <button

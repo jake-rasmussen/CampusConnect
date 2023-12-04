@@ -78,9 +78,8 @@ const ApplicationCard = (props: PropType) => {
         {displayEditComponent && (
           <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
             <Link
-              href={`/admin/${projectId as string}/application/${
-                application.id
-              }`}
+              href={`/admin/${projectId as string}/application/${application.id
+                }`}
               className="group flex h-full w-full items-center"
             >
               <div className="absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10" />
@@ -162,24 +161,22 @@ const ApplicationCard = (props: PropType) => {
         <div className="flex w-full justify-end">
           {status === ApplicationSubmissionStatus.NEW &&
             application.status !== ApplicationStatus.CLOSED && (
-              <button
-                className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
-                onClick={() =>
-                  router.push(`/project/${projectId}/apply/${application.id}`)
-                }
-              >
-                Apply <ArrowRight className="mx-1 h-full" />
-              </button>
+              <Link href={`/project/${projectId}/apply/${application.id}`}>
+                <button
+                  className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
+                >
+                  Apply <ArrowRight className="mx-1 h-full" />
+                </button>
+              </Link>
             )}
           {status === ApplicationSubmissionStatus.DRAFT && (
-            <button
-              className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
-              onClick={() =>
-                router.push(`/project/${projectId}/apply/${application.id}`)
-              }
-            >
-              Continue <ArrowRight className="mx-1 h-full" />
-            </button>
+            <Link href={`/project/${projectId}/apply/${application.id}`}>
+              <button
+                className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
+              >
+                Continue <ArrowRight className="mx-1 h-full" />
+              </button>
+            </Link>
           )}
           {status === ApplicationSubmissionStatus.SUBMITTED && (
             <p className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out">

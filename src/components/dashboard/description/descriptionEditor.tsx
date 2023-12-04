@@ -81,6 +81,8 @@ const DescriptionEditor = (props: PropType) => {
             </Field>
             <Button
               onClickFn={() => {
+                toast.dismiss();
+                toast.loading("Saving Description...");
                 submit().catch((e) => console.log(e));
               }}
               className="my-4"

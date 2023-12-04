@@ -29,6 +29,9 @@ export const applicationSubmissionRouter = createTRPCRouter({
             applicationSubmissionStatus: status,
             updatedAt: new Date(),
           },
+          include: {
+            applicationSubmissionAnswers: true
+          }
         });
 
       return applicationSubmission;

@@ -72,14 +72,13 @@ const ApplicationPreviewCard = (props: PropType) => {
                 <></>
               )}
               <DialogFooter>
-                <Button
-                  className="mx-auto"
-                  onClickFn={() =>
-                    router.push(
-                      `/project/${application.projectId}/apply/${application.id}`,
-                    )
-                  }
-                >{`Apply for ${application.name}`}</Button>
+
+                <Button className="mx-auto">
+                  <Link href={`/project/${application.projectId}/apply/${application.id}`}>
+                    {`Apply for ${application.name}`}
+                  </Link>
+                </Button>
+
               </DialogFooter>
             </DialogContent>
           </Dialog>

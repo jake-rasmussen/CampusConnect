@@ -36,8 +36,6 @@ const SocialMediaForm = (props: PropType) => {
       onSubmit={(values) => {
         onSubmit(values);
         setOpenDialog(false);
-        toast.dismiss();
-        toast.success("Success submitting the form!");
       }}
     >
       {({ submit }) => (
@@ -123,6 +121,8 @@ const SocialMediaForm = (props: PropType) => {
             <div className="flex justify-end">
               <Button
                 onClickFn={() => {
+                  toast.dismiss();
+                  toast.loading("Saving Social Media...");
                   submit().catch((e) => console.log(e));
                 }}
                 className="my-4"

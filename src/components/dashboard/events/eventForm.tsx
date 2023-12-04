@@ -65,8 +65,6 @@ const EventForm = (props: PropType) => {
       onSubmit={(values) => {
         onSubmit(values);
         setOpenDialog(false);
-        toast.dismiss();
-        toast.success("Success submitting the form!");
       }}
     >
       {({ submit }) => (
@@ -234,7 +232,7 @@ const EventForm = (props: PropType) => {
             {handleDelete && (
               <div className="mx-8 flex w-auto grow justify-end">
                 <DeleteController
-                  dialogDescription="Are you sure you want to delete the Contact Info?"
+                  dialogDescription="Are you sure you want to delete the Event?"
                   handleDelete={handleDelete}
                 />
               </div>
@@ -243,6 +241,8 @@ const EventForm = (props: PropType) => {
             <div className="flex justify-end">
               <Button
                 onClickFn={() => {
+                  toast.dismiss();
+                  toast.loading("Saving Event...");
                   submit().catch((e) => console.log(e));
                 }}
                 className="my-4"
