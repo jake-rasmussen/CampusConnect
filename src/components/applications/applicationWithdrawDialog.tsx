@@ -59,7 +59,7 @@ const ApplicationWithdrawDialog = (props: PropType) => {
         </DialogHeader>
         <DialogFooter>
           <Button
-            onClick={() => {
+            onClickFn={() => {
               withdrawApplicationSubmission.mutate({
                 applicationSubmissionId,
                 applicationId,

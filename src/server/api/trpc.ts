@@ -7,14 +7,15 @@
  * need to use are documented accordingly near the end.
  */
 
+import { clerkClient } from "@clerk/nextjs";
 import { getAuth } from "@clerk/nextjs/server";
+import { Member, ProjectMemberType, User } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { prisma } from "~/server/db";
 
-import type { User } from "@prisma/client";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 /**
@@ -63,6 +64,9 @@ const getOrCreateUser = async (
       firstName,
       lastName,
     },
+    include: {
+      memberships: true,
+    },
   });
 };
 
@@ -75,7 +79,10 @@ const getOrCreateUser = async (
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const { sessionClaims, userId } = getAuth(opts.req);
   if (!userId) {
-    return createInnerTRPCContext(null);
+    return {
+      ...createInnerTRPCContext(null),
+      req: opts.req,
+    };
   }
 
   const { email, firstName, lastName } = sessionClaims;
@@ -86,7 +93,28 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
     lastName as string,
   );
 
-  return createInnerTRPCContext(user);
+  const evaluatorProjectIds: string[] = [];
+  const adminProjectIds: string[] = [];
+
+  user.memberships.forEach((membership: Member) => {
+    if (membership.type === ProjectMemberType.ADMIN) {
+      adminProjectIds.push(membership.projectId);
+    } else {
+      evaluatorProjectIds.push(membership.projectId);
+    }
+  });
+
+  await clerkClient.users.updateUserMetadata(userId, {
+    publicMetadata: {
+      evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
+      adminProjectIds: JSON.stringify(adminProjectIds),
+    },
+  });
+
+  return {
+    ...createInnerTRPCContext(user),
+    req: opts.req,
+  };
 };
 
 /**
@@ -97,7 +125,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  * errors on the backend.
  */
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
+export const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
     return {
@@ -147,10 +175,23 @@ const isAuthed = t.middleware(({ next, ctx }) => {
 
 export const protectedProcedure = t.procedure.use(isAuthed);
 
-const isAdmin = t.middleware(({ next, ctx }) => {
+export const isAdmin = t.middleware(async ({ next, ctx, input }) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
+  const castedInput = input as { projectId: string };
+  const castedUser = ctx.user as User & { memberships: Member[] };
+  const projectId = castedInput.projectId;
+
+  if (
+    !castedUser.memberships.find(
+      (membership) => membership.projectId === projectId,
+    )
+  ) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
   return next({
     ctx: {
       user: ctx.user,

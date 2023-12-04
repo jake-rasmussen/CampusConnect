@@ -42,7 +42,7 @@ const AdminDashboardPage = () => {
     data: applications,
     isLoading: isLoadingApplications,
     isError: isErrorApplications,
-  } = api.applicationRouter.getApplicationsByProjectId.useQuery({
+  } = api.applicationRouter.getProjectApplicationsByProjectId.useQuery({
     projectId,
   });
 

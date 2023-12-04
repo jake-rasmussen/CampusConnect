@@ -13,6 +13,7 @@ import ApplicationPublishConfirmationDialog, {
   ConfirmationFormType,
 } from "./applicationPublishConfirmationDialog";
 import QuestionsEditor from "./questionsEditor";
+import toast from "react-hot-toast";
 
 type ApplicationFormType = {
   name: string;
@@ -154,7 +155,7 @@ const ApplicationEditForm = (props: PropType) => {
 
             <div className="flex grow flex-row justify-end gap-4">
               <Button
-                onClick={() => {
+                onClickFn={() => {
                   submit().catch((e) => console.log(e));
                 }}
               >

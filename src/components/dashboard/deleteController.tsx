@@ -10,6 +10,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../shadcn_ui/dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
+import toast from "react-hot-toast";
 
 type PropType = {
   dialogDescription: string;
@@ -32,11 +34,20 @@ const DeleteController = (props: PropType) => {
             <DialogTitle>Confirm Delete</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button className="mx-2" onClick={handleDelete}>
-              Confirm
-            </Button>
-          </DialogFooter>
+          <DialogClose className="flex justify-center w-full">
+            <div
+              className="mx-2 max-w-xs rounded-xl bg-secondary px-4 py-4 transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50"
+              onClick={() => {
+                toast.dismiss();
+                toast.loading("Deleting...");
+                handleDelete();
+              }}
+            >
+              <span className="tracking-none font-black uppercase text-white">
+                Confirm
+              </span>
+            </div>
+          </DialogClose>
         </DialogContent>
       </Dialog>
     </>

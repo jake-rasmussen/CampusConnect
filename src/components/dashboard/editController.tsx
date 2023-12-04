@@ -4,6 +4,7 @@ import React from "react";
 import { Edit, SquarePlus } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
+import { Button } from "../shadcn_ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../shadcn_ui/dialog";
+import { Input } from "../shadcn_ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../shadcn_ui/popover";
 
 type PropType = {
   dialogDescription: string;
@@ -35,42 +38,42 @@ const EditController = (props: PropType) => {
   } = props;
 
   return (
-    <>
-      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <DialogTrigger asChild>
-          <>
-            {editType === "update" && (
-              <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
-                <button
-                  className="group flex h-full w-full items-center"
-                  onClick={() => setOpenDialog(true)}
-                >
-                  <div
-                    className={twMerge(
-                      "absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10",
-                      className,
-                    )}
-                  />
-                  <Edit className="mx-auto h-24 w-24 text-gray opacity-0 duration-300 group-hover:text-primary group-hover:opacity-100" />
-                </button>
-              </div>
-            )}
-            {editType === "create" && (
-              <div className={className}>
-                <button
-                  className="group flex flex-row items-center"
-                  onClick={() => setOpenDialog(true)}
-                >
-                  <SquarePlus className="mx-auto h-14 w-14 text-gray duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
-                  <h1 className="tracking-none text-2xl font-black uppercase text-gray group-hover:cursor-pointer group-hover:text-secondary">
-                    {createDescription}
-                  </h1>
-                </button>
-              </div>
-            )}
-          </>
-        </DialogTrigger>
-        <DialogContent className="max-w-2xl">
+    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+      <DialogTrigger asChild>
+        <>
+          {editType === "update" && (
+            <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
+              <button
+                className="group flex h-full w-full items-center"
+                onClick={() => setOpenDialog(true)}
+              >
+                <div
+                  className={twMerge(
+                    "absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10",
+                    className,
+                  )}
+                />
+                <Edit className="mx-auto h-24 w-24 text-gray opacity-0 duration-300 group-hover:text-primary group-hover:opacity-100" />
+              </button>
+            </div>
+          )}
+          {editType === "create" && (
+            <div className={className}>
+              <button
+                className="group flex flex-row items-center"
+                onClick={() => setOpenDialog(true)}
+              >
+                <SquarePlus className="mx-auto h-14 w-14 text-gray duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
+                <h1 className="tracking-none text-2xl font-black uppercase text-gray group-hover:cursor-pointer group-hover:text-secondary">
+                  {createDescription}
+                </h1>
+              </button>
+            </div>
+          )}
+        </>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl">
+        <>
           <DialogHeader>
             <DialogTitle>Editor</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
@@ -83,9 +86,9 @@ const EditController = (props: PropType) => {
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
           {children}
-        </DialogContent>
-      </Dialog>
-    </>
+        </>
+      </DialogContent>
+    </Dialog>
   );
 };
 

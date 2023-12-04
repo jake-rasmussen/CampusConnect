@@ -9,7 +9,7 @@ const MemberOutline = ({
 }) => {
   return (
     <>
-      <section className="flex w-full flex-col items-center gap-10 md:pt-0">
+      <section className="flex w-full flex-col items-center gap-8 md:pt-0">
         {displaySearch && search}
         <h1 className="text-center text-2xl font-semibold underline decoration-secondary">
           Members

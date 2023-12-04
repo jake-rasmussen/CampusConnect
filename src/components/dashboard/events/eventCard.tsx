@@ -24,7 +24,7 @@ type PropType = {
 };
 
 const EventCard = (props: PropType) => {
-  const { event, editable } = props;
+  const { event, editable, projectId } = props;
 
   return (
     <>
@@ -64,6 +64,7 @@ const EventCard = (props: PropType) => {
                     eventInPerson={event.inPerson}
                     eventDate={event.date}
                     eventId={event.id}
+                    projectId={projectId}
                   />
                 ) : (
                   <></>

@@ -20,9 +20,6 @@ const AllProjects: NextPageWithLayout = () => {
     error: projectsError,
   } = api.projectRouter.getAllProjects.useQuery();
 
-  // TODO: remove this
-  const createProject = api.projectRouter.createProject.useMutation({});
-
   useEffect(() => {
     setProjects(projectsData || []);
   }, [projectsData, query]);

@@ -1,8 +1,8 @@
 import { twMerge } from "tailwind-merge";
 
 type PropTypes = {
-  onClick?: () => void;
-  children: string;
+  onClickFn?: () => void;
+  children: string | JSX.Element;
   className?: string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
@@ -10,7 +10,7 @@ type PropTypes = {
 
 const Button = ({
   disabled,
-  onClick,
+  onClickFn,
   children,
   className,
   type,
@@ -24,7 +24,8 @@ const Button = ({
         )}
         onClick={(e) => {
           e.preventDefault();
-          if (onClick) onClick();
+          console.log(onClickFn);
+          if (onClickFn) onClickFn();
         }}
         disabled={disabled !== undefined ? disabled : false}
         type={type}

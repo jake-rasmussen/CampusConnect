@@ -179,7 +179,7 @@ const ApplicationPublishConfirmationDialog = ({
                   <SkillsCreator skills={skills} setSkills={setSkills} />
 
                   <Button
-                    onClick={() => {
+                    onClickFn={() => {
                       submit().catch((e) => console.error(e));
                     }}
                     className="my-4"

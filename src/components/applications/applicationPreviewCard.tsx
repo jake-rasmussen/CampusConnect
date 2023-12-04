@@ -72,14 +72,13 @@ const ApplicationPreviewCard = (props: PropType) => {
                 <></>
               )}
               <DialogFooter>
-                <Button
-                  className="mx-auto"
-                  onClick={() =>
-                    router.push(
-                      `/project/${application.projectId}/apply/${application.id}`,
-                    )
-                  }
-                >{`Apply for ${application.name}`}</Button>
+
+                <Button className="mx-auto">
+                  <Link href={`/project/${application.projectId}/apply/${application.id}`}>
+                    {`Apply for ${application.name}`}
+                  </Link>
+                </Button>
+
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -87,7 +86,7 @@ const ApplicationPreviewCard = (props: PropType) => {
 
         {application.desiredSkills.length > 0 && (
           <div className="mt-4 flex flex-col">
-            <p className="py-px text-sm underline">Desired Skills</p>
+            <p className="py-px text-sm underline pb-2 font-semibold">Desired Skills</p>
             <div className="flex flex-wrap gap-2">
               {application.desiredSkills.map((skill: string, index: number) => (
                 <Badge

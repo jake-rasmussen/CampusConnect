@@ -1,30 +1,15 @@
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter } from "../trpc";
+import { adminProcedure, createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
-  getEventById: adminProcedure
-    .input(
-      z.object({
-        id: z.string(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const { id } = input;
-      const event = await ctx.prisma.event.findUniqueOrThrow({
-        where: {
-          id,
-        },
-      });
-
-      return event;
-    }),
-  getEventsByProjectId: adminProcedure
+  getEventsByProjectId: t.procedure
     .input(
       z.object({
         projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .query(async ({ ctx, input }) => {
       const { projectId } = input;
       const events = await ctx.prisma.event.findMany({
@@ -35,9 +20,10 @@ export const eventRouter = createTRPCRouter({
 
       return events;
     }),
-  updateEventById: adminProcedure
+  updateEventById: t.procedure
     .input(
       z.object({
+        projectId: z.string(),
         id: z.string(),
         name: z.string(),
         date: z.date(),
@@ -46,6 +32,7 @@ export const eventRouter = createTRPCRouter({
         location: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { id, name, date, description, inPerson, location } = input;
       const event = await ctx.prisma.event.update({
@@ -63,7 +50,7 @@ export const eventRouter = createTRPCRouter({
 
       return event;
     }),
-  createEvent: adminProcedure
+  createEvent: t.procedure
     .input(
       z.object({
         projectId: z.string(),
@@ -74,6 +61,7 @@ export const eventRouter = createTRPCRouter({
         location: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { projectId, name, date, description, inPerson, location } = input;
       const event = await ctx.prisma.event.create({
@@ -89,12 +77,14 @@ export const eventRouter = createTRPCRouter({
 
       return event;
     }),
-  deleteEventById: adminProcedure
+  deleteEventById: t.procedure
     .input(
       z.object({
         id: z.string(),
+        projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { id } = input;
       const event = await ctx.prisma.event.delete({

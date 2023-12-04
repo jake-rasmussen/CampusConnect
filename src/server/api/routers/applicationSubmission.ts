@@ -29,6 +29,9 @@ export const applicationSubmissionRouter = createTRPCRouter({
             applicationSubmissionStatus: status,
             updatedAt: new Date(),
           },
+          include: {
+            applicationSubmissionAnswers: true
+          }
         });
 
       return applicationSubmission;
@@ -65,7 +68,11 @@ export const applicationSubmissionRouter = createTRPCRouter({
         include: {
           application: {
             include: {
-              questions: true,
+              questions: {
+                orderBy: {
+                  orderNumber: "asc",
+                },
+              },
             },
           },
           applicationSubmissionAnswers: true,
