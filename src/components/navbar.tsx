@@ -10,7 +10,7 @@ const Navbar = () => {
     <>
       <header className="sticky top-0 z-50 w-full bg-white p-4 text-black shadow-xl">
         <div className="mx-auto flex h-16">
-          <Link href="/" className="mr-4 h-16 w-16">
+          <Link href="/" className="mx-4 h-16 w-16">
             <Image
               src={"/assets/SWEC Logo.png"}
               alt={"SWEC Logo"}
