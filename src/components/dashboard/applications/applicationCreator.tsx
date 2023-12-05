@@ -25,9 +25,12 @@ type ApplicationFormType = {
 const ApplicationCreator = ({ projectId }: Props) => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
+  const queryClient = api.useContext();
+
   const createApplication = api.applicationRouter.createApplication.useMutation(
     {
       onSuccess(application) {
+        queryClient.applicationRouter.getProjectApplicationsByProjectIdForAdmin.invalidate({ projectId });
         router.push(`/admin/${projectId}/application/${application.id}`);
       },
       onError() {
@@ -48,6 +51,9 @@ const ApplicationCreator = ({ projectId }: Props) => {
       <Form<ApplicationFormType>
         onSubmit={(values, isValid) => {
           if (isValid) {
+            toast.dismiss();
+            toast.loading("Entering Application View...");
+
             const { name, description } = values;
             createApplication.mutate({
               projectId,

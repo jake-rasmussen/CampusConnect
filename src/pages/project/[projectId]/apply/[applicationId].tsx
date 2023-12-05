@@ -18,6 +18,7 @@ const Apply: NextPageWithLayout = () => {
   const router = useRouter();
   const projectId = router.query.projectId as string;
   const applicationId = router.query.applicationId as string;
+  const queryClient = api.useContext();
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -48,9 +49,14 @@ const Apply: NextPageWithLayout = () => {
     isError: isErrorUserSubmissions,
     error: errorUserSubmissions,
   } = api.applicationSubmissionRouter.getApplicationSubmissionsForUser.useQuery();
-
+  
   const upsertApplicationSubmission =
-    api.applicationSubmissionRouter.upsertApplicationSubmission.useMutation();
+    api.applicationSubmissionRouter.upsertApplicationSubmission.useMutation({
+      onSuccess() {
+        queryClient.applicationRouter.getProjectApplicationsByProjectIdForUsers.invalidate({ projectId });
+        queryClient.applicationSubmissionRouter.getApplicationSubmissionsForUser.invalidate();
+      }
+    });
 
   const createApplicationSubmissionAnswer =
     api.applicationSubmissionAnswerRouter.createApplicationSubmissionAnswer.useMutation(

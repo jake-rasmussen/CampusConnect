@@ -85,6 +85,8 @@ const ApplicationEditForm = (props: PropType) => {
     description: string,
     values: ConfirmationFormType,
   ) => {
+    toast.dismiss();
+    toast.loading("Publishing Application...");
     publishApplication(name, description, values, questions);
   };
 
@@ -156,6 +158,8 @@ const ApplicationEditForm = (props: PropType) => {
             <div className="flex grow flex-row justify-end gap-4">
               <Button
                 onClickFn={() => {
+                  toast.dismiss();
+                  toast.loading("Saving Application....");
                   submit().catch((e) => console.log(e));
                 }}
               >

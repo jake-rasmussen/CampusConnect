@@ -1,4 +1,4 @@
-import { Project } from "@prisma/client";
+import { ApplicationStatus, Project } from "@prisma/client";
 import { z } from "zod";
 
 import {
@@ -19,15 +19,6 @@ export const projectRouter = createTRPCRouter({
           id: projectId,
         },
         include: {
-          applications: {
-            include: {
-              questions: {
-                orderBy: {
-                  orderNumber: "asc",
-                },
-              },
-            },
-          },
           events: true,
           contactInfo: true,
           socialMedia: true,

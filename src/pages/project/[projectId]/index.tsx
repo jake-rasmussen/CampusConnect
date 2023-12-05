@@ -17,9 +17,9 @@ const ProjectDashboardPage: NextPageWithLayout = () => {
 
   const {
     data: project,
-    isLoading,
-    isError,
-    error,
+    isLoading: isLoadingProjects,
+    isError: isErrorProjects,
+    error: errorProjects,
   } = api.projectRouter.getProjectByIdForUsers.useQuery(
     {
       projectId,
@@ -27,10 +27,22 @@ const ProjectDashboardPage: NextPageWithLayout = () => {
     { enabled: !!projectId },
   );
 
-  if (isLoading) {
+  const {
+    data: applications,
+    isLoading: isLoadingApplications,
+    isError: isErrorApplications,
+    error: errorApplications,
+  } = api.applicationRouter.getProjectApplicationsByProjectIdForUsers.useQuery(
+    {
+      projectId
+    },
+    { enabled: !!projectId },
+  );
+
+  if (isLoadingProjects || isLoadingApplications) {
     return <LoadingPage />;
-  } else if (isError) {
-    return <Error statusCode={error?.data?.httpStatus || 500} />;
+  } else if (isErrorProjects || isErrorApplications) {
+    return <Error statusCode={errorProjects?.data?.httpStatus || errorApplications?.data?.httpStatus || 500} />;
   } else {
     return (
       <ProjectDashboard
@@ -39,7 +51,7 @@ const ProjectDashboardPage: NextPageWithLayout = () => {
         description={project.description}
         events={project.events}
         contactInfos={project.contactInfo}
-        applications={project.applications}
+        applications={applications}
         socialMedias={project.socialMedia}
         members={project.members}
         isAdminPage={false}

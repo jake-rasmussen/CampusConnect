@@ -4,7 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, isAdmin, protectedProcedure, t } from "../trpc";
 
 export const applicationRouter = createTRPCRouter({
-  getProjectApplicationsByProjectId: t.procedure
+  getProjectApplicationsByProjectIdForAdmin: t.procedure
     .input(
       z.object({
         projectId: z.string(),
@@ -17,6 +17,31 @@ export const applicationRouter = createTRPCRouter({
       const applications = await ctx.prisma.application.findMany({
         where: {
           projectId,
+        },
+        include: {
+          questions: {
+            orderBy: {
+              orderNumber: "asc",
+            },
+          },
+        },
+      });
+
+      return applications;
+    }),
+  getProjectApplicationsByProjectIdForUsers: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { projectId } = input;
+
+      const applications = await ctx.prisma.application.findMany({
+        where: {
+          projectId,
+          status: ApplicationStatus.OPEN
         },
         include: {
           questions: {
