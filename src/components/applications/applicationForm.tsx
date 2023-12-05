@@ -95,12 +95,10 @@ const ApplicationForm = (props: PropType) => {
 
   const handleSubmitAnswers = (answers: ApplicationSubmissionAnswer[]) => {
     if (!checkValidAnswers()) {
-      console.log("Not valid!");
       toast.dismiss();
       toast.error("Please fill out the entire form!");
     } else {
       if (applicationId && handleSaveAnswers) {
-        console.log("Valid!");
         handleSaveAnswers(answers, true);
       }
     }
@@ -128,13 +126,12 @@ const ApplicationForm = (props: PropType) => {
           {name}
         </h1>
         <h2 className="text-center text-lg font-bold text-black">
-          {`Deadline: ${
-            deadline
+          {`Deadline: ${deadline
               ? dateToStringFormatted(deadline) +
-                " at " +
-                dateToTimeStringFormatted(deadline)
+              " at " +
+              dateToTimeStringFormatted(deadline)
               : " TBD"
-          }`}
+            }`}
         </h2>
         <p className="text-center text-black">{description}</p>
 

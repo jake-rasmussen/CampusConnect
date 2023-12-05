@@ -53,6 +53,7 @@ const ApplicationEditForm = (props: PropType) => {
   const [questions, setQuestions] = useState<ApplicationQuestion[]>([]);
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setQuestions(savedQuestions);
@@ -93,12 +94,12 @@ const ApplicationEditForm = (props: PropType) => {
   return (
     <>
       <Form<ApplicationFormType>
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           if (!isApplicationFormValid(values.name, values.description)) {
             setOpenErrorDialog(true);
             return;
           }
-          saveApplication(values.name, values.description, questions);
+          saveApplication(values.name, values.description, questions).then(() => setIsSaving(false));
         }}
       >
         {({ submit, getFieldValue }) => (
@@ -158,17 +159,23 @@ const ApplicationEditForm = (props: PropType) => {
             <div className="flex grow flex-row justify-end gap-4">
               <Button
                 onClickFn={() => {
+                  setIsSaving(true);
                   toast.dismiss();
                   toast.loading("Saving Application....");
                   submit().catch((e) => console.log(e));
                 }}
+                disabled={isSaving}
               >
                 Save
               </Button>
 
               <ApplicationPreviewDialog
                 triggerButton={
-                  <button className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110">
+                  <button 
+                    className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50"
+                    disabled={isSaving}
+                    onClick={() => setIsSaving(true)}
+                  >
                     <h1 className="tracking-none font-black uppercase text-white">
                       Preview
                     </h1>
@@ -194,6 +201,8 @@ const ApplicationEditForm = (props: PropType) => {
                 isApplicationFormValid={isApplicationFormValid}
                 confirmPublishApplication={confirmPublishApplication}
                 setErrorDialogOpen={setOpenErrorDialog}
+                isSaving={isSaving}
+                setIsSaving={setIsSaving}
               />
             </div>
 

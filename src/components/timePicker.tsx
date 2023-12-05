@@ -89,7 +89,7 @@ const TimePicker = (props: PropType) => {
 
   return (
     <>
-      <div className="flex w-44 items-center">
+      <div className="flex items-center">
         <div className="grow">
           <input
             className="border-input placeholder:text-muted-foreground h-[3rem] w-[3.3rem]  rounded-xl border px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -107,7 +107,7 @@ const TimePicker = (props: PropType) => {
             onBlur={onBlur}
           />
         </div>
-        <h1 className="px-2 text-xl">:</h1>
+        <h1 className="px-2 text-xl w-full text-center">:</h1>
         <div className="grow">
           <input
             className="border-input placeholder:text-muted-foreground h-[3rem] w-[3.3rem]  rounded-xl border px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -121,7 +121,7 @@ const TimePicker = (props: PropType) => {
             onBlur={onBlur}
           />
         </div>
-        <h1 className="px-2 text-xl">:</h1>
+        <h1 className="px-2 text-xl w-full text-center">:</h1>
         <div className="h-full">
           <Select
             onValueChange={(input) => {

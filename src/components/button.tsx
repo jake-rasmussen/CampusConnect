@@ -24,7 +24,6 @@ const Button = ({
         )}
         onClick={(e) => {
           e.preventDefault();
-          console.log(onClickFn);
           if (onClickFn) onClickFn();
         }}
         disabled={disabled !== undefined ? disabled : false}

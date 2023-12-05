@@ -66,12 +66,24 @@ const AdminDashboardPage = () => {
     { enabled: !!projectId },
   );
 
+  const {
+    data: members,
+    isLoading: isLoadingMembers,
+    isError: isErrorMembers,
+  } = api.memberRouter.getAllMembersByProjectId.useQuery(
+    {
+      projectId,
+    },
+    { enabled: !!projectId },
+  )
+
   if (
     isLoadingProject ||
     isLoadingEvents ||
     isLoadingContacts ||
     isLoadingApplications ||
-    isLoadingSocialMedia
+    isLoadingSocialMedia ||
+    isLoadingMembers
   ) {
     return <LoadingPage />;
   } else if (
@@ -79,7 +91,8 @@ const AdminDashboardPage = () => {
     isErrorEvents ||
     isErrorContacts ||
     isErrorApplications ||
-    isErrorSocialMedia
+    isErrorSocialMedia ||
+    isErrorMembers
   ) {
     return <Error statusCode={500} />;
   } else {
@@ -92,7 +105,7 @@ const AdminDashboardPage = () => {
         contactInfos={contactInfos}
         applications={applications}
         socialMedias={socialMedia}
-        members={[]}
+        members={members}
         isAdminPage={true}
       />
     );

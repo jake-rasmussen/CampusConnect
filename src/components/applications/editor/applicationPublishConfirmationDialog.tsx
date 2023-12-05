@@ -22,7 +22,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "~/components/shadcn_ui/popover";
+} from "~/components/shadcn_ui/popoverDialog";
 import TimePicker from "~/components/timePicker";
 import { cn } from "../../../../lib/utils";
 
@@ -36,6 +36,8 @@ type PropTypes = {
   ) => void;
   isApplicationFormValid: (name: string, description: string) => boolean;
   setErrorDialogOpen: React.Dispatch<boolean>;
+  isSaving: boolean;
+  setIsSaving: React.Dispatch<boolean>;
 };
 
 export type ConfirmationFormType = {
@@ -50,9 +52,10 @@ const ApplicationPublishConfirmationDialog = ({
   confirmPublishApplication,
   isApplicationFormValid,
   setErrorDialogOpen,
+  isSaving,
+  setIsSaving
 }: PropTypes) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [calendarPopoverOpen, setCalendarPopoverOpen] = useState(false);
 
   const [skills, setSkills] = useState<string[]>([]);
 
@@ -62,7 +65,7 @@ const ApplicationPublishConfirmationDialog = ({
     <>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <button
-          className="w-3xl max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110"
+          className="w-3xl max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50"
           onClick={() => {
             if (!isApplicationFormValid(name, description)) {
               setErrorDialogOpen(true);
@@ -98,7 +101,7 @@ const ApplicationPublishConfirmationDialog = ({
             >
               {({ submit }) => (
                 <main className="flex flex-col items-center gap-8">
-                  <section className="flex w-full flex-row items-center justify-center gap-4">
+                  <section className="flex flex-row items-center justify-center gap-4 w-fit">
                     <Field
                       name="date"
                       initialValue={new Date()}
@@ -110,10 +113,7 @@ const ApplicationPublishConfirmationDialog = ({
                       {({ value, setValue, onBlur, isValid, errors }) => (
                         <div className="flex flex-col">
                           <span className="font-semibold">Date</span>
-                          <Popover
-                            open={calendarPopoverOpen}
-                            onOpenChange={setCalendarPopoverOpen}
-                          >
+                          <Popover>
                             <PopoverTrigger asChild>
                               <ShadCNButton
                                 variant={"outline"}
@@ -142,7 +142,6 @@ const ApplicationPublishConfirmationDialog = ({
                                 onSelect={(date) => {
                                   if (date !== undefined) {
                                     setValue(date);
-                                    setCalendarPopoverOpen(false);
                                   }
                                 }}
                                 onDayBlur={onBlur}
@@ -183,6 +182,7 @@ const ApplicationPublishConfirmationDialog = ({
                       submit().catch((e) => console.error(e));
                     }}
                     className="my-4"
+                    disabled={isSaving}
                   >
                     Publish
                   </Button>
