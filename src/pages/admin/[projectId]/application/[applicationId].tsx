@@ -10,7 +10,7 @@ import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-import type { JSXElementConstructor, ReactElement } from "react";
+import { useEffect, type JSXElementConstructor, type ReactElement } from "react";
 
 const EditApplication = () => {
   const router = useRouter();
@@ -105,6 +105,8 @@ const EditApplication = () => {
       projectId,
     });
   };
+
+  useEffect(() => toast.dismiss(), []);
 
   if (isLoading) {
     return <LoadingPage />;
