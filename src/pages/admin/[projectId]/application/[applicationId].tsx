@@ -17,6 +17,8 @@ const EditApplication = () => {
   const applicationId = router.query.applicationId as string;
   const projectId = router.query.projectId as string;
 
+  useEffect(() => toast.dismiss(), []);
+
   const queryClient = api.useContext();
 
   const {
@@ -64,14 +66,14 @@ const EditApplication = () => {
     description: string,
     questions: ApplicationQuestion[],
   ) => {
-    deleteAllApplicationQuestions.mutate({
+    await deleteAllApplicationQuestions.mutateAsync({
       applicationId: applicationId,
       projectId,
     });
 
     let count = 0;
     for (const question of questions) {
-      createApplicationQuestion.mutate({
+      await createApplicationQuestion.mutateAsync({
         ...question,
         applicationId: applicationId,
         answerChoices: question.answerChoices,
@@ -80,7 +82,7 @@ const EditApplication = () => {
       });
     }
 
-    updateApplication.mutate({
+    await updateApplication.mutateAsync({
       applicationId: applicationId,
       name,
       description,
@@ -105,8 +107,6 @@ const EditApplication = () => {
       projectId,
     });
   };
-
-  useEffect(() => toast.dismiss(), []);
 
   if (isLoading) {
     return <LoadingPage />;
