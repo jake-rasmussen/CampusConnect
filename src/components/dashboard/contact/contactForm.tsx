@@ -173,7 +173,7 @@ const ContactForm = (props: PropType) => {
               <Button
                 onClickFn={() => {
                   toast.dismiss();
-                  toast.loading("Saving Contact...")
+                  toast.loading("Saving Contact...");
                   submit().catch((e) => console.log(e));
                 }}
                 className="my-4"

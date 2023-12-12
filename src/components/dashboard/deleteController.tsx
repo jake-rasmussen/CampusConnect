@@ -1,3 +1,5 @@
+import { DialogClose } from "@radix-ui/react-dialog";
+import toast from "react-hot-toast";
 import { Trash } from "tabler-icons-react";
 
 import Button from "../button";
@@ -10,8 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../shadcn_ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
-import toast from "react-hot-toast";
 
 type PropType = {
   dialogDescription: string;
@@ -34,7 +34,7 @@ const DeleteController = (props: PropType) => {
             <DialogTitle>Confirm Delete</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>
           </DialogHeader>
-          <DialogClose className="flex justify-center w-full">
+          <DialogClose className="flex w-full justify-center">
             <div
               className="mx-2 max-w-xs rounded-xl bg-secondary px-4 py-4 transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50"
               onClick={() => {

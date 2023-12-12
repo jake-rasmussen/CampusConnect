@@ -184,11 +184,11 @@ export const isAdmin = t.middleware(async ({ next, ctx, input }) => {
   const castedUser = ctx.user as User & { memberships: Member[] };
   const projectId = castedInput.projectId;
 
-  if (
-    !castedUser.memberships.find(
-      (membership) => membership.projectId === projectId,
-    )
-  ) {
+  const membership = castedUser.memberships.find(
+    (membership) => membership.projectId === projectId,
+  );
+
+  if (!membership || membership.type !== ProjectMemberType.ADMIN) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
@@ -199,4 +199,30 @@ export const isAdmin = t.middleware(async ({ next, ctx, input }) => {
   });
 });
 
-export const adminProcedure = t.procedure.use(isAdmin);
+export const isEvaluator = t.middleware(async ({ next, ctx, input }) => {
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  const castedInput = input as { projectId: string };
+  const castedUser = ctx.user as User & { memberships: Member[] };
+  const projectId = castedInput.projectId;
+
+  const membership = castedUser.memberships.find(
+    (membership) => membership.projectId === projectId,
+  );
+
+  if (
+    !membership ||
+    (membership.type !== ProjectMemberType.EVALUATOR &&
+      membership.type !== ProjectMemberType.ADMIN)
+  ) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return next({
+    ctx: {
+      user: ctx.user,
+    },
+  });
+});

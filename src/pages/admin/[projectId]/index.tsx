@@ -75,7 +75,7 @@ const AdminDashboardPage = () => {
       projectId,
     },
     { enabled: !!projectId },
-  )
+  );
 
   if (
     isLoadingProject ||

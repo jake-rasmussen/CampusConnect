@@ -88,14 +88,14 @@ const OpenApplications = () => {
         <section className="py-10">
           <div className="ml-4 flex flex-col items-center text-center">
             {skills.length > 0 && (
-              <div className="pb-8 max-w-4xl">
-                <div className="max-w-xs mx-auto">
+              <div className="max-w-4xl pb-8">
+                <div className="mx-auto max-w-xs">
                   <h3 className="text-xl font-semibold uppercase text-black">
                     Filter
                   </h3>
                   <Separator
                     orientation="horizontal"
-                    className="my-4 bg-secondary w-full"
+                    className="my-4 w-full bg-secondary"
                   />
                 </div>
                 <div className="flex flex-wrap justify-center gap-2">
@@ -104,7 +104,7 @@ const OpenApplications = () => {
                       className={twMerge(
                         "h-[2rem] bg-secondary capitalize text-white shadow-xl transition duration-300 hover:cursor-pointer hover:text-white",
                         !filteredSkills.includes(skill) &&
-                        "border border-primary bg-white text-primary",
+                          "border border-primary bg-white text-primary",
                       )}
                       onClick={() => {
                         const updatedFilteredSkills = filteredSkills;
@@ -134,11 +134,11 @@ const OpenApplications = () => {
                       {(filteredSkills.length === 0 ||
                         (filteredSkills.length > 0 &&
                           skillInFilter(application))) && (
-                          <ApplicationPreviewCard
-                            application={application}
-                            projectId={application.projectId}
-                          />
-                        )}
+                        <ApplicationPreviewCard
+                          application={application}
+                          projectId={application.projectId}
+                        />
+                      )}
                     </div>
                   ))}
                 </>

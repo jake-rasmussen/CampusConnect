@@ -14,7 +14,6 @@ type PropType = {
 };
 
 const Search = (props: PropType) => {
-  // TODO: create confirm add user modal -- if user already exists notify using react toast otherwise notify addition
   const { projectId, members } = props;
 
   const [search, setSearch] = useState("");

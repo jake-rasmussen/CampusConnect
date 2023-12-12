@@ -15,7 +15,7 @@ import { twMerge } from "tailwind-merge";
 import ApplicationForm from "~/components/applications/applicationForm";
 import ApplicationWithdrawDialog from "~/components/applications/applicationWithdrawDialog";
 import ApplicationDeleteDialog from "~/components/applications/editor/applicationDeleteDialog";
-import ApplicationPreviewDialog from "~/components/applications/editor/applicationPreviewDialog";
+import PreviewDialog from "~/components/previewDialog";
 import { Separator } from "~/components/shadcn_ui/separator";
 import { DATE_TIME_FORMAT_OPTS } from "~/constants";
 import {
@@ -49,8 +49,6 @@ const ApplicationCard = (props: PropType) => {
     projectId,
     applicationSubmissionId,
   } = props;
-  const router = useRouter();
-
   const displayEditComponent =
     editable && application.status === ApplicationStatus.DRAFT;
   const displayPreviewComponent =
@@ -78,8 +76,9 @@ const ApplicationCard = (props: PropType) => {
         {displayEditComponent && (
           <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
             <Link
-              href={`/admin/${projectId as string}/application/${application.id
-                }`}
+              href={`/admin/${projectId as string}/application/${
+                application.id
+              }`}
               className="group flex h-full w-full items-center"
             >
               <div className="absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10" />
@@ -88,7 +87,7 @@ const ApplicationCard = (props: PropType) => {
           </div>
         )}
         {displayPreviewComponent && (
-          <ApplicationPreviewDialog
+          <PreviewDialog
             triggerButton={
               <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
                 <div className="group flex h-full w-full items-center">
@@ -97,7 +96,8 @@ const ApplicationCard = (props: PropType) => {
                 </div>
               </div>
             }
-            dialogDescription={"Preview the Application"}
+            dialogTitle="Application Preview"
+            dialogDescription="Preview the Application"
             openDialog={openPreviewDialog}
             setOpenDialog={setOpenPreviewDialog}
           >
@@ -111,7 +111,7 @@ const ApplicationCard = (props: PropType) => {
               name={""}
               description={""}
             />
-          </ApplicationPreviewDialog>
+          </PreviewDialog>
         )}
         <div className="opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100">
           {editable && (
@@ -162,18 +162,14 @@ const ApplicationCard = (props: PropType) => {
           {status === ApplicationSubmissionStatus.NEW &&
             application.status !== ApplicationStatus.CLOSED && (
               <Link href={`/project/${projectId}/apply/${application.id}`}>
-                <button
-                  className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
-                >
+                <button className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2">
                   Apply <ArrowRight className="mx-1 h-full" />
                 </button>
               </Link>
             )}
           {status === ApplicationSubmissionStatus.DRAFT && (
             <Link href={`/project/${projectId}/apply/${application.id}`}>
-              <button
-                className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
-              >
+              <button className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2">
                 Continue <ArrowRight className="mx-1 h-full" />
               </button>
             </Link>

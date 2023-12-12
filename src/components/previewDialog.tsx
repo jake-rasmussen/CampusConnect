@@ -1,5 +1,6 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { twMerge } from "tailwind-merge";
 
 import {
   Dialog,
@@ -8,23 +9,27 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../shadcn_ui/dialog";
+} from "./shadcn_ui/dialog";
 
 type PropType = {
   triggerButton: JSX.Element;
-  children?: JSX.Element | JSX.Element[];
+  dialogTitle: string;
   dialogDescription: string;
+  children?: JSX.Element | JSX.Element[];
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  className?: string;
 };
 
-const ApplicationPreviewDialog = (props: PropType) => {
+const PreviewDialog = (props: PropType) => {
   const {
     children,
+    dialogTitle,
     dialogDescription,
     openDialog,
     setOpenDialog,
     triggerButton,
+    className,
   } = props;
 
   return (
@@ -33,9 +38,14 @@ const ApplicationPreviewDialog = (props: PropType) => {
         <DialogTrigger asChild>
           <div onClick={() => setOpenDialog(true)}>{triggerButton}</div>
         </DialogTrigger>
-        <DialogContent className="h-[75vh] max-w-5xl">
+        <DialogContent
+          className={twMerge(
+            "max-h-[75vh] max-w-5xl overflow-y-scroll",
+            className,
+          )}
+        >
           <DialogHeader>
-            <DialogTitle>Application Preview</DialogTitle>
+            <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription className="py-4">
               {dialogDescription}
             </DialogDescription>
@@ -44,11 +54,13 @@ const ApplicationPreviewDialog = (props: PropType) => {
             <Cross2Icon className="h-8 w-8" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
-          <section className="overflow-y-scroll">{children}</section>
+          <section className="overflow-y-scroll rounded-2xl">
+            {children}
+          </section>
         </DialogContent>
       </Dialog>
     </>
   );
 };
 
-export default ApplicationPreviewDialog;
+export default PreviewDialog;

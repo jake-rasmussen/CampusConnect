@@ -1,13 +1,7 @@
-import { ApplicationStatus, Project } from "@prisma/client";
+import { ApplicationStatus, Project, ProjectMemberType } from "@prisma/client";
 import { z } from "zod";
 
-import {
-  adminProcedure,
-  createTRPCRouter,
-  isAdmin,
-  protectedProcedure,
-  t,
-} from "../trpc";
+import { createTRPCRouter, isAdmin, protectedProcedure, t } from "../trpc";
 
 export const projectRouter = createTRPCRouter({
   getProjectByIdForUsers: protectedProcedure
@@ -81,9 +75,10 @@ export const projectRouter = createTRPCRouter({
   getAdminProjects: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.user.userId;
 
-    const members = await ctx.prisma.member.findMany({
+    const admins = await ctx.prisma.member.findMany({
       where: {
         userId,
+        type: ProjectMemberType.ADMIN,
       },
       include: {
         project: true,
@@ -91,8 +86,27 @@ export const projectRouter = createTRPCRouter({
     });
 
     let projects: Project[] = [];
-    members.forEach((member) => {
+    admins.forEach((member) => {
       projects.push(member.project);
+    });
+    return projects;
+  }),
+  getEvaluatorProjects: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.userId;
+
+    const evaluators = await ctx.prisma.member.findMany({
+      where: {
+        userId,
+        type: ProjectMemberType.EVALUATOR,
+      },
+      include: {
+        project: true,
+      },
+    });
+
+    let projects: Project[] = [];
+    evaluators.forEach((evaluator) => {
+      projects.push(evaluator.project);
     });
     return projects;
   }),

@@ -1,6 +1,7 @@
 import { ApplicationQuestion } from "@prisma/client";
 import Error from "next/error";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 import ApplicationEditForm from "~/components/applications/editor/applicationEditForm";
@@ -10,7 +11,7 @@ import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-import { useEffect, type JSXElementConstructor, type ReactElement } from "react";
+import type { JSXElementConstructor, ReactElement } from "react";
 
 const EditApplication = () => {
   const router = useRouter();

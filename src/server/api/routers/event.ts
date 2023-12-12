@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter, isAdmin, t } from "../trpc";
+import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
   getEventsByProjectId: t.procedure

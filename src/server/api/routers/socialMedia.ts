@@ -1,7 +1,7 @@
 import { SocialMediaPlatformType } from "@prisma/client";
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter, isAdmin, t } from "../trpc";
+import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const socialMediaRouter = createTRPCRouter({
   updateSocialMediaById: t.procedure
@@ -34,7 +34,7 @@ export const socialMediaRouter = createTRPCRouter({
 
       return socialMedia;
     }),
-  createSocialMedia: adminProcedure
+  createSocialMedia: t.procedure
     .input(
       z.object({
         projectId: z.string(),

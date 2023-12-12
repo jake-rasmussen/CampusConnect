@@ -34,8 +34,6 @@ type PropType = {
 const ApplicationPreviewCard = (props: PropType) => {
   const { application } = props;
 
-  const router = useRouter();
-
   return (
     <Card className="relative my-6 mb-0 mr-4 flex w-[25rem] flex-col rounded-xl bg-white shadow-xl">
       <CardHeader className="pb-0">
@@ -72,13 +70,13 @@ const ApplicationPreviewCard = (props: PropType) => {
                 <></>
               )}
               <DialogFooter>
-
                 <Button className="mx-auto">
-                  <Link href={`/project/${application.projectId}/apply/${application.id}`}>
+                  <Link
+                    href={`/project/${application.projectId}/apply/${application.id}`}
+                  >
                     {`Apply for ${application.name}`}
                   </Link>
                 </Button>
-
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -86,7 +84,9 @@ const ApplicationPreviewCard = (props: PropType) => {
 
         {application.desiredSkills.length > 0 && (
           <div className="mt-4 flex flex-col">
-            <p className="py-px text-sm underline pb-2 font-semibold">Desired Skills</p>
+            <p className="py-px pb-2 text-sm font-semibold underline">
+              Desired Skills
+            </p>
             <div className="flex flex-wrap gap-2">
               {application.desiredSkills.map((skill: string, index: number) => (
                 <Badge

@@ -24,8 +24,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-    })
+        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+      })
     | undefined
   >();
 
@@ -49,13 +49,15 @@ const Apply: NextPageWithLayout = () => {
     isError: isErrorUserSubmissions,
     error: errorUserSubmissions,
   } = api.applicationSubmissionRouter.getApplicationSubmissionsForUser.useQuery();
-  
+
   const upsertApplicationSubmission =
     api.applicationSubmissionRouter.upsertApplicationSubmission.useMutation({
       onSuccess() {
-        queryClient.applicationRouter.getProjectApplicationsByProjectIdForUsers.invalidate({ projectId });
+        queryClient.applicationRouter.getProjectApplicationsByProjectIdForUsers.invalidate(
+          { projectId },
+        );
         queryClient.applicationSubmissionRouter.getApplicationSubmissionsForUser.invalidate();
-      }
+      },
     });
 
   const createApplicationSubmissionAnswer =
@@ -119,7 +121,6 @@ const Apply: NextPageWithLayout = () => {
           toast.dismiss();
           toast.success("Successfully Saved Application!");
         }
-
       };
 
       saveAnswers()
@@ -152,7 +153,10 @@ const Apply: NextPageWithLayout = () => {
         }
       />
     );
-  } else if (savedSubmission?.applicationSubmissionStatus === ApplicationSubmissionStatus.SUBMITTED) {
+  } else if (
+    savedSubmission?.applicationSubmissionStatus ===
+    ApplicationSubmissionStatus.SUBMITTED
+  ) {
     return (
       <section className="flex justify-center py-10">
         <div className="min-w-[80vw] max-w-4xl">
@@ -167,7 +171,7 @@ const Apply: NextPageWithLayout = () => {
           />
         </div>
       </section>
-    )
+    );
   } else {
     return (
       <section className="flex justify-center py-10">
