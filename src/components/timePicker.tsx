@@ -92,7 +92,7 @@ const TimePicker = (props: PropType) => {
       <div className="flex items-center">
         <div className="grow">
           <input
-            className="border-input placeholder:text-muted-foreground h-[3rem] w-[3.3rem]  rounded-xl border px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="border-input placeholder:text-muted-foreground h-[3rem] w-[3.3rem]  rounded-xl border px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-center"
             onChange={(e) => {
               const input = e.currentTarget.value;
               if (+input <= 12 && +input >= 0 && input.length <= 2) {
@@ -110,7 +110,7 @@ const TimePicker = (props: PropType) => {
         <h1 className="w-full px-2 text-center text-xl">:</h1>
         <div className="grow">
           <input
-            className="border-input placeholder:text-muted-foreground h-[3rem] w-[3.3rem]  rounded-xl border px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="border-input placeholder:text-muted-foreground h-[3rem] w-[3.3rem]  rounded-xl border px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-center"
             onChange={(e) => {
               const input = e.currentTarget.value;
               if (+input < 60 && +input >= 0 && input.length <= 2) {

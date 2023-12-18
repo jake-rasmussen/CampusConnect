@@ -38,7 +38,7 @@ export const projectRouter = createTRPCRouter({
           applications: true,
           events: {
             orderBy: {
-              date: "asc",
+              start: "asc",
             },
           },
         },

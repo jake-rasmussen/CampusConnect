@@ -176,7 +176,6 @@ const ApplicationEditForm = (props: PropType) => {
                   <button
                     className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50"
                     disabled={isSaving}
-                    onClick={() => setIsSaving(true)}
                   >
                     <h1 className="tracking-none font-black uppercase text-white">
                       Preview

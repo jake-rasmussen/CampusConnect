@@ -15,7 +15,7 @@ export const applicationQuestionRouter = createTRPCRouter({
         question: z.string(),
         answerChoices: z.array(z.string()),
         type: z.enum([
-          ApplicationQuestionType.FILE_UPLOAD,
+          // ApplicationQuestionType.FILE_UPLOAD,
           ApplicationQuestionType.MULTIPLE_CHOICE,
           ApplicationQuestionType.MULTIPLE_SELECT,
           ApplicationQuestionType.TEXT_FIELD,

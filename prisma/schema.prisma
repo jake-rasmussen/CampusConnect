@@ -32,7 +32,7 @@ enum ApplicationQuestionType {
   TEXT_FIELD
   MULTIPLE_CHOICE
   MULTIPLE_SELECT
-  FILE_UPLOAD
+  // FILE_UPLOAD
 }
 
 enum ApplicationStatus {
@@ -110,7 +110,8 @@ model Event {
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
   name        String
-  date        DateTime
+  start       DateTime
+  end         DateTime
   description String
   inPerson    Boolean
   location    String

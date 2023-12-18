@@ -18,7 +18,10 @@ import {
 import { Textarea } from "~/components/shadcn_ui/textarea";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
-import { dateToStringFormatted, dateToTimeStringFormatted } from "~/utils/helpers";
+import {
+  dateToStringFormatted,
+  dateToTimeStringFormatted,
+} from "~/utils/helpers";
 
 const EvaluateApplicationSubmission = () => {
   const [comment, setComment] = useState("");
@@ -71,8 +74,8 @@ const EvaluateApplicationSubmission = () => {
         },
         onError() {
           toast.dismiss();
-          toast.error("Error...")
-        }
+          toast.error("Error...");
+        },
       },
     );
 
@@ -84,10 +87,10 @@ const EvaluateApplicationSubmission = () => {
       createApplicationSubmissionComment.mutate({
         projectId,
         applicationSubmissionEvaluationId: applicationSubmissionEvaluation.id,
-        comment
+        comment,
       });
     }
-  }
+  };
 
   if (isLoadingApplicationSubmission || isLoadingEvaluation) {
     return <LoadingPage />;
@@ -135,13 +138,17 @@ const EvaluateApplicationSubmission = () => {
                 />
               </CardContent>
               <CardFooter className="flex w-full justify-center">
-                <Button onClickFn={() => handleCreateApplicationSubmissionComment()}>Submit Comment</Button>
+                <Button
+                  onClickFn={() => handleCreateApplicationSubmissionComment()}
+                >
+                  Submit Comment
+                </Button>
               </CardFooter>
             </Card>
           </div>
         </section>
 
-        <Card className="mx-8 mb-8 max-w-4xl w-full bg-white">
+        <Card className="mx-8 mb-8 w-full max-w-4xl bg-white">
           <CardHeader>
             <CardTitle>Submission Comments</CardTitle>
           </CardHeader>
@@ -151,7 +158,10 @@ const EvaluateApplicationSubmission = () => {
                 {applicationSubmissionEvaluation.comments.map((comment) => (
                   <div>
                     <h5 className="mb-2 w-full border-b border-black font-semibold uppercase">
-                      {comment.evaluatorName} <span className="text-primary">@</span> {dateToStringFormatted(comment.createdAt)}, {dateToTimeStringFormatted(comment.createdAt)}
+                      {comment.evaluatorName}{" "}
+                      <span className="text-primary">@</span>{" "}
+                      {dateToStringFormatted(comment.createdAt)},{" "}
+                      {dateToTimeStringFormatted(comment.createdAt)}
                     </h5>
                     {comment.comment}
                   </div>

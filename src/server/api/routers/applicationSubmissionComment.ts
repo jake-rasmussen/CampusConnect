@@ -13,8 +13,7 @@ export const applicationSubmissionCommentRouter = createTRPCRouter({
     )
     .use(isEvaluator)
     .mutation(async ({ ctx, input }) => {
-      const { applicationSubmissionEvaluationId, comment } =
-        input;
+      const { applicationSubmissionEvaluationId, comment } = input;
 
       return ctx.prisma.applicationSubmissionComment.create({
         data: {
