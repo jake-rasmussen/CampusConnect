@@ -1,7 +1,13 @@
 import { ApplicationStatus } from "@prisma/client";
 import { z } from "zod";
 
-import { createTRPCRouter, isAdmin, protectedProcedure, t } from "../trpc";
+import {
+  createTRPCRouter,
+  isAdmin,
+  isEvaluator,
+  protectedProcedure,
+  t,
+} from "../trpc";
 
 export const applicationRouter = createTRPCRouter({
   getProjectApplicationsByProjectIdForAdmin: t.procedure
@@ -41,13 +47,36 @@ export const applicationRouter = createTRPCRouter({
       const applications = await ctx.prisma.application.findMany({
         where: {
           projectId,
-          status: ApplicationStatus.OPEN
+          status: ApplicationStatus.OPEN,
         },
         include: {
           questions: {
             orderBy: {
               orderNumber: "asc",
             },
+          },
+        },
+      });
+
+      return applications;
+    }),
+  getProjectApplicationsByProjectIdForEvaluators: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { projectId } = input;
+
+      const applications = await ctx.prisma.application.findMany({
+        where: {
+          projectId,
+          status: ApplicationStatus.CLOSED,
+        },
+        include: {
+          applicationSubmissions: {
+            select: { id: true, user: true },
           },
         },
       });

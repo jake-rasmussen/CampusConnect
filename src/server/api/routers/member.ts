@@ -1,7 +1,7 @@
 import { ProjectMemberType } from "@prisma/client";
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter, isAdmin, t } from "../trpc";
+import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const memberRouter = createTRPCRouter({
   createMember: t.procedure

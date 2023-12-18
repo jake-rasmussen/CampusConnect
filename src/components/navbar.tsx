@@ -39,7 +39,7 @@ const Navbar = () => {
               </h1>
             </Link>
             <Separator orientation="vertical" className="bg-secondary" />
-            <Link href="/admin" className="flex items-center p-2">
+            <Link href="/my-projects" className="flex items-center p-2">
               <h1 className="tracking-none text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
                 My Projects
               </h1>

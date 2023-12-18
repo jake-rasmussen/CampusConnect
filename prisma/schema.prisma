@@ -119,17 +119,16 @@ model Event {
 }
 
 model Application {
-  id                     String                       @id @default(cuid())
+  id                     String                  @id @default(cuid())
   name                   String
-  description            String                       @default("")
+  description            String                  @default("")
   projectId              String?
-  project                Project?                     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project                Project?                @relation(fields: [projectId], references: [id], onDelete: Cascade)
   deadline               DateTime?
-  status                 ApplicationStatus            @default(DRAFT)
+  status                 ApplicationStatus       @default(DRAFT)
   questions              ApplicationQuestion[]
-  scoringCriteria        ApplicationScoringCriteria[]
-  createdAt              DateTime                     @default(now())
-  updatedAt              DateTime                     @updatedAt
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
   applicationSubmissions ApplicationSubmission[]
   desiredSkills          String[]
 }
@@ -149,15 +148,16 @@ model ApplicationQuestion {
 }
 
 model ApplicationSubmission {
-  id                           String                        @id @default(cuid())
-  createdAt                    DateTime                      @default(now())
-  updatedAt                    DateTime                      @updatedAt
-  user                         User                          @relation(fields: [userId], references: [userId])
-  userId                       String
-  application                  Application                   @relation(fields: [applicationId], references: [id])
-  applicationId                String
-  applicationSubmissionAnswers ApplicationSubmissionAnswer[]
-  applicationSubmissionStatus  ApplicationSubmissionStatus
+  id                              String                           @id @default(cuid())
+  createdAt                       DateTime                         @default(now())
+  updatedAt                       DateTime                         @updatedAt
+  user                            User                             @relation(fields: [userId], references: [userId])
+  userId                          String
+  application                     Application                      @relation(fields: [applicationId], references: [id])
+  applicationId                   String
+  applicationSubmissionAnswers    ApplicationSubmissionAnswer[]
+  applicationSubmissionStatus     ApplicationSubmissionStatus
+  applicationSubmissionEvaluation ApplicationSubmissionEvaluation?
 }
 
 model ApplicationSubmissionAnswer {
@@ -169,13 +169,21 @@ model ApplicationSubmissionAnswer {
   applicationQuestionId   String
 }
 
-model ApplicationScoringCriteria {
-  id            String      @id @default(cuid())
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  applicationId String
-  weight        Int         @default(1)
-  orderNumber   Int
-  criteria      String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+model ApplicationSubmissionEvaluation {
+  id                      String                         @id @default(cuid())
+  comments                ApplicationSubmissionComment[]
+  createdAt               DateTime                       @default(now())
+  updatedAt               DateTime                       @updatedAt
+  applicationSubmission   ApplicationSubmission          @relation(fields: [applicationSubmissionId], references: [id])
+  applicationSubmissionId String                         @unique
+}
+
+model ApplicationSubmissionComment {
+  id                                String                           @id @default(cuid())
+  evaluatorName                     String
+  comment                           String
+  applicationSubmissionEvaluation   ApplicationSubmissionEvaluation? @relation(fields: [applicationSubmissionEvaluationId], references: [id])
+  applicationSubmissionEvaluationId String?
+  createdAt                         DateTime                         @default(now())
+  updatedAt                         DateTime                         @updatedAt
 }

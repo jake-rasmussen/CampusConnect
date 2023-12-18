@@ -30,7 +30,9 @@ const ApplicationCreator = ({ projectId }: Props) => {
   const createApplication = api.applicationRouter.createApplication.useMutation(
     {
       onSuccess(application) {
-        queryClient.applicationRouter.getProjectApplicationsByProjectIdForAdmin.invalidate({ projectId });
+        queryClient.applicationRouter.getProjectApplicationsByProjectIdForAdmin.invalidate(
+          { projectId },
+        );
         router.push(`/admin/${projectId}/application/${application.id}`);
       },
       onError() {

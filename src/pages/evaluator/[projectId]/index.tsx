@@ -1,20 +1,28 @@
-import { ApplicationSubmissionStatus } from "@prisma/client";
 import Error from "next/error";
+import { useRouter } from "next/router";
 import { LicenseOff } from "tabler-icons-react";
 
-import ApplicationCard from "~/components/dashboard/applications/applicationCard";
+import ApplicationEvaluatorCard from "~/components/applications/evaluator/applicationEvaluatorCard";
 import Header from "~/components/dashboard/header/header";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-const MyApplications = () => {
+const ViewApplicantsForApplication = () => {
+  const router = useRouter();
+  const projectId = router.query.projectId as string;
+
   const {
-    data: applicationSubmissions,
+    data: applications,
     isLoading,
     isError,
     error,
-  } = api.applicationSubmissionRouter.getApplicationSubmissionsForUser.useQuery();
+  } = api.applicationRouter.getProjectApplicationsByProjectIdForEvaluators.useQuery(
+    {
+      projectId,
+    },
+    { enabled: !!projectId },
+  );
 
   if (isLoading) {
     return <LoadingPage />;
@@ -23,22 +31,14 @@ const MyApplications = () => {
   } else {
     return (
       <main className="w-full pb-10">
-        <Header name={"My Applications"} editable={false} />
+        <Header name={"Evaluate Applications"} editable={false} />
         <section className="mt-10 flex w-full justify-center">
-          {applicationSubmissions.length > 0 ? (
+          {applications.length > 0 ? (
             <div className="flex max-w-4xl flex-wrap justify-center gap-4">
-              {applicationSubmissions.map((savedApplication, index) => (
-                <ApplicationCard
-                  application={savedApplication.application}
-                  projectId={savedApplication.application.projectId}
-                  editable={false}
-                  previewable={
-                    savedApplication.applicationSubmissionStatus !==
-                    ApplicationSubmissionStatus.DRAFT
-                  }
-                  savedAnswers={savedApplication.applicationSubmissionAnswers}
-                  applicationSubmissionId={savedApplication.id}
-                  status={savedApplication.applicationSubmissionStatus}
+              {applications.map((application, index) => (
+                <ApplicationEvaluatorCard
+                  application={application}
+                  projectId={projectId}
                   key={`applicationSubmission${index}`}
                 />
               ))}
@@ -47,7 +47,7 @@ const MyApplications = () => {
             <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">
               <LicenseOff className="h-44 w-44 text-secondary" />
               <h3 className="text-2xl font-semibold uppercase">
-                You have not submitted any applications
+                There are no finished applications!
               </h3>
             </div>
           )}
@@ -57,10 +57,10 @@ const MyApplications = () => {
   }
 };
 
-MyApplications.getLayout = (
+ViewApplicantsForApplication.getLayout = (
   page: React.ReactElement<any, string | React.JSXElementConstructor<any>>,
 ) => {
   return <UserLayout>{page}</UserLayout>;
 };
 
-export default MyApplications;
+export default ViewApplicantsForApplication;

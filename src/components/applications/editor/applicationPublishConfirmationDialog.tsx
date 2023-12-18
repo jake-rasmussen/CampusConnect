@@ -53,7 +53,7 @@ const ApplicationPublishConfirmationDialog = ({
   isApplicationFormValid,
   setErrorDialogOpen,
   isSaving,
-  setIsSaving
+  setIsSaving,
 }: PropTypes) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -101,7 +101,7 @@ const ApplicationPublishConfirmationDialog = ({
             >
               {({ submit }) => (
                 <main className="flex flex-col items-center gap-8">
-                  <section className="flex flex-row items-center justify-center gap-4 w-fit">
+                  <section className="flex w-fit flex-row items-center justify-center gap-4">
                     <Field
                       name="date"
                       initialValue={new Date()}

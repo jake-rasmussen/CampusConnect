@@ -58,3 +58,9 @@ export const applicationMemberTypeToString = (type: string) => {
 
   return str;
 };
+
+export const uppercaseToCapitalize = (str: string) => {
+  str = str.toLocaleLowerCase();
+  str = str[0]?.toLocaleUpperCase() + str.slice(1);
+  return str;
+};

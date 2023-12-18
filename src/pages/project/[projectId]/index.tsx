@@ -34,7 +34,7 @@ const ProjectDashboardPage: NextPageWithLayout = () => {
     error: errorApplications,
   } = api.applicationRouter.getProjectApplicationsByProjectIdForUsers.useQuery(
     {
-      projectId
+      projectId,
     },
     { enabled: !!projectId },
   );
@@ -42,7 +42,15 @@ const ProjectDashboardPage: NextPageWithLayout = () => {
   if (isLoadingProjects || isLoadingApplications) {
     return <LoadingPage />;
   } else if (isErrorProjects || isErrorApplications) {
-    return <Error statusCode={errorProjects?.data?.httpStatus || errorApplications?.data?.httpStatus || 500} />;
+    return (
+      <Error
+        statusCode={
+          errorProjects?.data?.httpStatus ||
+          errorApplications?.data?.httpStatus ||
+          500
+        }
+      />
+    );
   } else {
     return (
       <ProjectDashboard

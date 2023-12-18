@@ -125,14 +125,18 @@ const ApplicationForm = (props: PropType) => {
         <h1 className="text-center text-4xl font-black uppercase text-black underline">
           {name}
         </h1>
-        <h2 className="text-center text-lg font-bold text-black">
-          {`Deadline: ${deadline
-              ? dateToStringFormatted(deadline) +
-              " at " +
-              dateToTimeStringFormatted(deadline)
-              : " TBD"
+        {!readonly && (
+          <h2 className="text-center text-lg font-bold text-black">
+            {`Deadline: ${
+              deadline
+                ? dateToStringFormatted(deadline) +
+                  " at " +
+                  dateToTimeStringFormatted(deadline)
+                : " TBD"
             }`}
-        </h2>
+          </h2>
+        )}
+
         <p className="text-center text-black">{description}</p>
 
         <div className="border-1 flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
@@ -161,7 +165,7 @@ const ApplicationForm = (props: PropType) => {
                 )}
                 {question.type === ApplicationQuestionType.TEXT_FIELD && (
                   <Textarea
-                    className="h-[3rem] rounded-xl bg-white p-4"
+                    className="h-[3rem] rounded-xl bg-white"
                     value={
                       (answersMap?.get(question.id)?.answer as string) || ""
                     }

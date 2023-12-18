@@ -1,19 +1,19 @@
 import { ApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 import ErrorDialog from "~/components/errorDialog";
+import PreviewDialog from "~/components/previewDialog";
 import { Textarea } from "~/components/shadcn_ui/textarea";
 import Button from "../../button";
 import ErrorMessage from "../../dashboard/errorMessage";
 import { Input } from "../../shadcn_ui/input";
 import ApplicationForm from "../applicationForm";
-import ApplicationPreviewDialog from "./applicationPreviewDialog";
 import ApplicationPublishConfirmationDialog, {
   ConfirmationFormType,
 } from "./applicationPublishConfirmationDialog";
 import QuestionsEditor from "./questionsEditor";
-import toast from "react-hot-toast";
 
 type ApplicationFormType = {
   name: string;
@@ -99,7 +99,9 @@ const ApplicationEditForm = (props: PropType) => {
             setOpenErrorDialog(true);
             return;
           }
-          saveApplication(values.name, values.description, questions).then(() => setIsSaving(false));
+          saveApplication(values.name, values.description, questions).then(() =>
+            setIsSaving(false),
+          );
         }}
       >
         {({ submit, getFieldValue }) => (
@@ -169,9 +171,9 @@ const ApplicationEditForm = (props: PropType) => {
                 Save
               </Button>
 
-              <ApplicationPreviewDialog
+              <PreviewDialog
                 triggerButton={
-                  <button 
+                  <button
                     className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50"
                     disabled={isSaving}
                     onClick={() => setIsSaving(true)}
@@ -181,7 +183,8 @@ const ApplicationEditForm = (props: PropType) => {
                     </h1>
                   </button>
                 }
-                dialogDescription={""}
+                dialogTitle="Application Preview"
+                dialogDescription=""
                 openDialog={openPreviewDialog}
                 setOpenDialog={setOpenPreviewDialog}
               >
@@ -193,7 +196,7 @@ const ApplicationEditForm = (props: PropType) => {
                   questions={questions}
                   readonly
                 />
-              </ApplicationPreviewDialog>
+              </PreviewDialog>
 
               <ApplicationPublishConfirmationDialog
                 name={getFieldValue("name")?.value}

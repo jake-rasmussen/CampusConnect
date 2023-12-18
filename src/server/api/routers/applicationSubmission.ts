@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, isEvaluator, protectedProcedure, t } from "../trpc";
 
 export const applicationSubmissionRouter = createTRPCRouter({
   upsertApplicationSubmission: protectedProcedure
@@ -30,8 +30,8 @@ export const applicationSubmissionRouter = createTRPCRouter({
             updatedAt: new Date(),
           },
           include: {
-            applicationSubmissionAnswers: true
-          }
+            applicationSubmissionAnswers: true,
+          },
         });
 
       return applicationSubmission;
@@ -73,7 +73,7 @@ export const applicationSubmissionRouter = createTRPCRouter({
       const applicationSubmission =
         await ctx.prisma.applicationSubmission.findFirst({
           where: {
-            applicationId: applicationId,
+            applicationId,
             userId,
           },
           include: {
@@ -126,5 +126,39 @@ export const applicationSubmissionRouter = createTRPCRouter({
           });
         }
       }
+    }),
+  getApplicationSubmissionByIdForEvaluator: t.procedure
+    .input(
+      z.object({
+        projectId: z.string(),
+        applicationSubmissionId: z.string(),
+      }),
+    )
+    .use(isEvaluator)
+    .query(async ({ ctx, input }) => {
+      const { applicationSubmissionId } = input;
+
+      const applicationSubmission =
+        await ctx.prisma.applicationSubmission.findUniqueOrThrow({
+          where: {
+            id: applicationSubmissionId,
+          },
+          include: {
+            applicationSubmissionAnswers: true,
+            application: {
+              include: {
+                questions: true,
+              },
+            },
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        });
+
+      return applicationSubmission;
     }),
 });

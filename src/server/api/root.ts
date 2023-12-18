@@ -3,6 +3,8 @@ import { applicationRouter } from "./routers/application";
 import { applicationQuestionRouter } from "./routers/applicationQuestion";
 import { applicationSubmissionRouter } from "./routers/applicationSubmission";
 import { applicationSubmissionAnswerRouter } from "./routers/applicationSubmissionAnswer";
+import { applicationSubmissionCommentRouter } from "./routers/applicationSubmissionComment";
+import { applicationSubmissionEvaluationRouter } from "./routers/applicationSubmissionEvaluation";
 import { contactInfoRouter } from "./routers/contactInfo";
 import { eventRouter } from "./routers/event";
 import { memberRouter } from "./routers/member";
@@ -27,6 +29,8 @@ export const appRouter = createTRPCRouter({
   applicationSubmissionRouter,
   applicationSubmissionAnswerRouter,
   usersRouter,
+  applicationSubmissionEvaluationRouter,
+  applicationSubmissionCommentRouter,
 });
 
 // export type definition of API
