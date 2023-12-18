@@ -199,7 +199,7 @@ const ApplicationForm = (props: PropType) => {
                   />
                 )}
                 {/* 
-                {question.type === ClubApplicationQuestionType.FILE_UPLOAD && (
+                {question.type === ApplicationQuestionType.FILE_UPLOAD && (
                   <FileUpload />
                 )}
                 */}

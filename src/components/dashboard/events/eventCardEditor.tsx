@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
-import { Button } from "~/components/shadcn_ui/button";
-import { Input } from "~/components/shadcn_ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/shadcn_ui/popover";
 import { api } from "~/utils/api";
 import EditController from "../editController";
 import EventForm from "./eventForm";
@@ -19,7 +12,8 @@ type PropType = {
   eventDescription: string;
   eventLocation: string;
   eventInPerson: boolean;
-  eventDate: Date;
+  eventStart: Date;
+  eventEnd: Date;
   eventId: string;
   projectId: string;
 };
@@ -30,7 +24,8 @@ const EventCardEditor = (props: PropType) => {
     eventDescription,
     eventLocation,
     eventInPerson,
-    eventDate,
+    eventStart,
+    eventEnd,
     eventId,
     projectId,
   } = props;
@@ -65,13 +60,24 @@ const EventCardEditor = (props: PropType) => {
   });
 
   const handleUpdate = (values: EventFormType) => {
-    values.date.setHours(values.time.getHours());
-    values.date.setMinutes(values.time.getMinutes());
+    toast.dismiss();
+    toast.loading("Saving Event...");
+
+    let startDate = values.date;
+    let endDate = values.date;
+
+    startDate.setHours(values.start.getHours());
+    startDate.setMinutes(values.start.getMinutes());
+
+    endDate.setHours(values.end.getHours());
+    endDate.setMinutes(values.end.getMinutes());
+
     updateEvent.mutate({
       id: eventId,
       name: values.name,
       description: values.description,
-      date: values.date,
+      start: startDate,
+      end: endDate,
       inPerson: values.inPerson,
       location: values.location,
       projectId,
@@ -97,7 +103,8 @@ const EventCardEditor = (props: PropType) => {
         eventDescription={eventDescription}
         eventLocation={eventLocation}
         eventInPerson={eventInPerson}
-        eventDate={eventDate}
+        eventStart={eventStart}
+        eventEnd={eventEnd}
         eventId={eventId}
         setOpenDialog={setOpenDialog}
         onSubmit={handleUpdate}

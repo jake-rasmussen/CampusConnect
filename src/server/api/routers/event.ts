@@ -26,7 +26,8 @@ export const eventRouter = createTRPCRouter({
         projectId: z.string(),
         id: z.string(),
         name: z.string(),
-        date: z.date(),
+        start: z.date(),
+        end: z.date(),
         description: z.string(),
         inPerson: z.boolean(),
         location: z.string(),
@@ -34,14 +35,15 @@ export const eventRouter = createTRPCRouter({
     )
     .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
-      const { id, name, date, description, inPerson, location } = input;
+      const { id, name, start, end, description, inPerson, location } = input;
       const event = await ctx.prisma.event.update({
         where: {
           id,
         },
         data: {
           name,
-          date,
+          start,
+          end,
           description,
           inPerson,
           location,
@@ -55,7 +57,8 @@ export const eventRouter = createTRPCRouter({
       z.object({
         projectId: z.string(),
         name: z.string(),
-        date: z.date(),
+        start: z.date(),
+        end: z.date(),
         description: z.string(),
         inPerson: z.boolean(),
         location: z.string(),
@@ -63,12 +66,13 @@ export const eventRouter = createTRPCRouter({
     )
     .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
-      const { projectId, name, date, description, inPerson, location } = input;
+      const { projectId, name, start, end, description, inPerson, location } = input;
       const event = await ctx.prisma.event.create({
         data: {
           projectId,
           name,
-          date,
+          start,
+          end,
           description,
           inPerson,
           location,

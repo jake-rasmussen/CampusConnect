@@ -3,7 +3,6 @@ import { Field, Form } from "houseform";
 import { cn } from "lib/utils";
 import { CalendarIcon } from "lucide-react";
 import React from "react";
-import toast from "react-hot-toast";
 import { z } from "zod";
 
 import Button from "~/components/button";
@@ -26,11 +25,13 @@ import {
 } from "../../shadcn_ui/select";
 import DeleteController from "../deleteController";
 import ErrorMessage from "../errorMessage";
+import { ArrowNarrowRight } from "tabler-icons-react";
 
 export type EventFormType = {
   name: string;
   date: Date;
-  time: Date;
+  start: Date;
+  end: Date;
   description: string;
   inPerson: boolean;
   location: string;
@@ -41,7 +42,8 @@ type PropType = {
   eventDescription?: string;
   eventLocation?: string;
   eventInPerson?: boolean;
-  eventDate?: Date;
+  eventStart?: Date;
+  eventEnd?: Date;
   eventId?: string;
   setOpenDialog: React.Dispatch<boolean>;
   onSubmit: (values: EventFormType) => void;
@@ -54,7 +56,8 @@ const EventForm = (props: PropType) => {
     eventDescription,
     eventLocation,
     eventInPerson,
-    eventDate,
+    eventStart,
+    eventEnd,
     setOpenDialog,
     onSubmit,
     handleDelete,
@@ -146,14 +149,14 @@ const EventForm = (props: PropType) => {
 
           <Field
             name="date"
-            initialValue={eventDate}
+            initialValue={eventStart}
             onBlurValidate={z.date({
               required_error: "Enter a date",
               invalid_type_error: "Enter a date",
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-5 flex flex-col">
+              <div className="col-span-8 flex flex-col">
                 <span className="font-semibold">Date</span>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -192,16 +195,37 @@ const EventForm = (props: PropType) => {
           </Field>
 
           <Field
-            name="time"
-            initialValue={eventDate}
+            name="start"
+            initialValue={eventStart}
             onSubmitValidate={z.date({
               required_error: "Enter a time",
               invalid_type_error: "Enter a time",
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-3 flex flex-col">
-                <span className="font-semibold">Time</span>
+              <div className="col-span-3 flex flex-col ml-4">
+                <span className="font-semibold">Start Time</span>
+                <TimePicker value={value} setValue={setValue} onBlur={onBlur} />
+                {!isValid && <ErrorMessage message={errors[0]} />}
+              </div>
+            )}
+          </Field>
+
+          <div className="col-span-2 flex items-center justify-center">
+            <ArrowNarrowRight className="h-20 w-20 pt-4"/>
+          </div>
+            
+          <Field
+            name="end"
+            initialValue={eventEnd}
+            onSubmitValidate={z.date({
+              required_error: "Enter a time",
+              invalid_type_error: "Enter a time",
+            })}
+          >
+            {({ value, setValue, onBlur, isValid, errors }) => (
+              <div className="col-span-3 flex flex-col mr-4">
+                <span className="font-semibold">End Time</span>
                 <TimePicker value={value} setValue={setValue} onBlur={onBlur} />
                 {!isValid && <ErrorMessage message={errors[0]} />}
               </div>
@@ -241,8 +265,6 @@ const EventForm = (props: PropType) => {
             <div className="flex justify-end">
               <Button
                 onClickFn={() => {
-                  toast.dismiss();
-                  toast.loading("Saving Event...");
                   submit().catch((e) => console.log(e));
                 }}
                 className="my-4"
