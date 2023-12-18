@@ -7,48 +7,115 @@ import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-const AdminDashboard = () => {
+const AdminDashboardPage = () => {
   const router = useRouter();
   const projectId = router.query.projectId as string;
-  //TODO: all the data fields should be fetched seperately as opposed to in one big query to allow for better caching/invalidate
+
   const {
     data: project,
-    isLoading,
-    isError,
-    error,
-  } = api.projectRouter.getProjectByIdForUsers.useQuery(
+    isLoading: isLoadingProject,
+    isError: isErrorProject,
+  } = api.projectRouter.getProjectByIdForAdmin.useQuery(
     {
       projectId,
     },
     { enabled: !!projectId },
   );
 
-  if (isLoading) {
+  const {
+    data: events,
+    isLoading: isLoadingEvents,
+    isError: isErrorEvents,
+  } = api.eventRouter.getEventsByProjectId.useQuery(
+    {
+      projectId,
+    },
+    { enabled: !!projectId },
+  );
+
+  const {
+    data: contactInfos,
+    isLoading: isLoadingContacts,
+    isError: isErrorContacts,
+  } = api.contactInfoRouter.getContactInfosByProjectId.useQuery(
+    {
+      projectId,
+    },
+    { enabled: !!projectId },
+  );
+
+  const {
+    data: applications,
+    isLoading: isLoadingApplications,
+    isError: isErrorApplications,
+  } = api.applicationRouter.getProjectApplicationsByProjectIdForAdmin.useQuery(
+    {
+      projectId,
+    },
+    { enabled: !!projectId },
+  );
+
+  const {
+    data: socialMedia,
+    isLoading: isLoadingSocialMedia,
+    isError: isErrorSocialMedia,
+  } = api.socialMediaRouter.getSocialMediaByProjectId.useQuery(
+    {
+      projectId,
+    },
+    { enabled: !!projectId },
+  );
+
+  const {
+    data: members,
+    isLoading: isLoadingMembers,
+    isError: isErrorMembers,
+  } = api.memberRouter.getAllMembersByProjectId.useQuery(
+    {
+      projectId,
+    },
+    { enabled: !!projectId },
+  );
+
+  if (
+    isLoadingProject ||
+    isLoadingEvents ||
+    isLoadingContacts ||
+    isLoadingApplications ||
+    isLoadingSocialMedia ||
+    isLoadingMembers
+  ) {
     return <LoadingPage />;
-  } else if (isError) {
-    return <Error statusCode={error?.data?.httpStatus || 500} />;
+  } else if (
+    isErrorProject ||
+    isErrorEvents ||
+    isErrorContacts ||
+    isErrorApplications ||
+    isErrorSocialMedia ||
+    isErrorMembers
+  ) {
+    return <Error statusCode={500} />;
   } else {
     return (
       <DashboardPage
         name={project.name}
         projectId={project.id}
         description={project.description}
-        events={project.events}
-        contactInfos={project.contactInfo}
-        applications={project.applications}
-        socialMedias={project.socialMedia}
-        members={project.members}
+        events={events}
+        contactInfos={contactInfos}
+        applications={applications}
+        socialMedias={socialMedia}
+        members={members}
         isAdminPage={true}
       />
     );
   }
 };
 
-AdminDashboard.getLayout = (
+AdminDashboardPage.getLayout = (
   page: React.ReactElement<any, string | React.JSXElementConstructor<any>>,
 ) => {
-  //TODO: add admin layout
   return <UserLayout>{page}</UserLayout>;
 };
 
-export default AdminDashboard;
+export default AdminDashboardPage;

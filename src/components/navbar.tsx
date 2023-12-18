@@ -1,7 +1,8 @@
 import { UserButton } from "@clerk/nextjs";
+import Image from "next/image";
 import Link from "next/link";
 import { Affiliate, Menu2 } from "tabler-icons-react";
-import Image from "next/image";
+
 import { Separator } from "./shadcn_ui/separator";
 
 const Navbar = () => {
@@ -9,12 +10,12 @@ const Navbar = () => {
     <>
       <header className="sticky top-0 z-50 w-full bg-white p-4 text-black shadow-xl">
         <div className="mx-auto flex h-16">
-          <Link href="/" className="mr-4 h-16 w-16">
+          <Link href="/" className="mx-4 h-16 w-16">
             <Image
               src={"/assets/SWEC Logo.png"}
               alt={"SWEC Logo"}
               width="0"
-              height="0" 
+              height="0"
               sizes="100vw"
               className="h-auto w-full"
             />
@@ -26,13 +27,19 @@ const Navbar = () => {
               </h1>
             </Link>
             <Separator orientation="vertical" className="bg-secondary" />
-            <Link href="/applications" className="flex items-center p-2">
+            <Link href="/open-applications" className="flex items-center p-2">
+              <h1 className="tracking-none text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
+                Open Applications
+              </h1>
+            </Link>
+            <Separator orientation="vertical" className="bg-secondary" />
+            <Link href="/my-applications" className="flex items-center p-2">
               <h1 className="tracking-none text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
                 My Applications
               </h1>
             </Link>
             <Separator orientation="vertical" className="bg-secondary" />
-            <Link href="/admin" className="flex items-center p-2">
+            <Link href="/my-projects" className="flex items-center p-2">
               <h1 className="tracking-none text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
                 My Projects
               </h1>

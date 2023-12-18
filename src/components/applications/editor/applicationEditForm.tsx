@@ -1,14 +1,15 @@
 import { ApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 import ErrorDialog from "~/components/errorDialog";
+import PreviewDialog from "~/components/previewDialog";
 import { Textarea } from "~/components/shadcn_ui/textarea";
 import Button from "../../button";
 import ErrorMessage from "../../dashboard/errorMessage";
 import { Input } from "../../shadcn_ui/input";
 import ApplicationForm from "../applicationForm";
-import ApplicationPreviewDialog from "./applicationPreviewDialog";
 import ApplicationPublishConfirmationDialog, {
   ConfirmationFormType,
 } from "./applicationPublishConfirmationDialog";
@@ -52,6 +53,7 @@ const ApplicationEditForm = (props: PropType) => {
   const [questions, setQuestions] = useState<ApplicationQuestion[]>([]);
   const [openErrorDialog, setOpenErrorDialog] = useState(false);
   const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setQuestions(savedQuestions);
@@ -84,18 +86,22 @@ const ApplicationEditForm = (props: PropType) => {
     description: string,
     values: ConfirmationFormType,
   ) => {
+    toast.dismiss();
+    toast.loading("Publishing Application...");
     publishApplication(name, description, values, questions);
   };
 
   return (
     <>
       <Form<ApplicationFormType>
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           if (!isApplicationFormValid(values.name, values.description)) {
             setOpenErrorDialog(true);
             return;
           }
-          saveApplication(values.name, values.description, questions);
+          saveApplication(values.name, values.description, questions).then(() =>
+            setIsSaving(false),
+          );
         }}
       >
         {({ submit, getFieldValue }) => (
@@ -154,22 +160,30 @@ const ApplicationEditForm = (props: PropType) => {
 
             <div className="flex grow flex-row justify-end gap-4">
               <Button
-                onClick={() => {
+                onClickFn={() => {
+                  setIsSaving(true);
+                  toast.dismiss();
+                  toast.loading("Saving Application....");
                   submit().catch((e) => console.log(e));
                 }}
+                disabled={isSaving}
               >
                 Save
               </Button>
 
-              <ApplicationPreviewDialog
+              <PreviewDialog
                 triggerButton={
-                  <button className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110">
+                  <button
+                    className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50"
+                    disabled={isSaving}
+                  >
                     <h1 className="tracking-none font-black uppercase text-white">
                       Preview
                     </h1>
                   </button>
                 }
-                dialogDescription={""}
+                dialogTitle="Application Preview"
+                dialogDescription=""
                 openDialog={openPreviewDialog}
                 setOpenDialog={setOpenPreviewDialog}
               >
@@ -181,7 +195,7 @@ const ApplicationEditForm = (props: PropType) => {
                   questions={questions}
                   readonly
                 />
-              </ApplicationPreviewDialog>
+              </PreviewDialog>
 
               <ApplicationPublishConfirmationDialog
                 name={getFieldValue("name")?.value}
@@ -189,6 +203,8 @@ const ApplicationEditForm = (props: PropType) => {
                 isApplicationFormValid={isApplicationFormValid}
                 confirmPublishApplication={confirmPublishApplication}
                 setErrorDialogOpen={setOpenErrorDialog}
+                isSaving={isSaving}
+                setIsSaving={setIsSaving}
               />
             </div>
 

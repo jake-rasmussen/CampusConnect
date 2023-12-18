@@ -1,3 +1,4 @@
+import React from "react";
 import DescriptionEditor from "./descriptionEditor";
 import DescriptionOutline from "./descriptionOutline";
 
@@ -14,7 +15,12 @@ const DescriptionSection = (props: PropType) => {
     <>
       <DescriptionOutline>
         <p className="flex flex-col justify-center px-8 text-center">
-          {projectDescription}
+          {projectDescription.split("\n").map((text: string, index: number) => (
+            <React.Fragment key={`paragraph${index}${projectId}`}>
+              {text}
+              <br />
+            </React.Fragment>
+          ))}
         </p>
         {editable ? (
           <DescriptionEditor

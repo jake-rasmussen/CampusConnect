@@ -1,10 +1,41 @@
-import { ApplicationStatus, ApplicationSubmissionStatus } from "@prisma/client";
+import { ApplicationStatus } from "@prisma/client";
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  isAdmin,
+  isEvaluator,
+  protectedProcedure,
+  t,
+} from "../trpc";
 
 export const applicationRouter = createTRPCRouter({
-  getApplicationsByProjectId: adminProcedure
+  getProjectApplicationsByProjectIdForAdmin: t.procedure
+    .input(
+      z.object({
+        projectId: z.string(),
+      }),
+    )
+    .use(isAdmin)
+    .query(async ({ ctx, input }) => {
+      const { projectId } = input;
+
+      const applications = await ctx.prisma.application.findMany({
+        where: {
+          projectId,
+        },
+        include: {
+          questions: {
+            orderBy: {
+              orderNumber: "asc",
+            },
+          },
+        },
+      });
+
+      return applications;
+    }),
+  getProjectApplicationsByProjectIdForUsers: protectedProcedure
     .input(
       z.object({
         projectId: z.string(),
@@ -16,15 +47,59 @@ export const applicationRouter = createTRPCRouter({
       const applications = await ctx.prisma.application.findMany({
         where: {
           projectId,
+          status: ApplicationStatus.OPEN,
         },
         include: {
-          questions: true,
+          questions: {
+            orderBy: {
+              orderNumber: "asc",
+            },
+          },
         },
       });
 
       return applications;
     }),
-  createApplication: protectedProcedure
+  getProjectApplicationsByProjectIdForEvaluators: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { projectId } = input;
+
+      const applications = await ctx.prisma.application.findMany({
+        where: {
+          projectId,
+          status: ApplicationStatus.CLOSED,
+        },
+        include: {
+          applicationSubmissions: {
+            select: { id: true, user: true },
+          },
+        },
+      });
+
+      return applications;
+    }),
+  getAllOpenApplications: protectedProcedure.query(async ({ ctx }) => {
+    const applications = await ctx.prisma.application.findMany({
+      where: {
+        status: ApplicationStatus.OPEN,
+      },
+      include: {
+        questions: {
+          orderBy: {
+            orderNumber: "asc",
+          },
+        },
+        project: true,
+      },
+    });
+    return applications;
+  }),
+  createApplication: t.procedure
     .input(
       z.object({
         projectId: z.string(),
@@ -32,6 +107,7 @@ export const applicationRouter = createTRPCRouter({
         description: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { projectId, name, description } = input;
 
@@ -49,14 +125,16 @@ export const applicationRouter = createTRPCRouter({
 
       return application;
     }),
-  updateApplication: protectedProcedure
+  updateApplication: t.procedure
     .input(
       z.object({
         applicationId: z.string(),
         name: z.string(),
         description: z.string(),
+        projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { applicationId, name, description } = input;
 
@@ -72,16 +150,25 @@ export const applicationRouter = createTRPCRouter({
 
       return application;
     }),
-  publishApplication: protectedProcedure
-    .input(z.object({ applicationId: z.string(), deadline: z.date() }))
+  publishApplication: t.procedure
+    .input(
+      z.object({
+        applicationId: z.string(),
+        deadline: z.date(),
+        skills: z.string().array().optional(),
+        projectId: z.string(),
+      }),
+    )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
-      const { applicationId, deadline } = input;
+      const { applicationId, deadline, skills } = input;
       await ctx.prisma.application.update({
         where: {
           id: applicationId,
         },
         data: {
           deadline,
+          desiredSkills: skills,
           status: "OPEN",
         },
       });
@@ -111,12 +198,14 @@ export const applicationRouter = createTRPCRouter({
       return application;
     }),
   // USE TO EITHER DELETE PROJECT ID REFERENCE OR DELETE IF NO SUBMISSIONS
-  removeApplicationProject: protectedProcedure
+  removeApplicationFromProject: t.procedure
     .input(
       z.object({
         applicationId: z.string(),
+        projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { applicationId } = input;
 

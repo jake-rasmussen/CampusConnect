@@ -16,18 +16,18 @@ const SocialMediaSection = (props: PropType) => {
   return (
     socialMedias !== undefined && (
       <>
-        <section>
+        <section className="flex flex-col items-center justify-center">
           <SocialMediaOutline>
             <>
-              {socialMedias.length !== 0 && (
+              {socialMedias.length !== 0 &&
                 socialMedias.map((socialMedia: SocialMedia, index: number) => (
                   <SocialMediaCard
                     socialMedia={socialMedia}
                     editable={editable}
+                    projectId={projectId}
                     key={`socialMediaCard${index}`}
                   />
-                ))
-              )}
+                ))}
             </>
           </SocialMediaOutline>
           {editable && <SocialMediasEditor projectId={projectId} />}

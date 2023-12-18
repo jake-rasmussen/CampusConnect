@@ -6,14 +6,15 @@ import ContactCardEditor from "./contactCardEditor";
 type PropType = {
   contactInfo: ContactInfo;
   editable: boolean;
+  projectId: string;
 };
 
 const ContactCard = (props: PropType) => {
-  const { contactInfo, editable } = props;
+  const { contactInfo, editable, projectId } = props;
 
   return (
     <>
-      <div className="relative my-6 h-[10rem] w-[20rem] rounded-xl border border-solid bg-white shadow-xl">
+      <div className="relative my-6 h-[10rem] w-[20rem] rounded-xl border border-solid bg-white shadow-xl overscroll-none">
         <Badge className="absolute right-0 ml-4 h-[2rem] translate-x-[-1rem] translate-y-[-0.75rem] bg-secondary text-white shadow-xl">
           {contactInfo.role}
         </Badge>
@@ -39,6 +40,7 @@ const ContactCard = (props: PropType) => {
             phone={contactInfo.phone ? contactInfo.phone : undefined}
             role={contactInfo.role}
             contactInfoId={contactInfo.id}
+            projectId={projectId}
           />
         )}
       </div>

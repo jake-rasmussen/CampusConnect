@@ -15,10 +15,11 @@ import type { SocialMedia } from "@prisma/client";
 type PropType = {
   socialMedia: SocialMedia;
   editable: boolean;
+  projectId: string;
 };
 
 const SocialMediaCard = (props: PropType) => {
-  const { socialMedia, editable } = props;
+  const { socialMedia, editable, projectId } = props;
 
   const iconClassName =
     "w-full h-full text-secondary transition duration-300 ease-in-out hover:text-primary";
@@ -37,7 +38,7 @@ const SocialMediaCard = (props: PropType) => {
 
   return (
     <>
-      <div className="relative h-16 w-16 my-4">
+      <div className="relative my-4 h-16 w-16">
         <Link className="h-full w-full" href={socialMedia.url}>
           {icon}
         </Link>
@@ -47,6 +48,7 @@ const SocialMediaCard = (props: PropType) => {
             url={socialMedia.url}
             platform={socialMedia.platform}
             socialMediaId={socialMedia.id}
+            projectId={projectId}
           />
         )}
       </div>

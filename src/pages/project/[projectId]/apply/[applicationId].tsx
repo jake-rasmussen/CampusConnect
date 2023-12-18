@@ -18,9 +18,9 @@ const Apply: NextPageWithLayout = () => {
   const router = useRouter();
   const projectId = router.query.projectId as string;
   const applicationId = router.query.applicationId as string;
+  const queryClient = api.useContext();
 
   const [isSaving, setIsSaving] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
@@ -53,28 +53,17 @@ const Apply: NextPageWithLayout = () => {
   const upsertApplicationSubmission =
     api.applicationSubmissionRouter.upsertApplicationSubmission.useMutation({
       onSuccess() {
-        if (isSubmitted) router.push(`/project/${projectId}`);
-      },
-      onError() {
-        setIsSaving(false);
-        setIsSubmitted(false);
+        queryClient.applicationRouter.getProjectApplicationsByProjectIdForUsers.invalidate(
+          { projectId },
+        );
+        queryClient.applicationSubmissionRouter.getApplicationSubmissionsForUser.invalidate();
       },
     });
 
   const createApplicationSubmissionAnswer =
     api.applicationSubmissionAnswerRouter.createApplicationSubmissionAnswer.useMutation(
       {
-        onSuccess() {
-          setIsSaving(false);
-          if (!isSubmitted) {
-            toast.dismiss();
-            toast.success("Successfully Saved Application!");
-          }
-        },
         onError() {
-          setIsSaving(false);
-          setIsSubmitted(false);
-
           toast.dismiss();
           toast.error("Error...");
         },
@@ -88,32 +77,57 @@ const Apply: NextPageWithLayout = () => {
     answers: ApplicationSubmissionAnswer[],
     submit?: boolean,
   ) => {
-    if (submit) setIsSubmitted(true);
+    setIsSaving(true);
 
     if (applicationId && !isSaving) {
-      setIsSaving(true);
-      const applicationSubmission =
-        await upsertApplicationSubmission.mutateAsync({
-          applicationSubmissionId: savedSubmission?.id,
-          applicationId,
-          status: submit
-            ? ApplicationSubmissionStatus.SUBMITTED
-            : ApplicationSubmissionStatus.DRAFT,
-        });
-
-      await deleteApplicationSubmissionAnswerChoices.mutateAsync({
-        applicationSubmissionId: applicationSubmission.id,
-      });
-
-      if (answers) {
-        answers.forEach(async (answer) => {
-          await createApplicationSubmissionAnswer.mutateAsync({
-            applicationSubmissionId: applicationSubmission.id,
-            applicationQuestionId: answer.applicationQuestionId,
-            answer: answer.answer as string | string[],
-          });
-        });
+      toast.dismiss();
+      if (submit) {
+        toast.loading("Submitting Application...");
+      } else {
+        toast.loading("Saving Application...");
       }
+
+      const saveAnswers = async () => {
+        const applicationSubmission =
+          await upsertApplicationSubmission.mutateAsync({
+            applicationSubmissionId: savedSubmission?.id,
+            applicationId,
+            status: submit
+              ? ApplicationSubmissionStatus.SUBMITTED
+              : ApplicationSubmissionStatus.DRAFT,
+          });
+
+        setSavedSubmission(applicationSubmission);
+
+        await deleteApplicationSubmissionAnswerChoices.mutateAsync({
+          applicationSubmissionId: applicationSubmission.id,
+        });
+
+        if (answers) {
+          for (let answer of answers) {
+            await createApplicationSubmissionAnswer.mutateAsync({
+              applicationSubmissionId: applicationSubmission.id,
+              applicationQuestionId: answer.applicationQuestionId,
+              answer: answer.answer as string | string[],
+            });
+          }
+        }
+
+        if (submit) {
+          toast.loading("Redirecting...");
+          toast.dismiss();
+          router.push(`/project/${projectId}`);
+        } else {
+          toast.dismiss();
+          toast.success("Successfully Saved Application!");
+        }
+      };
+
+      saveAnswers()
+        .then(() => {
+          if (!submit) setTimeout(() => setIsSaving(false), 1000);
+        })
+        .catch(() => setIsSaving(false));
     }
   };
 
@@ -139,6 +153,25 @@ const Apply: NextPageWithLayout = () => {
         }
       />
     );
+  } else if (
+    savedSubmission?.applicationSubmissionStatus ===
+    ApplicationSubmissionStatus.SUBMITTED
+  ) {
+    return (
+      <section className="flex justify-center py-10">
+        <div className="min-w-[80vw] max-w-4xl">
+          <ApplicationForm
+            projectId={projectId}
+            applicationId={application.id}
+            name={application.name}
+            description={application.description}
+            questions={application.questions}
+            savedAnswers={savedSubmission?.applicationSubmissionAnswers}
+            readonly
+          />
+        </div>
+      </section>
+    );
   } else {
     return (
       <section className="flex justify-center py-10">
@@ -151,6 +184,7 @@ const Apply: NextPageWithLayout = () => {
             questions={application.questions}
             savedAnswers={savedSubmission?.applicationSubmissionAnswers}
             handleSaveAnswers={handleSaveAnswers}
+            isSaving={isSaving}
           />
         </div>
       </section>

@@ -14,10 +14,12 @@ type PropType = {
   phone?: string;
   role: string;
   contactInfoId: string;
+  projectId: string;
 };
 
 const ContactCardEditor = (props: PropType) => {
-  const { firstName, lastName, email, phone, role, contactInfoId } = props;
+  const { firstName, lastName, email, phone, role, contactInfoId, projectId } =
+    props;
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -58,12 +60,14 @@ const ContactCardEditor = (props: PropType) => {
       email: values.email,
       phone: values.phone,
       role: values.role,
+      projectId,
     });
   };
 
   const handleDelete = () => {
     deleteContactInfo.mutate({
       id: contactInfoId,
+      projectId,
     });
   };
 

@@ -1,6 +1,7 @@
 import { ApplicationQuestion } from "@prisma/client";
 import Error from "next/error";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 import ApplicationEditForm from "~/components/applications/editor/applicationEditForm";
@@ -16,6 +17,8 @@ const EditApplication = () => {
   const router = useRouter();
   const applicationId = router.query.applicationId as string;
   const projectId = router.query.projectId as string;
+
+  useEffect(() => toast.dismiss(), []);
 
   const queryClient = api.useContext();
 
@@ -42,6 +45,8 @@ const EditApplication = () => {
   const updateApplication = api.applicationRouter.updateApplication.useMutation(
     {
       onSuccess() {
+        toast.dismiss();
+        toast.success("Application saved!");
         queryClient.invalidate();
       },
     },
@@ -50,6 +55,7 @@ const EditApplication = () => {
   const handlePublishApplication =
     api.applicationRouter.publishApplication.useMutation({
       onSuccess() {
+        toast.dismiss();
         toast.success("Application published!");
         queryClient.invalidate();
         router.push(`/admin/${projectId}/`);
@@ -61,24 +67,27 @@ const EditApplication = () => {
     description: string,
     questions: ApplicationQuestion[],
   ) => {
-    deleteAllApplicationQuestions.mutate({
+    await deleteAllApplicationQuestions.mutateAsync({
       applicationId: applicationId,
+      projectId,
     });
 
     let count = 0;
     for (const question of questions) {
-      createApplicationQuestion.mutate({
+      await createApplicationQuestion.mutateAsync({
         ...question,
         applicationId: applicationId,
         answerChoices: question.answerChoices,
         orderNumber: count++,
+        projectId,
       });
     }
 
-    updateApplication.mutate({
+    await updateApplication.mutateAsync({
       applicationId: applicationId,
       name,
       description,
+      projectId,
     });
   };
 
@@ -95,6 +104,8 @@ const EditApplication = () => {
     handlePublishApplication.mutate({
       applicationId,
       deadline,
+      skills: values.skills,
+      projectId,
     });
   };
 

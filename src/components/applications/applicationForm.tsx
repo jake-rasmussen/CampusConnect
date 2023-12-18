@@ -3,10 +3,13 @@ import {
   ApplicationQuestionType,
   ApplicationSubmissionAnswer,
 } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import { dateToStringFormatted, dateToTimeStringFormatted } from "~/utils/helpers";
+import {
+  dateToStringFormatted,
+  dateToTimeStringFormatted,
+} from "~/utils/helpers";
 import Button from "../button";
 import Checklist from "../checklist";
 import LoadingPage from "../loadingPage";
@@ -27,6 +30,7 @@ type PropType = {
     answers: ApplicationSubmissionAnswer[],
     submit?: boolean,
   ) => void;
+  isSaving?: boolean;
 };
 
 export type ApplicationFormSubmissionAnswer = Omit<
@@ -52,6 +56,7 @@ const ApplicationForm = (props: PropType) => {
     savedAnswers,
     readonly,
     handleSaveAnswers,
+    isSaving,
   } = props;
 
   const [answersMap, setAnswersMap] = useState<
@@ -78,16 +83,18 @@ const ApplicationForm = (props: PropType) => {
     questionId: string,
     answer: string | string[],
   ) => {
-    const updatedMap = new Map(answersMap);
-    updatedMap.set(questionId, {
-      answer,
-      applicationQuestionId: questionId,
-    });
-    setAnswersMap(updatedMap);
+    if (questionId) {
+      const updatedMap = new Map(answersMap);
+      updatedMap.set(questionId, {
+        answer,
+        applicationQuestionId: questionId,
+      });
+      setAnswersMap(updatedMap);
+    }
   };
 
   const handleSubmitAnswers = (answers: ApplicationSubmissionAnswer[]) => {
-    if (!checkValidAnswers(answers)) {
+    if (!checkValidAnswers()) {
       toast.dismiss();
       toast.error("Please fill out the entire form!");
     } else {
@@ -97,16 +104,16 @@ const ApplicationForm = (props: PropType) => {
     }
   };
 
-  const checkValidAnswers = (answers: ApplicationFormSubmissionAnswer[]) => {
+  const checkValidAnswers = () => {
     if (!questions) return false;
-    for (let i = 0; i < answers.length; i++) {
-      if (
-        answers[i] !== undefined &&
-        answers[i]?.answer === undefined &&
-        questions[i]?.required
-      )
-        return false;
+
+    for (const question of questions) {
+      if (question.required) {
+        if (!answersMap.has(question.id)) return false;
+        if (answersMap.get(question.id)?.answer === "") return false;
+      }
     }
+
     return true;
   };
 
@@ -118,9 +125,18 @@ const ApplicationForm = (props: PropType) => {
         <h1 className="text-center text-4xl font-black uppercase text-black underline">
           {name}
         </h1>
-        <h2 className="text-center text-lg font-bold text-black">
-          {`Deadline: ${deadline ? (dateToStringFormatted(deadline) + " at " + dateToTimeStringFormatted(deadline)): " TBD"}`}
-        </h2>
+        {!readonly && (
+          <h2 className="text-center text-lg font-bold text-black">
+            {`Deadline: ${
+              deadline
+                ? dateToStringFormatted(deadline) +
+                  " at " +
+                  dateToTimeStringFormatted(deadline)
+                : " TBD"
+            }`}
+          </h2>
+        )}
+
         <p className="text-center text-black">{description}</p>
 
         <div className="border-1 flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
@@ -141,20 +157,22 @@ const ApplicationForm = (props: PropType) => {
                     value={
                       (answersMap?.get(question.id)?.answer as string) || ""
                     }
-                    onChange={(e) =>
-                      handleUpdateAnswer(question.id, e.currentTarget.value)
-                    }
+                    onChange={(e) => {
+                      if (!readonly)
+                        handleUpdateAnswer(question.id, e.currentTarget.value);
+                    }}
                   />
                 )}
                 {question.type === ApplicationQuestionType.TEXT_FIELD && (
                   <Textarea
-                    className="h-[3rem] rounded-xl bg-white p-4"
+                    className="h-[3rem] rounded-xl bg-white"
                     value={
                       (answersMap?.get(question.id)?.answer as string) || ""
                     }
-                    onChange={(e) =>
-                      handleUpdateAnswer(question.id, e.currentTarget.value)
-                    }
+                    onChange={(e) => {
+                      if (!readonly)
+                        handleUpdateAnswer(question.id, e.currentTarget.value);
+                    }}
                     rows={4}
                   />
                 )}
@@ -164,7 +182,9 @@ const ApplicationForm = (props: PropType) => {
                     value={
                       (answersMap?.get(question.id)?.answer as string) || ""
                     }
-                    onChange={(e: string) => handleUpdateAnswer(question.id, e)}
+                    onChange={(e: string) => {
+                      if (!readonly) handleUpdateAnswer(question.id, e);
+                    }}
                   />
                 )}
                 {question.type === ApplicationQuestionType.MULTIPLE_SELECT && (
@@ -173,13 +193,13 @@ const ApplicationForm = (props: PropType) => {
                     value={
                       (answersMap?.get(question.id)?.answer as string[]) || []
                     }
-                    onChange={(e: string[]) =>
-                      handleUpdateAnswer(question.id, e)
-                    }
+                    onChange={(e: string[]) => {
+                      if (!readonly) handleUpdateAnswer(question.id, e);
+                    }}
                   />
                 )}
                 {/* 
-                {question.type === ClubApplicationQuestionType.FILE_UPLOAD && (
+                {question.type === ApplicationQuestionType.FILE_UPLOAD && (
                   <FileUpload />
                 )}
                 */}
@@ -188,8 +208,8 @@ const ApplicationForm = (props: PropType) => {
             {!readonly && (
               <div className="my-2 flex grow flex-row justify-center gap-4">
                 <Button
-                  onClick={() => {
-                    if (handleSaveAnswers) {
+                  onClickFn={() => {
+                    if (handleSaveAnswers && answersMap.size > 0) {
                       handleSaveAnswers(
                         Array.from(
                           answersMap.values(),
@@ -197,18 +217,20 @@ const ApplicationForm = (props: PropType) => {
                       );
                     }
                   }}
+                  disabled={isSaving}
                 >
                   Save for later
                 </Button>
                 <Button
                   className="bg-white/10 backdrop-invert"
-                  onClick={() =>
+                  onClickFn={() =>
                     handleSubmitAnswers(
                       Array.from(
                         answersMap.values(),
                       ) as ApplicationSubmissionAnswer[],
                     )
                   }
+                  disabled={isSaving}
                 >
                   Submit application
                 </Button>

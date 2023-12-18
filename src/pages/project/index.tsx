@@ -48,7 +48,7 @@ const AllProjects: NextPageWithLayout = () => {
           />
         </section>
 
-        <div className="m-10 flex w-full flex-wrap items-center justify-center">
+        <div className="m-10 flex w-full max-w-6xl flex-wrap items-center justify-center">
           {projects
             .filter((project) =>
               project.name.toLowerCase().includes(query.toLowerCase()),

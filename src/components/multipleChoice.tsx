@@ -31,7 +31,7 @@ const MultipleChoice = (props: PropType) => {
                 value={answerChoice}
                 id={`${answerChoice}${index}`}
                 onClick={() => {
-                  setSelectedAnswer(answerChoice);
+                  // setSelectedAnswer(answerChoice);
                   onChange(answerChoice);
                 }}
                 defaultChecked={selectedAnswer === answerChoice}

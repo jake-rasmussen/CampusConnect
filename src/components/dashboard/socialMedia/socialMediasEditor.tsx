@@ -18,8 +18,8 @@ const SocialMediasEditor = (props: PropType) => {
 
   const queryClient = api.useContext();
 
-  const createSocialMedia =
-    api.socialMediaRouter.createSocialMedia.useMutation({
+  const createSocialMedia = api.socialMediaRouter.createSocialMedia.useMutation(
+    {
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Created the Social Media!");
@@ -29,7 +29,8 @@ const SocialMediasEditor = (props: PropType) => {
         toast.dismiss();
         toast.error("Error...");
       },
-    });
+    },
+  );
 
   const handleSubmit = (values: SocialMediaFormType) => {
     createSocialMedia.mutate({

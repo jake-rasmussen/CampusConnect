@@ -21,6 +21,7 @@ const ContactSection = (props: PropType) => {
             <ContactCard
               contactInfo={contactInfo}
               editable={editable}
+              projectId={projectId}
               key={`contact${index}`}
             />
           ))}

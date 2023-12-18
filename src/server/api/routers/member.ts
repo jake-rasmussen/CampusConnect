@@ -1,16 +1,17 @@
 import { ProjectMemberType } from "@prisma/client";
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter } from "../trpc";
+import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const memberRouter = createTRPCRouter({
-  createMember: adminProcedure
+  createMember: t.procedure
     .input(
       z.object({
         projectId: z.string(),
         userId: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { projectId, userId } = input;
 
@@ -23,13 +24,14 @@ export const memberRouter = createTRPCRouter({
       });
       return member;
     }),
-  deleteMember: adminProcedure
+  deleteMember: t.procedure
     .input(
       z.object({
         projectId: z.string(),
         userId: z.string(),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { projectId, userId } = input;
 
@@ -40,7 +42,7 @@ export const memberRouter = createTRPCRouter({
       });
       return member;
     }),
-  updateMember: adminProcedure
+  updateMember: t.procedure
     .input(
       z.object({
         projectId: z.string(),
@@ -48,6 +50,7 @@ export const memberRouter = createTRPCRouter({
         type: z.enum([ProjectMemberType.ADMIN, ProjectMemberType.EVALUATOR]),
       }),
     )
+    .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { projectId, userId, type } = input;
 
@@ -61,12 +64,13 @@ export const memberRouter = createTRPCRouter({
       });
       return member;
     }),
-  getAllMembersByProjectId: adminProcedure
+  getAllMembersByProjectId: t.procedure
     .input(
       z.object({
         projectId: z.string(),
       }),
     )
+    .use(isAdmin)
     .query(async ({ ctx, input }) => {
       const { projectId } = input;
 

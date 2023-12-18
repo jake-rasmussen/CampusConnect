@@ -35,49 +35,57 @@ const Applications = (props: PropType) => {
     return (
       <section className="flex flex-col items-center gap-y-8">
         <ApplicationsOutline>
-          <>
-            {applications.map(
-              (
-                application: Application & {
-                  questions: ApplicationQuestion[];
+          {applications.length > 0 ? (
+            <div className="flex flex-wrap justify-center gap-4">
+              {applications.map(
+                (
+                  application: Application & {
+                    questions: ApplicationQuestion[];
+                  },
+                  index: number,
+                ) => {
+                  const savedApplication = userApplicationSubmissions.find(
+                    (applicationSubmission) =>
+                      applicationSubmission.applicationId === application.id,
+                  );
+                  if (savedApplication) {
+                    return (
+                      <ApplicationCard
+                        application={application}
+                        projectId={projectId}
+                        editable={editable}
+                        status={savedApplication.applicationSubmissionStatus}
+                        previewable={
+                          savedApplication.applicationSubmissionStatus !==
+                          ApplicationSubmissionStatus.DRAFT
+                        }
+                        savedAnswers={
+                          savedApplication.applicationSubmissionAnswers
+                        }
+                        key={`application${index}`}
+                      />
+                    );
+                  } else {
+                    return (
+                      <ApplicationCard
+                        application={application}
+                        projectId={projectId}
+                        editable={editable}
+                        status={ApplicationSubmissionStatus.NEW}
+                        key={`application${index}`}
+                      />
+                    );
+                  }
                 },
-                index: number,
-              ) => {
-                const savedApplication = userApplicationSubmissions.find(
-                  (applicationSubmission) =>
-                    applicationSubmission.applicationId === application.id,
-                );
-                if (savedApplication) {
-                  return (
-                    <ApplicationCard
-                      application={application}
-                      projectId={projectId}
-                      editable={editable}
-                      status={savedApplication.applicationSubmissionStatus}
-                      previewable={
-                        savedApplication.applicationSubmissionStatus !==
-                        ApplicationSubmissionStatus.DRAFT
-                      }
-                      savedAnswers={
-                        savedApplication.applicationSubmissionAnswers
-                      }
-                      key={`application${index}`}
-                    />
-                  );
-                } else {
-                  return (
-                    <ApplicationCard
-                      application={application}
-                      projectId={projectId}
-                      editable={editable}
-                      status={ApplicationSubmissionStatus.NEW}
-                      key={`application${index}`}
-                    />
-                  );
-                }
-              },
-            )}
-          </>
+              )}
+            </div>
+          ) : (
+            <>
+              <h3 className="tracking-none my-4 text-xl font-black uppercase underline">
+                There are no open applications
+              </h3>
+            </>
+          )}
         </ApplicationsOutline>
         {editable && <ApplicationCreator projectId={projectId} />}
       </section>

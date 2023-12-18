@@ -31,13 +31,14 @@ const EventsEditor = (props: PropType) => {
   });
 
   const onSubmit = (values: EventFormType) => {
-    values.date.setHours(values.time.getHours());
-    values.date.setMinutes(values.time.getMinutes());
+    values.start.setDate(values.date.getDate());
+    values.end.setDate(values.date.getDate());
 
     createEvent.mutate({
       projectId,
       name: values.name,
-      date: values.date,
+      start: values.start,
+      end: values.end,
       description: values.description,
       inPerson: values.inPerson,
       location: values.location,
