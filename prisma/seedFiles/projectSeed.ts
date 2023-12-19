@@ -63,21 +63,25 @@ const generateRandomEvents = (
 ) => {
   const events: Array<Prisma.EventCreateWithoutProjectInput> = [];
 
-  // for (let i = 0; i < numEvents; i++) {
-  //   const inPerson = randomNumberBetweenInclusive(0, 40) > 5;
-  //   const date =
-  //     randomNumberBetweenInclusive(0, 40) > 10
-  //       ? faker.date.future()
-  //       : faker.date.past();
-  //   const event = {
-  //     name: faker.lorem.words({ min: 3, max: 5 }),
-  //     description: faker.lorem.paragraph({ min: 2, max: 5 }),
-  //     date,
-  //     inPerson,
-  //     location: inPerson ? faker.location.city() : faker.internet.domainName(),
-  //   };
-  //   events.push(event);
-  // }
+  for (let i = 0; i < numEvents; i++) {
+    const inPerson = randomNumberBetweenInclusive(0, 40) > 5;
+    const start =
+      randomNumberBetweenInclusive(0, 40) > 10
+        ? faker.date.future()
+        : faker.date.past();
+    const end = start;
+    end.setHours(end.getHours() + 2);
+
+    const event = {
+      name: faker.lorem.words({ min: 3, max: 5 }),
+      description: faker.lorem.paragraph({ min: 2, max: 5 }),
+      start,
+      end,
+      inPerson,
+      location: inPerson ? faker.location.city() : faker.internet.domainName(),
+    };
+    events.push(event);
+  }
   return events;
 };
 
