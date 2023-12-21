@@ -12,6 +12,7 @@ import {
 } from "~/utils/helpers";
 import Button from "../button";
 import Checklist from "../checklist";
+import FileUpload from "../fileUpload";
 import LoadingPage from "../loadingPage";
 import MultipleChoice from "../multipleChoice";
 import { Input } from "../shadcn_ui/input";
@@ -28,6 +29,7 @@ type PropType = {
   readonly?: boolean;
   handleSaveAnswers?: (
     answers: ApplicationSubmissionAnswer[],
+    files: File[],
     submit?: boolean,
   ) => void;
   isSaving?: boolean;
@@ -48,6 +50,7 @@ type ApplicationForm = {
 
 const ApplicationForm = (props: PropType) => {
   const {
+    projectId,
     applicationId,
     name,
     description,
@@ -62,6 +65,8 @@ const ApplicationForm = (props: PropType) => {
   const [answersMap, setAnswersMap] = useState<
     Map<string, ApplicationFormSubmissionAnswer>
   >(new Map());
+
+  const [filesMap, setFilesMap] = useState<Map<string, File>>(new Map());
 
   useEffect(() => {
     if (savedAnswers) {
@@ -93,13 +98,24 @@ const ApplicationForm = (props: PropType) => {
     }
   };
 
-  const handleSubmitAnswers = (answers: ApplicationSubmissionAnswer[]) => {
+  const handleUpdateFile = (questionId: string, answer: File) => {
+    if (questionId) {
+      const updatedMap = new Map(filesMap);
+      updatedMap.set(questionId, answer);
+      setFilesMap(updatedMap);
+    }
+  };
+
+  const handleSubmitAnswers = (
+    answers: ApplicationSubmissionAnswer[],
+    files: File[],
+  ) => {
     if (!checkValidAnswers()) {
       toast.dismiss();
       toast.error("Please fill out the entire form!");
     } else {
       if (applicationId && handleSaveAnswers) {
-        handleSaveAnswers(answers, true);
+        handleSaveAnswers(answers, files, true);
       }
     }
   };
@@ -198,11 +214,25 @@ const ApplicationForm = (props: PropType) => {
                     }}
                   />
                 )}
-                {/* 
+
                 {question.type === ApplicationQuestionType.FILE_UPLOAD && (
-                  <FileUpload />
+                  <FileUpload
+                    value={
+                      (answersMap?.get(question.id)?.answer as string) || ""
+                    }
+                    onChange={(e: File) => {
+                      console.log("Here");
+                      if (!readonly) {
+                        handleUpdateAnswer(question.id, e.name);
+                        console.log(e.name, answersMap);
+                        handleUpdateFile(question.id, e);
+                      }
+                    }}
+                    projectId={projectId}
+                    applicationId={applicationId}
+                    readonly={readonly}
+                  />
                 )}
-                */}
               </div>
             ))}
             {!readonly && (
@@ -214,6 +244,7 @@ const ApplicationForm = (props: PropType) => {
                         Array.from(
                           answersMap.values(),
                         ) as ApplicationSubmissionAnswer[],
+                        Array.from(filesMap.values()),
                       );
                     }
                   }}
@@ -228,6 +259,7 @@ const ApplicationForm = (props: PropType) => {
                       Array.from(
                         answersMap.values(),
                       ) as ApplicationSubmissionAnswer[],
+                      Array.from(filesMap.values()),
                     )
                   }
                   disabled={isSaving}

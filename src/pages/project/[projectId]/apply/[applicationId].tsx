@@ -73,8 +73,12 @@ const Apply: NextPageWithLayout = () => {
   const deleteApplicationSubmissionAnswerChoices =
     api.applicationSubmissionAnswerRouter.deleteAllApplicationSubmissionAnswersByApplicationSubmissionId.useMutation();
 
+  const getPresignedUrlUpload =
+    api.s3Router.getPresignedUrlUpload.useMutation();
+
   const handleSaveAnswers = async (
     answers: ApplicationSubmissionAnswer[],
+    files: File[],
     submit?: boolean,
   ) => {
     setIsSaving(true);
@@ -104,13 +108,26 @@ const Apply: NextPageWithLayout = () => {
         });
 
         if (answers) {
-          for (let answer of answers) {
+          for (const answer of answers) {
             await createApplicationSubmissionAnswer.mutateAsync({
               applicationSubmissionId: applicationSubmission.id,
               applicationQuestionId: answer.applicationQuestionId,
               answer: answer.answer as string | string[],
             });
           }
+        }
+
+        for (const file of files) {
+          const url = await getPresignedUrlUpload.mutateAsync({
+            projectId,
+            applicationId,
+            filename: file.name,
+          });
+          await fetch(url, {
+            method: "PUT",
+            headers: { "Content-Type": file.type },
+            body: file.slice(),
+          });
         }
 
         if (submit) {

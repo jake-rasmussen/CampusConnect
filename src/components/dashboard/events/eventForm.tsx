@@ -3,6 +3,7 @@ import { Field, Form } from "houseform";
 import { cn } from "lib/utils";
 import { CalendarIcon } from "lucide-react";
 import React from "react";
+import { ArrowNarrowRight } from "tabler-icons-react";
 import { z } from "zod";
 
 import Button from "~/components/button";
@@ -25,7 +26,6 @@ import {
 } from "../../shadcn_ui/select";
 import DeleteController from "../deleteController";
 import ErrorMessage from "../errorMessage";
-import { ArrowNarrowRight } from "tabler-icons-react";
 
 export type EventFormType = {
   name: string;
@@ -203,7 +203,7 @@ const EventForm = (props: PropType) => {
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-3 flex flex-col ml-4">
+              <div className="col-span-3 ml-4 flex flex-col">
                 <span className="font-semibold">Start Time</span>
                 <TimePicker value={value} setValue={setValue} onBlur={onBlur} />
                 {!isValid && <ErrorMessage message={errors[0]} />}
@@ -212,9 +212,9 @@ const EventForm = (props: PropType) => {
           </Field>
 
           <div className="col-span-2 flex items-center justify-center">
-            <ArrowNarrowRight className="h-20 w-20 pt-4"/>
+            <ArrowNarrowRight className="h-20 w-20 pt-4" />
           </div>
-            
+
           <Field
             name="end"
             initialValue={eventEnd}
@@ -224,7 +224,7 @@ const EventForm = (props: PropType) => {
             })}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-              <div className="col-span-3 flex flex-col mr-4">
+              <div className="col-span-3 mr-4 flex flex-col">
                 <span className="font-semibold">End Time</span>
                 <TimePicker value={value} setValue={setValue} onBlur={onBlur} />
                 {!isValid && <ErrorMessage message={errors[0]} />}

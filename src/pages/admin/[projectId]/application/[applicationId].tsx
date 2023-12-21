@@ -72,6 +72,8 @@ const EditApplication = () => {
       projectId,
     });
 
+    console.log("QUESTIONS", questions);
+
     let count = 0;
     for (const question of questions) {
       await createApplicationQuestion.mutateAsync({

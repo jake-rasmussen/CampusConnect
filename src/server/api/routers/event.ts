@@ -66,7 +66,8 @@ export const eventRouter = createTRPCRouter({
     )
     .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
-      const { projectId, name, start, end, description, inPerson, location } = input;
+      const { projectId, name, start, end, description, inPerson, location } =
+        input;
       const event = await ctx.prisma.event.create({
         data: {
           projectId,

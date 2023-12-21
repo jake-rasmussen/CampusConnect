@@ -61,8 +61,8 @@ const SkillsCreator = (props: PropType) => {
                     className="relative"
                     onClick={() => handleRemoveSkill(index)}
                   >
-                    <div className="absolute right-0 top-0 transform translate-x-1/4 -translate-y-1/4 bg-black rounded-full bg-opacity-30 p-px">
-                      <X className="text-white h-4 w-4" />
+                    <div className="absolute right-0 top-0 -translate-y-1/4 translate-x-1/4 transform rounded-full bg-black bg-opacity-30 p-px">
+                      <X className="h-4 w-4 text-white" />
                     </div>
                     <Badge className="h-[2rem] bg-secondary capitalize text-white shadow-xl hover:cursor-pointer">
                       {skill}
