@@ -9,6 +9,7 @@ import { contactInfoRouter } from "./routers/contactInfo";
 import { eventRouter } from "./routers/event";
 import { memberRouter } from "./routers/member";
 import { projectRouter } from "./routers/project";
+import { s3Router } from "./routers/s3";
 import { socialMediaRouter } from "./routers/socialMedia";
 import { usersRouter } from "./routers/users";
 
@@ -31,6 +32,7 @@ export const appRouter = createTRPCRouter({
   usersRouter,
   applicationSubmissionEvaluationRouter,
   applicationSubmissionCommentRouter,
+  s3Router,
 });
 
 // export type definition of API

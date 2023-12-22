@@ -32,7 +32,7 @@ enum ApplicationQuestionType {
   TEXT_FIELD
   MULTIPLE_CHOICE
   MULTIPLE_SELECT
-  // FILE_UPLOAD
+  FILE_UPLOAD
 }
 
 enum ApplicationStatus {

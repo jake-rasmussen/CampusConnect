@@ -14,7 +14,7 @@ const ContactCard = (props: PropType) => {
 
   return (
     <>
-      <div className="relative my-6 h-[10rem] w-[20rem] rounded-xl border border-solid bg-white shadow-xl overscroll-none">
+      <div className="relative my-6 h-[10rem] w-[20rem] overscroll-none rounded-xl border border-solid bg-white shadow-xl">
         <Badge className="absolute right-0 ml-4 h-[2rem] translate-x-[-1rem] translate-y-[-0.75rem] bg-secondary text-white shadow-xl">
           {contactInfo.role}
         </Badge>

@@ -99,6 +99,20 @@ export const applicationSubmissionRouter = createTRPCRouter({
         },
       });
 
+      const applicationSubmissionEvaluation = await ctx.prisma.applicationSubmissionEvaluation.findFirst({
+        where: {
+          applicationSubmissionId
+        }
+      });
+
+      if (applicationSubmissionEvaluation) {
+        await ctx.prisma.applicationSubmissionEvaluation.delete({
+          where: {
+            id: applicationSubmissionEvaluation.id,
+          },
+        });
+      }
+
       await ctx.prisma.applicationSubmission.delete({
         where: {
           id: applicationSubmissionId,
