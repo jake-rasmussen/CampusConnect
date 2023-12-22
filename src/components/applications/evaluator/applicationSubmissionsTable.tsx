@@ -34,24 +34,26 @@ const ApplicationSubmissionsTable = (props: PropType) => {
         </TableHeader>
 
         <TableBody>
-          {applicationSubmissions.map((applicationSubmission) => (
-            <TableRow className="border-none">
-              <TableCell className="font-medium text-primary underline">
-                <Link
-                  href={`/evaluator/${projectId}/evaluate/${applicationSubmission.id}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {applicationSubmission.user.firstName}{" "}
-                  {applicationSubmission.user.lastName}
-                </Link>
-              </TableCell>
-              <TableCell className="font-medium">
-                {applicationSubmission.id}
-              </TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          ))}
+          {applicationSubmissions.map(
+            (applicationSubmission, index: number) => (
+              <TableRow className="border-none" key={`submissionRow${index}`}>
+                <TableCell className="font-medium text-primary underline">
+                  <Link
+                    href={`/evaluator/${projectId}/evaluate/${applicationSubmission.id}`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {applicationSubmission.user.firstName}{" "}
+                    {applicationSubmission.user.lastName}
+                  </Link>
+                </TableCell>
+                <TableCell className="font-medium">
+                  {applicationSubmission.id}
+                </TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            ),
+          )}
         </TableBody>
       </Table>
     </Card>

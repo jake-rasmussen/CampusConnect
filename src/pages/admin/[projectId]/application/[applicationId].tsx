@@ -55,7 +55,6 @@ const EditApplication = () => {
   const handlePublishApplication =
     api.applicationRouter.publishApplication.useMutation({
       onSuccess() {
-        toast.dismiss();
         toast.success("Application published!");
         queryClient.invalidate();
         router.push(`/admin/${projectId}/`);

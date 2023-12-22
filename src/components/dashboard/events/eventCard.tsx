@@ -1,7 +1,10 @@
 import { Event } from "@prisma/client";
 import { Calendar } from "tabler-icons-react";
 
-import { dateAndTimeToStringFormatted, dateToTimeStringFormatted } from "~/utils/helpers";
+import {
+  dateAndTimeToStringFormatted,
+  dateToTimeStringFormatted,
+} from "~/utils/helpers";
 import {
   Card,
   CardContent,
@@ -52,7 +55,8 @@ const EventCard = (props: PropType) => {
                   {event.name}
                 </CardTitle>
                 <CardDescription className="text-gray">
-                  {dateAndTimeToStringFormatted(event.start)} to {dateToTimeStringFormatted(event.end)}
+                  {dateAndTimeToStringFormatted(event.start)} to{" "}
+                  {dateToTimeStringFormatted(event.end)}
                 </CardDescription>
               </CardHeader>
               <CardContent>
