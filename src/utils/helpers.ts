@@ -64,34 +64,3 @@ export const uppercaseToCapitalize = (str: string) => {
   str = str[0]?.toLocaleUpperCase() + str.slice(1);
   return str;
 };
-
-export const convertStreamToFile = async (
-  stream: ReadableStream<Uint8Array>,
-  fileName: string,
-) => {
-  const chunks: Uint8Array[] = [];
-  const reader = stream.getReader();
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) {
-      break;
-    }
-    chunks.push(value);
-  }
-
-  const concatenatedArray = new Uint8Array(
-    chunks.reduce((totalLength, chunk) => totalLength + chunk.length, 0),
-  );
-  let offset = 0;
-
-  for (const chunk of chunks) {
-    concatenatedArray.set(chunk, offset);
-    offset += chunk.length;
-  }
-
-  const blob = new Blob([concatenatedArray], { type: "text/plain" });
-  const file = new File([blob], fileName, { type: "text/plain" });
-
-  return file;
-};
