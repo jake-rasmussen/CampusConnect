@@ -221,10 +221,8 @@ const ApplicationForm = (props: PropType) => {
                       (answersMap?.get(question.id)?.answer as string) || ""
                     }
                     onChange={(e: File) => {
-                      console.log("Here");
                       if (!readonly) {
                         handleUpdateAnswer(question.id, e.name);
-                        console.log(e.name, answersMap);
                         handleUpdateFile(question.id, e);
                       }
                     }}

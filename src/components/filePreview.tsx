@@ -58,7 +58,7 @@ const FilePreview = (props: PropType) => {
 
           <section
             className={twMerge(
-              "flex overflow-y-scroll",
+              "flex overflow-y-scroll border border-dashed rounded-xl p-2",
               isLoading ? "hidden" : "",
             )}
           >

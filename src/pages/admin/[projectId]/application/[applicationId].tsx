@@ -55,7 +55,6 @@ const EditApplication = () => {
   const handlePublishApplication =
     api.applicationRouter.publishApplication.useMutation({
       onSuccess() {
-        toast.dismiss();
         toast.success("Application published!");
         queryClient.invalidate();
         router.push(`/admin/${projectId}/`);
@@ -71,8 +70,6 @@ const EditApplication = () => {
       applicationId: applicationId,
       projectId,
     });
-
-    console.log("QUESTIONS", questions);
 
     let count = 0;
     for (const question of questions) {

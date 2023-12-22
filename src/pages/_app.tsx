@@ -24,7 +24,7 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   return (
-    <main className="min-h-screen w-screen bg-background">
+    <main className="min-h-screen w-screen bg-background overflow-x-hidden">
       <ClerkProvider {...pageProps}>
         <Toaster />
         {/* TODO: see if we should add this to specific admin layout */}
