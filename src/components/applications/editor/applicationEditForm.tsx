@@ -193,6 +193,7 @@ const ApplicationEditForm = (props: PropType) => {
                   name={getFieldValue("name")?.value}
                   description={getFieldValue("description")?.value}
                   questions={questions}
+                  isSaving={isSaving}
                   readonly
                 />
               </PreviewDialog>
