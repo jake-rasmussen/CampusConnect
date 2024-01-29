@@ -1,3 +1,4 @@
+import { ApplicationSubmissionComment } from "@prisma/client";
 import Error from "next/error";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -155,8 +156,8 @@ const EvaluateApplicationSubmission = () => {
           <CardContent>
             {applicationSubmissionEvaluation.comments.length > 0 ? (
               <>
-                {applicationSubmissionEvaluation.comments.map((comment) => (
-                  <div>
+                {applicationSubmissionEvaluation.comments.map((comment: ApplicationSubmissionComment, index: number) => (
+                  <div key={`${comment.evaluatorName}${comment.comment}${index}`}>
                     <h5 className="mb-2 w-full border-b border-black font-semibold uppercase">
                       {comment.evaluatorName}{" "}
                       <span className="text-primary">@</span>{" "}

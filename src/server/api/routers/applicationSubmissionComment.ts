@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, isEvaluator, protectedProcedure, t } from "../trpc";
+import { createTRPCRouter, isEvaluator, t } from "../trpc";
 
 export const applicationSubmissionCommentRouter = createTRPCRouter({
   createApplicationSubmissionComment: t.procedure

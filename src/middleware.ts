@@ -1,9 +1,10 @@
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 
 export default authMiddleware({
-  publicRoutes: ["/"],
-  afterAuth(auth, req, evt) {
+  afterAuth(auth, req) {
     const url = new URL(req.url);
+
+    if (url.pathname === "/") return;
 
     const publicMetadata = auth.sessionClaims?.publicMetadata as {
       adminProjectIds: string;
@@ -49,6 +50,7 @@ export default authMiddleware({
       return redirectToSignIn({ returnBackUrl: req.url });
     }
   },
+  publicRoutes: ["/"],
 });
 
 export const config = {
