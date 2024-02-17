@@ -9,7 +9,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { Check, Edit, Eye } from "tabler-icons-react";
+import { Check, Edit, Eye, Pencil } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
 import ApplicationForm from "~/components/applications/applicationForm";
@@ -26,6 +26,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../shadcn_ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/shadcn_ui/tooltip";
+import Button from "~/components/button";
 
 type PropType = {
   application: Application & {
@@ -76,9 +78,8 @@ const ApplicationCard = (props: PropType) => {
         {displayEditComponent && (
           <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
             <Link
-              href={`/admin/${projectId as string}/application/${
-                application.id
-              }`}
+              href={`/admin/${projectId as string}/application/${application.id
+                }`}
               className="group flex h-full w-full items-center"
             >
               <div className="absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10" />
@@ -157,6 +158,7 @@ const ApplicationCard = (props: PropType) => {
           )}
         </div>
       </CardContent>
+
       <CardFooter className="flex grow items-end justify-end">
         <div className="flex w-full justify-end">
           {status === ApplicationSubmissionStatus.NEW &&
@@ -180,6 +182,24 @@ const ApplicationCard = (props: PropType) => {
             </p>
           )}
         </div>
+
+        {editable && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-8">
+                <Link href={`/evaluator/${projectId}`}>
+                  <div className="bg-white rounded-full border border-black border-1 z-30">
+                    <Pencil className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500 p-2" />
+                  </div>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent className="bg-white">
+                <p>Evaluate Submissions</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+
       </CardFooter>
     </Card>
   );
