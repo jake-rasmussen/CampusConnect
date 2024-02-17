@@ -88,7 +88,7 @@ const OpenApplications = () => {
         <section className="py-10">
           <div className="ml-4 flex flex-col items-center text-center">
             {skills.length > 0 && (
-              <div className="max-w-4xl pb-8">
+              <div className="mmax-w-3xl pb-8">
                 <div className="mx-auto max-w-xs">
                   <h3 className="text-xl font-semibold uppercase text-black">
                     Filter
@@ -125,7 +125,7 @@ const OpenApplications = () => {
               </div>
             )}
           </div>
-          <div className="flex w-full items-center justify-center ">
+          <div className="flex w-full items-center justify-center">
             {applications.length > 0 ? (
               <div className="flex max-w-7xl flex-wrap justify-center">
                 <>

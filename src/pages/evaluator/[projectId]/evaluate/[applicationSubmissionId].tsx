@@ -155,19 +155,23 @@ const EvaluateApplicationSubmission = () => {
           </CardHeader>
           <CardContent>
             {applicationSubmissionEvaluation.comments.length > 0 ? (
-              <>
-                {applicationSubmissionEvaluation.comments.map((comment: ApplicationSubmissionComment, index: number) => (
-                  <div key={`${comment.evaluatorName}${comment.comment}${index}`}>
-                    <h5 className="mb-2 w-full border-b border-black font-semibold uppercase">
-                      {comment.evaluatorName}{" "}
-                      <span className="text-primary">@</span>{" "}
-                      {dateToStringFormatted(comment.createdAt)},{" "}
-                      {dateToTimeStringFormatted(comment.createdAt)}
-                    </h5>
-                    {comment.comment}
-                  </div>
-                ))}
-              </>
+              <section className="flex flex-col gap-4">
+                {applicationSubmissionEvaluation.comments.map(
+                  (comment: ApplicationSubmissionComment, index: number) => (
+                    <div
+                      key={`${comment.evaluatorName}${comment.comment}${index}`}
+                    >
+                      <h5 className="mb-2 w-full border-b border-black font-semibold uppercase">
+                        {comment.evaluatorName}{" "}
+                        <span className="text-primary">@</span>{" "}
+                        {dateToStringFormatted(comment.createdAt)},{" "}
+                        {dateToTimeStringFormatted(comment.createdAt)}
+                      </h5>
+                      {comment.comment}
+                    </div>
+                  ),
+                )}
+              </section>
             ) : (
               <>
                 <h5 className="mb-2 w-full border-b border-black text-center font-semibold uppercase">

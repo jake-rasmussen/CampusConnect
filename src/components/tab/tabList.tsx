@@ -22,7 +22,7 @@ const TabList = (props: PropType) => {
 
   return (
     <>
-      <main className="-mx-4 flex flex-nowrap items-center justify-center space-x-2 pb-10">
+      <main className=" flex flex-nowrap items-center justify-center space-x-2 pb-10 overflow-x-scroll">
         {childrenWithProps}
       </main>
     </>

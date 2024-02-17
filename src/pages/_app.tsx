@@ -9,6 +9,8 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Toaster } from "react-hot-toast";
 
+import Navbar from "~/components/navbar";
+
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import type { ReactElement, ReactNode } from "react";
@@ -24,8 +26,9 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   return (
-    <main className="min-h-screen w-screen bg-background overflow-x-hidden">
+    <main className="min-h-screen w-screen bg-background">
       <ClerkProvider {...pageProps}>
+        <Navbar />
         <Toaster />
         {/* TODO: see if we should add this to specific admin layout */}
         <DndProvider backend={HTML5Backend}>
