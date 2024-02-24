@@ -15,7 +15,6 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { prisma } from "~/server/db";
-import { s3 } from "../aws/s3";
 
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
@@ -41,7 +40,6 @@ const createInnerTRPCContext = (user: User | null) => {
   return {
     prisma,
     user,
-    s3,
   };
 };
 

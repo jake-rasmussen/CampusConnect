@@ -3,7 +3,6 @@ import "@prisma/client";
 import Applications from "./dashboard/applications/applications";
 import ContactSection from "./dashboard/contact/contactSection";
 import DescriptionSection from "./dashboard/description/descriptionSection";
-import Events from "./dashboard/events/events";
 import Header from "./dashboard/header/header";
 import Members from "./dashboard/members/members";
 import SocialMediaSection from "./dashboard/socialMedia/socialMediaSection";
@@ -112,13 +111,6 @@ const DashboardPage = (props: PropType) => {
             <></>
           )}
         </Tab>
-        {(isAdminPage || events.length > 0) && (
-          <Events
-            events={events}
-            projectId={projectId}
-            editable={isAdminPage}
-          />
-        )}
       </main>
     </>
   );
