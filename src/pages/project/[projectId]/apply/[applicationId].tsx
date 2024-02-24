@@ -13,6 +13,7 @@ import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 import { NextPageWithLayout } from "../../../_app";
+import { createClient } from "@supabase/supabase-js";
 
 const Apply: NextPageWithLayout = () => {
   const router = useRouter();
@@ -24,8 +25,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-      })
+      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+    })
     | undefined
   >();
 
@@ -73,8 +74,8 @@ const Apply: NextPageWithLayout = () => {
   const deleteApplicationSubmissionAnswerChoices =
     api.applicationSubmissionAnswerRouter.deleteAllApplicationSubmissionAnswersByApplicationSubmissionId.useMutation();
 
-  const getPresignedUrlUpload =
-    api.s3Router.getPresignedUrlUpload.useMutation();
+  const createSignedUrlUpload =
+    api.supabaseRouter.createSignedUrlUpload.useMutation({})
 
   const handleSaveAnswers = async (
     answers: ApplicationSubmissionAnswer[],
@@ -92,6 +93,26 @@ const Apply: NextPageWithLayout = () => {
       }
 
       const saveAnswers = async () => {
+        for (const file of files) {
+          const url = await createSignedUrlUpload.mutateAsync({
+            projectId,
+            applicationId,
+            filename: file.name
+          });
+
+          if (url) {
+            await fetch(url, {
+              method: "PUT",
+              headers: { "Content-Type": file.type },
+              body: file.slice(),
+            });
+          } else {
+            toast.dismiss();
+            toast.error("Error...");
+            return;
+          }
+        }
+
         const applicationSubmission =
           await upsertApplicationSubmission.mutateAsync({
             applicationSubmissionId: savedSubmission?.id,
@@ -115,19 +136,6 @@ const Apply: NextPageWithLayout = () => {
               answer: answer.answer as string | string[],
             });
           }
-        }
-
-        for (const file of files) {
-          const url = await getPresignedUrlUpload.mutateAsync({
-            projectId,
-            applicationId,
-            filename: file.name,
-          });
-          await fetch(url, {
-            method: "PUT",
-            headers: { "Content-Type": file.type },
-            body: file.slice(),
-          });
         }
 
         if (submit) {

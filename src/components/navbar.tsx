@@ -51,6 +51,11 @@ const Navbar = () => {
             {menu}
           </ul>
           <div className="flex grow items-center justify-center md:space-x-4 lg:flex-none">
+            <Link href="/project/swec" className="lg:flex items-center p-2 hidden" onClick={() => setMenuIsOpen(false)}>
+              <h1 className="tracking-none text-2xl lg:text-lg font-black uppercase transition duration-300 ease-in-out hover:text-black bg-gradient-to-r from-secondary to-primary inline-block text-transparent bg-clip-text">
+                SWEC Page
+              </h1>
+            </Link>
             <UserButton afterSignOutUrl="/" />
           </div>
 
