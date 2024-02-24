@@ -3,6 +3,7 @@ import {
   ApplicationSubmissionAnswer,
   ApplicationSubmissionStatus,
 } from "@prisma/client";
+import { createClient } from "@supabase/supabase-js";
 import Error from "next/error";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -13,7 +14,6 @@ import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 import { NextPageWithLayout } from "../../../_app";
-import { createClient } from "@supabase/supabase-js";
 
 const Apply: NextPageWithLayout = () => {
   const router = useRouter();
@@ -25,8 +25,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-    })
+        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+      })
     | undefined
   >();
 
@@ -75,7 +75,7 @@ const Apply: NextPageWithLayout = () => {
     api.applicationSubmissionAnswerRouter.deleteAllApplicationSubmissionAnswersByApplicationSubmissionId.useMutation();
 
   const createSignedUrlUpload =
-    api.supabaseRouter.createSignedUrlUpload.useMutation({})
+    api.supabaseRouter.createSignedUrlUpload.useMutation({});
 
   const handleSaveAnswers = async (
     answers: ApplicationSubmissionAnswer[],
@@ -97,7 +97,7 @@ const Apply: NextPageWithLayout = () => {
           const url = await createSignedUrlUpload.mutateAsync({
             projectId,
             applicationId,
-            filename: file.name
+            filename: file.name,
           });
 
           if (url) {

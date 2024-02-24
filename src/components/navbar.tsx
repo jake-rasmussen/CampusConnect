@@ -10,23 +10,39 @@ const Navbar = () => {
 
   const menu = (
     <>
-      <Link href="/project" className="flex items-center p-2" onClick={() => setMenuIsOpen(false)}>
-        <h1 className="tracking-none text-2xl lg:text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
+      <Link
+        href="/project"
+        className="flex items-center p-2"
+        onClick={() => setMenuIsOpen(false)}
+      >
+        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
           All Projects
         </h1>
       </Link>
-      <Link href="/open-applications" className="flex items-center p-2" onClick={() => setMenuIsOpen(false)}>
-        <h1 className="tracking-none text-2xl lg:text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
+      <Link
+        href="/open-applications"
+        className="flex items-center p-2"
+        onClick={() => setMenuIsOpen(false)}
+      >
+        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
           Open Applications
         </h1>
       </Link>
-      <Link href="/my-applications" className="flex items-center p-2" onClick={() => setMenuIsOpen(false)}>
-        <h1 className="tracking-none text-2xl lg:text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
+      <Link
+        href="/my-applications"
+        className="flex items-center p-2"
+        onClick={() => setMenuIsOpen(false)}
+      >
+        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
           My Applications
         </h1>
       </Link>
-      <Link href="/my-projects" className="flex items-center p-2" onClick={() => setMenuIsOpen(false)}>
-        <h1 className="tracking-none text-2xl lg:text-lg font-black uppercase transition duration-300 ease-in-out hover:text-secondary">
+      <Link
+        href="/my-projects"
+        className="flex items-center p-2"
+        onClick={() => setMenuIsOpen(false)}
+      >
+        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
           My Projects
         </h1>
       </Link>
@@ -36,8 +52,12 @@ const Navbar = () => {
   return (
     <>
       <header className="sticky top-0 z-50 w-full bg-white p-4 text-black shadow-xl">
-        <div className="mx-auto flex items-center h-16">
-          <Link href="/" className="mx-4 w-10 h-10 lg:h-16 lg:w-16" onClick={() => setMenuIsOpen(false)}>
+        <div className="mx-auto flex h-16 items-center">
+          <Link
+            href="/"
+            className="mx-4 h-10 w-10 lg:h-16 lg:w-16"
+            onClick={() => setMenuIsOpen(false)}
+          >
             <Image
               src={"/assets/SWEC Logo.png"}
               alt={"SWEC Logo"}
@@ -51,8 +71,12 @@ const Navbar = () => {
             {menu}
           </ul>
           <div className="flex grow items-center justify-center md:space-x-4 lg:flex-none">
-            <Link href="/project/swec" className="lg:flex items-center p-2 hidden" onClick={() => setMenuIsOpen(false)}>
-              <h1 className="tracking-none text-2xl lg:text-lg font-black uppercase transition duration-300 ease-in-out hover:text-black bg-gradient-to-r from-secondary to-primary inline-block text-transparent bg-clip-text">
+            <Link
+              href="/project/swec"
+              className="hidden items-center p-2 lg:flex"
+              onClick={() => setMenuIsOpen(false)}
+            >
+              <h1 className="tracking-none inline-block bg-gradient-to-r from-secondary to-primary bg-clip-text text-2xl font-black uppercase text-transparent transition duration-300 ease-in-out hover:text-black lg:text-lg">
                 SWEC Page
               </h1>
             </Link>
@@ -70,7 +94,7 @@ const Navbar = () => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
-                    <X className="w-7 h-7" />
+                    <X className="h-7 w-7" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -80,7 +104,7 @@ const Navbar = () => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
-                    <Menu2 className="w-7 h-7" />
+                    <Menu2 className="h-7 w-7" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -104,8 +128,9 @@ const Navbar = () => {
                 <div
                   tabIndex={0}
                   className={`flex h-[92vh] w-screen flex-col items-center justify-center overflow-y-scroll bg-white text-xl
-              transition duration-300 ease-in-out ${!menuIsOpen ? "pointer-events-none" : ""
-                    }`}
+              transition duration-300 ease-in-out ${
+                !menuIsOpen ? "pointer-events-none" : ""
+              }`}
                   id="menu"
                 >
                   {menu}

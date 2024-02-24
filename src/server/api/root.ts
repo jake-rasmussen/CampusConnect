@@ -9,8 +9,8 @@ import { contactInfoRouter } from "./routers/contactInfo";
 import { eventRouter } from "./routers/event";
 import { memberRouter } from "./routers/member";
 import { projectRouter } from "./routers/project";
-import { supabaseRouter } from "./routers/supabase";
 import { socialMediaRouter } from "./routers/socialMedia";
+import { supabaseRouter } from "./routers/supabase";
 import { usersRouter } from "./routers/users";
 
 /**

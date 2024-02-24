@@ -1,5 +1,6 @@
 import { ApplicationSubmissionStatus } from "@prisma/client";
 import Error from "next/error";
+import { twMerge } from "tailwind-merge";
 
 import LoadingSection from "~/components/loadingSection";
 import { api } from "~/utils/api";
@@ -8,7 +9,6 @@ import ApplicationCreator from "./applicationCreator";
 import ApplicationsOutline from "./applicationsOutline";
 
 import type { Application, ApplicationQuestion } from "@prisma/client";
-import { twMerge } from "tailwind-merge";
 
 type PropType = {
   applications: (Application & {
@@ -37,7 +37,12 @@ const Applications = (props: PropType) => {
       <section className="flex flex-col items-center gap-y-8">
         <ApplicationsOutline>
           {applications.length > 0 ? (
-            <div className={twMerge("flex flex-wrap justify-center gap-4", editable && "gap-y-14")}>
+            <div
+              className={twMerge(
+                "flex flex-wrap justify-center gap-4",
+                editable && "gap-y-14",
+              )}
+            >
               {applications.map(
                 (
                   application: Application & {
@@ -82,7 +87,7 @@ const Applications = (props: PropType) => {
             </div>
           ) : (
             <>
-              <h3 className="tracking-none my-4 text-lg md:text-xl font-black uppercase underline">
+              <h3 className="tracking-none my-4 text-lg font-black uppercase underline md:text-xl">
                 There are no open applications
               </h3>
             </>

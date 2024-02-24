@@ -1,8 +1,12 @@
 import "@prisma/client";
 
+import { twMerge } from "tailwind-merge";
+
+import { isAdmin } from "~/server/api/trpc";
 import Applications from "./dashboard/applications/applications";
 import ContactSection from "./dashboard/contact/contactSection";
 import DescriptionSection from "./dashboard/description/descriptionSection";
+import Events from "./dashboard/events/events";
 import Header from "./dashboard/header/header";
 import Members from "./dashboard/members/members";
 import SocialMediaSection from "./dashboard/socialMedia/socialMediaSection";
@@ -20,8 +24,6 @@ import type {
   SocialMedia,
   User,
 } from "@prisma/client";
-import { twMerge } from "tailwind-merge";
-import { isAdmin } from "~/server/api/trpc";
 
 type PropType = {
   name: string;
@@ -54,8 +56,14 @@ const DashboardPage = (props: PropType) => {
 
   return (
     <>
-      <section className={twMerge(isAdminPage ? "fixed h-screen w-screen bg-white top-0 z-40 flex items-center justify-center md:hidden" : "hidden")}>
-        <span className="font-semibold text-lg uppercase mx-8">
+      <section
+        className={twMerge(
+          isAdminPage
+            ? "fixed top-0 z-40 flex h-screen w-screen items-center justify-center bg-white md:hidden"
+            : "hidden",
+        )}
+      >
+        <span className="mx-8 text-lg font-semibold uppercase">
           Admin Mode Disabled on Mobile
         </span>
       </section>
@@ -76,6 +84,13 @@ const DashboardPage = (props: PropType) => {
                 projectDescription={description}
                 editable={isAdminPage}
               />
+              {projectId === "swec" && events.length > 0 && (
+                <Events
+                  events={events}
+                  projectId={projectId}
+                  editable={isAdminPage}
+                />
+              )}
               {(isAdminPage || contactInfos.length > 0) && (
                 <ContactSection
                   contactInfos={contactInfos}

@@ -1,12 +1,13 @@
 "use client";
-import type { NextPage } from "next";
-import React from "react";
-import { useEffect, useState } from "react";
+
 import Particles, { initParticlesEngine } from "@tsparticles/react";
-import type { Container, Engine } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
-import { cn } from "lib/utils";
 import { motion, useAnimation } from "framer-motion";
+import { cn } from "lib/utils";
+import React, { useEffect, useState } from "react";
+
+import type { Container, Engine } from "@tsparticles/engine";
+import type { NextPage } from "next";
 
 type ParticlesProps = {
   id?: string;

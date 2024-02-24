@@ -1,12 +1,12 @@
 import { InfoCircle } from "tabler-icons-react";
 
+import { SparklesCore } from "~/components/aceternity_ui/sparkles";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "~/components/shadcn_ui/hover-card";
 import HeaderOutline from "./headerOutline";
-import { SparklesCore } from "~/components/aceternity_ui/sparkles";
 
 type PropType = {
   name: string;
@@ -41,7 +41,7 @@ const Header = (props: PropType) => {
         <></>
       )}
 
-      <div className="flex flex-col min-w-96 overflow-hidden">
+      <div className="min-w-96 flex flex-col overflow-hidden">
         <h2 className="mb-6 font-sans text-5xl font-bold tracking-tight text-white sm:text-7xl sm:leading-none">
           {name}
         </h2>

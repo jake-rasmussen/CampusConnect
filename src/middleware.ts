@@ -41,7 +41,11 @@ export default authMiddleware({
         const evaluatorIndex = parts.indexOf("evaluator");
         if (evaluatorIndex !== -1 && evaluatorIndex < parts.length - 1) {
           const projectId = parts[evaluatorIndex + 1];
-          if (projectId && !evaluatorProjectIds.includes(projectId) && !adminProjectIds.includes(projectId)) {
+          if (
+            projectId &&
+            !evaluatorProjectIds.includes(projectId) &&
+            !adminProjectIds.includes(projectId)
+          ) {
             return redirectToSignIn({ returnBackUrl: req.url });
           }
         }

@@ -34,7 +34,7 @@ const ApplicationPreviewCard = (props: PropType) => {
   const { application } = props;
 
   return (
-    <Card className="relative my-6 mb-0 mr-4 flex w-[20rem] md:w-[25rem] flex-col rounded-xl bg-white shadow-xl">
+    <Card className="relative my-6 mb-0 mr-4 flex w-[20rem] flex-col rounded-xl bg-white shadow-xl md:w-[25rem]">
       <CardHeader className="pb-0">
         <CardTitle>{application.name}</CardTitle>
         <CardDescription>{application.description}</CardDescription>

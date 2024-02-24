@@ -15,8 +15,15 @@ import { twMerge } from "tailwind-merge";
 import ApplicationForm from "~/components/applications/applicationForm";
 import ApplicationWithdrawDialog from "~/components/applications/applicationWithdrawDialog";
 import ApplicationDeleteDialog from "~/components/applications/editor/applicationDeleteDialog";
+import Button from "~/components/button";
 import PreviewDialog from "~/components/previewDialog";
 import { Separator } from "~/components/shadcn_ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/shadcn_ui/tooltip";
 import { DATE_TIME_FORMAT_OPTS } from "~/constants";
 import {
   Card,
@@ -26,8 +33,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../shadcn_ui/card";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/shadcn_ui/tooltip";
-import Button from "~/components/button";
 
 type PropType = {
   application: Application & {
@@ -78,8 +83,9 @@ const ApplicationCard = (props: PropType) => {
         {displayEditComponent && (
           <div className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transform transition ease-in-out">
             <Link
-              href={`/admin/${projectId as string}/application/${application.id
-                }`}
+              href={`/admin/${projectId as string}/application/${
+                application.id
+              }`}
               className="group flex h-full w-full items-center"
             >
               <div className="absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10" />
@@ -186,10 +192,10 @@ const ApplicationCard = (props: PropType) => {
         {editable && (
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger className="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-8">
+              <TooltipTrigger className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-8 transform">
                 <Link href={`/evaluator/${projectId}`}>
-                  <div className="bg-white rounded-full border border-black border-1 z-30">
-                    <Pencil className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500 p-2" />
+                  <div className="border-1 z-30 rounded-full border border-black bg-white">
+                    <Pencil className="h-14 w-14 p-2 text-primary transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500" />
                   </div>
                 </Link>
               </TooltipTrigger>
@@ -199,7 +205,6 @@ const ApplicationCard = (props: PropType) => {
             </Tooltip>
           </TooltipProvider>
         )}
-
       </CardFooter>
     </Card>
   );

@@ -24,7 +24,8 @@ const FilePreview = (props: PropType) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [url, setUrl] = useState<string>();
 
-  const getPresignedUrlGet = api.supabaseRouter.createSignedUrlDownload.useMutation();
+  const getPresignedUrlGet =
+    api.supabaseRouter.createSignedUrlDownload.useMutation();
 
   useEffect(() => {
     if (projectId && applicationId && filename) {
