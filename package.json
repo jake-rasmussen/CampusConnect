@@ -8,6 +8,7 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
+    "ngrok": "ngrok http --domain=good-civet-beloved.ngrok-free.app 3000",
     "format": "prettier --write \"{prisma,src}/**/*.{ts,tsx}\"",
     "docker:up": "docker compose up --detach --no-recreate --wait",
     "docker:down": "docker compose down --timeout 5",

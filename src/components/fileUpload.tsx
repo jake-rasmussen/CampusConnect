@@ -47,7 +47,7 @@ const FileUpload = (props: PropType) => {
                 }
               }
             }}
-            accept=".jpg,.jpeg,.png"
+            accept=".jpg,.jpeg,.png,.pdf"
             disabled={readonly}
           />
           <label className="mr-8 block w-full cursor-pointer rounded-lg rounded-xl border bg-white p-3">
