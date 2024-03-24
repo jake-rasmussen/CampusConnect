@@ -8,6 +8,7 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
+    "ngrok": "ngrok http --domain=good-civet-beloved.ngrok-free.app 3000",
     "format": "prettier --write \"{prisma,src}/**/*.{ts,tsx}\"",
     "docker:up": "docker compose up --detach --no-recreate --wait",
     "docker:down": "docker compose down --timeout 5",
@@ -64,6 +65,7 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
     "superjson": "1.12.2",
+    "svix": "^1.21.0",
     "tabler-icons-react": "^1.56.0",
     "zod": "^3.21.4"
   },

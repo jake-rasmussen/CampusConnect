@@ -7,7 +7,6 @@
  * need to use are documented accordingly near the end.
  */
 
-import { clerkClient } from "@clerk/nextjs";
 import { getAuth } from "@clerk/nextjs/server";
 import { Member, ProjectMemberType, User } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
@@ -43,33 +42,6 @@ const createInnerTRPCContext = (user: User | null) => {
   };
 };
 
-const getOrCreateUser = async (
-  externalId: string,
-  emailAddress: string,
-  firstName: string,
-  lastName: string,
-) => {
-  return await prisma.user.upsert({
-    where: {
-      externalId,
-    },
-    update: {
-      emailAddress,
-      firstName,
-      lastName,
-    },
-    create: {
-      externalId,
-      emailAddress,
-      firstName,
-      lastName,
-    },
-    include: {
-      memberships: true,
-    },
-  });
-};
-
 /**
  * This is the actual context you will use in your router. It will be used to process every request
  * that goes through your tRPC endpoint.
@@ -77,7 +49,7 @@ const getOrCreateUser = async (
  * @see https://trpc.io/docs/context
  */
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { sessionClaims, userId } = getAuth(opts.req);
+  const { userId } = getAuth(opts.req);
   if (!userId) {
     return {
       ...createInnerTRPCContext(null),
@@ -85,29 +57,12 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
     };
   }
 
-  const { email, firstName, lastName } = sessionClaims;
-  const user = await getOrCreateUser(
-    userId,
-    email as string,
-    firstName as string,
-    lastName as string,
-  );
-
-  const evaluatorProjectIds: string[] = [];
-  const adminProjectIds: string[] = [];
-
-  user.memberships.forEach((membership: Member) => {
-    if (membership.type === ProjectMemberType.ADMIN) {
-      adminProjectIds.push(membership.projectId);
-    } else {
-      evaluatorProjectIds.push(membership.projectId);
-    }
-  });
-
-  await clerkClient.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
-      adminProjectIds: JSON.stringify(adminProjectIds),
+  const user = await prisma.user.findUnique({
+    where: {
+      externalId: userId,
+    },
+    include: {
+      memberships: true,
     },
   });
 
