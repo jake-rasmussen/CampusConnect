@@ -21,16 +21,6 @@ const config = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'swecconnect.s3.us-east-1.amazonaws.com',
-        port: '',
-        pathname: '**',
-      },
-    ]
-  }
 };
 
 export default config;
