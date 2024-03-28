@@ -63,15 +63,23 @@ const FilePreview = (props: PropType) => {
               isLoading ? "hidden" : "",
             )}
           >
-            <img
-              src={url || ""}
-              onLoad={() => setIsLoading(false)}
-              width="0"
-              height="0"
-              sizes="100vw"
-              className="h-auto w-full"
-              alt={filename}
-            />
+            {filename.slice(-4).toLowerCase() === ".pdf" ? (
+              <iframe
+                src={url || ""}
+                onLoad={() => setIsLoading(false)}
+                className="w-full min-h-[75vh]"
+              />
+            ) : (
+              <img
+                src={url || ""}
+                onLoad={() => setIsLoading(false)}
+                width="0"
+                height="0"
+                sizes="100vw"
+                className="h-auto w-full"
+                alt={filename}
+              />
+            )}
           </section>
         </DialogContent>
       </Dialog>

@@ -7,11 +7,13 @@ import { Menu2, X } from "tabler-icons-react";
 
 type PropType = {
   isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>
-}
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+};
 
 const Navbar = (props: PropType) => {
   const { isLoading, setIsLoading } = props;
+
+  useEffect(() => setIsLoading(false));
 
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [adminProjects, setAdminProjects] = useState<string[]>([]);
@@ -23,11 +25,15 @@ const Navbar = (props: PropType) => {
     if (user) {
       const metadata = user.publicMetadata;
 
-      const adminProjectIds: string[] = JSON.parse(metadata.adminProjectIds as string) || [];
-      const evaluatorProjectIds: string[] = JSON.parse(metadata.evaluatorProjectIds as string) || [];
+      if (metadata && metadata.adminProjectIds && metadata.evaluatorProjectIds) {
+        const adminProjectIds: string[] =
+          JSON.parse(metadata.adminProjectIds as string) || [];
+        const evaluatorProjectIds: string[] =
+          JSON.parse(metadata.evaluatorProjectIds as string) || [];
 
-      setAdminProjects(adminProjectIds);
-      setEvaluatorProjects(evaluatorProjectIds);
+        setAdminProjects(adminProjectIds);
+        setEvaluatorProjects(evaluatorProjectIds);
+      }
 
       setIsLoading(false);
     }
@@ -62,8 +68,7 @@ const Navbar = (props: PropType) => {
           My Applications
         </h1>
       </Link>
-      {
-        (adminProjects.length > 0 || evaluatorProjects.length > 0) &&
+      {(adminProjects.length > 0 || evaluatorProjects.length > 0) && (
         <Link
           href="/my-projects"
           className="flex items-center p-2"
@@ -73,8 +78,7 @@ const Navbar = (props: PropType) => {
             My Projects
           </h1>
         </Link>
-      }
-
+      )}
     </>
   );
 

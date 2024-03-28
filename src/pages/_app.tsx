@@ -1,5 +1,5 @@
 import { useClerk } from "@clerk/clerk-react";
-import { ClerkProvider, useAuth, useUser } from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, useAuth, useUser } from "@clerk/nextjs";
 
 import { api } from "~/utils/api";
 
@@ -30,15 +30,14 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
-    <main className="min-h-screen w-screen bg-background">
+    <main className="min-h-screen w-screen bg-background overflow-y-hidden">
       <ClerkProvider {...pageProps}>
-        <Navbar
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
+        <SignedIn>
+          <Navbar isLoading={isLoading} setIsLoading={setIsLoading} />
+        </SignedIn>
         <Toaster />
         {isLoading ? (
           <LoadingPage />

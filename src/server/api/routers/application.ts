@@ -33,6 +33,19 @@ export const applicationRouter = createTRPCRouter({
         },
       });
 
+      applications.forEach(async (application) => {
+        if (application.deadline && application.deadline < new Date()) {
+          await ctx.prisma.application.update({
+            where: {
+              id: application.id,
+            },
+            data: {
+              status: ApplicationStatus.CLOSED
+            }
+          })
+        }
+      })
+
       return applications;
     }),
   getProjectApplicationsByProjectIdForUsers: protectedProcedure
@@ -48,6 +61,9 @@ export const applicationRouter = createTRPCRouter({
         where: {
           projectId,
           status: ApplicationStatus.OPEN,
+          deadline: {
+            gt: new Date()
+          }
         },
         include: {
           questions: {
@@ -56,6 +72,19 @@ export const applicationRouter = createTRPCRouter({
             },
           },
         },
+      });
+
+      applications.forEach(async (application) => {
+        if (application.deadline && application.deadline < new Date()) {
+          await ctx.prisma.application.update({
+            where: {
+              id: application.id,
+            },
+            data: {
+              status: ApplicationStatus.CLOSED
+            }
+          })
+        }
       });
 
       return applications;
@@ -72,7 +101,6 @@ export const applicationRouter = createTRPCRouter({
       const applications = await ctx.prisma.application.findMany({
         where: {
           projectId,
-          status: ApplicationStatus.CLOSED,
         },
         include: {
           applicationSubmissions: {
@@ -81,22 +109,41 @@ export const applicationRouter = createTRPCRouter({
         },
       });
 
+      applications.forEach(async (application) => {
+        if (application.deadline && application.deadline < new Date()) {
+          await ctx.prisma.application.update({
+            where: {
+              id: application.id,
+            },
+            data: {
+              status: ApplicationStatus.CLOSED
+            }
+          })
+        }
+      });
+
       return applications;
     }),
   getAllOpenApplications: protectedProcedure.query(async ({ ctx }) => {
     const applications = await ctx.prisma.application.findMany({
       where: {
         status: ApplicationStatus.OPEN,
+        deadline: {
+          gt: new Date()
+        }
       },
       include: {
         questions: {
           orderBy: {
             orderNumber: "asc",
           },
+
         },
+
         project: true,
       },
     });
+
     return applications;
   }),
   createApplication: t.procedure
@@ -110,7 +157,7 @@ export const applicationRouter = createTRPCRouter({
     .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { projectId, name, description } = input;
-
+      
       const application = await ctx.prisma.application.create({
         data: {
           name,
@@ -169,7 +216,7 @@ export const applicationRouter = createTRPCRouter({
         data: {
           deadline,
           desiredSkills: skills,
-          status: "OPEN",
+          status: deadline > new Date() ? ApplicationStatus.OPEN : ApplicationStatus.CLOSED,
         },
       });
     }),
@@ -194,6 +241,17 @@ export const applicationRouter = createTRPCRouter({
           },
         },
       });
+
+      if (application.deadline && application.deadline < new Date()) {
+        await ctx.prisma.application.update({
+          where: {
+            id: applicationId,
+          },
+          data: {
+            status: ApplicationStatus.CLOSED
+          }
+        })
+      }
 
       return application;
     }),

@@ -46,7 +46,7 @@ const SkillsCreator = (props: PropType) => {
           value={value}
           onChange={(e) => setValue(e.currentTarget.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handleAddSkill(value);
+            if (e.key === "Enter" && value.length > 0) handleAddSkill(value);
           }}
           placeholder="Enter skill for application..."
           className="my-4 py-4"

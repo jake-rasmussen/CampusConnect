@@ -25,8 +25,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-      })
+      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+    })
     | undefined
   >();
 
@@ -43,6 +43,16 @@ const Apply: NextPageWithLayout = () => {
       enabled: !!applicationId,
     },
   );
+
+  const {
+    data: fileList,
+    isLoading: isLoadingFileList,
+    isError: isErrorFileList,
+    error: errorFileList,
+  } = api.supabaseRouter.getSupabaseFolder.useQuery({
+    projectId,
+    applicationId,
+  });
 
   const {
     data: userSubmissions,
@@ -94,22 +104,24 @@ const Apply: NextPageWithLayout = () => {
 
       const saveAnswers = async () => {
         for (const file of files) {
-          const url = await createSignedUrlUpload.mutateAsync({
-            projectId,
-            applicationId,
-            filename: file.name,
-          });
-
-          if (url) {
-            await fetch(url, {
-              method: "PUT",
-              headers: { "Content-Type": file.type },
-              body: file.slice(),
+          if (!fileList?.includes(file.name)) {
+            const url = await createSignedUrlUpload.mutateAsync({
+              projectId,
+              applicationId,
+              filename: file.name,
             });
-          } else {
-            toast.dismiss();
-            toast.error("Error...");
-            return;
+
+            if (url) {
+              await fetch(url, {
+                method: "PUT",
+                headers: { "Content-Type": file.type },
+                body: file.slice(),
+              });
+            } else {
+              toast.dismiss();
+              toast.error("Error...");
+              return;
+            }
           }
         }
 
@@ -166,14 +178,15 @@ const Apply: NextPageWithLayout = () => {
     }
   }, [application, userSubmissions]);
 
-  if (!applicationId || isLoadingApplication || isLoadingUserSubmissions) {
+  if (!applicationId || isLoadingApplication || isLoadingUserSubmissions || isLoadingFileList) {
     return <LoadingPage />;
-  } else if (isErrorApplication || isErrorUserSubmissions) {
+  } else if (isErrorApplication || isErrorUserSubmissions || isErrorFileList) {
     return (
       <Error
         statusCode={
           errorApplication?.data?.httpStatus ||
           errorUserSubmissions?.data?.httpStatus ||
+          errorFileList?.data?.httpStatus ||
           500
         }
       />
@@ -192,6 +205,7 @@ const Apply: NextPageWithLayout = () => {
             description={application.description}
             questions={application.questions}
             savedAnswers={savedSubmission?.applicationSubmissionAnswers}
+            isSaving={isSaving}
             readonly
           />
         </div>
@@ -208,6 +222,7 @@ const Apply: NextPageWithLayout = () => {
             description={application.description}
             questions={application.questions}
             savedAnswers={savedSubmission?.applicationSubmissionAnswers}
+            deadline={application.deadline || undefined}
             handleSaveAnswers={handleSaveAnswers}
             isSaving={isSaving}
           />

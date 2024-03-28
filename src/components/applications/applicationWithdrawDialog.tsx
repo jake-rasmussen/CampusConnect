@@ -15,6 +15,7 @@ import {
 import { api } from "~/utils/api";
 
 type PropType = {
+  projectId: string;
   applicationId: string;
   applicationSubmissionId: string;
   openDialog: boolean;
@@ -22,10 +23,12 @@ type PropType = {
 };
 
 const ApplicationWithdrawDialog = (props: PropType) => {
-  const { applicationId, applicationSubmissionId, openDialog, setOpenDialog } =
+  const { projectId, applicationId, applicationSubmissionId, openDialog, setOpenDialog } =
     props;
 
   const queryClient = api.useContext();
+
+  const clearSupabaseFolder = api.supabaseRouter.clearSupabaseFolder.useMutation({});
 
   const withdrawApplicationSubmission =
     api.applicationSubmissionRouter.withdrawApplicationSubmission.useMutation({
@@ -59,7 +62,12 @@ const ApplicationWithdrawDialog = (props: PropType) => {
         </DialogHeader>
         <DialogFooter>
           <Button
-            onClickFn={() => {
+            onClickFn={async () => {
+              await clearSupabaseFolder.mutateAsync({
+                projectId,
+                applicationId
+              });
+
               withdrawApplicationSubmission.mutate({
                 applicationSubmissionId,
                 applicationId,

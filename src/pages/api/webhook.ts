@@ -58,7 +58,7 @@ export default async function handler(
     const { id, ...attributes } = evt.data;
 
     try {
-      await prisma.user.upsert({
+      const user = await prisma.user.upsert({
         where: {
           externalId: id,
         },
@@ -77,6 +77,8 @@ export default async function handler(
           memberships: true,
         },
       });
+
+      await establishMetadata(user);
     } catch (_) {
       return res.status(400).json({});
     }
@@ -86,7 +88,7 @@ export default async function handler(
     const { user_id } = evt.data;
 
     try {
-      const user = await prisma.user.findUniqueOrThrow({
+      const user = await prisma.user.findUnique({
         where: {
           externalId: user_id,
         },
@@ -95,7 +97,7 @@ export default async function handler(
         },
       });
 
-      await establishMetadata(user);
+      if (user) await establishMetadata(user);
     } catch (_) {
       return res.status(400).json({});
     }

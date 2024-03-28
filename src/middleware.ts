@@ -11,7 +11,7 @@ export default authMiddleware({
       evaluatorProjectIds: string;
     };
 
-    if (metadata) {
+    if (metadata && metadata.adminProjectIds && metadata.evaluatorProjectIds) {
       const evaluatorProjectIds: string[] = JSON.parse(
         metadata.evaluatorProjectIds,
       );
@@ -49,7 +49,9 @@ export default authMiddleware({
         }
       }
     } else {
-      return redirectToSignIn({ returnBackUrl: req.url });
+      if (!auth.userId) {
+        return redirectToSignIn({ returnBackUrl: req.url });
+      }
     }
   },
   publicRoutes: ["/", "/api/webhook(.*)"],
