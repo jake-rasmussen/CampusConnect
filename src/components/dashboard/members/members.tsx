@@ -40,8 +40,6 @@ const Members = (props: PropType) => {
 
   const { user, isLoaded } = useUser();
 
-  console.log(user);
-
   const queryClient = api.useContext();
 
   const deleteMember = api.memberRouter.deleteMember.useMutation({
