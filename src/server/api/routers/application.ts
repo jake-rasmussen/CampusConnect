@@ -101,6 +101,9 @@ export const applicationRouter = createTRPCRouter({
       const applications = await ctx.prisma.application.findMany({
         where: {
           projectId,
+          status: {
+            not: ApplicationStatus.DRAFT
+          }
         },
         include: {
           applicationSubmissions: {

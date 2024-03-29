@@ -108,22 +108,33 @@ const EvaluateApplicationSubmission = () => {
   } else {
     return (
       <main className="flex w-full flex-col items-center pb-10">
+        <section
+          className="fixed top-0 z-40 flex h-screen w-screen items-center justify-center bg-white md:hidden"
+        >
+          <span className="mx-8 text-lg font-semibold uppercase text-center">
+            Evaluator Mode Disabled on Mobile
+          </span>
+        </section>
+
         <Header
           name={"Evaluate Application"}
-          subtext={"Jake Rasmussen"}
+          subtext={applicationSubmission.user.firstName + " " + applicationSubmission.user.lastName}
           editable={false}
         />
         <section className="my-10 flex w-full justify-center">
           <div className="flex flex-row">
-            <ApplicationForm
-              projectId={projectId as string}
-              applicationId={applicationSubmission.applicationId}
-              questions={applicationSubmission.application.questions}
-              savedAnswers={applicationSubmission.applicationSubmissionAnswers}
-              readonly
-              name={""}
-              description={""}
-            />
+            <div className="min-w-[50vw]">
+              <ApplicationForm
+                projectId={projectId as string}
+                applicationId={applicationSubmission.applicationId}
+                questions={applicationSubmission.application.questions}
+                savedAnswers={applicationSubmission.applicationSubmissionAnswers}
+                readonly
+                name={""}
+                description={""}
+              />
+            </div>
+
             <Card className="m-8 h-fit w-[350px] bg-white">
               <CardHeader>
                 <CardTitle>Enter Comments</CardTitle>

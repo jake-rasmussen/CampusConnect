@@ -59,7 +59,7 @@ const ApplicationPublishConfirmationDialog = ({
 
   const [skills, setSkills] = useState<string[]>([]);
 
-  const DEFAULT_TIME = new Date(new Date().setHours(0, 0, 0, 0));
+  const DEFAULT_TIME = new Date(new Date().setHours(23, 59, 0, 0));
 
   return (
     <>
