@@ -47,7 +47,7 @@ const ViewApplicantsForApplication = () => {
             <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">
               <LicenseOff className="h-44 w-44 text-secondary" />
               <h3 className="text-2xl font-semibold uppercase">
-                There are no finished applications!
+                There are no applications!
               </h3>
             </div>
           )}

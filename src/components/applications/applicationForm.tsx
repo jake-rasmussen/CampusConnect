@@ -69,7 +69,7 @@ const ApplicationForm = (props: PropType) => {
   const [filesMap, setFilesMap] = useState<Map<string, File>>(new Map());
 
   useEffect(() => {
-    if (savedAnswers) {
+    if (savedAnswers && !isSaving) {
       savedAnswers.forEach((savedAnswer) => {
         const { answer } = savedAnswer.answer as { answer: string | string[] };
         setAnswersMap((prevAnswersMap) => {
@@ -89,12 +89,18 @@ const ApplicationForm = (props: PropType) => {
     answer: string | string[],
   ) => {
     if (questionId) {
-      const updatedMap = new Map(answersMap);
-      updatedMap.set(questionId, {
-        answer,
-        applicationQuestionId: questionId,
-      });
-      setAnswersMap(updatedMap);
+      if (answer.length > 0) {
+        const updatedMap = new Map(answersMap);
+        updatedMap.set(questionId, {
+          answer,
+          applicationQuestionId: questionId,
+        });
+        setAnswersMap(updatedMap);
+      } else {
+        const updatedMap = new Map(answersMap);
+        updatedMap.delete(questionId);
+        setAnswersMap(updatedMap);
+      }
     }
   };
 
@@ -143,13 +149,12 @@ const ApplicationForm = (props: PropType) => {
         </h1>
         {!readonly && (
           <h2 className="text-center text-lg font-bold text-black">
-            {`Deadline: ${
-              deadline
+            {`Deadline: ${deadline
                 ? dateToStringFormatted(deadline) +
-                  " at " +
-                  dateToTimeStringFormatted(deadline)
+                " at " +
+                dateToTimeStringFormatted(deadline)
                 : " TBD"
-            }`}
+              }`}
           </h2>
         )}
 

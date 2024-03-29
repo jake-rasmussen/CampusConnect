@@ -88,7 +88,7 @@ const ApplicationCreator = ({ projectId }: Props) => {
 
             <Field
               name={"description"}
-              onBlurValidate={z.string().min(1, "Please provide a description")}
+              onBlurValidate={z.string().min(1, "Please provide a description").max(200, "Description must be less than 200 characters")}
             >
               {(field: FieldInstance) => (
                 <div>

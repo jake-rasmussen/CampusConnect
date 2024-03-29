@@ -57,7 +57,7 @@ const QuestionsEditor = (props: PropType) => {
 
   return (
     <>
-      <section className="border-1 w-[75rem] rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
+      <section className="border-1 w-[75vw] max-w-[75rem] rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
         {questions.map((question, index: number) => {
           return (
             <DraggableCard

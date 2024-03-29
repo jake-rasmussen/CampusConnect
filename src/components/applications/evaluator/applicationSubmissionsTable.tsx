@@ -22,6 +22,12 @@ type PropType = {
 const ApplicationSubmissionsTable = (props: PropType) => {
   const { projectId, applicationSubmissions } = props;
 
+  const sortedApplicationSubmissions = applicationSubmissions.sort((a, b) => {
+    const firstCharA = a.user.firstName.charAt(0);
+    const firstCharB = b.user.firstName.charAt(0);
+    return firstCharA.localeCompare(firstCharB);
+  });
+
   return (
     <Card className="mx-4 border border-black bg-white">
       <Table className="rounded-2xl border-none">
@@ -29,12 +35,12 @@ const ApplicationSubmissionsTable = (props: PropType) => {
           <TableRow>
             <TableHead>Candidate Name</TableHead>
             <TableHead>Application ID</TableHead>
-            <TableHead>Evaluated?</TableHead>
+            {/* <TableHead>Evaluated?</TableHead> */}
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {applicationSubmissions.map(
+          {sortedApplicationSubmissions.map(
             (applicationSubmission, index: number) => (
               <TableRow className="border-none" key={`submissionRow${index}`}>
                 <TableCell className="font-medium text-primary underline">
@@ -50,7 +56,7 @@ const ApplicationSubmissionsTable = (props: PropType) => {
                 <TableCell className="font-medium">
                   {applicationSubmission.id}
                 </TableCell>
-                <TableCell></TableCell>
+                {/* <TableCell></TableCell> */}
               </TableRow>
             ),
           )}

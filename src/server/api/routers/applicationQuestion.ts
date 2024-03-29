@@ -3,8 +3,6 @@ import { z } from "zod";
 
 import { createTRPCRouter, isAdmin, t } from "../trpc";
 
-// TODO: if application is live make sure you cannot make edits to it
-
 export const applicationQuestionRouter = createTRPCRouter({
   createApplicationQuestion: t.procedure
     .input(
