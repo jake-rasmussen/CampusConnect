@@ -65,6 +65,9 @@ const ApplicationWithdrawDialog = (props: PropType) => {
             onClickFn={async () => {
               setOpenDialog(false);
 
+              toast.dismiss();
+              toast.loading("Withdrawing Application...");
+
               await clearSupabaseFolder.mutateAsync({
                 projectId,
                 applicationId
@@ -74,9 +77,6 @@ const ApplicationWithdrawDialog = (props: PropType) => {
                 applicationSubmissionId,
                 applicationId,
               });
-
-              toast.dismiss();
-              toast.loading("Withdrawing Application...");
             }}
           >
             Yes, I'm Sure
