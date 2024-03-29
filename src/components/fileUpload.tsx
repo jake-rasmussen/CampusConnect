@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { api } from "~/utils/api";
 import FilePreview from "./filePreview";
 
 type PropType = {

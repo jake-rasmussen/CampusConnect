@@ -65,6 +65,7 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
     "superjson": "1.12.2",
+    "svix": "^1.21.0",
     "tabler-icons-react": "^1.56.0",
     "zod": "^3.21.4"
   },

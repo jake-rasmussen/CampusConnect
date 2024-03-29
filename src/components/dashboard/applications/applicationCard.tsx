@@ -7,15 +7,13 @@ import {
 } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
-import { Check, Edit, Eye, Pencil } from "tabler-icons-react";
+import { Check, Edit, Eye, ListCheck, Pencil } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
 import ApplicationForm from "~/components/applications/applicationForm";
 import ApplicationWithdrawDialog from "~/components/applications/applicationWithdrawDialog";
 import ApplicationDeleteDialog from "~/components/applications/editor/applicationDeleteDialog";
-import Button from "~/components/button";
 import PreviewDialog from "~/components/previewDialog";
 import { Separator } from "~/components/shadcn_ui/separator";
 import {
@@ -104,7 +102,7 @@ const ApplicationCard = (props: PropType) => {
               </div>
             }
             dialogTitle="Application Preview"
-            dialogDescription="Preview the Application"
+            dialogDescription="Preview Your Submitted Application"
             openDialog={openPreviewDialog}
             setOpenDialog={setOpenPreviewDialog}
           >
@@ -135,6 +133,7 @@ const ApplicationCard = (props: PropType) => {
           {applicationSubmissionId &&
             status === ApplicationSubmissionStatus.SUBMITTED && (
               <ApplicationWithdrawDialog
+                projectId={projectId || "UNAUTHORIZED"}
                 applicationId={application.id}
                 openDialog={openDeleteDialog}
                 setOpenDialog={setOpenDeleteDialog}
@@ -189,13 +188,13 @@ const ApplicationCard = (props: PropType) => {
           )}
         </div>
 
-        {editable && (
+        {editable && application.status !== ApplicationStatus.DRAFT && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-8 transform">
                 <Link href={`/evaluator/${projectId}`}>
                   <div className="border-1 z-30 rounded-full border border-black bg-white">
-                    <Pencil className="h-14 w-14 p-2 text-primary transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500" />
+                    <ListCheck className="h-14 w-14 p-2 text-primary transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500" />
                   </div>
                 </Link>
               </TooltipTrigger>

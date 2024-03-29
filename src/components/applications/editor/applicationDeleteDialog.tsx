@@ -1,6 +1,5 @@
-import { DialogClose } from "@radix-ui/react-dialog";
 import toast from "react-hot-toast";
-import { Trash, TrashX } from "tabler-icons-react";
+import { Trash } from "tabler-icons-react";
 
 import Button from "~/components/button";
 import {

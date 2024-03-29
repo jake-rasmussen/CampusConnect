@@ -1,23 +1,21 @@
-import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
+import { authMiddleware, clerkClient, redirectToSignIn } from "@clerk/nextjs";
 
 export default authMiddleware({
   afterAuth(auth, req) {
     const url = new URL(req.url);
 
-    if (url.pathname === "/") return;
+    if (url.pathname === "/" || url.pathname === "/api/webhook") return;
 
-    const publicMetadata = auth.sessionClaims?.publicMetadata as {
+    const metadata = auth.sessionClaims?.publicMetadata as {
       adminProjectIds: string;
       evaluatorProjectIds: string;
     };
 
-    if (publicMetadata) {
+    if (metadata && metadata.adminProjectIds && metadata.evaluatorProjectIds) {
       const evaluatorProjectIds: string[] = JSON.parse(
-        publicMetadata.evaluatorProjectIds,
+        metadata.evaluatorProjectIds,
       );
-      const adminProjectIds: string[] = JSON.parse(
-        publicMetadata.adminProjectIds,
-      );
+      const adminProjectIds: string[] = JSON.parse(metadata.adminProjectIds);
 
       if (!auth.userId && !auth.isPublicRoute) {
         return redirectToSignIn({ returnBackUrl: req.url });
@@ -51,10 +49,12 @@ export default authMiddleware({
         }
       }
     } else {
-      return redirectToSignIn({ returnBackUrl: req.url });
+      if (!auth.userId) {
+        return redirectToSignIn({ returnBackUrl: req.url });
+      }
     }
   },
-  publicRoutes: ["/"],
+  publicRoutes: ["/", "/api/webhook(.*)"],
 });
 
 export const config = {

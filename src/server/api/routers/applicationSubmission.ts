@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, isEvaluator, protectedProcedure, t } from "../trpc";
+import { ApplicationStatus } from "@prisma/client";
 
 export const applicationSubmissionRouter = createTRPCRouter({
   upsertApplicationSubmission: protectedProcedure
@@ -31,6 +32,7 @@ export const applicationSubmissionRouter = createTRPCRouter({
           },
           include: {
             applicationSubmissionAnswers: true,
+            application: true,
           },
         });
 
@@ -40,7 +42,7 @@ export const applicationSubmissionRouter = createTRPCRouter({
     async ({ ctx }) => {
       const userId = ctx.user.userId;
 
-      return await ctx.prisma.applicationSubmission.findMany({
+      const applicationSubmissions = await ctx.prisma.applicationSubmission.findMany({
         where: {
           userId,
         },
@@ -57,6 +59,22 @@ export const applicationSubmissionRouter = createTRPCRouter({
           applicationSubmissionAnswers: true,
         },
       });
+
+      applicationSubmissions.forEach(async (applicationSubmission) => {
+        const application = applicationSubmission.application;
+        if (application.deadline && application.deadline < new Date()) {
+          await ctx.prisma.application.update({
+            where: {
+              id: application.id,
+            },
+            data: {
+              status: ApplicationStatus.CLOSED
+            }
+          })
+        }
+      })
+
+      return applicationSubmissions;
     },
   ),
   getApplicationSubmissionByApplicationId: protectedProcedure
@@ -78,8 +96,23 @@ export const applicationSubmissionRouter = createTRPCRouter({
           },
           include: {
             applicationSubmissionAnswers: true,
+            application: true,
           },
         });
+
+      if (applicationSubmission) {
+        const application = applicationSubmission.application;
+        if (application.deadline && application.deadline < new Date()) {
+          await ctx.prisma.application.update({
+            where: {
+              id: application.id,
+            },
+            data: {
+              status: ApplicationStatus.CLOSED
+            }
+          })
+        }
+      }
 
       return applicationSubmission;
     }),
@@ -173,6 +206,20 @@ export const applicationSubmissionRouter = createTRPCRouter({
             },
           },
         });
+
+      if (applicationSubmission) {
+        const application = applicationSubmission.application;
+        if (application.deadline && application.deadline < new Date()) {
+          await ctx.prisma.application.update({
+            where: {
+              id: application.id,
+            },
+            data: {
+              status: ApplicationStatus.CLOSED
+            }
+          })
+        }
+      }
 
       return applicationSubmission;
     }),

@@ -2,17 +2,11 @@ import { SignInButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  CardBody,
-  CardContainer,
-  CardItem,
-} from "~/components/aceternity_ui/3d-card";
 import { BackgroundBeams } from "~/components/aceternity_ui/background-beams";
 import LoadingPage from "~/components/loadingPage";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "~/components/shadcn_ui/card";

@@ -4,6 +4,49 @@ import { supabase } from "~/server/supabase/supabaseClient";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const supabaseRouter = createTRPCRouter({
+  clearSupabaseFolder: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+        applicationId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { projectId, applicationId } = input;
+
+      const { data: fileList } = await supabase.storage
+        .from("swec-bucket")
+        .list(`${projectId}/${applicationId}/${ctx.user.userId}`);
+
+      if (fileList && fileList.length > 0) {
+        const filesToRemove = fileList.map((x) => `${projectId}/${applicationId}/${ctx.user.userId}/${x.name}`);
+        const { data, error } = await supabase.storage
+          .from("swec-bucket")
+          .remove(filesToRemove);
+      }
+    }),
+  getSupabaseFolder: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+        applicationId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { projectId, applicationId } = input;
+
+      const { data } = await supabase.storage
+        .from("swec-bucket")
+        .list(`${projectId}/${applicationId}/${ctx.user.userId}`);
+
+      if (data) {
+        const fileList = data.map((x) => x.name);
+        return fileList;
+      } else {
+        return [];
+      }
+
+    }),
   createSignedUrlUpload: protectedProcedure
     .input(
       z.object({
@@ -40,7 +83,7 @@ export const supabaseRouter = createTRPCRouter({
           `${projectId}/${applicationId}/${ctx.user.userId}/${filename}`,
           60,
           {
-            download: true,
+            download: !filename.includes(".pdf"),
           },
         );
 

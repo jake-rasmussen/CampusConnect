@@ -7,7 +7,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    DATABASE_URL: z.string().url().optional(),
+    DATABASE_URL: z.string().url(),
     SUPABASE_URL: z.string().url(),
     SUPABASE_API_KEY: z.string(),
     HOST_PORT: z.string().length(4),

@@ -63,7 +63,7 @@ const DashboardPage = (props: PropType) => {
             : "hidden",
         )}
       >
-        <span className="mx-8 text-lg font-semibold uppercase">
+        <span className="mx-8 text-lg font-semibold uppercase text-center">
           Admin Mode Disabled on Mobile
         </span>
       </section>
