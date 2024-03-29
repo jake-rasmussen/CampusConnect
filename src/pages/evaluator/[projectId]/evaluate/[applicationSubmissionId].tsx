@@ -178,7 +178,7 @@ const EvaluateApplicationSubmission = () => {
                         {dateToStringFormatted(comment.createdAt)},{" "}
                         {dateToTimeStringFormatted(comment.createdAt)}
                       </h5>
-                      <pre className="font-sans">{comment.comment}</pre>
+                      <pre className="font-sans overflow-x-auto whitespace-pre-wrap">{comment.comment}</pre>
                     </div>
                   ),
                 )}
