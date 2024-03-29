@@ -68,7 +68,7 @@ const ApplicationWithdrawDialog = (props: PropType) => {
                 applicationId
               });
 
-              withdrawApplicationSubmission.mutate({
+              await withdrawApplicationSubmission.mutateAsync({
                 applicationSubmissionId,
                 applicationId,
               });

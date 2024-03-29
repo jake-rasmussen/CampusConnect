@@ -179,7 +179,6 @@ const ApplicationEditForm = (props: PropType) => {
                   submit().catch((e) => {
                     setIsSaving(false);
                     toast.dismiss();
-                    console.log(e);
                   });
                 }}
                 disabled={isSaving}
