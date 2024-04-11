@@ -217,7 +217,7 @@ export const applicationSubmissionRouter = createTRPCRouter({
       const { applicationSubmissionId } = input;
 
       const applicationSubmission =
-        await ctx.prisma.applicationSubmission.findFirst({
+        await ctx.prisma.applicationSubmission.findFirstOrThrow({
           where: {
             id: applicationSubmissionId,
             applicationSubmissionStatus: {
