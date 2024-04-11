@@ -88,13 +88,6 @@ const DashboardPage = (props: PropType) => {
                 projectDescription={description}
                 editable={isAdminPage}
               />
-              {projectId === "swec" && events.length > 0 && (
-                <Events
-                  events={events}
-                  projectId={projectId}
-                  editable={isAdminPage}
-                />
-              )}
               {(isAdminPage || contactInfos.length > 0) && (
                 <ContactSection
                   contactInfos={contactInfos}
@@ -105,6 +98,13 @@ const DashboardPage = (props: PropType) => {
               {(isAdminPage || socialMedias.length > 0) && (
                 <SocialMediaSection
                   socialMedias={socialMedias}
+                  projectId={projectId}
+                  editable={isAdminPage}
+                />
+              )}
+              {projectId === "swec" && (isAdminPage || events.length > 0) && (
+                <Events
+                  events={events}
                   projectId={projectId}
                   editable={isAdminPage}
                 />
