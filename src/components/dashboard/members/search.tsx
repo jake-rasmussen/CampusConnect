@@ -2,13 +2,13 @@ import "@prisma/client";
 
 import { debounce } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
 import { Input } from "../../shadcn_ui/input";
+import MemberConfirmDialog from "./memberConfirmDialog";
 
 import type { Member, User } from "@prisma/client";
-import MemberConfirmDialog from "./memberConfirmDialog";
-import toast from "react-hot-toast";
 
 type PropType = {
   projectId: string;
@@ -40,7 +40,7 @@ const Search = (props: PropType) => {
     onError() {
       toast.dismiss();
       toast.error("Error...");
-    }
+    },
   });
 
   const [queryResult, setQueryResult] = useState<User[]>([]);

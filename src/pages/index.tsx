@@ -44,21 +44,41 @@ const Home = () => {
             </span>
           </section>
 
-          <Card className="z-30 mb-52 max-w-2xl bg-gradient-to-r from-primary to-secondary shadow-xl transition duration-300 ease-in-out hover:scale-125">
+          <Card className="z-30 mb-52 max-w-4xl bg-gradient-to-r from-primary to-secondary shadow-xl transition duration-300 ease-in-out">
             <CardHeader>
-              <CardTitle className="text-center text-2xl font-black uppercase text-white">
+              <CardTitle className="text-center text-2xl font-black uppercase text-white lg:text-4xl">
                 What we do
               </CardTitle>
             </CardHeader>
-            <CardContent className="group flex h-full flex-col items-center gap-8 text-center text-sm text-white md:text-lg">
-              Designed to seamlessly connect aspiring minds with exciting
-              opportunities right here on campus, SWEConnect revolutionizes the
-              way students discover and engage in projects at Johns Hopkins.
-              Whether it's a student-led venture or a faculty-led research
-              project, our platform empowers you to find the perfect fit for
-              your passion and expertise. Say goodbye to endless searches and
-              missed connections – join us and unlock a world of collaborative
-              possibilities today!
+            <CardContent className="group flex h-full flex-col items-center gap-8 text-center text-sm text-white md:mx-10 md:text-lg lg:text-xl">
+              <span>
+                Designed to seamlessly connect aspiring minds with exciting
+                opportunities right here on campus, SWEConnect enhances the way
+                students discover and engage in projects at Johns Hopkins.
+                Whether it's a student-led venture or a faculty-led research
+                project, our platform empowers you to find the perfect fit for
+                your passion and expertise.
+              </span>
+              <span>
+                SWEConnect provides a centralized hub where student and faculty
+                can connect with talented students who possess the skills
+                needed for their initiatives. As a leader of a
+                venture, SWEConnect will provide a centralized application
+                system, and applicant management system. As a student looking
+                for work, check out the open applications and project pages to
+                see what interests you!
+              </span>
+
+              <div className="flex w-full items-center">
+                <div className="mr-1 h-px flex-grow bg-white/10 backdrop-invert" />
+                <span className="max-w-md">
+                  What are you waiting for? Say goodbye to endless searches and
+                  missed connections – join us and unlock a world of
+                  collaborative possibilities today!
+                </span>
+                <div className="ml-1 h-px flex-grow bg-white/10 backdrop-invert" />
+              </div>
+
               {!isSignedIn ? (
                 <SignInButton mode="modal">
                   <div className="w-fit rounded-xl bg-black px-14 py-4 py-6 shadow-xl transition duration-300 ease-in-out hover:scale-110 hover:cursor-pointer">

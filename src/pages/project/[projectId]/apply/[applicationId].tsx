@@ -3,7 +3,6 @@ import {
   ApplicationSubmissionAnswer,
   ApplicationSubmissionStatus,
 } from "@prisma/client";
-import { createClient } from "@supabase/supabase-js";
 import Error from "next/error";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -25,8 +24,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-    })
+        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+      })
     | undefined
   >();
 
@@ -50,9 +49,15 @@ const Apply: NextPageWithLayout = () => {
     isError: isErrorFileList,
     error: errorFileList,
   } = api.supabaseRouter.getSupabaseFolder.useQuery({
-    projectId,
     applicationId,
   });
+
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+    error: errorUser
+  } = api.usersRouter.getUser.useQuery();
 
   const {
     data: userSubmissions,
@@ -77,6 +82,7 @@ const Apply: NextPageWithLayout = () => {
         onError() {
           toast.dismiss();
           toast.error("Error...");
+          setIsSaving(false);
         },
       },
     );
@@ -106,7 +112,6 @@ const Apply: NextPageWithLayout = () => {
         for (const file of files) {
           if (!fileList?.includes(file.name)) {
             const url = await createSignedUrlUpload.mutateAsync({
-              projectId,
               applicationId,
               filename: file.name,
             });
@@ -178,15 +183,22 @@ const Apply: NextPageWithLayout = () => {
     }
   }, [application, userSubmissions]);
 
-  if (!applicationId || isLoadingApplication || isLoadingUserSubmissions || isLoadingFileList) {
+  if (
+    !applicationId ||
+    isLoadingApplication ||
+    isLoadingUserSubmissions ||
+    isLoadingFileList ||
+    isLoadingUser
+  ) {
     return <LoadingPage />;
-  } else if (isErrorApplication || isErrorUserSubmissions || isErrorFileList) {
+  } else if (isErrorApplication || isErrorUserSubmissions || isErrorFileList || isErrorUser) {
     return (
       <Error
         statusCode={
           errorApplication?.data?.httpStatus ||
           errorUserSubmissions?.data?.httpStatus ||
           errorFileList?.data?.httpStatus ||
+          errorUser?.data?.httpStatus ||
           500
         }
       />

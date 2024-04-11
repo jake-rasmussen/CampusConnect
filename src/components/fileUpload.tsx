@@ -8,10 +8,11 @@ type PropType = {
   readonly?: boolean;
   projectId: string;
   applicationId: string;
+  userId?: string;
 };
 
 const FileUpload = (props: PropType) => {
-  const { readonly, value, onChange, projectId, applicationId } = props;
+  const { readonly, value, onChange, projectId, applicationId, userId } = props;
 
   const [filename, setFilename] = useState<string>();
 
@@ -28,6 +29,7 @@ const FileUpload = (props: PropType) => {
           <FilePreview
             projectId={projectId}
             applicationId={applicationId}
+            userId={userId}
             filename={filename}
           />
         </>

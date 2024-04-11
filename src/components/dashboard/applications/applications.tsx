@@ -88,7 +88,7 @@ const Applications = (props: PropType) => {
           ) : (
             <>
               <h3 className="tracking-none my-4 text-lg font-black uppercase underline md:text-xl">
-                There are no open applications
+                There are no applications
               </h3>
             </>
           )}

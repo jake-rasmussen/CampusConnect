@@ -84,7 +84,11 @@ const OpenApplications = () => {
   } else {
     return (
       <main className="w-full">
-        <Header name={"Open Applications"} editable={false} />
+        <Header
+          name="Open Applications"
+          subtext="Check out projects that are hiring!"
+          editable={false}
+        />
         <section className="py-10">
           <div className="ml-4 flex flex-col items-center text-center">
             {skills.length > 0 && (

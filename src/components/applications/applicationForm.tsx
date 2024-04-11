@@ -21,6 +21,7 @@ import { Textarea } from "../shadcn_ui/textarea";
 type PropType = {
   projectId: string;
   applicationId: string;
+  applicantId?: string;
   name: string;
   description: string;
   deadline?: Date;
@@ -52,6 +53,7 @@ const ApplicationForm = (props: PropType) => {
   const {
     projectId,
     applicationId,
+    applicantId,
     name,
     description,
     questions,
@@ -149,12 +151,13 @@ const ApplicationForm = (props: PropType) => {
         </h1>
         {!readonly && (
           <h2 className="text-center text-lg font-bold text-black">
-            {`Deadline: ${deadline
+            {`Deadline: ${
+              deadline
                 ? dateToStringFormatted(deadline) +
-                " at " +
-                dateToTimeStringFormatted(deadline)
+                  " at " +
+                  dateToTimeStringFormatted(deadline)
                 : " TBD"
-              }`}
+            }`}
           </h2>
         )}
 
@@ -232,6 +235,7 @@ const ApplicationForm = (props: PropType) => {
                       }
                     }}
                     projectId={projectId}
+                    userId={applicantId}
                     applicationId={applicationId}
                     readonly={readonly}
                   />

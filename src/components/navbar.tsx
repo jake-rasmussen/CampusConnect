@@ -16,28 +16,6 @@ const Navbar = (props: PropType) => {
   useEffect(() => setIsLoading(false));
 
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-  const [adminProjects, setAdminProjects] = useState<string[]>([]);
-  const [evaluatorProjects, setEvaluatorProjects] = useState<string[]>([]);
-
-  const { user } = useUser();
-
-  useEffect(() => {
-    if (user) {
-      const metadata = user.publicMetadata;
-
-      if (metadata && metadata.adminProjectIds && metadata.evaluatorProjectIds) {
-        const adminProjectIds: string[] =
-          JSON.parse(metadata.adminProjectIds as string) || [];
-        const evaluatorProjectIds: string[] =
-          JSON.parse(metadata.evaluatorProjectIds as string) || [];
-
-        setAdminProjects(adminProjectIds);
-        setEvaluatorProjects(evaluatorProjectIds);
-      }
-
-      setIsLoading(false);
-    }
-  }, [user]);
 
   const menu = (
     <>
@@ -68,17 +46,15 @@ const Navbar = (props: PropType) => {
           My Applications
         </h1>
       </Link>
-      {(adminProjects.length > 0 || evaluatorProjects.length > 0) && (
-        <Link
-          href="/my-projects"
-          className="flex items-center p-2"
-          onClick={() => setMenuIsOpen(false)}
-        >
-          <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
-            My Projects
-          </h1>
-        </Link>
-      )}
+      <Link
+        href="/my-projects"
+        className="flex items-center p-2"
+        onClick={() => setMenuIsOpen(false)}
+      >
+        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
+          My Projects
+        </h1>
+      </Link>
     </>
   );
 
@@ -164,8 +140,9 @@ const Navbar = (props: PropType) => {
                   <div
                     tabIndex={0}
                     className={`flex h-[92vh] w-screen flex-col items-center justify-center overflow-y-scroll bg-white text-xl
-                transition duration-300 ease-in-out ${!menuIsOpen ? "pointer-events-none" : ""
-                      }`}
+                transition duration-300 ease-in-out ${
+                  !menuIsOpen ? "pointer-events-none" : ""
+                }`}
                     id="menu"
                   >
                     {menu}

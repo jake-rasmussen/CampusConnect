@@ -18,17 +18,21 @@ type PropType = {
 };
 
 const ErrorDialog = (props: PropType) => {
-  const { children, dialogDescription, openDialog, setOpenDialog, onClose } = props;
+  const { children, dialogDescription, openDialog, setOpenDialog, onClose } =
+    props;
 
   return (
     <>
-      <Dialog open={openDialog} onOpenChange={() => {
-        setOpenDialog(!openDialog);
+      <Dialog
+        open={openDialog}
+        onOpenChange={() => {
+          setOpenDialog(!openDialog);
 
-        if (openDialog && onClose) {
-          onClose();
-        }
-      }}>
+          if (openDialog && onClose) {
+            onClose();
+          }
+        }}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Error</DialogTitle>

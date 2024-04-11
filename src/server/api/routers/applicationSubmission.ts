@@ -1,7 +1,8 @@
+import { ApplicationStatus, ApplicationSubmissionStatus } from "@prisma/client";
 import { z } from "zod";
 
+import { supabase } from "~/server/supabase/supabaseClient";
 import { createTRPCRouter, isEvaluator, protectedProcedure, t } from "../trpc";
-import { ApplicationStatus } from "@prisma/client";
 
 export const applicationSubmissionRouter = createTRPCRouter({
   upsertApplicationSubmission: protectedProcedure
@@ -42,23 +43,29 @@ export const applicationSubmissionRouter = createTRPCRouter({
     async ({ ctx }) => {
       const userId = ctx.user.userId;
 
-      const applicationSubmissions = await ctx.prisma.applicationSubmission.findMany({
-        where: {
-          userId,
-        },
-        include: {
-          application: {
-            include: {
-              questions: {
-                orderBy: {
-                  orderNumber: "asc",
+      const applicationSubmissions =
+        await ctx.prisma.applicationSubmission.findMany({
+          where: {
+            userId,
+          },
+          include: {
+            application: {
+              include: {
+                questions: {
+                  orderBy: {
+                    orderNumber: "asc",
+                  },
                 },
+                project: {
+                  select: {
+                    id: true
+                  }
+                }
               },
             },
+            applicationSubmissionAnswers: true,
           },
-          applicationSubmissionAnswers: true,
-        },
-      });
+        });
 
       applicationSubmissions.forEach(async (applicationSubmission) => {
         const application = applicationSubmission.application;
@@ -68,11 +75,11 @@ export const applicationSubmissionRouter = createTRPCRouter({
               id: application.id,
             },
             data: {
-              status: ApplicationStatus.CLOSED
-            }
-          })
+              status: ApplicationStatus.CLOSED,
+            },
+          });
         }
-      })
+      });
 
       return applicationSubmissions;
     },
@@ -108,9 +115,9 @@ export const applicationSubmissionRouter = createTRPCRouter({
               id: application.id,
             },
             data: {
-              status: ApplicationStatus.CLOSED
-            }
-          })
+              status: ApplicationStatus.CLOSED,
+            },
+          });
         }
       }
 
@@ -140,6 +147,18 @@ export const applicationSubmissionRouter = createTRPCRouter({
         });
 
       if (applicationSubmissionEvaluation) {
+        await ctx.prisma.applicationSubmissionEvaluation.findFirst({
+          where: {
+            id: applicationSubmissionEvaluation.id,
+          },
+        });
+
+        await ctx.prisma.applicationSubmissionComment.deleteMany({
+          where: {
+            applicationSubmissionEvaluationId: applicationSubmissionEvaluation.id,
+          }
+        });
+
         await ctx.prisma.applicationSubmissionEvaluation.delete({
           where: {
             id: applicationSubmissionEvaluation.id,
@@ -152,6 +171,17 @@ export const applicationSubmissionRouter = createTRPCRouter({
           id: applicationSubmissionId,
         },
       });
+
+      const { data: fileList } = await supabase.storage
+        .from("swec-bucket")
+        .list(`${applicationId}/${ctx.user.userId}`);
+
+      if (fileList && fileList.length > 0) {
+        const filesToRemove = fileList.map(
+          (x) => `${applicationId}/${ctx.user.userId}/${x.name}`,
+        );
+        await supabase.storage.from("swec-bucket").remove(filesToRemove);
+      }
 
       const numSubmissions = await ctx.prisma.applicationSubmission.count({
         where: {
@@ -187,9 +217,12 @@ export const applicationSubmissionRouter = createTRPCRouter({
       const { applicationSubmissionId } = input;
 
       const applicationSubmission =
-        await ctx.prisma.applicationSubmission.findUniqueOrThrow({
+        await ctx.prisma.applicationSubmission.findFirst({
           where: {
             id: applicationSubmissionId,
+            applicationSubmissionStatus: {
+              not: ApplicationSubmissionStatus.DRAFT,
+            }
           },
           include: {
             applicationSubmissionAnswers: true,
@@ -215,9 +248,9 @@ export const applicationSubmissionRouter = createTRPCRouter({
               id: application.id,
             },
             data: {
-              status: ApplicationStatus.CLOSED
-            }
-          })
+              status: ApplicationStatus.CLOSED,
+            },
+          });
         }
       }
 

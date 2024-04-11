@@ -8,7 +8,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { Check, Edit, Eye, ListCheck, Pencil } from "tabler-icons-react";
+import { Check, Edit, Eye, ListCheck } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
 import ApplicationForm from "~/components/applications/applicationForm";
@@ -36,7 +36,7 @@ type PropType = {
   application: Application & {
     questions: ApplicationQuestion[];
   };
-  projectId: string | null;
+  projectId: string;
   editable: boolean;
   previewable?: boolean;
   savedAnswers?: ApplicationSubmissionAnswer[];
@@ -107,7 +107,7 @@ const ApplicationCard = (props: PropType) => {
             setOpenDialog={setOpenPreviewDialog}
           >
             <ApplicationForm
-              projectId={projectId as string}
+              projectId={projectId}
               applicationId={application.id}
               questions={application.questions}
               savedAnswers={savedAnswers}
@@ -131,7 +131,7 @@ const ApplicationCard = (props: PropType) => {
 
         <div className="opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100">
           {applicationSubmissionId &&
-            status === ApplicationSubmissionStatus.SUBMITTED && (
+            (status === ApplicationSubmissionStatus.SUBMITTED || status === ApplicationSubmissionStatus.DRAFT) && (
               <ApplicationWithdrawDialog
                 projectId={projectId || "UNAUTHORIZED"}
                 applicationId={application.id}

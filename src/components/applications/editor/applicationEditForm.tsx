@@ -2,6 +2,7 @@ import { ApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { z } from "zod";
 
 import ErrorDialog from "~/components/errorDialog";
 import PreviewDialog from "~/components/previewDialog";
@@ -14,7 +15,6 @@ import ApplicationPublishConfirmationDialog, {
   ConfirmationFormType,
 } from "./applicationPublishConfirmationDialog";
 import QuestionsEditor from "./questionsEditor";
-import { z } from "zod";
 
 type ApplicationFormType = {
   name: string;
@@ -131,10 +131,13 @@ const ApplicationEditForm = (props: PropType) => {
                 )}
               </Field>
 
-              <Field 
-                name="description" 
+              <Field
+                name="description"
                 initialValue={description}
-                onBlurValidate={z.string().min(1, "Please provide a description").max(200, "Description must be less than 200 characters")}
+                onBlurValidate={z
+                  .string()
+                  .min(1, "Please provide a description")
+                  .max(500, "Description must be less than 500 characters")}
               >
                 {({ value, setValue, onBlur, isValid, errors }) => (
                   <>
@@ -170,7 +173,7 @@ const ApplicationEditForm = (props: PropType) => {
                   setIsSaving(true);
                   toast.dismiss();
                   toast.loading("Saving Application....");
-                  
+
                   if (errors.length > 0) {
                     setIsSaving(false);
                     toast.dismiss();

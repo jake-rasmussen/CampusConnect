@@ -32,7 +32,7 @@ const MemberConfirmDialog = (props: PropType) => {
           </DialogHeader>
           <DialogFooter>
             <Button
-              className="opacity-50 bg-black"
+              className="bg-black opacity-50"
               onClickFn={() => {
                 setOpenDialog(false);
               }}

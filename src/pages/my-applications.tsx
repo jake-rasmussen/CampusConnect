@@ -30,8 +30,8 @@ const MyApplications = () => {
               {applicationSubmissions.map((savedApplication, index) => (
                 <ApplicationCard
                   application={savedApplication.application}
-                  projectId={savedApplication.application.projectId}
-                  editable={false}
+                  projectId={savedApplication.application.projectId as string}
+                  editable={false} 
                   previewable={
                     savedApplication.applicationSubmissionStatus !==
                     ApplicationSubmissionStatus.DRAFT

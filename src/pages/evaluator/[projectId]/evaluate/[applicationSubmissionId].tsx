@@ -108,17 +108,19 @@ const EvaluateApplicationSubmission = () => {
   } else {
     return (
       <main className="flex w-full flex-col items-center pb-10">
-        <section
-          className="fixed top-0 z-40 flex h-screen w-screen items-center justify-center bg-white md:hidden"
-        >
-          <span className="mx-8 text-lg font-semibold uppercase text-center">
+        <section className="fixed top-0 z-40 flex h-screen w-screen items-center justify-center bg-white md:hidden">
+          <span className="mx-8 text-center text-lg font-semibold uppercase">
             Evaluator Mode Disabled on Mobile
           </span>
         </section>
 
         <Header
           name={"Evaluate Application"}
-          subtext={applicationSubmission.user.firstName + " " + applicationSubmission.user.lastName}
+          subtext={
+            applicationSubmission.user.firstName +
+            " " +
+            applicationSubmission.user.lastName
+          }
           editable={false}
         />
         <section className="my-10 flex w-full justify-center">
@@ -127,8 +129,11 @@ const EvaluateApplicationSubmission = () => {
               <ApplicationForm
                 projectId={projectId as string}
                 applicationId={applicationSubmission.applicationId}
+                applicantId={applicationSubmission.userId}
                 questions={applicationSubmission.application.questions}
-                savedAnswers={applicationSubmission.applicationSubmissionAnswers}
+                savedAnswers={
+                  applicationSubmission.applicationSubmissionAnswers
+                }
                 readonly
                 name={""}
                 description={""}
@@ -178,7 +183,9 @@ const EvaluateApplicationSubmission = () => {
                         {dateToStringFormatted(comment.createdAt)},{" "}
                         {dateToTimeStringFormatted(comment.createdAt)}
                       </h5>
-                      <pre className="font-sans overflow-x-auto whitespace-pre-wrap">{comment.comment}</pre>
+                      <pre className="overflow-x-auto whitespace-pre-wrap font-sans">
+                        {comment.comment}
+                      </pre>
                     </div>
                   ),
                 )}

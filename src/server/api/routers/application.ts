@@ -1,6 +1,8 @@
-import { ApplicationStatus } from "@prisma/client";
+import { ApplicationStatus, ApplicationSubmissionStatus } from "@prisma/client";
 import { z } from "zod";
 
+import { supabase } from "~/server/supabase/supabaseClient";
+import { api } from "~/utils/api";
 import {
   createTRPCRouter,
   isAdmin,
@@ -40,11 +42,11 @@ export const applicationRouter = createTRPCRouter({
               id: application.id,
             },
             data: {
-              status: ApplicationStatus.CLOSED
-            }
-          })
+              status: ApplicationStatus.CLOSED,
+            },
+          });
         }
-      })
+      });
 
       return applications;
     }),
@@ -60,10 +62,9 @@ export const applicationRouter = createTRPCRouter({
       const applications = await ctx.prisma.application.findMany({
         where: {
           projectId,
-          status: ApplicationStatus.OPEN,
-          deadline: {
-            gt: new Date()
-          }
+          status: {
+            not: ApplicationStatus.DRAFT,
+          },
         },
         include: {
           questions: {
@@ -81,9 +82,9 @@ export const applicationRouter = createTRPCRouter({
               id: application.id,
             },
             data: {
-              status: ApplicationStatus.CLOSED
-            }
-          })
+              status: ApplicationStatus.CLOSED,
+            },
+          });
         }
       });
 
@@ -102,14 +103,22 @@ export const applicationRouter = createTRPCRouter({
         where: {
           projectId,
           status: {
-            not: ApplicationStatus.DRAFT
-          }
+            not: ApplicationStatus.DRAFT,
+          },
         },
         include: {
           applicationSubmissions: {
-            select: { id: true, user: true },
+            select: {
+              id: true,
+              user: true,
+              applicationSubmissionStatus: true
+            },
           },
         },
+      });
+      
+      applications.forEach(app => {
+        app.applicationSubmissions = app.applicationSubmissions.filter(sub => sub.applicationSubmissionStatus !== ApplicationSubmissionStatus.DRAFT);
       });
 
       applications.forEach(async (application) => {
@@ -119,9 +128,9 @@ export const applicationRouter = createTRPCRouter({
               id: application.id,
             },
             data: {
-              status: ApplicationStatus.CLOSED
-            }
-          })
+              status: ApplicationStatus.CLOSED,
+            },
+          });
         }
       });
 
@@ -131,16 +140,18 @@ export const applicationRouter = createTRPCRouter({
     const applications = await ctx.prisma.application.findMany({
       where: {
         status: ApplicationStatus.OPEN,
+        projectId: {
+          not: null,
+        },
         deadline: {
-          gt: new Date()
-        }
+          gt: new Date(),
+        },
       },
       include: {
         questions: {
           orderBy: {
             orderNumber: "asc",
           },
-
         },
 
         project: true,
@@ -160,7 +171,7 @@ export const applicationRouter = createTRPCRouter({
     .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
       const { projectId, name, description } = input;
-      
+
       const application = await ctx.prisma.application.create({
         data: {
           name,
@@ -219,7 +230,10 @@ export const applicationRouter = createTRPCRouter({
         data: {
           deadline,
           desiredSkills: skills,
-          status: deadline > new Date() ? ApplicationStatus.OPEN : ApplicationStatus.CLOSED,
+          status:
+            deadline > new Date()
+              ? ApplicationStatus.OPEN
+              : ApplicationStatus.CLOSED,
         },
       });
     }),
@@ -251,9 +265,9 @@ export const applicationRouter = createTRPCRouter({
             id: applicationId,
           },
           data: {
-            status: ApplicationStatus.CLOSED
-          }
-        })
+            status: ApplicationStatus.CLOSED,
+          },
+        });
       }
 
       return application;

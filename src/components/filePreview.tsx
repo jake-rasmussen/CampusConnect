@@ -15,11 +15,12 @@ import {
 type PropType = {
   projectId: string;
   applicationId: string;
+  userId?: string;
   filename: string;
 };
 
 const FilePreview = (props: PropType) => {
-  const { projectId, applicationId, filename } = props;
+  const { projectId, applicationId, userId, filename } = props;
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [url, setUrl] = useState<string>();
@@ -28,11 +29,12 @@ const FilePreview = (props: PropType) => {
     api.supabaseRouter.createSignedUrlDownload.useMutation();
 
   useEffect(() => {
+    console.log(projectId, applicationId, filename)
     if (projectId && applicationId && filename) {
       const fetchFile = async () => {
         const url = await getPresignedUrlGet.mutateAsync({
-          projectId,
           applicationId,
+          userId,
           filename,
         });
         setUrl(url);
@@ -67,7 +69,7 @@ const FilePreview = (props: PropType) => {
               <iframe
                 src={url || ""}
                 onLoad={() => setIsLoading(false)}
-                className="w-full min-h-[75vh]"
+                className="min-h-[75vh] w-full"
               />
             ) : (
               <img

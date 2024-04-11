@@ -1,8 +1,8 @@
+import { clerkClient } from "@clerk/nextjs";
 import { Member, ProjectMemberType, User } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, isAdmin, t } from "../trpc";
-import { clerkClient } from "@clerk/nextjs";
 
 const updateMetadata = async (user: User & { memberships: Member[] }) => {
   const evaluatorProjectIds: string[] = [];
@@ -22,7 +22,7 @@ const updateMetadata = async (user: User & { memberships: Member[] }) => {
       adminProjectIds: JSON.stringify(adminProjectIds),
     },
   });
-}
+};
 
 export const memberRouter = createTRPCRouter({
   createMember: t.procedure
@@ -46,11 +46,11 @@ export const memberRouter = createTRPCRouter({
 
       const user = await ctx.prisma.user.findFirst({
         where: {
-          userId
+          userId,
         },
         include: {
-          memberships: true
-        }
+          memberships: true,
+        },
       });
       await updateMetadata(user!);
 
@@ -75,11 +75,11 @@ export const memberRouter = createTRPCRouter({
 
       const user = await ctx.prisma.user.findFirst({
         where: {
-          userId
+          userId,
         },
         include: {
-          memberships: true
-        }
+          memberships: true,
+        },
       });
       await updateMetadata(user!);
 
@@ -108,11 +108,11 @@ export const memberRouter = createTRPCRouter({
 
       const user = await ctx.prisma.user.findFirst({
         where: {
-          userId
+          userId,
         },
         include: {
-          memberships: true
-        }
+          memberships: true,
+        },
       });
       await updateMetadata(user!);
 

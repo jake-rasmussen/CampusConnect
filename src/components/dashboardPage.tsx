@@ -1,8 +1,11 @@
 import "@prisma/client";
 
+import router from "next/router";
+import toast from "react-hot-toast";
+import { Trash } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
-import { isAdmin } from "~/server/api/trpc";
+import { api } from "~/utils/api";
 import Applications from "./dashboard/applications/applications";
 import ContactSection from "./dashboard/contact/contactSection";
 import DescriptionSection from "./dashboard/description/descriptionSection";
@@ -24,6 +27,7 @@ import type {
   SocialMedia,
   User,
 } from "@prisma/client";
+import DeleteProjectDialog from "./dashboard/deleteProjectDialog";
 
 type PropType = {
   name: string;
@@ -63,7 +67,7 @@ const DashboardPage = (props: PropType) => {
             : "hidden",
         )}
       >
-        <span className="mx-8 text-lg font-semibold uppercase text-center">
+        <span className="mx-8 text-center text-lg font-semibold uppercase">
           Admin Mode Disabled on Mobile
         </span>
       </section>
@@ -125,6 +129,15 @@ const DashboardPage = (props: PropType) => {
           ) : (
             <></>
           )}
+
+          <>
+            {isAdminPage && (
+              <DeleteProjectDialog
+                projectId={projectId}
+                projectName={name}
+              />
+            )}
+          </>
         </Tab>
       </main>
     </>

@@ -115,13 +115,11 @@ const EditApplication = () => {
   } else {
     return (
       <>
-        <section
-          className="fixed top-0 z-40 flex h-screen w-screen items-center justify-center bg-white md:hidden"
-        >
+        <section className="fixed top-0 z-40 flex h-screen w-screen items-center justify-center bg-white md:hidden">
           <span className="mx-8 text-lg font-semibold uppercase">
             Application Builder Disabled on Mobile
           </span>
-        </section >
+        </section>
 
         <HeaderOutline>
           <h2 className="font-sans text-5xl font-bold tracking-tight text-white sm:text-7xl sm:leading-none">

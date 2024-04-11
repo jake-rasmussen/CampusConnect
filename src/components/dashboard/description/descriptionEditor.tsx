@@ -60,7 +60,10 @@ const DescriptionEditor = (props: PropType) => {
             <Field
               name="description"
               initialValue={projectDescription}
-              onBlurValidate={z.string().min(1, "Enter a description")}
+              onBlurValidate={
+                z.string()
+                .min(1, "Enter a description")
+                .max(500, "Description must be less than 500 characters")}
             >
               {({ value, setValue, onBlur, isValid, errors }) => (
                 <div>
@@ -74,7 +77,7 @@ const DescriptionEditor = (props: PropType) => {
                     rows={15}
                   />
                   {errors.length !== 0 && (
-                    <ErrorMessage message="Must be longer than 50 characters" />
+                    <ErrorMessage message={errors[0]} />
                   )}
                 </div>
               )}

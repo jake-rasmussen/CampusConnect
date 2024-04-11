@@ -1,9 +1,11 @@
 import "@prisma/client";
 
+import { useUser } from "@clerk/nextjs";
 import lodash from "lodash";
 import toast from "react-hot-toast";
 import { TrashX } from "tabler-icons-react";
 
+import LoadingSection from "~/components/loadingSection";
 import {
   Select,
   SelectContent,
@@ -24,8 +26,6 @@ import MemberOutline from "./memberOutline";
 import Search from "./search";
 
 import type { Member, ProjectMemberType, User } from "@prisma/client";
-import { useUser } from "@clerk/nextjs";
-import LoadingSection from "~/components/loadingSection";
 
 type PropType = {
   projectId: string;
@@ -59,7 +59,7 @@ const Members = (props: PropType) => {
     onError() {
       toast.dismiss();
       toast.error("Error...");
-    }
+    },
   });
 
   const handleDeleteMember = (userId: string) => {
@@ -78,7 +78,7 @@ const Members = (props: PropType) => {
   };
 
   if (!isLoaded) {
-    return <LoadingSection />
+    return <LoadingSection />;
   } else {
     return (
       <MemberOutline
@@ -119,7 +119,7 @@ const Members = (props: PropType) => {
                                 defaultValue={member.type}
                                 onValueChange={(input: ProjectMemberType) => {
                                   toast.dismiss();
-                                  toast.loading("Updating Member...")
+                                  toast.loading("Updating Member...");
                                   handleUpdateMemberType(member.userId, input);
                                 }}
                                 disabled={member.user.externalId === user?.id}

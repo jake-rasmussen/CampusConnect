@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
-    <main className="min-h-screen w-screen bg-background overflow-y-hidden">
+    <main className="min-h-screen w-screen overflow-y-hidden bg-background">
       <ClerkProvider {...pageProps}>
         <SignedIn>
           <Navbar isLoading={isLoading} setIsLoading={setIsLoading} />

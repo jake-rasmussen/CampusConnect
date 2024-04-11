@@ -4,7 +4,6 @@ import React from "react";
 import { Edit, SquarePlus } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
-import { Button } from "../shadcn_ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,8 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../shadcn_ui/dialog";
-import { Input } from "../shadcn_ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../shadcn_ui/popover";
 
 type PropType = {
   dialogDescription: string;

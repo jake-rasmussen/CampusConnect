@@ -5,6 +5,7 @@ import { NoteOff } from "tabler-icons-react";
 
 import ProjectMemberCard from "~/components/allProjects/projectMemberCard";
 import LoadingPage from "~/components/loadingPage";
+import CreateProjectDialog from "~/components/my-projects/createProjectDialog";
 import { Input } from "~/components/shadcn_ui/input";
 import { Separator } from "~/components/shadcn_ui/separator";
 import UserLayout from "~/layouts/userLayout";
@@ -109,6 +110,10 @@ const MyProjects: NextPageWithLayout = () => {
             </span>
           </div>
         )}
+
+        <section className="my-10">
+          <CreateProjectDialog />
+        </section>
       </div>
     );
   }
