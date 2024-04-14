@@ -29,7 +29,6 @@ const FilePreview = (props: PropType) => {
     api.supabaseRouter.createSignedUrlDownload.useMutation();
 
   useEffect(() => {
-    console.log(projectId, applicationId, filename)
     if (applicationId && filename) {
       const fetchFile = async () => {
         const url = await getPresignedUrlGet.mutateAsync({
@@ -37,7 +36,8 @@ const FilePreview = (props: PropType) => {
           userId,
           filename,
         });
-        setUrl(url);
+
+        if (typeof url === typeof("str")) setUrl(url as string);
       };
 
       fetchFile();

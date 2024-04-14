@@ -55,8 +55,6 @@ export const supabaseRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { applicationId, filename } = input;
 
-      console.log(applicationId, filename)
-
       const { data, error } = await supabase.storage
         .from("swec-bucket")
         .createSignedUploadUrl(
