@@ -55,13 +55,15 @@ export const supabaseRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { applicationId, filename } = input;
 
-      const { data } = await supabase.storage
+      console.log(applicationId, filename)
+
+      const { data, error } = await supabase.storage
         .from("swec-bucket")
         .createSignedUploadUrl(
           `${applicationId}/${ctx.user.userId}/${filename}`,
         );
 
-      return data?.signedUrl;
+      return data?.signedUrl || error;
     }),
   createSignedUrlDownload: protectedProcedure
     .input(
@@ -80,7 +82,7 @@ export const supabaseRouter = createTRPCRouter({
         updatedUserId = ctx.user.userId;
       }
 
-      const { data } = await supabase.storage
+      const { data, error } = await supabase.storage
         .from("swec-bucket")
         .createSignedUrl(
           `${applicationId}/${updatedUserId}/${filename}`,
@@ -90,6 +92,6 @@ export const supabaseRouter = createTRPCRouter({
           },
         );
 
-      return data?.signedUrl;
+      return data?.signedUrl || error;
     }),
 });

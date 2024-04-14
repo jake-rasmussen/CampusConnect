@@ -30,7 +30,7 @@ const FilePreview = (props: PropType) => {
 
   useEffect(() => {
     console.log(projectId, applicationId, filename)
-    if (projectId && applicationId && filename) {
+    if (applicationId && filename) {
       const fetchFile = async () => {
         const url = await getPresignedUrlGet.mutateAsync({
           applicationId,

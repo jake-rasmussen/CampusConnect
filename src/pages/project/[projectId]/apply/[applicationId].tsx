@@ -24,8 +24,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-      })
+      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+    })
     | undefined
   >();
 
@@ -111,22 +111,35 @@ const Apply: NextPageWithLayout = () => {
       const saveAnswers = async () => {
         for (const file of files) {
           if (!fileList?.includes(file.name)) {
+
             const url = await createSignedUrlUpload.mutateAsync({
               applicationId,
               filename: file.name,
             });
 
-            if (url) {
-              await fetch(url, {
-                method: "PUT",
-                headers: { "Content-Type": file.type },
-                body: file.slice(),
-              });
-            } else {
+            if (url !== null && typeof url !== typeof ("str")) {
               toast.dismiss();
               toast.error("Error...");
+
+              setIsSaving(false);
               return;
+            } else {
+              
             }
+
+            if (url) {
+              try {
+                await fetch(url as string, {
+                  method: "PUT",
+                  headers: { "Content-Type": file.type },
+                  body: file.slice(),
+                });
+              } catch (e) {
+              }
+            }
+
+
+
           }
         }
 

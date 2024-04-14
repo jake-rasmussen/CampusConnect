@@ -233,16 +233,7 @@ export const projectRouter = createTRPCRouter({
           projectId: null,
         },
       });
-
-      await ctx.prisma.application.deleteMany({
-        where: {
-          projectId,
-          applicationSubmissions: {
-
-          }
-        },
-      });
-
+      
       const applicationsWithoutSubmissions =
         await ctx.prisma.application.findMany({
           where: {

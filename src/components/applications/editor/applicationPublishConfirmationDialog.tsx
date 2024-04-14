@@ -179,7 +179,11 @@ const ApplicationPublishConfirmationDialog = ({
 
                   <Button
                     onClickFn={() => {
-                      submit().catch((e) => console.error(e));
+                      setIsSaving(true);
+                      submit().catch((e) => {
+                        console.error(e);
+                        setIsSaving(false);
+                    });
                     }}
                     className="my-4"
                     disabled={isSaving}
