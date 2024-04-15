@@ -58,9 +58,9 @@ export const applicationSubmissionRouter = createTRPCRouter({
                 },
                 project: {
                   select: {
-                    id: true
-                  }
-                }
+                    id: true,
+                  },
+                },
               },
             },
             applicationSubmissionAnswers: true,
@@ -155,8 +155,9 @@ export const applicationSubmissionRouter = createTRPCRouter({
 
         await ctx.prisma.applicationSubmissionComment.deleteMany({
           where: {
-            applicationSubmissionEvaluationId: applicationSubmissionEvaluation.id,
-          }
+            applicationSubmissionEvaluationId:
+              applicationSubmissionEvaluation.id,
+          },
         });
 
         await ctx.prisma.applicationSubmissionEvaluation.delete({
@@ -222,7 +223,7 @@ export const applicationSubmissionRouter = createTRPCRouter({
             id: applicationSubmissionId,
             applicationSubmissionStatus: {
               not: ApplicationSubmissionStatus.DRAFT,
-            }
+            },
           },
           include: {
             applicationSubmissionAnswers: true,

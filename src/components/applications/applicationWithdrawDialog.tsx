@@ -57,7 +57,7 @@ const ApplicationWithdrawDialog = (props: PropType) => {
         <div className="absolute right-0 top-0 -translate-x-px translate-y-px">
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger >
+              <TooltipTrigger>
                 <LicenseOff className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:rotate-12 hover:text-red-500" />
               </TooltipTrigger>
               <TooltipContent className="bg-white">
@@ -66,7 +66,6 @@ const ApplicationWithdrawDialog = (props: PropType) => {
             </Tooltip>
           </TooltipProvider>
         </div>
-
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -131,7 +131,8 @@ const ApplicationCard = (props: PropType) => {
 
         <div className="opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100">
           {applicationSubmissionId &&
-            (status === ApplicationSubmissionStatus.SUBMITTED || status === ApplicationSubmissionStatus.DRAFT) && (
+            (status === ApplicationSubmissionStatus.SUBMITTED ||
+              status === ApplicationSubmissionStatus.DRAFT) && (
               <ApplicationWithdrawDialog
                 projectId={projectId || "UNAUTHORIZED"}
                 applicationId={application.id}

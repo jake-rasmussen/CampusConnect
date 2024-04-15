@@ -29,8 +29,7 @@ export const usersRouter = createTRPCRouter({
       });
       return user;
     }),
-  getUser: protectedProcedure
-    .query(async ({ ctx }) => {
-      return ctx.user;
-    })
+  getUser: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.user;
+  }),
 });

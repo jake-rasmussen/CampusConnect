@@ -69,8 +69,8 @@ const ApplicationCreator = ({ projectId }: Props) => {
           <>
             <Field
               name={"name"}
-              onBlurValidate={
-                z.string()
+              onBlurValidate={z
+                .string()
                 .min(1, "Enter an application name")
                 .max(30, "Please enter shorter application name")}
             >

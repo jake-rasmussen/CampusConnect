@@ -37,7 +37,7 @@ const FilePreview = (props: PropType) => {
           filename,
         });
 
-        if (typeof url === typeof("str")) setUrl(url as string);
+        if (typeof url === typeof "str") setUrl(url as string);
       };
 
       fetchFile();

@@ -31,7 +31,7 @@ const MyApplications = () => {
                 <ApplicationCard
                   application={savedApplication.application}
                   projectId={savedApplication.application.projectId as string}
-                  editable={false} 
+                  editable={false}
                   previewable={
                     savedApplication.applicationSubmissionStatus !==
                     ApplicationSubmissionStatus.DRAFT

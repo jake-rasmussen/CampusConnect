@@ -24,8 +24,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-    })
+        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+      })
     | undefined
   >();
 
@@ -56,7 +56,7 @@ const Apply: NextPageWithLayout = () => {
     data: user,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-    error: errorUser
+    error: errorUser,
   } = api.usersRouter.getUser.useQuery();
 
   const {
@@ -93,6 +93,9 @@ const Apply: NextPageWithLayout = () => {
   const createSignedUrlUpload =
     api.supabaseRouter.createSignedUrlUpload.useMutation({});
 
+  const getPresignedUrlGet =
+    api.supabaseRouter.createSignedUrlDownload.useMutation();
+
   const handleSaveAnswers = async (
     answers: ApplicationSubmissionAnswer[],
     files: File[],
@@ -111,23 +114,17 @@ const Apply: NextPageWithLayout = () => {
       const saveAnswers = async () => {
         for (const file of files) {
           if (!fileList?.includes(file.name)) {
-
-            const url = await createSignedUrlUpload.mutateAsync({
+            const urlDownload = await getPresignedUrlGet.mutateAsync({
               applicationId,
               filename: file.name,
             });
 
-            if (url !== null && typeof url !== typeof ("str")) {
-              toast.dismiss();
-              toast.error("Error...");
+            if (typeof urlDownload !== typeof "str") {
+              const url = await createSignedUrlUpload.mutateAsync({
+                applicationId,
+                filename: file.name,
+              });
 
-              setIsSaving(false);
-              return;
-            } else {
-              
-            }
-
-            if (url) {
               try {
                 await fetch(url as string, {
                   method: "PUT",
@@ -135,11 +132,13 @@ const Apply: NextPageWithLayout = () => {
                   body: file.slice(),
                 });
               } catch (e) {
+                toast.dismiss();
+                toast.error("Error...");
+
+                setIsSaving(false);
+                return;
               }
             }
-
-
-
           }
         }
 
@@ -204,7 +203,12 @@ const Apply: NextPageWithLayout = () => {
     isLoadingUser
   ) {
     return <LoadingPage />;
-  } else if (isErrorApplication || isErrorUserSubmissions || isErrorFileList || isErrorUser) {
+  } else if (
+    isErrorApplication ||
+    isErrorUserSubmissions ||
+    isErrorFileList ||
+    isErrorUser
+  ) {
     return (
       <Error
         statusCode={

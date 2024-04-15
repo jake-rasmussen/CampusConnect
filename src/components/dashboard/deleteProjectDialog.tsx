@@ -1,5 +1,9 @@
+import router from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { Trash } from "tabler-icons-react";
 
+import { api } from "~/utils/api";
 import Button from "../button";
 import {
   Dialog,
@@ -11,15 +15,11 @@ import {
   DialogTrigger,
 } from "../shadcn_ui/dialog";
 import { Input } from "../shadcn_ui/input";
-import { Trash } from "tabler-icons-react";
-import toast from "react-hot-toast";
-import { api } from "~/utils/api";
-import router from "next/router";
 
 type PropType = {
   projectId: string;
   projectName: string;
-}
+};
 
 const DeleteProjectDialog = (props: PropType) => {
   const { projectId, projectName } = props;
@@ -43,14 +43,11 @@ const DeleteProjectDialog = (props: PropType) => {
     },
   });
 
-
   return (
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <button
-            className="fixed bottom-0 right-0 m-10 transition duration-300 ease-in-out hover:scale-125 hover:cursor-pointer"
-          >
+          <button className="fixed bottom-0 right-0 m-10 transition duration-300 ease-in-out hover:scale-125 hover:cursor-pointer">
             <div className="flex flex-row items-center rounded-full bg-gradient-to-r from-secondary to-primary">
               <span className="ml-8 mr-4 text-lg font-black uppercase text-white">
                 Delete Project?
@@ -63,15 +60,15 @@ const DeleteProjectDialog = (props: PropType) => {
           <>
             <DialogHeader className="pb-6">
               <DialogTitle>Confirm Delete Project</DialogTitle>
-              <DialogDescription>Are you sure you want to delete your project?</DialogDescription>
+              <DialogDescription>
+                Are you sure you want to delete your project?
+              </DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-col">
               <span className="flex flex-row gap-2">
                 Type the project name to confirm:{"    "}
-                <h3 className="tracking-none font-black">
-                  {projectName}
-                </h3>
+                <h3 className="tracking-none font-black">{projectName}</h3>
               </span>
 
               <span> </span>
@@ -83,7 +80,7 @@ const DeleteProjectDialog = (props: PropType) => {
               />
             </div>
 
-            <div className="w-full flex justify-end items-end">
+            <div className="flex w-full items-end justify-end">
               <Button
                 disabled={!confirm}
                 onClickFn={() => {
@@ -91,13 +88,14 @@ const DeleteProjectDialog = (props: PropType) => {
                   deleteProject.mutate({
                     projectId,
                   });
-                }}>
+                }}
+              >
                 Confirm Delete
               </Button>
             </div>
           </>
         </DialogContent>
-      </Dialog >
+      </Dialog>
     </>
   );
 };

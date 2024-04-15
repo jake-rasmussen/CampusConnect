@@ -8,6 +8,7 @@ import { twMerge } from "tailwind-merge";
 import { api } from "~/utils/api";
 import Applications from "./dashboard/applications/applications";
 import ContactSection from "./dashboard/contact/contactSection";
+import DeleteProjectDialog from "./dashboard/deleteProjectDialog";
 import DescriptionSection from "./dashboard/description/descriptionSection";
 import Events from "./dashboard/events/events";
 import Header from "./dashboard/header/header";
@@ -27,7 +28,6 @@ import type {
   SocialMedia,
   User,
 } from "@prisma/client";
-import DeleteProjectDialog from "./dashboard/deleteProjectDialog";
 
 type PropType = {
   name: string;
@@ -132,10 +132,7 @@ const DashboardPage = (props: PropType) => {
 
           <>
             {isAdminPage && (
-              <DeleteProjectDialog
-                projectId={projectId}
-                projectName={name}
-              />
+              <DeleteProjectDialog projectId={projectId} projectName={name} />
             )}
           </>
         </Tab>

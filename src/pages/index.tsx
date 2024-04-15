@@ -61,12 +61,11 @@ const Home = () => {
               </span>
               <span>
                 SWEConnect provides a centralized hub where student and faculty
-                can connect with talented students who possess the skills
-                needed for their initiatives. As a leader of a
-                venture, SWEConnect will provide a centralized application
-                system, and applicant management system. As a student looking
-                for work, check out the open applications and project pages to
-                see what interests you!
+                can connect with talented students who possess the skills needed
+                for their initiatives. As a leader of a venture, SWEConnect will
+                provide a centralized application system, and applicant
+                management system. As a student looking for work, check out the
+                open applications and project pages to see what interests you!
               </span>
 
               <div className="flex w-full items-center">

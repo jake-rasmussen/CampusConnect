@@ -10,7 +10,7 @@ const ErrorMessage = (props: PropType) => {
 
   useEffect(() => {
     toast.dismiss();
-  }, [])
+  }, []);
 
   return (
     <h5 className="text-sm font-semibold text-red-600">

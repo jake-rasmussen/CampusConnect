@@ -50,8 +50,8 @@ const ContactForm = (props: PropType) => {
           <Field
             name="firstName"
             initialValue={firstName}
-            onBlurValidate={
-              z.string()
+            onBlurValidate={z
+              .string()
               .min(1, "Enter a first name")
               .max(15, "Enter a shorter first name")}
           >
@@ -73,8 +73,8 @@ const ContactForm = (props: PropType) => {
           <Field
             name="lastName"
             initialValue={lastName}
-            onBlurValidate={
-              z.string()
+            onBlurValidate={z
+              .string()
               .min(1, "Enter a last name")
               .max(15, "Enter a shorter last name")}
           >
@@ -96,8 +96,8 @@ const ContactForm = (props: PropType) => {
           <Field
             name="email"
             initialValue={email}
-            onBlurValidate={
-              z.string()
+            onBlurValidate={z
+              .string()
               .min(1, "Enter an email")
               .max(25, "Enter a shorter email")
               .email("email")}
@@ -153,8 +153,8 @@ const ContactForm = (props: PropType) => {
           <Field
             name="role"
             initialValue={role}
-            onBlurValidate={
-              z.string()
+            onBlurValidate={z
+              .string()
               .min(1, "Enter a role")
               .max(20, "Please enter shorter role title")}
           >

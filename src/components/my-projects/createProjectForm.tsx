@@ -59,7 +59,10 @@ const CreateProjectForm = (props: {
             <section className="mx-10 flex w-full flex-col gap-4">
               <Field
                 name="name"
-                onBlurValidate={z.string().min(1, "Enter a project name").max(35, "Project name must be less than 35 characters")}
+                onBlurValidate={z
+                  .string()
+                  .min(1, "Enter a project name")
+                  .max(35, "Project name must be less than 35 characters")}
               >
                 {({ value, setValue, onBlur, isValid, errors }) => (
                   <div>

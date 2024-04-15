@@ -204,22 +204,30 @@ export const projectRouter = createTRPCRouter({
         },
       });
 
-      const applicationsWithZeroSubmissions = await ctx.prisma.application.findMany({
-        where: {
-          projectId
-        },
-        include: {
-          _count: {
-            select: { applicationSubmissions: true }
-          }
-        }
-      }).then(applications => applications.filter(application => application._count.applicationSubmissions === 0));
+      const applicationsWithZeroSubmissions = await ctx.prisma.application
+        .findMany({
+          where: {
+            projectId,
+          },
+          include: {
+            _count: {
+              select: { applicationSubmissions: true },
+            },
+          },
+        })
+        .then((applications) =>
+          applications.filter(
+            (application) => application._count.applicationSubmissions === 0,
+          ),
+        );
 
       if (applicationsWithZeroSubmissions.length > 0) {
         await ctx.prisma.application.deleteMany({
           where: {
             id: {
-              in: applicationsWithZeroSubmissions.map(application => application.id),
+              in: applicationsWithZeroSubmissions.map(
+                (application) => application.id,
+              ),
             },
           },
         });
@@ -233,7 +241,7 @@ export const projectRouter = createTRPCRouter({
           projectId: null,
         },
       });
-      
+
       const applicationsWithoutSubmissions =
         await ctx.prisma.application.findMany({
           where: {

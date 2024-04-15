@@ -183,7 +183,7 @@ const ApplicationPublishConfirmationDialog = ({
                       submit().catch((e) => {
                         console.error(e);
                         setIsSaving(false);
-                    });
+                      });
                     }}
                     className="my-4"
                     disabled={isSaving}

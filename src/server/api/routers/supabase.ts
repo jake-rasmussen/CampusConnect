@@ -82,13 +82,9 @@ export const supabaseRouter = createTRPCRouter({
 
       const { data, error } = await supabase.storage
         .from("swec-bucket")
-        .createSignedUrl(
-          `${applicationId}/${updatedUserId}/${filename}`,
-          60,
-          {
-            download: !filename.includes(".pdf"),
-          },
-        );
+        .createSignedUrl(`${applicationId}/${updatedUserId}/${filename}`, 60, {
+          download: !filename.includes(".pdf"),
+        });
 
       return data?.signedUrl || error;
     }),

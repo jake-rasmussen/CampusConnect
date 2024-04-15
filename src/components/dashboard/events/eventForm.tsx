@@ -75,11 +75,10 @@ const EventForm = (props: PropType) => {
           <Field
             name="name"
             initialValue={eventName}
-            onBlurValidate={
-              z.string()
+            onBlurValidate={z
+              .string()
               .min(1, "Enter a name")
-              .max(50, "Please enter a shorter name")
-            }
+              .max(50, "Please enter a shorter name")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-6">
@@ -133,10 +132,10 @@ const EventForm = (props: PropType) => {
           <Field
             name="description"
             initialValue={eventDescription}
-            onBlurValidate={z.string()
+            onBlurValidate={z
+              .string()
               .min(1, "Enter a description")
-              .max(500, "Description must be less than 500 characters")
-            }
+              .max(500, "Description must be less than 500 characters")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-8">

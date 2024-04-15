@@ -111,14 +111,18 @@ export const applicationRouter = createTRPCRouter({
             select: {
               id: true,
               user: true,
-              applicationSubmissionStatus: true
+              applicationSubmissionStatus: true,
             },
           },
         },
       });
-      
-      applications.forEach(app => {
-        app.applicationSubmissions = app.applicationSubmissions.filter(sub => sub.applicationSubmissionStatus !== ApplicationSubmissionStatus.DRAFT);
+
+      applications.forEach((app) => {
+        app.applicationSubmissions = app.applicationSubmissions.filter(
+          (sub) =>
+            sub.applicationSubmissionStatus !==
+            ApplicationSubmissionStatus.DRAFT,
+        );
       });
 
       applications.forEach(async (application) => {
