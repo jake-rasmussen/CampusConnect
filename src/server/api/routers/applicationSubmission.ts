@@ -190,7 +190,7 @@ export const applicationSubmissionRouter = createTRPCRouter({
           },
         });
 
-        if (application?.projectId) {
+        if (!application?.projectId) {
           await ctx.prisma.application.delete({
             where: {
               id: applicationId,
