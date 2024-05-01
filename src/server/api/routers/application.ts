@@ -1,17 +1,45 @@
-import { ApplicationStatus, ApplicationSubmissionStatus } from "@prisma/client";
+import {
+  Application,
+  ApplicationStatus,
+  ApplicationSubmissionStatus,
+  Prisma,
+  PrismaClient,
+  User,
+} from "@prisma/client";
+import { NextApiRequest } from "next/types";
 import { z } from "zod";
 
-import { supabase } from "~/server/supabase/supabaseClient";
-import { api } from "~/utils/api";
-import {
-  createTRPCRouter,
-  isAdmin,
-  isEvaluator,
-  protectedProcedure,
-  t,
-} from "../trpc";
+import { createTRPCRouter, isAdmin, protectedProcedure, t } from "../trpc";
 
+//A function to check if the application deadline has passed and update the application status to CLOSED
+export const checkIfApplicationPastDeadline = async (
+  ctx: {
+    prisma: PrismaClient<
+      Prisma.PrismaClientOptions,
+      never,
+      Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
+    >;
+    user: User;
+    req: NextApiRequest;
+  },
+  application: Application,
+) => {
+  // If the current time has surpassed the deadline close the application
+  if (application.deadline && new Date() > application.deadline) {
+    await ctx.prisma.application.update({
+      where: {
+        id: application.id,
+      },
+      data: {
+        status: ApplicationStatus.CLOSED,
+      },
+    });
+  }
+};
+
+// Define and export a TRPC router for handling various application-related API requests
 export const applicationRouter = createTRPCRouter({
+  // Admin only procedure to get project applications by project ID
   getProjectApplicationsByProjectIdForAdmin: t.procedure
     .input(
       z.object({
@@ -36,20 +64,13 @@ export const applicationRouter = createTRPCRouter({
       });
 
       applications.forEach(async (application) => {
-        if (application.deadline && application.deadline < new Date()) {
-          await ctx.prisma.application.update({
-            where: {
-              id: application.id,
-            },
-            data: {
-              status: ApplicationStatus.CLOSED,
-            },
-          });
-        }
+        checkIfApplicationPastDeadline(ctx, application);
       });
 
       return applications;
     }),
+
+  // Procedure for users to get project applications filtered by status and project ID
   getProjectApplicationsByProjectIdForUsers: protectedProcedure
     .input(
       z.object({
@@ -59,6 +80,7 @@ export const applicationRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { projectId } = input;
 
+      // We want to include applications that are closed and open for admins
       const applications = await ctx.prisma.application.findMany({
         where: {
           projectId,
@@ -76,20 +98,13 @@ export const applicationRouter = createTRPCRouter({
       });
 
       applications.forEach(async (application) => {
-        if (application.deadline && application.deadline < new Date()) {
-          await ctx.prisma.application.update({
-            where: {
-              id: application.id,
-            },
-            data: {
-              status: ApplicationStatus.CLOSED,
-            },
-          });
-        }
+        checkIfApplicationPastDeadline(ctx, application);
       });
 
       return applications;
     }),
+
+  // Procedure for evaluators to get applications filtered by non-draft status
   getProjectApplicationsByProjectIdForEvaluators: protectedProcedure
     .input(
       z.object({
@@ -99,6 +114,7 @@ export const applicationRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { projectId } = input;
 
+      // We want to include applications that are closed and open for evaluators
       const applications = await ctx.prisma.application.findMany({
         where: {
           projectId,
@@ -126,26 +142,19 @@ export const applicationRouter = createTRPCRouter({
       });
 
       applications.forEach(async (application) => {
-        if (application.deadline && application.deadline < new Date()) {
-          await ctx.prisma.application.update({
-            where: {
-              id: application.id,
-            },
-            data: {
-              status: ApplicationStatus.CLOSED,
-            },
-          });
-        }
+        checkIfApplicationPastDeadline(ctx, application);
       });
 
       return applications;
     }),
+
+  // Procedure to get all open applications
   getAllOpenApplications: protectedProcedure.query(async ({ ctx }) => {
     const applications = await ctx.prisma.application.findMany({
       where: {
         status: ApplicationStatus.OPEN,
         projectId: {
-          not: null,
+          not: null, // If project ID is null, it means the project has been deleted or the application has been removed from a project
         },
         deadline: {
           gt: new Date(),
@@ -164,6 +173,8 @@ export const applicationRouter = createTRPCRouter({
 
     return applications;
   }),
+
+  // Admin-only procedure to create a new application
   createApplication: t.procedure
     .input(
       z.object({
@@ -190,6 +201,8 @@ export const applicationRouter = createTRPCRouter({
 
       return application;
     }),
+
+  // Admin-only procedure to update an existing application
   updateApplication: t.procedure
     .input(
       z.object({
@@ -215,6 +228,8 @@ export const applicationRouter = createTRPCRouter({
 
       return application;
     }),
+
+  // Admin-only procedure to publish an application with a deadline and optional skills
   publishApplication: t.procedure
     .input(
       z.object({
@@ -241,6 +256,8 @@ export const applicationRouter = createTRPCRouter({
         },
       });
     }),
+
+  // Procedure to retrieve a specific application by ID, with questions included
   getApplicationById: protectedProcedure
     .input(
       z.object({
@@ -263,20 +280,12 @@ export const applicationRouter = createTRPCRouter({
         },
       });
 
-      if (application.deadline && application.deadline < new Date()) {
-        await ctx.prisma.application.update({
-          where: {
-            id: applicationId,
-          },
-          data: {
-            status: ApplicationStatus.CLOSED,
-          },
-        });
-      }
+      checkIfApplicationPastDeadline(ctx, application);
 
       return application;
     }),
-  // USE TO EITHER DELETE PROJECT ID REFERENCE OR DELETE IF NO SUBMISSIONS
+
+  // Admin-only procedure to either disconnect or delete an application from a project depending on submissions
   removeApplicationFromProject: t.procedure
     .input(
       z.object({
@@ -297,6 +306,10 @@ export const applicationRouter = createTRPCRouter({
         },
       });
 
+      // If the application has submissions, then disconnect it from the project and close the application
+      // We still want to allow users to view applications even if the project removes it
+      // The application will be permanentaly deleted once a user withdraws the applications and the
+      // application has no submissions
       if (application.applicationSubmissions.length > 0) {
         await ctx.prisma.application.update({
           where: {
@@ -310,6 +323,7 @@ export const applicationRouter = createTRPCRouter({
           },
         });
       } else {
+        // If there are no submissions for the application, just delete it
         await ctx.prisma.application.delete({
           where: {
             id: applicationId,

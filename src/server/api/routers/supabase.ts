@@ -4,18 +4,19 @@ import { supabase } from "~/server/supabase/supabaseClient";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const supabaseRouter = createTRPCRouter({
+  // Procedure to clear a folder for the current user
+  // Only the current user should ever be able to clear their supabase folder
   clearSupabaseFolder: protectedProcedure
     .input(
       z.object({
-        projectId: z.string(),
         applicationId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { projectId, applicationId } = input;
+      const { applicationId } = input;
 
       const { data: fileList } = await supabase.storage
-        .from("swec-bucket")
+        .from("swec-bucket") // The bucket name, be sure to update if that should ever change
         .list(`${applicationId}/${ctx.user.userId}`);
 
       if (fileList && fileList.length > 0) {
@@ -25,6 +26,7 @@ export const supabaseRouter = createTRPCRouter({
         await supabase.storage.from("swec-bucket").remove(filesToRemove);
       }
     }),
+  // Procedure to get the supabase folder for the current user
   getSupabaseFolder: protectedProcedure
     .input(
       z.object({
@@ -45,6 +47,7 @@ export const supabaseRouter = createTRPCRouter({
         return [];
       }
     }),
+  // Procedure to create a signed URL for uploading files to a specific folder in Supabase storage
   createSignedUrlUpload: protectedProcedure
     .input(
       z.object({

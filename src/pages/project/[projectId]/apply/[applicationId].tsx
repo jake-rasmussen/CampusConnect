@@ -53,13 +53,6 @@ const Apply: NextPageWithLayout = () => {
   });
 
   const {
-    data: user,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-    error: errorUser,
-  } = api.usersRouter.getUser.useQuery();
-
-  const {
     data: userSubmissions,
     isLoading: isLoadingUserSubmissions,
     isError: isErrorUserSubmissions,
@@ -199,15 +192,13 @@ const Apply: NextPageWithLayout = () => {
     !applicationId ||
     isLoadingApplication ||
     isLoadingUserSubmissions ||
-    isLoadingFileList ||
-    isLoadingUser
+    isLoadingFileList
   ) {
     return <LoadingPage />;
   } else if (
     isErrorApplication ||
     isErrorUserSubmissions ||
-    isErrorFileList ||
-    isErrorUser
+    isErrorFileList
   ) {
     return (
       <Error
@@ -215,7 +206,6 @@ const Apply: NextPageWithLayout = () => {
           errorApplication?.data?.httpStatus ||
           errorUserSubmissions?.data?.httpStatus ||
           errorFileList?.data?.httpStatus ||
-          errorUser?.data?.httpStatus ||
           500
         }
       />

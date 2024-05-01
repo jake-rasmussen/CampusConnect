@@ -86,7 +86,6 @@ const ApplicationWithdrawDialog = (props: PropType) => {
               toast.loading("Withdrawing Application...");
 
               await clearSupabaseFolder.mutateAsync({
-                projectId,
                 applicationId,
               });
 

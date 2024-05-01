@@ -40,7 +40,7 @@ const EditApplication = () => {
   const createApplicationQuestion =
     api.applicationQuestionRouter.createApplicationQuestion.useMutation();
   const deleteAllApplicationQuestions =
-    api.applicationQuestionRouter.deleteApplicationQuestionByApplicationId.useMutation();
+    api.applicationQuestionRouter.deleteAllApplicationQuestionsByApplicationId.useMutation();
 
   const updateApplication = api.applicationRouter.updateApplication.useMutation(
     {

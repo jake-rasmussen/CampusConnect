@@ -37,8 +37,8 @@ import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
  */
 const createInnerTRPCContext = (user: User | null) => {
   return {
-    prisma,
-    user,
+    prisma, // Provides Prisma ORM database access
+    user, // Current authenticated user
   };
 };
 
@@ -60,9 +60,6 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const user = await prisma.user.findUnique({
     where: {
       externalId: userId,
-    },
-    include: {
-      memberships: true,
     },
   });
 
@@ -117,6 +114,9 @@ export const createTRPCRouter = t.router;
  */
 export const publicProcedure = t.procedure;
 
+/**
+ * Middleware to ensure the user is authenticated. Throws an error if no user context is found.
+ */
 const isAuthed = t.middleware(({ next, ctx }) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
@@ -128,8 +128,14 @@ const isAuthed = t.middleware(({ next, ctx }) => {
   });
 });
 
+/**
+ * Protected procedures require an authenticated user; uses the isAuthed middleware
+ */
 export const protectedProcedure = t.procedure.use(isAuthed);
 
+/**
+ * Middleware to check if the user is an admin of the specified project
+ */
 export const isAdmin = t.middleware(async ({ next, ctx, input }) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
@@ -154,6 +160,9 @@ export const isAdmin = t.middleware(async ({ next, ctx, input }) => {
   });
 });
 
+/**
+ * Middleware to check if the user is an evaluator or admin of the specified project
+ */
 export const isEvaluator = t.middleware(async ({ next, ctx, input }) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });

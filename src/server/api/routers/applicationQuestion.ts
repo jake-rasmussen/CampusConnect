@@ -4,6 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const applicationQuestionRouter = createTRPCRouter({
+  // Define a procedure to create an application question
   createApplicationQuestion: t.procedure
     .input(
       z.object({
@@ -13,6 +14,7 @@ export const applicationQuestionRouter = createTRPCRouter({
         question: z.string(),
         answerChoices: z.array(z.string()),
         type: z.enum([
+          // Enum specifying the type of question
           ApplicationQuestionType.FILE_UPLOAD,
           ApplicationQuestionType.MULTIPLE_CHOICE,
           ApplicationQuestionType.MULTIPLE_SELECT,
@@ -50,7 +52,9 @@ export const applicationQuestionRouter = createTRPCRouter({
 
       return applicationQuestion;
     }),
-  deleteApplicationQuestionByApplicationId: t.procedure
+
+  // Define a procedure to delete application questions based on application ID
+  deleteAllApplicationQuestionsByApplicationId: t.procedure
     .input(
       z.object({
         applicationId: z.string(),

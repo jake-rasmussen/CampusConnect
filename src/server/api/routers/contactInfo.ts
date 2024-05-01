@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const contactInfoRouter = createTRPCRouter({
+    // Admin-only procedure to retrieve all contact information entries associated with a specific project
   getContactInfosByProjectId: t.procedure
     .input(
       z.object({
@@ -19,6 +20,7 @@ export const contactInfoRouter = createTRPCRouter({
       });
       return contactInfos;
     }),
+  // Admin-only procedure to fetch all contact information from the database where the projectId matches
   updateContactInfoById: t.procedure
     .input(
       z.object({
@@ -49,6 +51,7 @@ export const contactInfoRouter = createTRPCRouter({
 
       return contactInfo;
     }),
+  // Admin-only procedure to create a contact info
   createContactInfo: t.procedure
     .input(
       z.object({
@@ -77,6 +80,7 @@ export const contactInfoRouter = createTRPCRouter({
 
       return contactInfo;
     }),
+  // Admin-only procedure to delete a contact info
   deleteContactInfoById: t.procedure
     .input(
       z.object({
