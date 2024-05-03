@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const contactInfoRouter = createTRPCRouter({
-    // Admin-only procedure to retrieve all contact information entries associated with a specific project
+  // Admin-only procedure to retrieve all contact information entries associated with a specific project
   getContactInfosByProjectId: t.procedure
     .input(
       z.object({

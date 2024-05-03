@@ -1,29 +1,31 @@
-# Create T3 App
+# SWEConnect
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+SWEConnect looks to provide JHU startup projects and SWEC with a means to find people who are looking to get involved by providing an application management system. Users can create projects, and then create applications that people can apply for. Any user looking to get involved can search for roles through various methods and apply!
 
-## What's next? How do I make an app with this?
+## Installing / Getting started
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+> A quick introduction of the minimal setup you need to get the app up & running on a local computer
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+1. Make sure you have these prerequisites installed: [yarn](https://classic.yarnpkg.com/en/docs/getting-started), [Docker](https://docs.docker.com/engine/install/), [ngrok](https://ngrok.com/download).  
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+2. Clone the repository and navigate to the root folder in the terminal.
 
-## Learn More
+3. Add a `.env` file in the root folder of this repository containing the fields in the`.env.example` file, and fill in the required environment variables.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+4. Run `yarn` to install dependencies.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+5. To run locally: 
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+    a. Run `yarn dev` in one terminal
 
-## How do I deploy this?
+    b. Run `yarn ngrok` in another terminal
+    
+    c. Go to (http://localhost:3000/) in your browser.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
-# hopkins-club-connect
+### Code style and formatting
+
+To run prettier: `yarn format`.
+
+### Deployment
+
+As of now, SWEConnect uses Next.js and Vercel for deployment. For a guide on deployment, check out (https://vercel.com/docs/deployments/overview)

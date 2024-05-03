@@ -3,7 +3,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { Field, Form } from "houseform";
 import { CalendarIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { z } from "zod";
 
 import Button from "~/components/button";

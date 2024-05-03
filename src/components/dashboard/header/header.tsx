@@ -1,6 +1,5 @@
-import { InfoCircle, Trash } from "tabler-icons-react";
+import { InfoCircle } from "tabler-icons-react";
 
-import { SparklesCore } from "~/components/aceternity_ui/sparkles";
 import {
   HoverCard,
   HoverCardContent,

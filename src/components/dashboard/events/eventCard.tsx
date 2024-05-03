@@ -12,12 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../shadcn_ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../shadcn_ui/tooltip";
 import EventCardEditor from "./eventCardEditor";
 
 type PropType = {

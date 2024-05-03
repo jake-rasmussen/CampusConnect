@@ -1,5 +1,4 @@
-import { useClerk } from "@clerk/clerk-react";
-import { ClerkProvider, SignedIn, useAuth, useUser } from "@clerk/nextjs";
+import { ClerkProvider, SignedIn } from "@clerk/nextjs";
 
 import { api } from "~/utils/api";
 
@@ -7,7 +6,7 @@ import "react";
 import "~/styles/globals.css";
 import "react";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Toaster } from "react-hot-toast";

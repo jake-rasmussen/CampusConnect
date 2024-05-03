@@ -1,6 +1,6 @@
 import { Application, User } from "@prisma/client";
 import { useState } from "react";
-import { Eye, Pencil } from "tabler-icons-react";
+import { Pencil } from "tabler-icons-react";
 
 import PreviewDialog from "~/components/previewDialog";
 import { Separator } from "~/components/shadcn_ui/separator";

@@ -1,7 +1,6 @@
 import "@prisma/client";
 
 import Error from "next/error";
-import { useRouter } from "next/router";
 import React from "react";
 
 import ProjectDashboard from "~/components/dashboardPage";

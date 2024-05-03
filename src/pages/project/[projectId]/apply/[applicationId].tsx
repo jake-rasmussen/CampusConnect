@@ -195,11 +195,7 @@ const Apply: NextPageWithLayout = () => {
     isLoadingFileList
   ) {
     return <LoadingPage />;
-  } else if (
-    isErrorApplication ||
-    isErrorUserSubmissions ||
-    isErrorFileList
-  ) {
+  } else if (isErrorApplication || isErrorUserSubmissions || isErrorFileList) {
     return (
       <Error
         statusCode={

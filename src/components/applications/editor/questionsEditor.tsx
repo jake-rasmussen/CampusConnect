@@ -1,5 +1,3 @@
-import "@prisma/client";
-
 import { ApplicationQuestion, ApplicationQuestionType } from "@prisma/client";
 import update from "immutability-helper";
 import { Dispatch, SetStateAction, useCallback } from "react";
