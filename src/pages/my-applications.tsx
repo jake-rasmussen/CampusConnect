@@ -22,7 +22,7 @@ const MyApplications = () => {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else {
     return (
-      <main className="w-full pb-10">
+      <main className="w-full pb-52">
         <Header name={"My Applications"} editable={false} />
         <section className="mt-10 flex w-full justify-center">
           {applicationSubmissions.length > 0 ? (
@@ -30,7 +30,7 @@ const MyApplications = () => {
               {applicationSubmissions.map((savedApplication, index) => (
                 <ApplicationCard
                   application={savedApplication.application}
-                  projectId={savedApplication.application.projectId}
+                  projectId={savedApplication.application.projectId as string}
                   editable={false}
                   previewable={
                     savedApplication.applicationSubmissionStatus !==

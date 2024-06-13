@@ -8,13 +8,11 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
+    SUPABASE_URL: z.string().url(),
+    SUPABASE_API_KEY: z.string(),
     HOST_PORT: z.string().length(4),
     NODE_ENV: z.enum(["development", "test", "production"]),
     CLERK_SECRET_KEY: z.string().min(1),
-    AWS_ACCESS_KEY_ID: z.string(),
-    AWS_SECRET_ACCESS_KEY: z.string(),
-    BUCKET_NAME: z.string(),
-    REGION: z.string(),
   },
 
   /**
@@ -32,15 +30,13 @@ export const env = createEnv({
    */
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_API_KEY: process.env.SUPABASE_API_KEY,
     HOST_PORT: process.env.HOST_PORT,
     NODE_ENV: process.env.NODE_ENV,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
-    BUCKET_NAME: process.env.BUCKET_NAME,
-    REGION: process.env.REGION,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

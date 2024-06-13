@@ -1,7 +1,14 @@
 import "@prisma/client";
 
+import router from "next/router";
+import toast from "react-hot-toast";
+import { Trash } from "tabler-icons-react";
+import { twMerge } from "tailwind-merge";
+
+import { api } from "~/utils/api";
 import Applications from "./dashboard/applications/applications";
 import ContactSection from "./dashboard/contact/contactSection";
+import DeleteProjectDialog from "./dashboard/deleteProjectDialog";
 import DescriptionSection from "./dashboard/description/descriptionSection";
 import Events from "./dashboard/events/events";
 import Header from "./dashboard/header/header";
@@ -53,6 +60,18 @@ const DashboardPage = (props: PropType) => {
 
   return (
     <>
+      <section
+        className={twMerge(
+          isAdminPage
+            ? "fixed top-0 z-40 flex h-screen w-screen items-center justify-center bg-white md:hidden"
+            : "hidden",
+        )}
+      >
+        <span className="mx-8 text-center text-lg font-semibold uppercase">
+          Admin Mode Disabled on Mobile
+        </span>
+      </section>
+
       <Header name={name} editable={isAdminPage} />
 
       <main className="relative flex flex-col justify-center pb-40">
@@ -83,6 +102,13 @@ const DashboardPage = (props: PropType) => {
                   editable={isAdminPage}
                 />
               )}
+              {projectId === "swec" && (isAdminPage || events.length > 0) && (
+                <Events
+                  events={events}
+                  projectId={projectId}
+                  editable={isAdminPage}
+                />
+              )}
             </div>
           </TabContent>
           <TabContent>
@@ -103,14 +129,13 @@ const DashboardPage = (props: PropType) => {
           ) : (
             <></>
           )}
+
+          <>
+            {isAdminPage && (
+              <DeleteProjectDialog projectId={projectId} projectName={name} />
+            )}
+          </>
         </Tab>
-        {(isAdminPage || events.length > 0) && (
-          <Events
-            events={events}
-            projectId={projectId}
-            editable={isAdminPage}
-          />
-        )}
       </main>
     </>
   );

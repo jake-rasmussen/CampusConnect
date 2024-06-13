@@ -40,7 +40,7 @@ const Header = (props: PropType) => {
         <></>
       )}
 
-      <div className="flex flex-col">
+      <div className="min-w-96 flex flex-col overflow-hidden">
         <h2 className="mb-6 font-sans text-5xl font-bold tracking-tight text-white sm:text-7xl sm:leading-none">
           {name}
         </h2>

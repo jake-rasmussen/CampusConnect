@@ -1,22 +1,21 @@
-import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
+import { authMiddleware, clerkClient, redirectToSignIn } from "@clerk/nextjs";
 
 export default authMiddleware({
-  publicRoutes: ["/"],
-  afterAuth(auth, req, evt) {
+  afterAuth(auth, req) {
     const url = new URL(req.url);
 
-    const publicMetadata = auth.sessionClaims?.publicMetadata as {
+    if (url.pathname === "/" || url.pathname === "/api/webhook") return;
+
+    const metadata = auth.sessionClaims?.publicMetadata as {
       adminProjectIds: string;
       evaluatorProjectIds: string;
     };
 
-    if (publicMetadata) {
+    if (metadata && metadata.adminProjectIds && metadata.evaluatorProjectIds) {
       const evaluatorProjectIds: string[] = JSON.parse(
-        publicMetadata.evaluatorProjectIds,
+        metadata.evaluatorProjectIds,
       );
-      const adminProjectIds: string[] = JSON.parse(
-        publicMetadata.adminProjectIds,
-      );
+      const adminProjectIds: string[] = JSON.parse(metadata.adminProjectIds);
 
       if (!auth.userId && !auth.isPublicRoute) {
         return redirectToSignIn({ returnBackUrl: req.url });
@@ -40,15 +39,22 @@ export default authMiddleware({
         const evaluatorIndex = parts.indexOf("evaluator");
         if (evaluatorIndex !== -1 && evaluatorIndex < parts.length - 1) {
           const projectId = parts[evaluatorIndex + 1];
-          if (projectId && !evaluatorProjectIds.includes(projectId)) {
+          if (
+            projectId &&
+            !evaluatorProjectIds.includes(projectId) &&
+            !adminProjectIds.includes(projectId)
+          ) {
             return redirectToSignIn({ returnBackUrl: req.url });
           }
         }
       }
     } else {
-      return redirectToSignIn({ returnBackUrl: req.url });
+      if (!auth.userId) {
+        return redirectToSignIn({ returnBackUrl: req.url });
+      }
     }
   },
+  publicRoutes: ["/", "/api/webhook(.*)"],
 });
 
 export const config = {

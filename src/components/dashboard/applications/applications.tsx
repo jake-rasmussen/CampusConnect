@@ -1,5 +1,6 @@
 import { ApplicationSubmissionStatus } from "@prisma/client";
 import Error from "next/error";
+import { twMerge } from "tailwind-merge";
 
 import LoadingSection from "~/components/loadingSection";
 import { api } from "~/utils/api";
@@ -36,7 +37,12 @@ const Applications = (props: PropType) => {
       <section className="flex flex-col items-center gap-y-8">
         <ApplicationsOutline>
           {applications.length > 0 ? (
-            <div className="flex flex-wrap justify-center gap-4">
+            <div
+              className={twMerge(
+                "flex flex-wrap justify-center gap-4",
+                editable && "gap-y-14",
+              )}
+            >
               {applications.map(
                 (
                   application: Application & {
@@ -81,8 +87,8 @@ const Applications = (props: PropType) => {
             </div>
           ) : (
             <>
-              <h3 className="tracking-none my-4 text-xl font-black uppercase underline">
-                There are no open applications
+              <h3 className="tracking-none my-4 text-lg font-black uppercase underline md:text-xl">
+                There are no applications
               </h3>
             </>
           )}

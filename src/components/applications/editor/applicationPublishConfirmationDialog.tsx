@@ -3,7 +3,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { Field, Form } from "houseform";
 import { CalendarIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { z } from "zod";
 
 import Button from "~/components/button";
@@ -59,7 +59,7 @@ const ApplicationPublishConfirmationDialog = ({
 
   const [skills, setSkills] = useState<string[]>([]);
 
-  const DEFAULT_TIME = new Date(new Date().setHours(0, 0, 0, 0));
+  const DEFAULT_TIME = new Date(new Date().setHours(23, 59, 0, 0));
 
   return (
     <>
@@ -179,7 +179,11 @@ const ApplicationPublishConfirmationDialog = ({
 
                   <Button
                     onClickFn={() => {
-                      submit().catch((e) => console.error(e));
+                      setIsSaving(true);
+                      submit().catch((e) => {
+                        console.error(e);
+                        setIsSaving(false);
+                      });
                     }}
                     className="my-4"
                     disabled={isSaving}

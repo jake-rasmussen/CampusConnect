@@ -1,6 +1,5 @@
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { InfoSquare } from "tabler-icons-react";
 
 import { DATE_TIME_FORMAT_OPTS } from "~/constants";
@@ -35,7 +34,7 @@ const ApplicationPreviewCard = (props: PropType) => {
   const { application } = props;
 
   return (
-    <Card className="relative my-6 mb-0 mr-4 flex w-[25rem] flex-col rounded-xl bg-white shadow-xl">
+    <Card className="relative my-6 mb-0 mr-4 flex w-[20rem] flex-col rounded-xl bg-white shadow-xl md:w-[25rem]">
       <CardHeader className="pb-0">
         <CardTitle>{application.name}</CardTitle>
         <CardDescription>{application.description}</CardDescription>
@@ -52,10 +51,6 @@ const ApplicationPreviewCard = (props: PropType) => {
             <DialogContent className="max-w-4xl">
               <DialogHeader>
                 <DialogTitle>Preview Application</DialogTitle>
-                {/* <DialogDescription>
-                    Make changes to your profile here. Click save when you're
-                    done.
-                  </DialogDescription> */}
               </DialogHeader>
               {application.project ? (
                 <div className="flex flex-col items-center justify-center py-4 text-center">

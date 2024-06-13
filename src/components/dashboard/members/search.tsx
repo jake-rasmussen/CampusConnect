@@ -2,9 +2,11 @@ import "@prisma/client";
 
 import { debounce } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
 import { Input } from "../../shadcn_ui/input";
+import MemberConfirmDialog from "./memberConfirmDialog";
 
 import type { Member, User } from "@prisma/client";
 
@@ -21,6 +23,7 @@ const Search = (props: PropType) => {
   const [registeredUserIds, setRegisteredUserIds] = useState<string[]>(
     Array.from(members, (member) => member.userId),
   );
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
 
   const { data: users } = api.usersRouter.getUsersByQuery.useQuery({
     query: search,
@@ -30,11 +33,18 @@ const Search = (props: PropType) => {
 
   const addMember = api.memberRouter.createMember.useMutation({
     onSuccess() {
+      toast.dismiss();
+      toast.success("Successfully Added Member!");
       queryClient.invalidate();
+    },
+    onError() {
+      toast.dismiss();
+      toast.error("Error...");
     },
   });
 
   const [queryResult, setQueryResult] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User>();
 
   const debouncedSearch = useRef(
     debounce(async (input: string) => {
@@ -59,6 +69,9 @@ const Search = (props: PropType) => {
   }, [debouncedSearch]);
 
   const handleAddMember = (userId: string) => {
+    toast.dismiss();
+    toast.loading("Adding Member...");
+
     addMember.mutate({
       projectId,
       userId,
@@ -78,6 +91,14 @@ const Search = (props: PropType) => {
         placeholder="ADD A USER"
         className="tracking-none border border-2 text-xl font-black uppercase text-secondary"
       />
+
+      <MemberConfirmDialog
+        user={selectedUser}
+        onConfirm={() => handleAddMember(selectedUser!.userId)}
+        openDialog={openConfirmDialog}
+        setOpenDialog={setOpenConfirmDialog}
+      />
+
       {queryResult && queryResult.length > 0 && search.length > 0 && (
         <div className="absolute top-0 z-20 flex max-h-48 translate-y-12 flex-col overflow-y-scroll rounded-xl border border-2 border-secondary bg-white p-4 shadow-xl">
           {queryResult.map((query: User, index: number) => {
@@ -85,7 +106,10 @@ const Search = (props: PropType) => {
               <button
                 className="my-2 flex flex-row rounded-xl p-4 transition duration-300 ease-in-out hover:bg-gray"
                 key={`search${index}`}
-                onClick={() => handleAddMember(query.userId)}
+                onClick={() => {
+                  setOpenConfirmDialog(true);
+                  setSelectedUser(query);
+                }}
               >
                 <span className="text-md flex-none font-semibold text-secondary">
                   {query.emailAddress}

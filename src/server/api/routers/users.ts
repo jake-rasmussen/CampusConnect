@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const usersRouter = createTRPCRouter({
+  // Procedure to get users by their email
   getUsersByQuery: protectedProcedure
     .input(z.object({ query: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -17,6 +18,7 @@ export const usersRouter = createTRPCRouter({
       });
       return users;
     }),
+  // Procedure to get user info by their ID
   getUserById: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -29,4 +31,8 @@ export const usersRouter = createTRPCRouter({
       });
       return user;
     }),
+  // Procedure to get the user associated with the context
+  getUser: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.user;
+  }),
 });

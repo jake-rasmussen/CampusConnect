@@ -44,6 +44,15 @@ const Apply: NextPageWithLayout = () => {
   );
 
   const {
+    data: fileList,
+    isLoading: isLoadingFileList,
+    isError: isErrorFileList,
+    error: errorFileList,
+  } = api.supabaseRouter.getSupabaseFolder.useQuery({
+    applicationId,
+  });
+
+  const {
     data: userSubmissions,
     isLoading: isLoadingUserSubmissions,
     isError: isErrorUserSubmissions,
@@ -66,6 +75,7 @@ const Apply: NextPageWithLayout = () => {
         onError() {
           toast.dismiss();
           toast.error("Error...");
+          setIsSaving(false);
         },
       },
     );
@@ -73,8 +83,11 @@ const Apply: NextPageWithLayout = () => {
   const deleteApplicationSubmissionAnswerChoices =
     api.applicationSubmissionAnswerRouter.deleteAllApplicationSubmissionAnswersByApplicationSubmissionId.useMutation();
 
-  const getPresignedUrlUpload =
-    api.s3Router.getPresignedUrlUpload.useMutation();
+  const createSignedUrlUpload =
+    api.supabaseRouter.createSignedUrlUpload.useMutation({});
+
+  const getPresignedUrlGet =
+    api.supabaseRouter.createSignedUrlDownload.useMutation();
 
   const handleSaveAnswers = async (
     answers: ApplicationSubmissionAnswer[],
@@ -92,6 +105,36 @@ const Apply: NextPageWithLayout = () => {
       }
 
       const saveAnswers = async () => {
+        for (const file of files) {
+          if (!fileList?.includes(file.name)) {
+            const urlDownload = await getPresignedUrlGet.mutateAsync({
+              applicationId,
+              filename: file.name,
+            });
+
+            if (typeof urlDownload !== typeof "str") {
+              const url = await createSignedUrlUpload.mutateAsync({
+                applicationId,
+                filename: file.name,
+              });
+
+              try {
+                await fetch(url as string, {
+                  method: "PUT",
+                  headers: { "Content-Type": file.type },
+                  body: file.slice(),
+                });
+              } catch (e) {
+                toast.dismiss();
+                toast.error("Error...");
+
+                setIsSaving(false);
+                return;
+              }
+            }
+          }
+        }
+
         const applicationSubmission =
           await upsertApplicationSubmission.mutateAsync({
             applicationSubmissionId: savedSubmission?.id,
@@ -115,19 +158,6 @@ const Apply: NextPageWithLayout = () => {
               answer: answer.answer as string | string[],
             });
           }
-        }
-
-        for (const file of files) {
-          const url = await getPresignedUrlUpload.mutateAsync({
-            projectId,
-            applicationId,
-            filename: file.name,
-          });
-          await fetch(url, {
-            method: "PUT",
-            headers: { "Content-Type": file.type },
-            body: file.slice(),
-          });
         }
 
         if (submit) {
@@ -158,14 +188,20 @@ const Apply: NextPageWithLayout = () => {
     }
   }, [application, userSubmissions]);
 
-  if (!applicationId || isLoadingApplication || isLoadingUserSubmissions) {
+  if (
+    !applicationId ||
+    isLoadingApplication ||
+    isLoadingUserSubmissions ||
+    isLoadingFileList
+  ) {
     return <LoadingPage />;
-  } else if (isErrorApplication || isErrorUserSubmissions) {
+  } else if (isErrorApplication || isErrorUserSubmissions || isErrorFileList) {
     return (
       <Error
         statusCode={
           errorApplication?.data?.httpStatus ||
           errorUserSubmissions?.data?.httpStatus ||
+          errorFileList?.data?.httpStatus ||
           500
         }
       />
@@ -184,6 +220,7 @@ const Apply: NextPageWithLayout = () => {
             description={application.description}
             questions={application.questions}
             savedAnswers={savedSubmission?.applicationSubmissionAnswers}
+            isSaving={isSaving}
             readonly
           />
         </div>
@@ -200,6 +237,7 @@ const Apply: NextPageWithLayout = () => {
             description={application.description}
             questions={application.questions}
             savedAnswers={savedSubmission?.applicationSubmissionAnswers}
+            deadline={application.deadline || undefined}
             handleSaveAnswers={handleSaveAnswers}
             isSaving={isSaving}
           />

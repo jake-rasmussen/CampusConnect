@@ -7,7 +7,6 @@
  * need to use are documented accordingly near the end.
  */
 
-import { clerkClient } from "@clerk/nextjs";
 import { getAuth } from "@clerk/nextjs/server";
 import { Member, ProjectMemberType, User } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
@@ -15,7 +14,6 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { prisma } from "~/server/db";
-import { s3 } from "../aws/s3";
 
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
@@ -39,37 +37,9 @@ import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
  */
 const createInnerTRPCContext = (user: User | null) => {
   return {
-    prisma,
-    user,
-    s3,
+    prisma, // Provides Prisma ORM database access
+    user, // Current authenticated user
   };
-};
-
-const getOrCreateUser = async (
-  externalId: string,
-  emailAddress: string,
-  firstName: string,
-  lastName: string,
-) => {
-  return await prisma.user.upsert({
-    where: {
-      externalId,
-    },
-    update: {
-      emailAddress,
-      firstName,
-      lastName,
-    },
-    create: {
-      externalId,
-      emailAddress,
-      firstName,
-      lastName,
-    },
-    include: {
-      memberships: true,
-    },
-  });
 };
 
 /**
@@ -79,7 +49,7 @@ const getOrCreateUser = async (
  * @see https://trpc.io/docs/context
  */
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { sessionClaims, userId } = getAuth(opts.req);
+  const { userId } = getAuth(opts.req);
   if (!userId) {
     return {
       ...createInnerTRPCContext(null),
@@ -87,29 +57,9 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
     };
   }
 
-  const { email, firstName, lastName } = sessionClaims;
-  const user = await getOrCreateUser(
-    userId,
-    email as string,
-    firstName as string,
-    lastName as string,
-  );
-
-  const evaluatorProjectIds: string[] = [];
-  const adminProjectIds: string[] = [];
-
-  user.memberships.forEach((membership: Member) => {
-    if (membership.type === ProjectMemberType.ADMIN) {
-      adminProjectIds.push(membership.projectId);
-    } else {
-      evaluatorProjectIds.push(membership.projectId);
-    }
-  });
-
-  await clerkClient.users.updateUserMetadata(userId, {
-    publicMetadata: {
-      evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
-      adminProjectIds: JSON.stringify(adminProjectIds),
+  const user = await prisma.user.findUnique({
+    where: {
+      externalId: userId,
     },
   });
 
@@ -164,6 +114,9 @@ export const createTRPCRouter = t.router;
  */
 export const publicProcedure = t.procedure;
 
+/**
+ * Middleware to ensure the user is authenticated. Throws an error if no user context is found.
+ */
 const isAuthed = t.middleware(({ next, ctx }) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
@@ -175,8 +128,14 @@ const isAuthed = t.middleware(({ next, ctx }) => {
   });
 });
 
+/**
+ * Protected procedures require an authenticated user; uses the isAuthed middleware
+ */
 export const protectedProcedure = t.procedure.use(isAuthed);
 
+/**
+ * Middleware to check if the user is an admin of the specified project
+ */
 export const isAdmin = t.middleware(async ({ next, ctx, input }) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
@@ -201,6 +160,9 @@ export const isAdmin = t.middleware(async ({ next, ctx, input }) => {
   });
 });
 
+/**
+ * Middleware to check if the user is an evaluator or admin of the specified project
+ */
 export const isEvaluator = t.middleware(async ({ next, ctx, input }) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });

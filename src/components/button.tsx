@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 
-type PropTypes = {
+type PropType = {
   onClickFn?: () => void;
   children: string | JSX.Element;
   className?: string;
@@ -14,12 +14,12 @@ const Button = ({
   children,
   className,
   type,
-}: PropTypes) => {
+}: PropType) => {
   return (
     <>
       <button
         className={twMerge(
-          "max-w-xs rounded-xl bg-secondary px-4 py-4 transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50",
+          "max-w-xs rounded-xl bg-secondary px-4 py-4 transition duration-300 ease-in-out hover:scale-110 hover:cursor-pointer disabled:opacity-50",
           className,
         )}
         onClick={(e) => {

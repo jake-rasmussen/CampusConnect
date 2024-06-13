@@ -2,6 +2,7 @@ import { ApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { z } from "zod";
 
 import ErrorDialog from "~/components/errorDialog";
 import PreviewDialog from "~/components/previewDialog";
@@ -97,6 +98,7 @@ const ApplicationEditForm = (props: PropType) => {
         onSubmit={async (values) => {
           if (!isApplicationFormValid(values.name, values.description)) {
             setOpenErrorDialog(true);
+            toast.dismiss();
             return;
           }
           saveApplication(values.name, values.description, questions).then(() =>
@@ -104,13 +106,13 @@ const ApplicationEditForm = (props: PropType) => {
           );
         }}
       >
-        {({ submit, getFieldValue }) => (
+        {({ submit, getFieldValue, errors }) => (
           <main className="flex flex-col items-center gap-4 py-4">
-            <section className="mx-10 flex w-[50rem] flex-col gap-4">
+            <section className="mx-10 flex w-[50vw] max-w-[50rem] flex-col gap-4">
               <Field
                 name="name"
                 initialValue={name}
-                // onBlurValidate={z.string().min(1, "Enter an application name")}
+                onBlurValidate={z.string().min(1, "Enter an application name")}
               >
                 {({ value, setValue, onBlur, isValid, errors }) => (
                   <>
@@ -129,7 +131,14 @@ const ApplicationEditForm = (props: PropType) => {
                 )}
               </Field>
 
-              <Field name="description" initialValue={description}>
+              <Field
+                name="description"
+                initialValue={description}
+                onBlurValidate={z
+                  .string()
+                  .min(1, "Please provide a description")
+                  .max(500, "Description must be less than 500 characters")}
+              >
                 {({ value, setValue, onBlur, isValid, errors }) => (
                   <>
                     <span className="text-xl font-semibold">
@@ -164,7 +173,16 @@ const ApplicationEditForm = (props: PropType) => {
                   setIsSaving(true);
                   toast.dismiss();
                   toast.loading("Saving Application....");
-                  submit().catch((e) => console.log(e));
+
+                  if (errors.length > 0) {
+                    setIsSaving(false);
+                    toast.dismiss();
+                  }
+
+                  submit().catch((e) => {
+                    setIsSaving(false);
+                    toast.dismiss();
+                  });
                 }}
                 disabled={isSaving}
               >
@@ -193,6 +211,7 @@ const ApplicationEditForm = (props: PropType) => {
                   name={getFieldValue("name")?.value}
                   description={getFieldValue("description")?.value}
                   questions={questions}
+                  isSaving={isSaving}
                   readonly
                 />
               </PreviewDialog>
@@ -214,6 +233,9 @@ const ApplicationEditForm = (props: PropType) => {
               }
               openDialog={openErrorDialog}
               setOpenDialog={setOpenErrorDialog}
+              onClose={() => {
+                setIsSaving(false);
+              }}
             />
           </main>
         )}

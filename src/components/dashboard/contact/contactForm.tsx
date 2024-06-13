@@ -50,7 +50,10 @@ const ContactForm = (props: PropType) => {
           <Field
             name="firstName"
             initialValue={firstName}
-            onBlurValidate={z.string().min(1, "Enter a first name")}
+            onBlurValidate={z
+              .string()
+              .min(1, "Enter a first name")
+              .max(15, "Enter a shorter first name")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-2">
@@ -70,7 +73,10 @@ const ContactForm = (props: PropType) => {
           <Field
             name="lastName"
             initialValue={lastName}
-            onBlurValidate={z.string().min(1, "Enter a last name")}
+            onBlurValidate={z
+              .string()
+              .min(1, "Enter a last name")
+              .max(15, "Enter a shorter last name")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-2">
@@ -90,7 +96,11 @@ const ContactForm = (props: PropType) => {
           <Field
             name="email"
             initialValue={email}
-            onBlurValidate={z.string().min(1, "Enter an email").email("email")}
+            onBlurValidate={z
+              .string()
+              .min(1, "Enter an email")
+              .max(25, "Enter a shorter email")
+              .email("email")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-2">
@@ -121,6 +131,7 @@ const ContactForm = (props: PropType) => {
             onBlurValidate={z
               .string()
               .min(10, "Enter a valid phone number")
+              .max(15, "Enter a valid phone number")
               .optional()
               .or(z.literal(""))}
           >
@@ -142,7 +153,10 @@ const ContactForm = (props: PropType) => {
           <Field
             name="role"
             initialValue={role}
-            onBlurValidate={z.string().min(1, "Enter a role")}
+            onBlurValidate={z
+              .string()
+              .min(1, "Enter a role")
+              .max(20, "Please enter shorter role title")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
               <div className="col-span-4">

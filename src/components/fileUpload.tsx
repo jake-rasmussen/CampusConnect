@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import { api } from "~/utils/api";
 import FilePreview from "./filePreview";
 
 type PropType = {
@@ -9,10 +8,11 @@ type PropType = {
   readonly?: boolean;
   projectId: string;
   applicationId: string;
+  userId?: string;
 };
 
 const FileUpload = (props: PropType) => {
-  const { readonly, value, onChange, projectId, applicationId } = props;
+  const { readonly, value, onChange, projectId, applicationId, userId } = props;
 
   const [filename, setFilename] = useState<string>();
 
@@ -29,6 +29,7 @@ const FileUpload = (props: PropType) => {
           <FilePreview
             projectId={projectId}
             applicationId={applicationId}
+            userId={userId}
             filename={filename}
           />
         </>
@@ -47,7 +48,7 @@ const FileUpload = (props: PropType) => {
                 }
               }
             }}
-            accept=".jpg,.jpeg,.png"
+            accept=".jpg,.jpeg,.png,.pdf"
             disabled={readonly}
           />
           <label className="mr-8 block w-full cursor-pointer rounded-lg rounded-xl border bg-white p-3">

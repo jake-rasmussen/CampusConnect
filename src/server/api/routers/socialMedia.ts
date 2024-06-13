@@ -4,6 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const socialMediaRouter = createTRPCRouter({
+  // Admin-only procedure to update a project's social media
   updateSocialMediaById: t.procedure
     .input(
       z.object({
@@ -34,6 +35,7 @@ export const socialMediaRouter = createTRPCRouter({
 
       return socialMedia;
     }),
+  // Admin-only procedure to create a project's social media
   createSocialMedia: t.procedure
     .input(
       z.object({
@@ -61,6 +63,7 @@ export const socialMediaRouter = createTRPCRouter({
 
       return socialMedia;
     }),
+  // Admin-only procedure to delete a project's social media
   deleteSocialMediaById: t.procedure
     .input(
       z.object({
@@ -78,6 +81,7 @@ export const socialMediaRouter = createTRPCRouter({
       });
       return socialMedia;
     }),
+  // Admin-only procedure to get a project's social media
   getSocialMediaByProjectId: t.procedure
     .input(
       z.object({

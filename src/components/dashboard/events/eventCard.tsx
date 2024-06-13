@@ -12,12 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../shadcn_ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../shadcn_ui/tooltip";
 import EventCardEditor from "./eventCardEditor";
 
 type PropType = {
@@ -34,18 +28,9 @@ const EventCard = (props: PropType) => {
       <Card className="relative m-6 mb-0 w-full rounded-2xl bg-white shadow-xl">
         <div className="flex flex-col lg:flex-row">
           <div className="item flex h-auto w-full justify-center rounded-xl bg-primary shadow-2xl lg:w-48 lg:rounded-l-xl">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button className=" h-full w-40 p-4">
-                    <Calendar className="h-full w-full text-white transition duration-300 ease-in-out group-hover:scale-125" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent className="rounded-xl bg-white">
-                  <p>Add to Calendar</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <button className=" h-full w-40 p-4">
+              <Calendar className="h-full w-full text-white transition duration-300 ease-in-out group-hover:scale-125" />
+            </button>
           </div>
 
           <main className="grid w-full grid-cols-1 lg:grid-cols-5">

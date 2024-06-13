@@ -3,7 +3,7 @@ import {
   ApplicationQuestionType,
   ApplicationSubmissionAnswer,
 } from "@prisma/client";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import {
@@ -21,6 +21,7 @@ import { Textarea } from "../shadcn_ui/textarea";
 type PropType = {
   projectId: string;
   applicationId: string;
+  applicantId?: string;
   name: string;
   description: string;
   deadline?: Date;
@@ -52,6 +53,7 @@ const ApplicationForm = (props: PropType) => {
   const {
     projectId,
     applicationId,
+    applicantId,
     name,
     description,
     questions,
@@ -69,7 +71,7 @@ const ApplicationForm = (props: PropType) => {
   const [filesMap, setFilesMap] = useState<Map<string, File>>(new Map());
 
   useEffect(() => {
-    if (savedAnswers) {
+    if (savedAnswers && !isSaving) {
       savedAnswers.forEach((savedAnswer) => {
         const { answer } = savedAnswer.answer as { answer: string | string[] };
         setAnswersMap((prevAnswersMap) => {
@@ -89,12 +91,18 @@ const ApplicationForm = (props: PropType) => {
     answer: string | string[],
   ) => {
     if (questionId) {
-      const updatedMap = new Map(answersMap);
-      updatedMap.set(questionId, {
-        answer,
-        applicationQuestionId: questionId,
-      });
-      setAnswersMap(updatedMap);
+      if (answer.length > 0) {
+        const updatedMap = new Map(answersMap);
+        updatedMap.set(questionId, {
+          answer,
+          applicationQuestionId: questionId,
+        });
+        setAnswersMap(updatedMap);
+      } else {
+        const updatedMap = new Map(answersMap);
+        updatedMap.delete(questionId);
+        setAnswersMap(updatedMap);
+      }
     }
   };
 
@@ -227,6 +235,7 @@ const ApplicationForm = (props: PropType) => {
                       }
                     }}
                     projectId={projectId}
+                    userId={applicantId}
                     applicationId={applicationId}
                     readonly={readonly}
                   />

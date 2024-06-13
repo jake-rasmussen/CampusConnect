@@ -1,3 +1,4 @@
+import { ApplicationSubmissionComment } from "@prisma/client";
 import Error from "next/error";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -107,22 +108,38 @@ const EvaluateApplicationSubmission = () => {
   } else {
     return (
       <main className="flex w-full flex-col items-center pb-10">
+        <section className="fixed top-0 z-40 flex h-screen w-screen items-center justify-center bg-white md:hidden">
+          <span className="mx-8 text-center text-lg font-semibold uppercase">
+            Evaluator Mode Disabled on Mobile
+          </span>
+        </section>
+
         <Header
           name={"Evaluate Application"}
-          subtext={"Jake Rasmussen"}
+          subtext={
+            applicationSubmission.user.firstName +
+            " " +
+            applicationSubmission.user.lastName
+          }
           editable={false}
         />
         <section className="my-10 flex w-full justify-center">
           <div className="flex flex-row">
-            <ApplicationForm
-              projectId={projectId as string}
-              applicationId={applicationSubmission.applicationId}
-              questions={applicationSubmission.application.questions}
-              savedAnswers={applicationSubmission.applicationSubmissionAnswers}
-              readonly
-              name={""}
-              description={""}
-            />
+            <div className="min-w-[50vw]">
+              <ApplicationForm
+                projectId={projectId as string}
+                applicationId={applicationSubmission.applicationId}
+                applicantId={applicationSubmission.userId}
+                questions={applicationSubmission.application.questions}
+                savedAnswers={
+                  applicationSubmission.applicationSubmissionAnswers
+                }
+                readonly
+                name={""}
+                description={""}
+              />
+            </div>
+
             <Card className="m-8 h-fit w-[350px] bg-white">
               <CardHeader>
                 <CardTitle>Enter Comments</CardTitle>
@@ -154,19 +171,25 @@ const EvaluateApplicationSubmission = () => {
           </CardHeader>
           <CardContent>
             {applicationSubmissionEvaluation.comments.length > 0 ? (
-              <>
-                {applicationSubmissionEvaluation.comments.map((comment) => (
-                  <div>
-                    <h5 className="mb-2 w-full border-b border-black font-semibold uppercase">
-                      {comment.evaluatorName}{" "}
-                      <span className="text-primary">@</span>{" "}
-                      {dateToStringFormatted(comment.createdAt)},{" "}
-                      {dateToTimeStringFormatted(comment.createdAt)}
-                    </h5>
-                    {comment.comment}
-                  </div>
-                ))}
-              </>
+              <section className="flex flex-col gap-4">
+                {applicationSubmissionEvaluation.comments.map(
+                  (comment: ApplicationSubmissionComment, index: number) => (
+                    <div
+                      key={`${comment.evaluatorName}${comment.comment}${index}`}
+                    >
+                      <h5 className="mb-2 w-full border-b border-black font-semibold uppercase">
+                        {comment.evaluatorName}{" "}
+                        <span className="text-primary">@</span>{" "}
+                        {dateToStringFormatted(comment.createdAt)},{" "}
+                        {dateToTimeStringFormatted(comment.createdAt)}
+                      </h5>
+                      <pre className="overflow-x-auto whitespace-pre-wrap font-sans">
+                        {comment.comment}
+                      </pre>
+                    </div>
+                  ),
+                )}
+              </section>
             ) : (
               <>
                 <h5 className="mb-2 w-full border-b border-black text-center font-semibold uppercase">

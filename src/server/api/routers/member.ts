@@ -1,9 +1,33 @@
-import { ProjectMemberType } from "@prisma/client";
+import { clerkClient } from "@clerk/nextjs";
+import { Member, ProjectMemberType, User } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, isAdmin, t } from "../trpc";
 
+// A function to update a user's metadata, which stores information about which projects
+// the user has leadership roles in, by storing the project IDs
+const updateMetadata = async (user: User & { memberships: Member[] }) => {
+  const evaluatorProjectIds: string[] = [];
+  const adminProjectIds: string[] = [];
+
+  user.memberships.forEach((membership: Member) => {
+    if (membership.type === ProjectMemberType.ADMIN) {
+      adminProjectIds.push(membership.projectId);
+    } else if (membership.type === ProjectMemberType.EVALUATOR) {
+      evaluatorProjectIds.push(membership.projectId);
+    }
+  });
+
+  await clerkClient.users.updateUserMetadata(user.externalId, {
+    publicMetadata: {
+      evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
+      adminProjectIds: JSON.stringify(adminProjectIds),
+    },
+  });
+};
+
 export const memberRouter = createTRPCRouter({
+  // Admin-only procedure to create a member for a project
   createMember: t.procedure
     .input(
       z.object({
@@ -22,8 +46,20 @@ export const memberRouter = createTRPCRouter({
           type: ProjectMemberType.EVALUATOR,
         },
       });
+
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          userId,
+        },
+        include: {
+          memberships: true,
+        },
+      });
+      await updateMetadata(user!);
+
       return member;
     }),
+  // Admin-only procedure to delete a project member with its user ID
   deleteMember: t.procedure
     .input(
       z.object({
@@ -40,8 +76,20 @@ export const memberRouter = createTRPCRouter({
           projectId_userId: { projectId, userId },
         },
       });
+
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          userId,
+        },
+        include: {
+          memberships: true,
+        },
+      });
+      await updateMetadata(user!);
+
       return member;
     }),
+  // Admin-only procedure to update the user's role, with the provided role
   updateMember: t.procedure
     .input(
       z.object({
@@ -62,8 +110,20 @@ export const memberRouter = createTRPCRouter({
           type,
         },
       });
+
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          userId,
+        },
+        include: {
+          memberships: true,
+        },
+      });
+      await updateMetadata(user!);
+
       return member;
     }),
+  // Admin-only procedure to get all members with a specific project
   getAllMembersByProjectId: t.procedure
     .input(
       z.object({

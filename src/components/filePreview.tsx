@@ -15,26 +15,29 @@ import {
 type PropType = {
   projectId: string;
   applicationId: string;
+  userId?: string;
   filename: string;
 };
 
 const FilePreview = (props: PropType) => {
-  const { projectId, applicationId, filename } = props;
+  const { projectId, applicationId, userId, filename } = props;
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [url, setUrl] = useState<string>();
 
-  const getPresignedUrlGet = api.s3Router.getPresignedUrlGet.useMutation();
+  const getPresignedUrlGet =
+    api.supabaseRouter.createSignedUrlDownload.useMutation();
 
   useEffect(() => {
-    if (projectId && applicationId && filename) {
+    if (applicationId && filename) {
       const fetchFile = async () => {
         const url = await getPresignedUrlGet.mutateAsync({
-          projectId,
           applicationId,
+          userId,
           filename,
         });
-        setUrl(url);
+
+        if (typeof url === typeof "str") setUrl(url as string);
       };
 
       fetchFile();
@@ -58,19 +61,27 @@ const FilePreview = (props: PropType) => {
 
           <section
             className={twMerge(
-              "flex overflow-y-scroll border border-dashed rounded-xl p-2",
+              "flex overflow-y-scroll rounded-xl border border-dashed p-2",
               isLoading ? "hidden" : "",
             )}
           >
-            <img
-              src={url || ""}
-              onLoad={() => setIsLoading(false)}
-              width="0"
-              height="0"
-              sizes="100vw"
-              className="h-auto w-full"
-              alt={filename}
-            />
+            {filename.slice(-4).toLowerCase() === ".pdf" ? (
+              <iframe
+                src={url || ""}
+                onLoad={() => setIsLoading(false)}
+                className="min-h-[75vh] w-full"
+              />
+            ) : (
+              <img
+                src={url || ""}
+                onLoad={() => setIsLoading(false)}
+                width="0"
+                height="0"
+                sizes="100vw"
+                className="h-auto w-full"
+                alt={filename}
+              />
+            )}
           </section>
         </DialogContent>
       </Dialog>

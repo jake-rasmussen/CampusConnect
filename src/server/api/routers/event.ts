@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 export const eventRouter = createTRPCRouter({
+  // Admin-only procedure to get all events for a project, with the project ID
   getEventsByProjectId: t.procedure
     .input(
       z.object({
@@ -20,6 +21,7 @@ export const eventRouter = createTRPCRouter({
 
       return events;
     }),
+  // Admin-only procedure to update an event by its ID
   updateEventById: t.procedure
     .input(
       z.object({
@@ -52,6 +54,7 @@ export const eventRouter = createTRPCRouter({
 
       return event;
     }),
+  // Admin-only procedure to create an event
   createEvent: t.procedure
     .input(
       z.object({
@@ -82,6 +85,7 @@ export const eventRouter = createTRPCRouter({
 
       return event;
     }),
+  // Admin-only procedure to delete and event by its ID
   deleteEventById: t.procedure
     .input(
       z.object({

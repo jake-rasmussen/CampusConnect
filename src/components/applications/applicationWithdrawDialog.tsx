@@ -1,6 +1,6 @@
-import { DialogClose } from "@radix-ui/react-dialog";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import toast from "react-hot-toast";
-import { LicenseOff, Trash, TrashX } from "tabler-icons-react";
+import { LicenseOff } from "tabler-icons-react";
 
 import Button from "~/components/button";
 import {
@@ -13,8 +13,10 @@ import {
   DialogTrigger,
 } from "~/components/shadcn_ui/dialog";
 import { api } from "~/utils/api";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../shadcn_ui/tooltip";
 
 type PropType = {
+  projectId: string;
   applicationId: string;
   applicationSubmissionId: string;
   openDialog: boolean;
@@ -22,10 +24,18 @@ type PropType = {
 };
 
 const ApplicationWithdrawDialog = (props: PropType) => {
-  const { applicationId, applicationSubmissionId, openDialog, setOpenDialog } =
-    props;
+  const {
+    projectId,
+    applicationId,
+    applicationSubmissionId,
+    openDialog,
+    setOpenDialog,
+  } = props;
 
   const queryClient = api.useContext();
+
+  const clearSupabaseFolder =
+    api.supabaseRouter.clearSupabaseFolder.useMutation({});
 
   const withdrawApplicationSubmission =
     api.applicationSubmissionRouter.withdrawApplicationSubmission.useMutation({
@@ -44,7 +54,16 @@ const ApplicationWithdrawDialog = (props: PropType) => {
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
         <div className="absolute right-0 top-0 -translate-x-px translate-y-px">
-          <LicenseOff className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:rotate-12 hover:text-red-500" />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <LicenseOff className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:rotate-12 hover:text-red-500" />
+              </TooltipTrigger>
+              <TooltipContent className="bg-white">
+                <p>Withdraw Application?</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </DialogTrigger>
       <DialogContent>
@@ -59,14 +78,20 @@ const ApplicationWithdrawDialog = (props: PropType) => {
         </DialogHeader>
         <DialogFooter>
           <Button
-            onClickFn={() => {
+            onClickFn={async () => {
+              setOpenDialog(false);
+
+              toast.dismiss();
+              toast.loading("Withdrawing Application...");
+
+              await clearSupabaseFolder.mutateAsync({
+                applicationId,
+              });
+
               withdrawApplicationSubmission.mutate({
                 applicationSubmissionId,
                 applicationId,
               });
-              setOpenDialog(false);
-              toast.dismiss();
-              toast.loading("Withdrawing Application...");
             }}
           >
             Yes, I'm Sure

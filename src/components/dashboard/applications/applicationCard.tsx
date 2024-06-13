@@ -7,9 +7,8 @@ import {
 } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
-import { Check, Edit, Eye } from "tabler-icons-react";
+import { Check, Edit, Eye, ListCheck } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
 import ApplicationForm from "~/components/applications/applicationForm";
@@ -17,6 +16,12 @@ import ApplicationWithdrawDialog from "~/components/applications/applicationWith
 import ApplicationDeleteDialog from "~/components/applications/editor/applicationDeleteDialog";
 import PreviewDialog from "~/components/previewDialog";
 import { Separator } from "~/components/shadcn_ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/shadcn_ui/tooltip";
 import { DATE_TIME_FORMAT_OPTS } from "~/constants";
 import {
   Card,
@@ -31,7 +36,7 @@ type PropType = {
   application: Application & {
     questions: ApplicationQuestion[];
   };
-  projectId: string | null;
+  projectId: string;
   editable: boolean;
   previewable?: boolean;
   savedAnswers?: ApplicationSubmissionAnswer[];
@@ -97,12 +102,12 @@ const ApplicationCard = (props: PropType) => {
               </div>
             }
             dialogTitle="Application Preview"
-            dialogDescription="Preview the Application"
+            dialogDescription="Preview Your Submitted Application"
             openDialog={openPreviewDialog}
             setOpenDialog={setOpenPreviewDialog}
           >
             <ApplicationForm
-              projectId={projectId as string}
+              projectId={projectId}
               applicationId={application.id}
               questions={application.questions}
               savedAnswers={savedAnswers}
@@ -126,8 +131,10 @@ const ApplicationCard = (props: PropType) => {
 
         <div className="opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100">
           {applicationSubmissionId &&
-            status === ApplicationSubmissionStatus.SUBMITTED && (
+            (status === ApplicationSubmissionStatus.SUBMITTED ||
+              status === ApplicationSubmissionStatus.DRAFT) && (
               <ApplicationWithdrawDialog
+                projectId={projectId || "UNAUTHORIZED"}
                 applicationId={application.id}
                 openDialog={openDeleteDialog}
                 setOpenDialog={setOpenDeleteDialog}
@@ -157,6 +164,7 @@ const ApplicationCard = (props: PropType) => {
           )}
         </div>
       </CardContent>
+
       <CardFooter className="flex grow items-end justify-end">
         <div className="flex w-full justify-end">
           {status === ApplicationSubmissionStatus.NEW &&
@@ -180,6 +188,23 @@ const ApplicationCard = (props: PropType) => {
             </p>
           )}
         </div>
+
+        {editable && application.status !== ApplicationStatus.DRAFT && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-8 transform">
+                <Link href={`/evaluator/${projectId}`}>
+                  <div className="border-1 z-30 rounded-full border border-black bg-white">
+                    <ListCheck className="h-14 w-14 p-2 text-primary transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500" />
+                  </div>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent className="bg-white">
+                <p>Evaluate Submissions</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </CardFooter>
     </Card>
   );
