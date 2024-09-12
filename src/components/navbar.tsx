@@ -72,7 +72,8 @@ const Navbar = (props: PropType) => {
               onClick={() => setMenuIsOpen(false)}
             >
               <Image
-                src={"/assets/SWEC Logo.png"}
+                priority
+                src={"/assets/SWEC Logo.svg"}
                 alt={"SWEC Logo"}
                 width="0"
                 height="0"
