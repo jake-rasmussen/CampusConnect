@@ -25,6 +25,7 @@ const Home = () => {
         <div className="container flex flex-col items-center justify-center gap-y-8">
           <section className="flex min-h-[93vh] w-full flex-col items-center justify-center gap-y-8">
             <Image
+              priority
               src={"/assets/SWEC Logo.svg"}
               alt={"SWEC Logo"}
               width="0"
