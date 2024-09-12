@@ -61,6 +61,9 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
     where: {
       externalId: userId,
     },
+    include: {
+      memberships: true,
+    }
   });
 
   return {
