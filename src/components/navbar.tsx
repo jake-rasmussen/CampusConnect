@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Menu2, X } from "tabler-icons-react";
+import { Badge } from "./shadcn_ui/badge";
 
 type PropType = {
   isLoading: boolean;
@@ -67,7 +68,7 @@ const Navbar = (props: PropType) => {
           <div className="mx-auto flex h-16 items-center">
             <Link
               href="/"
-              className="mx-4 h-10 w-10 lg:h-16 lg:w-16"
+              className="mx-4 h-10 w-10 lg:h-16 lg:w-16 relative"
               onClick={() => setMenuIsOpen(false)}
             >
               <Image
@@ -78,6 +79,7 @@ const Navbar = (props: PropType) => {
                 sizes="100vw"
                 className="h-auto w-full"
               />
+              <Badge className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-white">Beta</Badge>
             </Link>
             <ul className="hidden grow items-stretch space-x-3 lg:flex">
               {menu}
