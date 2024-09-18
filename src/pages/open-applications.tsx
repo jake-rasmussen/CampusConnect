@@ -1,4 +1,7 @@
+import { Input } from "@nextui-org/input";
+import { Select, SelectItem } from "@nextui-org/react";
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
+import { capitalize } from "lodash";
 import Error from "next/error";
 import { useEffect, useState } from "react";
 import { LicenseOff } from "tabler-icons-react";
@@ -21,6 +24,7 @@ const OpenApplications = () => {
   >([]);
   const [skills, setSkills] = useState<string[]>([]);
   const [filteredSkills, setFilteredSkills] = useState<string[]>([]);
+  const [query, setQuery] = useState<string>("");
 
   const {
     data: openApplications,
@@ -84,68 +88,56 @@ const OpenApplications = () => {
   } else {
     return (
       <main className="w-full">
-        <Header
-          name="Open Applications"
-          subtext="Check out projects that are hiring!"
-          editable={false}
-        />
-        <section className="py-10">
-          <div className="ml-4 flex flex-col items-center text-center">
-            {skills.length > 0 && (
-              <div className="max-w-3xl pb-8">
-                <div className="mx-auto max-w-xs">
-                  <h3 className="text-xl font-semibold uppercase text-black">
-                    Filter
-                  </h3>
-                  <Separator
-                    orientation="horizontal"
-                    className="my-4 w-full bg-secondary"
-                  />
-                </div>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {skills.map((skill: string, index: number) => (
-                    <Badge
-                      className={twMerge(
-                        "h-[2rem] bg-secondary capitalize text-white shadow-xl transition duration-300 hover:cursor-pointer hover:text-white",
-                        !filteredSkills.includes(skill) &&
-                          "border border-primary bg-white text-primary",
-                      )}
-                      onClick={() => {
-                        const updatedFilteredSkills = filteredSkills;
-                        if (!filteredSkills.includes(skill)) {
-                          updatedFilteredSkills.push(skill);
-                        } else {
-                          const index = updatedFilteredSkills.indexOf(skill);
-                          updatedFilteredSkills.splice(index, 1);
-                        }
-                        setFilteredSkills([...updatedFilteredSkills]);
-                      }}
-                      key={`skillBadge${index}`}
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
+        <section className="mb-14 mt-20">
+          <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
+            Open Applications
+          </h1>
+        </section>
+
+        <section className="m-10">
+          <div className="mx-auto my-10 flex items-center text-center max-w-4xl">
+            <Input
+              label="Search Open Applications"
+              variant="underlined"
+              value={query}
+              onChange={(e) => setQuery(e.currentTarget.value)}
+            />
+            <Select
+              label="Select Skills"
+              selectionMode="multiple"
+              className="max-w-xs"
+              variant="underlined"
+              onChange={(e) => {
+                const selectedSkills = e.target.value.split(",").filter(skill => skill !== "");
+                if (selectedSkills.length === 0) {
+                  setFilteredSkills([...skills])
+                } else {
+                  setFilteredSkills([...selectedSkills]);
+                }
+
+              }}
+            >
+              {skills.map((skill: string) => (
+                <SelectItem key={skill} onSelectCapture={(skill) => console.log("SELECTED", skill)}>
+                  {capitalize(skill)}
+                </SelectItem>
+              ))}
+            </Select>
           </div>
           <div className="flex w-full items-center justify-center">
             {applications.length > 0 ? (
               <div className="flex max-w-7xl flex-wrap justify-center">
-                <>
-                  {applications.map((application, index) => (
-                    <div key={`application${index}`}>
-                      {(filteredSkills.length === 0 ||
-                        (filteredSkills.length > 0 &&
-                          skillInFilter(application))) && (
-                        <ApplicationPreviewCard
-                          application={application}
-                          projectId={application.projectId}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </>
+                {applications.filter(application => (
+                  skillInFilter(application) ||
+                  application.name.toLowerCase().includes(query.toLowerCase())
+                )).map((application, index) => (
+                  <div key={`application${index}`}>
+                    <ApplicationPreviewCard
+                      application={application}
+                      projectId={application.projectId}
+                    />
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">

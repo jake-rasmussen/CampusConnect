@@ -17,6 +17,7 @@ import Navbar from "~/components/navbar";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import type { ReactElement, ReactNode } from "react";
+import { NextUIProvider } from "@nextui-org/react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -34,19 +35,21 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <main className="min-h-screen w-screen overflow-y-hidden bg-background">
       <ClerkProvider {...pageProps}>
-        <SignedIn>
-          <Navbar isLoading={isLoading} setIsLoading={setIsLoading} />
-        </SignedIn>
-        <Toaster />
-        {isLoading ? (
-          <LoadingPage />
-        ) : (
-          <DndProvider backend={HTML5Backend}>
-            {getLayout(<Component {...pageProps} />)}
-          </DndProvider>
-        )}
+        <NextUIProvider>
+          <SignedIn>
+            <Navbar isLoading={isLoading} setIsLoading={setIsLoading} />
+          </SignedIn>
+          <Toaster />
+          {isLoading ? (
+            <LoadingPage />
+          ) : (
+            <DndProvider backend={HTML5Backend}>
+              {getLayout(<Component {...pageProps} />)}
+            </DndProvider>
+          )}
+        </NextUIProvider>
       </ClerkProvider>
-    </main>
+    </main >
   );
 }
 

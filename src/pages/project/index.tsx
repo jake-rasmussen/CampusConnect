@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import ProjectCard from "~/components/allProjects/projectCard";
 import LoadingPage from "~/components/loadingPage";
-import { Input } from "~/components/shadcn_ui/input";
+import { Input } from "@nextui-org/input";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
@@ -39,12 +39,13 @@ const AllProjects: NextPageWithLayout = () => {
 
         <section className="w-full max-w-2xl px-4">
           <Input
-            className="rounded-none border-x-0 border-b-2 border-t-0 border-secondary bg-transparent focus-visible:ring-0"
-            placeholder={"Search"}
+            label="Search Projects"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
             }}
+            variant="underlined"
+            color="primary"
           />
         </section>
 
