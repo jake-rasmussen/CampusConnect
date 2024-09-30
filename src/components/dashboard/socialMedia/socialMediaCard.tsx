@@ -8,7 +8,7 @@ import {
   WorldWww,
 } from "tabler-icons-react";
 
-import SocialMediaCardEditor from "./socialMediaCardEditor";
+import SocialMediaEditor from "./socialMediaEditor";
 
 import type { SocialMedia } from "@prisma/client";
 
@@ -44,7 +44,7 @@ const SocialMediaCard = (props: PropType) => {
         </Link>
 
         {editable && (
-          <SocialMediaCardEditor
+          <SocialMediaEditor
             url={socialMedia.url}
             platform={socialMedia.platform}
             socialMediaId={socialMedia.id}

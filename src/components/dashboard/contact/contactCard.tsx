@@ -1,7 +1,7 @@
 import { ContactInfo } from "@prisma/client";
 
-import { Badge } from "../../shadcn_ui/badge";
-import ContactCardEditor from "./contactCardEditor";
+import { Chip } from "@nextui-org/react";
+import ContactEditor from "./contactEditor";
 
 type PropType = {
   contactInfo: ContactInfo;
@@ -14,10 +14,10 @@ const ContactCard = (props: PropType) => {
 
   return (
     <>
-      <div className="relative my-6 h-[10rem] w-[20rem] overscroll-none rounded-xl border border-solid bg-white shadow-xl">
-        <Badge className="absolute right-0 ml-4 h-[2rem] translate-x-[-1rem] translate-y-[-0.75rem] bg-secondary text-white shadow-xl">
+      <div className="relative my-6 h-[10rem] w-[20rem] overscroll-none rounded-xl bg-white shadow-xl">
+        <Chip className="absolute right-0 ml-4 h-[2rem] translate-x-[-1rem] translate-y-[-0.75rem] bg-secondary text-white shadow-xl">
           {contactInfo.role}
-        </Badge>
+        </Chip>
         <div className="flex h-full flex-row items-center pl-1 pr-4">
           <div>
             <div className="rounded-t-full border-b-[4.5rem] border-r-[2.5rem] border-solid border-b-secondary border-r-transparent" />
@@ -33,7 +33,7 @@ const ContactCard = (props: PropType) => {
         </div>
 
         {editable && (
-          <ContactCardEditor
+          <ContactEditor
             firstName={contactInfo.firstName}
             lastName={contactInfo.lastName}
             email={contactInfo.email}

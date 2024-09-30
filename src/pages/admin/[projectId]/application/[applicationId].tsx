@@ -121,24 +121,16 @@ const EditApplication = () => {
           </span>
         </section>
 
-        <HeaderOutline>
-          <h2 className="font-sans text-5xl font-bold tracking-tight text-white sm:text-7xl sm:leading-none">
-            Application Builder
-          </h2>
-        </HeaderOutline>
-
-        <main className="py-10">
-          <div className="mx-20">
-            <ApplicationEditForm
-              applicationId={applicationId}
-              projectId={projectId}
-              name={application.name}
-              description={application.description}
-              savedQuestions={application.questions}
-              saveApplication={saveApplication}
-              publishApplication={publishApplication}
-            />
-          </div>
+        <main className="py-20">
+          <ApplicationEditForm
+            applicationId={applicationId}
+            projectId={projectId}
+            name={application.name}
+            description={application.description}
+            savedQuestions={application.questions}
+            saveApplication={saveApplication}
+            publishApplication={publishApplication}
+          />
         </main>
       </>
     );

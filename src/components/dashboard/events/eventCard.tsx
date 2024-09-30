@@ -5,14 +5,8 @@ import {
   dateAndTimeToStringFormatted,
   dateToTimeStringFormatted,
 } from "~/utils/helpers";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../shadcn_ui/card";
-import EventCardEditor from "./eventCardEditor";
+import EventEditor from "./eventEditor";
+import { Card, CardBody, CardFooter, CardHeader, Divider } from "@nextui-org/react";
 
 type PropType = {
   projectId: string;
@@ -33,32 +27,21 @@ const EventCard = (props: PropType) => {
             </button>
           </div>
 
-          <main className="grid w-full grid-cols-1 lg:grid-cols-5">
-            <section className="col-span-2">
-              <CardHeader>
-                <CardTitle className="text-xl capitalize">
-                  {event.name}
-                </CardTitle>
-                <CardDescription className="text-gray">
-                  {dateAndTimeToStringFormatted(event.start)} to{" "}
-                  {dateToTimeStringFormatted(event.end)}
-                </CardDescription>
+          <main className="w-[50vw] ml-4">
+            <section>
+              <CardHeader className="text-xl flex flex-col items-start">
+                <h1 className="text-2xl font-black">{event.name}</h1>
+                <span className="text-gray text-sm">
+                  {dateAndTimeToStringFormatted(event.start)} to {dateToTimeStringFormatted(event.end)}
+                </span>
               </CardHeader>
-              <CardContent>
-                {editable ? (
-                  <EventCardEditor
-                    eventName={event.name}
-                    eventDescription={event.description}
-                    eventLocation={event.location}
-                    eventInPerson={event.inPerson}
-                    eventStart={event.start}
-                    eventEnd={event.end}
-                    eventId={event.id}
-                    projectId={projectId}
-                  />
-                ) : (
-                  <></>
-                )}
+              <CardBody className="flex flex-col items-start">
+                <div>
+                  {event.description}
+                </div>
+              </CardBody>
+              <Divider />
+              <CardFooter>
                 <div>
                   {event.inPerson ? (
                     <p>
@@ -77,18 +60,25 @@ const EventCard = (props: PropType) => {
                     </p>
                   )}
                 </div>
-              </CardContent>
-            </section>
-            <section className="col-span-3">
-              <CardHeader>
-                <CardTitle className="text-xl">Event Description</CardTitle>
-              </CardHeader>
-              <CardContent className="max-w-xl">
-                <p>{event.description}</p>
-              </CardContent>
+              </CardFooter>
             </section>
           </main>
         </div>
+
+        {editable ? (
+          <EventEditor
+            eventName={event.name}
+            eventDescription={event.description}
+            eventLocation={event.location}
+            eventInPerson={event.inPerson}
+            eventStart={event.start}
+            eventEnd={event.end}
+            eventId={event.id}
+            projectId={projectId}
+          />
+        ) : (
+          <></>
+        )}
       </Card>
     </>
   );

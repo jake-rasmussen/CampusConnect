@@ -1,26 +1,21 @@
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import toast from "react-hot-toast";
 import { LicenseOff } from "tabler-icons-react";
 
-import Button from "~/components/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "~/components/shadcn_ui/dialog";
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody
+} from "@nextui-org/modal";
+
 import { api } from "~/utils/api";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../shadcn_ui/tooltip";
+import { Button, useDisclosure } from "@nextui-org/react";
 
 type PropType = {
   projectId: string;
   applicationId: string;
   applicationSubmissionId: string;
-  openDialog: boolean;
-  setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ApplicationWithdrawDialog = (props: PropType) => {
@@ -28,8 +23,6 @@ const ApplicationWithdrawDialog = (props: PropType) => {
     projectId,
     applicationId,
     applicationSubmissionId,
-    openDialog,
-    setOpenDialog,
   } = props;
 
   const queryClient = api.useContext();
@@ -50,55 +43,55 @@ const ApplicationWithdrawDialog = (props: PropType) => {
       },
     });
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-      <DialogTrigger asChild>
-        <div className="absolute right-0 top-0 -translate-x-px translate-y-px">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <LicenseOff className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:rotate-12 hover:text-red-500" />
-              </TooltipTrigger>
-              <TooltipContent className="bg-white">
-                <p>Withdraw Application?</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            Are you sure you want to withdraw this application?
-          </DialogTitle>
-          <DialogDescription>
-            Please note, once this applicaiton is withdrawn, this action cannot
-            be undone. Access to the submission will be lost!
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button
-            onClickFn={async () => {
-              setOpenDialog(false);
+    <>
+      <div
+        className="absolute right-0 top-0 -translate-x-px translate-y-px"
+        onClick={onOpen}
+      >
+        <LicenseOff className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:rotate-12 hover:text-red-500" />
+      </div>
 
-              toast.dismiss();
-              toast.loading("Withdrawing Application...");
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="font-sans">
+                Are you sure you want to withdraw this application?
+              </ModalHeader>
+              <ModalBody>
+                Please note, once this applicaiton is withdrawn, this action cannot
+                be undone. Access to the submission will be lost!
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button color="primary" onPress={async () => {
+                  onClose();
 
-              await clearSupabaseFolder.mutateAsync({
-                applicationId,
-              });
+                  toast.dismiss();
+                  toast.loading("Withdrawing Application...");
 
-              withdrawApplicationSubmission.mutate({
-                applicationSubmissionId,
-                applicationId,
-              });
-            }}
-          >
-            Yes, I'm Sure
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+                  await clearSupabaseFolder.mutateAsync({
+                    applicationId,
+                  });
+
+                  withdrawApplicationSubmission.mutate({
+                    applicationSubmissionId,
+                    applicationId,
+                  });
+                }}>
+                  Confirm
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

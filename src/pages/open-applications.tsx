@@ -5,13 +5,8 @@ import { capitalize } from "lodash";
 import Error from "next/error";
 import { useEffect, useState } from "react";
 import { LicenseOff } from "tabler-icons-react";
-import { twMerge } from "tailwind-merge";
-
 import ApplicationPreviewCard from "~/components/applications/applicationPreviewCard";
-import Header from "~/components/dashboard/header/header";
 import LoadingPage from "~/components/loadingPage";
-import { Badge } from "~/components/shadcn_ui/badge";
-import { Separator } from "~/components/shadcn_ui/separator";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
@@ -88,7 +83,7 @@ const OpenApplications = () => {
   } else {
     return (
       <main className="w-full">
-        <section className="mb-14 mt-20">
+        <section className="mb-14 mt-28">
           <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
             Open Applications
           </h1>
@@ -131,12 +126,11 @@ const OpenApplications = () => {
                   skillInFilter(application) ||
                   application.name.toLowerCase().includes(query.toLowerCase())
                 )).map((application, index) => (
-                  <div key={`application${index}`}>
-                    <ApplicationPreviewCard
-                      application={application}
-                      projectId={application.projectId}
-                    />
-                  </div>
+                  <ApplicationPreviewCard
+                    application={application}
+                    projectId={application.projectId}
+                    key={`application${index}`}
+                  />
                 ))}
               </div>
             ) : (

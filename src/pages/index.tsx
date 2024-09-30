@@ -1,6 +1,8 @@
 import { SignInButton, useUser } from "@clerk/nextjs";
-import { FlipWords } from "~/components/aceternity_ui/flip-words";
-import { WavyBackground } from "~/components/aceternity_ui/wavy-background";
+import { motion } from "framer-motion";
+import { AuroraBackground } from "~/components/aceternity-ui/aurora-background";
+import { FlipWords } from "~/components/aceternity-ui/flip-words";
+import { WavyBackground } from "~/components/aceternity-ui/wavy-background";
 
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
@@ -12,24 +14,25 @@ const Home = () => {
     return <LoadingPage />;
   } else {
     return (
-      <section className="flex items-center justify-center h-full w-full bg-[#FFF7E9]">
-        <WavyBackground
-          backgroundFill="#FFF7E9"
-          colors={["#5F9DF7", "#1746A2"]}
-          waveWidth={100}
-        />
-        <div className="absolute flex flex-col justify-center items-center text-[#FFF7E9]">
-          <h1 className="text-9xl font-semibold text-black">
-            CampusConnect
-          </h1>
-
-          <div className="flex justify-center items-center px-4 my-20">
-            <div className="text-4xl mx-auto font-normal text-black">
-              Start building your <FlipWords words={["Project", "Network", "Startup", "Community"]} className="text-[#FF731D] w-[10rem]" /> <br />
-            </div>
+      <AuroraBackground className="bg-black">
+        <motion.div
+          initial={{ opacity: 0.0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="relative flex flex-col gap-4 items-center justify-center px-4"
+        >
+          <div className="text-4xl mx-auto font-normal text-white">
+            Start building your <FlipWords words={["Project", "Network", "Startup", "Community"]} className="text-[#FF731D] w-[10rem]" /> <br />
           </div>
-        </div>
-      </section>
+          <div className="text-9xl font-bold text-white text-center">
+            CampusConnect
+          </div>
+        </motion.div>
+      </AuroraBackground >
     );
   }
 };

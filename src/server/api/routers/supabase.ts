@@ -16,14 +16,14 @@ export const supabaseRouter = createTRPCRouter({
       const { applicationId } = input;
 
       const { data: fileList } = await supabase.storage
-        .from("swec-bucket") // The bucket name, be sure to update if that should ever change
+        .from("bucket") // The bucket name, be sure to update if that should ever change
         .list(`${applicationId}/${ctx.user.userId}`);
 
       if (fileList && fileList.length > 0) {
         const filesToRemove = fileList.map(
           (x) => `${applicationId}/${ctx.user.userId}/${x.name}`,
         );
-        await supabase.storage.from("swec-bucket").remove(filesToRemove);
+        await supabase.storage.from("bucket").remove(filesToRemove);
       }
     }),
   // Procedure to get the supabase folder for the current user
@@ -37,7 +37,7 @@ export const supabaseRouter = createTRPCRouter({
       const { applicationId } = input;
 
       const { data } = await supabase.storage
-        .from("swec-bucket")
+        .from("bucket")
         .list(`${applicationId}/${ctx.user.userId}`);
 
       if (data) {
@@ -59,7 +59,7 @@ export const supabaseRouter = createTRPCRouter({
       const { applicationId, filename } = input;
 
       const { data, error } = await supabase.storage
-        .from("swec-bucket")
+        .from("bucket")
         .createSignedUploadUrl(
           `${applicationId}/${ctx.user.userId}/${filename}`,
         );
@@ -84,7 +84,7 @@ export const supabaseRouter = createTRPCRouter({
       }
 
       const { data, error } = await supabase.storage
-        .from("swec-bucket")
+        .from("bucket")
         .createSignedUrl(`${applicationId}/${updatedUserId}/${filename}`, 60, {
           download: !filename.includes(".pdf"),
         });

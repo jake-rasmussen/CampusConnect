@@ -18,12 +18,17 @@ const updateMetadata = async (user: User & { memberships: Member[] }) => {
     }
   });
 
-  await clerkClient.users.updateUserMetadata(user.externalId, {
-    publicMetadata: {
-      evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
-      adminProjectIds: JSON.stringify(adminProjectIds),
-    },
-  });
+  try {
+    await clerkClient.users.updateUserMetadata(user.externalId, {
+      publicMetadata: {
+        evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
+        adminProjectIds: JSON.stringify(adminProjectIds),
+      },
+    });
+  } catch (error) {
+    console.error("Error updating Clerk metadata:", error);
+    throw new Error("Failed to update user metadata");
+  }
 };
 
 export const memberRouter = createTRPCRouter({
@@ -55,7 +60,12 @@ export const memberRouter = createTRPCRouter({
           memberships: true,
         },
       });
-      await updateMetadata(user!);
+
+      if (user) {
+        try {
+          await updateMetadata(user);
+        } catch (_) { }
+      }
 
       return member;
     }),
@@ -85,7 +95,13 @@ export const memberRouter = createTRPCRouter({
           memberships: true,
         },
       });
-      await updateMetadata(user!);
+
+      if (user) {
+        try {
+          await updateMetadata(user);
+        } catch (_) { }
+      }
+
 
       return member;
     }),
@@ -119,7 +135,13 @@ export const memberRouter = createTRPCRouter({
           memberships: true,
         },
       });
-      await updateMetadata(user!);
+
+      if (user) {
+        try {
+          await updateMetadata(user);
+        } catch (_) { }
+      }
+
 
       return member;
     }),

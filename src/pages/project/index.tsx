@@ -31,7 +31,7 @@ const AllProjects: NextPageWithLayout = () => {
   } else {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center ">
-        <section className="mb-14 mt-20">
+        <section className="mb-14 mt-28">
           <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
             All Projects
           </h1>
@@ -45,7 +45,6 @@ const AllProjects: NextPageWithLayout = () => {
               setQuery(e.target.value);
             }}
             variant="underlined"
-            color="primary"
           />
         </section>
 

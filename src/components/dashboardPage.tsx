@@ -1,14 +1,9 @@
 import "@prisma/client";
 
-import router from "next/router";
-import toast from "react-hot-toast";
-import { Trash } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
-import { api } from "~/utils/api";
 import Applications from "./dashboard/applications/applications";
 import ContactSection from "./dashboard/contact/contactSection";
-import DeleteProjectDialog from "./dashboard/deleteProjectDialog";
 import DescriptionSection from "./dashboard/description/descriptionSection";
 import Events from "./dashboard/events/events";
 import Header from "./dashboard/header/header";
@@ -28,6 +23,7 @@ import type {
   SocialMedia,
   User,
 } from "@prisma/client";
+import AdminSettings from "./adminSettings";
 
 type PropType = {
   name: string;
@@ -102,7 +98,7 @@ const DashboardPage = (props: PropType) => {
                   editable={isAdminPage}
                 />
               )}
-              {projectId === "swec" && (isAdminPage || events.length > 0) && (
+              {(isAdminPage || events.length > 0) && (
                 <Events
                   events={events}
                   projectId={projectId}
@@ -132,7 +128,8 @@ const DashboardPage = (props: PropType) => {
 
           <>
             {isAdminPage && (
-              <DeleteProjectDialog projectId={projectId} projectName={name} />
+              // <DeleteProjectEditor projectId={projectId} projectName={name} />
+              <AdminSettings />
             )}
           </>
         </Tab>

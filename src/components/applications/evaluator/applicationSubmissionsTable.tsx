@@ -1,15 +1,6 @@
+import { Card, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
 import { User } from "@prisma/client";
 import Link from "next/link";
-
-import { Card } from "~/components/shadcn_ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/shadcn_ui/table";
 
 type PropType = {
   projectId: string;
@@ -29,20 +20,17 @@ const ApplicationSubmissionsTable = (props: PropType) => {
   });
 
   return (
-    <Card className="mx-4 border border-black bg-white">
-      <Table className="rounded-2xl border-none">
+    <Card className="mx-4">
+      <Table className="rounded-2xl">
         <TableHeader>
-          <TableRow>
-            <TableHead>Candidate Name</TableHead>
-            <TableHead>Application ID</TableHead>
-            {/* <TableHead>Evaluated?</TableHead> */}
-          </TableRow>
+          <TableColumn>Candidate Name</TableColumn>
+          <TableColumn>Application ID</TableColumn>
         </TableHeader>
 
         <TableBody>
           {sortedApplicationSubmissions.map(
             (applicationSubmission, index: number) => (
-              <TableRow className="border-none" key={`submissionRow${index}`}>
+              <TableRow key={`submissionRow${index}`}>
                 <TableCell className="font-medium text-primary underline">
                   <Link
                     href={`/evaluator/${projectId}/evaluate/${applicationSubmission.id}`}

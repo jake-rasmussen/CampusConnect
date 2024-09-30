@@ -26,7 +26,7 @@ export default {
         orange: "FF731D",
         gray: "#9CA3AF",
         black: "#1F1F1F",
-        background: "#FFF7E9"
+        background: "#EEEEEE"
       },
       keyframes: {
         "accordion-down": {
@@ -51,12 +51,21 @@ export default {
           "0%, 100%": { borderWidth: "2px", borderColor: "rgba(0, 0, 0, 0.5)" },
           "50%": { borderWidth: "4px", borderColor: "rgba(0, 0, 0, 1)" },
         },
+        "aurora": {
+          from: {
+            backgroundPosition: "50% 50%, 50% 50%",
+          },
+          to: {
+            backgroundPosition: "350% 50%, 350% 50%",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "spotlight": "spotlight 2s ease .75s 1 forwards",
-        "pulse-border": 'pulse-border 1s infinite',
+        "pulse-border": "pulse-border 1s infinite",
+        "aurora": "aurora 60s linear infinite",
       },
     },
   },

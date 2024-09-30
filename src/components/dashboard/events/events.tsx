@@ -1,8 +1,8 @@
 import { Event } from "@prisma/client";
 
 import EventCard from "./eventCard";
-import EventsEditor from "./eventsEditor";
 import EventsOutline from "./eventsOutline";
+import EventEditor from "./eventEditor";
 
 type PropType = {
   events: Event[];
@@ -29,7 +29,7 @@ const Events = (props: PropType) => {
           })}
         </>
       </EventsOutline>
-      {editable && <EventsEditor projectId={projectId} />}
+      {editable && <EventEditor projectId={projectId} />}
     </section>
   );
 };
