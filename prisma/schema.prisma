@@ -70,6 +70,8 @@ model Project {
   updatedAt    DateTime      @updatedAt
   events       Event[]
   contactInfo  ContactInfo[]
+  colorsId     String
+  colors       Colors        @relation(fields: [colorsId], references: [id])
 }
 
 model Member {
@@ -187,4 +189,11 @@ model ApplicationSubmissionComment {
   applicationSubmissionEvaluationId String?
   createdAt                         DateTime                         @default(now())
   updatedAt                         DateTime                         @updatedAt
+}
+
+model Colors {
+  id             String    @id @default(cuid())
+  primaryColor   String
+  secondaryColor String
+  project        Project[]
 }

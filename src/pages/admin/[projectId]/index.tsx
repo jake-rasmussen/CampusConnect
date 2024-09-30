@@ -2,7 +2,7 @@ import Error from "next/error";
 import { useRouter } from "next/router";
 import React from "react";
 
-import DashboardPage from "~/components/dashboardPage";
+import ProjectDashboard from "~/components/dashboard/dashboardPage";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
@@ -77,13 +77,25 @@ const AdminDashboardPage = () => {
     { enabled: !!projectId },
   );
 
+  const {
+    data: colors,
+    isLoading: isLoadingColors,
+    isError: isErrorColors,
+  } = api.colorsRouter.getColorsByProjectId.useQuery(
+    {
+      projectId,
+    },
+    { enabled: !!projectId },
+  );
+
   if (
     isLoadingProject ||
     isLoadingEvents ||
     isLoadingContacts ||
     isLoadingApplications ||
     isLoadingSocialMedia ||
-    isLoadingMembers
+    isLoadingMembers ||
+    isLoadingColors
   ) {
     return <LoadingPage />;
   } else if (
@@ -92,12 +104,13 @@ const AdminDashboardPage = () => {
     isErrorContacts ||
     isErrorApplications ||
     isErrorSocialMedia ||
-    isErrorMembers
+    isErrorMembers ||
+    isErrorColors
   ) {
     return <Error statusCode={500} />;
   } else {
     return (
-      <DashboardPage
+      <ProjectDashboard
         name={project.name}
         projectId={project.id}
         description={project.description}
@@ -106,6 +119,7 @@ const AdminDashboardPage = () => {
         applications={applications}
         socialMedias={socialMedia}
         members={members}
+        colors={colors}
         isAdminPage={true}
       />
     );

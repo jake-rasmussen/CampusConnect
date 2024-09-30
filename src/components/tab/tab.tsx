@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import { Colors } from "@prisma/client";
 
 type PropType = {
+  project: {
+    colors: Colors;
+  }
   children: JSX.Element[];
 };
 
-const Tab = ({ children }: PropType) => {
+const Tab = ({ project, children }: PropType) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const childrenWithProps = React.Children.map(
@@ -27,7 +31,9 @@ const Tab = ({ children }: PropType) => {
 
   return (
     <>
-      <div className="w-full py-10">{childrenWithProps}</div>
+      <div className="w-full py-10">
+        {childrenWithProps}
+      </div>
     </>
   );
 };

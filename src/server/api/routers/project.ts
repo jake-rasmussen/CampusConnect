@@ -28,6 +28,7 @@ export const projectRouter = createTRPCRouter({
               user: true,
             },
           },
+          colors: true,
         },
       });
       return project;
@@ -80,6 +81,9 @@ export const projectRouter = createTRPCRouter({
       orderBy: {
         name: "asc",
       },
+      include: {
+        colors: true
+      }
     });
   }),
   // Procedure to get the projects that a person is an admin in
@@ -136,6 +140,7 @@ export const projectRouter = createTRPCRouter({
         data: {
           name,
           description,
+          colorsId: "default"
         },
       });
 

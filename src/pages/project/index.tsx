@@ -7,12 +7,14 @@ import { Input } from "@nextui-org/input";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-import type { Project } from "@prisma/client";
+import type { Colors, Project } from "@prisma/client";
 import type { NextPageWithLayout } from "~/pages/_app";
 
 const AllProjects: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
-  const [projects, setProjects] = useState<Array<Project>>([]);
+  const [projects, setProjects] = useState<Array<Project & {
+    colors: Colors;
+  }>>([]);
 
   const {
     data: projectsData,
@@ -59,6 +61,7 @@ const AllProjects: NextPageWithLayout = () => {
               <ProjectCard
                 projectId={project.id}
                 name={project.name}
+                colors={project.colors}
                 key={index}
               />
             ))}

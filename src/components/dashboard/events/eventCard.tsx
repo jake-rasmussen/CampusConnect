@@ -1,12 +1,13 @@
 import { Event } from "@prisma/client";
 import { Calendar } from "tabler-icons-react";
-
 import {
   dateAndTimeToStringFormatted,
   dateToTimeStringFormatted,
 } from "~/utils/helpers";
 import EventEditor from "./eventEditor";
 import { Card, CardBody, CardFooter, CardHeader, Divider } from "@nextui-org/react";
+import { useContext } from "react";
+import { ProjectContext } from "lib/context";
 
 type PropType = {
   projectId: string;
@@ -16,13 +17,17 @@ type PropType = {
 
 const EventCard = (props: PropType) => {
   const { event, editable, projectId } = props;
+  const { colors } = useContext(ProjectContext);
 
   return (
     <>
       <Card className="relative m-6 mb-0 w-full rounded-2xl bg-white shadow-xl">
         <div className="flex flex-col lg:flex-row">
-          <div className="item flex h-auto w-full justify-center rounded-xl bg-primary shadow-2xl lg:w-48 lg:rounded-l-xl">
-            <button className=" h-full w-40 p-4">
+          <div
+            className="item flex h-auto w-full justify-center rounded-xl shadow-2xl lg:w-48 lg:rounded-l-xl"
+            style={{ backgroundColor: colors.primaryColor }}
+          >
+            <button className="h-full w-40 p-4">
               <Calendar className="h-full w-full text-white transition duration-300 ease-in-out group-hover:scale-125" />
             </button>
           </div>
@@ -32,13 +37,12 @@ const EventCard = (props: PropType) => {
               <CardHeader className="text-xl flex flex-col items-start">
                 <h1 className="text-2xl font-black">{event.name}</h1>
                 <span className="text-gray text-sm">
-                  {dateAndTimeToStringFormatted(event.start)} to {dateToTimeStringFormatted(event.end)}
+                  {dateAndTimeToStringFormatted(event.start)} to{" "}
+                  {dateToTimeStringFormatted(event.end)}
                 </span>
               </CardHeader>
               <CardBody className="flex flex-col items-start">
-                <div>
-                  {event.description}
-                </div>
+                <div>{event.description}</div>
               </CardBody>
               <Divider />
               <CardFooter>
@@ -53,7 +57,8 @@ const EventCard = (props: PropType) => {
                       This event will be virtual:{" "}
                       <a
                         href={event.location}
-                        className="font-bold text-secondary"
+                        className="font-bold"
+                        style={{ color: colors.secondaryColor }}
                       >
                         Link
                       </a>
@@ -65,7 +70,7 @@ const EventCard = (props: PropType) => {
           </main>
         </div>
 
-        {editable ? (
+        {editable && (
           <EventEditor
             eventName={event.name}
             eventDescription={event.description}
@@ -76,8 +81,6 @@ const EventCard = (props: PropType) => {
             eventId={event.id}
             projectId={projectId}
           />
-        ) : (
-          <></>
         )}
       </Card>
     </>

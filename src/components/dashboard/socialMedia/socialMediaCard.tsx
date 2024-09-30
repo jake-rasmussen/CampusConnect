@@ -9,6 +9,8 @@ import {
 } from "tabler-icons-react";
 
 import SocialMediaEditor from "./socialMediaEditor";
+import { useContext } from "react";
+import { ProjectContext } from "lib/context"; // Import the ProjectContext
 
 import type { SocialMedia } from "@prisma/client";
 
@@ -21,25 +23,40 @@ type PropType = {
 const SocialMediaCard = (props: PropType) => {
   const { socialMedia, editable, projectId } = props;
 
-  const iconClassName =
-    "w-full h-full text-secondary transition duration-300 ease-in-out hover:text-primary";
+  const { colors } = useContext(ProjectContext);
+
+  const iconStyle = {
+    color: colors.secondaryColor,
+    transition: "color 0.3s ease-in-out",
+  };
+
+  const hoverStyle = {
+    color: colors.primaryColor,
+  };
+
   const icon: JSX.Element =
     socialMedia.platform === SocialMediaPlatformType.FACEBOOK ? (
-      <BrandFacebook className={iconClassName} />
+      <BrandFacebook style={iconStyle} className="w-full h-full hover:text-primary" />
     ) : socialMedia.platform === SocialMediaPlatformType.INSTAGRAM ? (
-      <BrandInstagram className={iconClassName} />
+      <BrandInstagram style={iconStyle} className="w-full h-full hover:text-primary" />
     ) : socialMedia.platform === SocialMediaPlatformType.LINKEDIN ? (
-      <BrandLinkedin className={iconClassName} />
+      <BrandLinkedin style={iconStyle} className="w-full h-full hover:text-primary" />
     ) : socialMedia.platform === SocialMediaPlatformType.TWITTER ? (
-      <BrandTwitter className={iconClassName} />
+      <BrandTwitter style={iconStyle} className="w-full h-full hover:text-primary" />
     ) : (
-      <WorldWww className={iconClassName} />
+      <WorldWww style={iconStyle} className="w-full h-full hover:text-primary" />
     );
 
   return (
     <>
       <div className="relative my-4 h-16 w-16">
-        <Link className="h-full w-full" href={socialMedia.url}>
+        <Link
+          className="h-full w-full"
+          href={socialMedia.url}
+          style={{ color: colors.secondaryColor }}
+          onMouseOver={(e) => (e.currentTarget.style.color = colors.primaryColor)}
+          onMouseOut={(e) => (e.currentTarget.style.color = colors.secondaryColor)}
+        >
           {icon}
         </Link>
 

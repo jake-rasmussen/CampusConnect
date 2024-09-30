@@ -1,17 +1,19 @@
 import { InfoCircle } from "tabler-icons-react";
 import HeaderOutline from "./headerOutline";
+import { Colors } from "@prisma/client";
 
 type PropType = {
   name: string;
   subtext?: string;
+  colors?: Colors;
   editable: boolean;
 };
 
 const Header = (props: PropType) => {
-  const { name, subtext, editable } = props;
+  const { name, subtext, colors, editable } = props;
 
   return (
-    <HeaderOutline>
+    <HeaderOutline colors={colors}>
       {editable ? <div className="absolute translate-y-20 rounded-xl px-8 py-2 backdrop-invert">
         <h1 className="tracking-none md:text-md flex flex-row items-center text-sm font-black uppercase">
           <InfoCircle className="mr-2" />
