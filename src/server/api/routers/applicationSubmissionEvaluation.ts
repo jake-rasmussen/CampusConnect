@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, isEvaluator, t } from "../trpc";
+import { ApplicationSubmissionEvaluationGrade } from "@prisma/client";
 
 export const applicationSubmissionEvaluationRouter = createTRPCRouter({
   // A procedure for creating or updating an evaluation for a submission
@@ -26,8 +27,42 @@ export const applicationSubmissionEvaluationRouter = createTRPCRouter({
           updatedAt: new Date(),
         },
         include: {
-          comments: true,
+          comments: {
+            include: {
+              evaluator: {
+                include: {
+                  user: true,
+                }
+              },
+            }
+          },
         },
       });
+    }),
+  updateApplicationSubmissionEvaluation: t.procedure
+    .input(
+      z.object({
+        projectId: z.string(),
+        applicationSubmissionEvaluationId: z.string(),
+        evaluation: z.enum([
+          ApplicationSubmissionEvaluationGrade.YES,
+          ApplicationSubmissionEvaluationGrade.NO,
+          ApplicationSubmissionEvaluationGrade.MAYBE,
+          ApplicationSubmissionEvaluationGrade.UNGRADED,
+        ])
+      })
+    )
+    .use(isEvaluator)
+    .mutation(async ({ ctx, input }) => {
+      const { applicationSubmissionEvaluationId, evaluation } = input;
+
+      return ctx.prisma.applicationSubmissionEvaluation.update({
+        where: {
+          id: applicationSubmissionEvaluationId
+        },
+        data: {
+          evaluation
+        }
+      })
     }),
 });

@@ -25,7 +25,6 @@ export default {
         secondary: "#5F9DF7",
         orange: "FF731D",
         gray: "#9CA3AF",
-        black: "#1F1F1F",
         background: "#EEEEEE"
       },
       keyframes: {
@@ -59,6 +58,14 @@ export default {
             backgroundPosition: "350% 50%, 350% 50%",
           },
         },
+        "meteor": {
+          "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
+          "70%": { opacity: "1" },
+          "100%": {
+            transform: "rotate(215deg) translateX(-500px)",
+            opacity: "0",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -66,6 +73,7 @@ export default {
         "spotlight": "spotlight 2s ease .75s 1 forwards",
         "pulse-border": "pulse-border 1s infinite",
         "aurora": "aurora 60s linear infinite",
+        "meteor-effect": "meteor 5s linear infinite",
       },
     },
   },

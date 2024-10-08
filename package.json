@@ -57,6 +57,7 @@
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.2.1",
     "@types/lodash": "^4.14.196",
+    "cobe": "^0.6.3",
     "date-fns": "^2.30.0",
     "dotenv-cli": "^7.2.1",
     "framer-motion": "^11.5.4",

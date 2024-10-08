@@ -1,12 +1,14 @@
-import { Card, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
-import { User } from "@prisma/client";
+import { Card, Checkbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
+import { ApplicationSubmissionEvaluation, ApplicationSubmissionEvaluationGrade, User } from "@prisma/client";
 import Link from "next/link";
+import { Check, ClockEdit, Cross, QuestionMark, X } from "tabler-icons-react";
 
 type PropType = {
   projectId: string;
   applicationSubmissions: {
     id: string;
     user: User;
+    applicationSubmissionEvaluation: ApplicationSubmissionEvaluation | null;
   }[];
 };
 
@@ -25,6 +27,7 @@ const ApplicationSubmissionsTable = (props: PropType) => {
         <TableHeader>
           <TableColumn>Candidate Name</TableColumn>
           <TableColumn>Application ID</TableColumn>
+          <TableColumn>Status</TableColumn>
         </TableHeader>
 
         <TableBody>
@@ -44,7 +47,18 @@ const ApplicationSubmissionsTable = (props: PropType) => {
                 <TableCell className="font-medium">
                   {applicationSubmission.id}
                 </TableCell>
-                {/* <TableCell></TableCell> */}
+                <TableCell className="flex justify-center items-center">
+                  <Checkbox icon={
+                    applicationSubmission.applicationSubmissionEvaluation ?
+                      (applicationSubmission.applicationSubmissionEvaluation.evaluation === ApplicationSubmissionEvaluationGrade.YES ? <Check /> :
+                        applicationSubmission.applicationSubmissionEvaluation.evaluation === ApplicationSubmissionEvaluationGrade.MAYBE ? <QuestionMark /> :
+                          applicationSubmission.applicationSubmissionEvaluation.evaluation === ApplicationSubmissionEvaluationGrade.NO ? <X /> : <ClockEdit />) :
+                      <ClockEdit />
+                  }
+                    isSelected
+                    isReadOnly
+                  />
+                </TableCell>
               </TableRow>
             ),
           )}

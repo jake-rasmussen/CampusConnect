@@ -24,7 +24,7 @@ const MultipleChoice = (props: PropType) => {
     <>
       <RadioGroup
         className="text-white"
-        label={<span className="text-white">{label}</span>}
+        label={<span className="text-white text-lg">{label}</span>}
         isRequired={isRequired}
         value={selectedAnswer}
       >

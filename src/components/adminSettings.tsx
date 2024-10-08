@@ -5,6 +5,7 @@ import { HexColorPicker } from "react-colorful";
 import { ProjectContext } from "lib/context";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
+import { upperCase } from "lodash";
 
 enum SettingsSection {
   "COLORS",
@@ -24,7 +25,7 @@ const AdminSettings = (props: PropType) => {
   const queryClient = api.useContext();
   const project = useContext(ProjectContext);
 
-  const [settingsSection, setSettingsSection] = useState<SettingsSection>();
+  const [settingsSection, setSettingsSection] = useState<SettingsSection>(SettingsSection.COLORS);
 
   const [primaryColor, setPrimaryColor] = useState(project.colors.primaryColor);
   const [secondaryColor, setSecondaryColor] = useState(project.colors.secondaryColor);
@@ -94,11 +95,11 @@ const AdminSettings = (props: PropType) => {
                                 <div className="w-14 h-8 rounded-sm ring ring-black ring-offset-2" style={{ backgroundColor: primaryColor }} />
                               </PopoverTrigger>
                               <PopoverContent>
-                                <HexColorPicker color={primaryColor} onChange={setPrimaryColor} className="my-1" />
+                                <HexColorPicker color={primaryColor} onChange={(e) => setPrimaryColor(e.toUpperCase())} className="my-1" />
                               </PopoverContent>
                             </Popover>
 
-                            <Input value={primaryColor} onChange={(e) => setPrimaryColor(e.currentTarget.value)} variant="underlined" className="w-32" />
+                            <Input value={primaryColor} onChange={(e) => setPrimaryColor(e.currentTarget.value.toUpperCase())} variant="underlined" className="w-32" />
                           </div>
                         </div>
                         <Divider className="w-full" />
@@ -111,11 +112,11 @@ const AdminSettings = (props: PropType) => {
                                 <div className="w-14 h-8 rounded-sm ring ring-black ring-offset-2" style={{ backgroundColor: secondaryColor }} />
                               </PopoverTrigger>
                               <PopoverContent>
-                                <HexColorPicker color={secondaryColor} onChange={setSecondaryColor} className="my-1" />
+                                <HexColorPicker color={secondaryColor} onChange={(e) => setSecondaryColor(e.toUpperCase())} className="my-1" />
                               </PopoverContent>
                             </Popover>
 
-                            <Input value={secondaryColor} onChange={(e) => setSecondaryColor(e.currentTarget.value)} variant="underlined" className="w-32" />
+                            <Input value={secondaryColor} onChange={(e) => setSecondaryColor(e.currentTarget.value.toUpperCase())} variant="underlined" className="w-32" />
                           </div>
                         </div>
                         <ModalFooter className="absolute right-0 bottom-0 m-4">

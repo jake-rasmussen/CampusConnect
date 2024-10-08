@@ -136,11 +136,26 @@ export const projectRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { name, description } = input;
+
+      let colors = await ctx.prisma.colors.findFirst({
+        where: { id: "default" },
+      });
+
+      if (!colors) {
+        colors = await ctx.prisma.colors.create({
+          data: {
+            id: "default",
+            primaryColor: "#FFFFFF",
+            secondaryColor: "#000000",
+          },
+        });
+      }
+
       const project = await ctx.prisma.project.create({
         data: {
           name,
           description,
-          colorsId: "default"
+          colorsId: colors.id,
         },
       });
 

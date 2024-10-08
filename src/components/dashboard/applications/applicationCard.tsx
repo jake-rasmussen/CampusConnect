@@ -149,7 +149,7 @@ const ApplicationCard = (props: PropType) => {
 
           {editable && application.status !== ApplicationStatus.DRAFT && (
             <Link href={`/evaluator/${projectId}`}>
-              <div className="border-1 z-30 rounded-full border border-black bg-white">
+              <div className="border-1 z-30 rounded-full border border-black bg-white absolute left-1/2 -translate-x-1/2 -translate-y-[1rem]">
                 <ListCheck
                   className="h-14 w-14 p-2 transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500"
                   style={{ color: primaryColor }} // Inline style for dynamic color

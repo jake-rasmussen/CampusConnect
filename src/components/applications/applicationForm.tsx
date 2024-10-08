@@ -162,7 +162,7 @@ const ApplicationForm = (props: PropType) => {
         <p className="text-center text-black">{description}</p>
 
         <div className="border-1 flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
-          <form className="flex flex-col gap-y-10">
+          <form className="flex flex-col gap-y-10 py-10">
             {questions.map((question: ApplicationQuestion, index: number) => (
               <div key={`question${index}`}>
                 {question.type === ApplicationQuestionType.TEXT_INPUT && (
@@ -175,7 +175,9 @@ const ApplicationForm = (props: PropType) => {
                         handleUpdateAnswer(question.id, e.currentTarget.value);
                     }}
                     isRequired={question.required}
-                    label={question.question}
+                    placeholder=" "
+                    labelPlacement="outside"
+                    label={<span className="text-white text-lg">{question.question}</span>}
                   />
                 )}
                 {question.type === ApplicationQuestionType.TEXT_FIELD && (
@@ -189,7 +191,8 @@ const ApplicationForm = (props: PropType) => {
                     }}
                     minRows={4}
                     isRequired={question.required}
-                    label={question.question}
+                    label={<span className="text-white text-lg">{question.question}</span>}
+                    labelPlacement="outside"
                   />
                 )}
                 {question.type === ApplicationQuestionType.MULTIPLE_CHOICE && (

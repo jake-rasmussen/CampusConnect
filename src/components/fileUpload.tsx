@@ -49,7 +49,7 @@ const FileUpload = (props: PropType) => {
         />
       ) : (
         <div className="flex flex-col">
-          <label className="mb-2 text-white">{label}</label>
+          <label className="mb-2 text-white text-lg">{label}</label>
           <div className="flex items-center gap-4 bg-white rounded-2xl p-2">
             {/* Hidden file input */}
             <Input

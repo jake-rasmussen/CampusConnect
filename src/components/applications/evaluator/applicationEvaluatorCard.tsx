@@ -1,4 +1,4 @@
-import { Application, User } from "@prisma/client";
+import { Application, ApplicationSubmissionEvaluation, User } from "@prisma/client";
 import { Pencil } from "tabler-icons-react";
 
 import PreviewModal from "~/components/previewModal";
@@ -13,6 +13,7 @@ type PropType = {
     applicationSubmissions: {
       id: string;
       user: User;
+      applicationSubmissionEvaluation: ApplicationSubmissionEvaluation | null;
     }[];
   };
   projectId: string;

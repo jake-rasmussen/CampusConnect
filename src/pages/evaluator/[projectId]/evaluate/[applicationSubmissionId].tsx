@@ -1,22 +1,14 @@
-import { ApplicationSubmissionComment } from "@prisma/client";
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { ApplicationSubmissionComment, ApplicationSubmissionEvaluationGrade, Member, User } from "@prisma/client";
+import { capitalize } from "lodash";
 import Error from "next/error";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Check, QuestionMark, X, ClockEdit, Trash } from "tabler-icons-react";
 
 import ApplicationForm from "~/components/applications/applicationForm";
-import Button from "~/components/button";
-import Header from "~/components/dashboard/header/header";
 import LoadingPage from "~/components/loadingPage";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/shadcn_ui/card";
-import { Textarea } from "~/components/shadcn_ui/textarea";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 import {
@@ -64,6 +56,13 @@ const EvaluateApplicationSubmission = () => {
     },
   );
 
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+    error: errorUser,
+  } = api.usersRouter.getUser.useQuery();
+
   const createApplicationSubmissionComment =
     api.applicationSubmissionCommentRouter.createApplicationSubmissionComment.useMutation(
       {
@@ -80,6 +79,37 @@ const EvaluateApplicationSubmission = () => {
       },
     );
 
+  const deleteApplicationSubmissionComment =
+    api.applicationSubmissionCommentRouter.deleteApplicationSubmissionComment.useMutation(
+      {
+        onSuccess() {
+          toast.dismiss();
+          toast.success("Deleted Comment!");
+          setComment("");
+          queryClient.invalidate();
+        },
+        onError() {
+          toast.dismiss();
+          toast.error("Error...");
+        },
+      },
+    )
+
+  const updateApplicationSubmissionEvaluation =
+    api.applicationSubmissionEvaluationRouter.updateApplicationSubmissionEvaluation.useMutation(
+      {
+        onSuccess() {
+          toast.dismiss();
+          toast.success("Updated Evaluation!");
+          queryClient.invalidate();
+        },
+        onError() {
+          toast.dismiss();
+          toast.error("Error...");
+        },
+      },
+    )
+
   const handleCreateApplicationSubmissionComment = () => {
     if (applicationSubmissionEvaluation) {
       toast.dismiss();
@@ -93,14 +123,19 @@ const EvaluateApplicationSubmission = () => {
     }
   };
 
-  if (isLoadingApplicationSubmission || isLoadingEvaluation) {
+  const gradeOptions = Object.values(ApplicationSubmissionEvaluationGrade).map((grade) => ({
+    label: grade,
+  }));
+
+  if (isLoadingApplicationSubmission || isLoadingEvaluation || isLoadingUser) {
     return <LoadingPage />;
-  } else if (isErrorApplicationSubmission || isErrorEvaluation) {
+  } else if (isErrorApplicationSubmission || isErrorEvaluation || isErrorUser) {
     return (
       <Error
         statusCode={
           errorApplicationSubmission?.data?.httpStatus ||
           errorEvaluation?.data?.httpStatus ||
+          errorUser?.data?.httpStatus ||
           500
         }
       />
@@ -114,17 +149,19 @@ const EvaluateApplicationSubmission = () => {
           </span>
         </section>
 
-        <Header
-          name={"Evaluate Application"}
-          subtext={
-            applicationSubmission.user.firstName +
-            " " +
-            applicationSubmission.user.lastName
-          }
-          editable={false}
-        />
+        <section className="mt-28">
+          <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
+            Evaluate Application
+          </h1>
+          <p className="text-center text-xl">
+            {applicationSubmission.user.firstName +
+              " " +
+              applicationSubmission.user.lastName}
+          </p>
+        </section>
+
         <section className="my-10 flex w-full justify-center">
-          <div className="flex flex-row">
+          <div className="flex flex-row mx-20">
             <div className="min-w-[50vw]">
               <ApplicationForm
                 projectId={projectId as string}
@@ -140,64 +177,136 @@ const EvaluateApplicationSubmission = () => {
               />
             </div>
 
-            <Card className="m-8 h-fit w-[350px] bg-white">
-              <CardHeader>
-                <CardTitle>Enter Comments</CardTitle>
-                <CardDescription>
-                  Submit comments for this submission
-                </CardDescription>
+            <Card className="ml-8 h-full min-w-[400px] bg-white">
+              <CardHeader className="font-bold py-4 flex flex-col justify-start items-start">
+                <h1 className="font-black">Enter Comments</h1>
+                <h4 className="font-normal">Submit comments for this submission</h4>
               </CardHeader>
-              <CardContent>
+              <CardBody>
                 <Textarea
                   value={comment}
+                  label="Comment"
                   onChange={(e) => setComment(e.currentTarget.value)}
-                  rows={10}
+                  minRows={10}
+                  className="px-4"
                 />
-              </CardContent>
+              </CardBody>
               <CardFooter className="flex w-full justify-center">
                 <Button
-                  onClickFn={() => handleCreateApplicationSubmissionComment()}
+                  onClick={() => handleCreateApplicationSubmissionComment()}
+                  color="primary"
                 >
-                  Submit Comment
+                  Submit
                 </Button>
               </CardFooter>
+              <Divider />
+              <CardHeader className="font-bold py-4 flex flex-col justify-start items-start">
+                <h1 className="font-black">Enter Grade</h1>
+                <h4 className="font-normal">Submit next steps for this submission</h4>
+              </CardHeader>
+              <CardBody>
+                <Select
+                  items={gradeOptions}
+                  className="p-4 pt-0 pb-8"
+                  placeholder="Select option"
+                  size="lg"
+                  defaultSelectedKeys={[applicationSubmissionEvaluation.evaluation]}
+                  onChange={(e) => {
+                    toast.dismiss();
+                    toast.loading("Updating Evaluation...");
+                    updateApplicationSubmissionEvaluation.mutate({
+                      projectId,
+                      applicationSubmissionEvaluationId: applicationSubmissionEvaluation.id,
+                      evaluation: e.target.value as ApplicationSubmissionEvaluationGrade,
+                    })
+                  }}
+                  renderValue={(gradeOptions) => {
+                    return gradeOptions.map((item) => (
+                      <div className="flex gap-2 items-center" key={`selected${item.data?.label}`}>
+                        <div className="flex flex-row items-center">
+                          <div className="mr-2 bg-primary text-white rounded-full p-1">
+                            {(item.data?.label === ApplicationSubmissionEvaluationGrade.YES ? <Check /> :
+                              item.data?.label === ApplicationSubmissionEvaluationGrade.MAYBE ? <QuestionMark /> :
+                                item.data?.label === ApplicationSubmissionEvaluationGrade.NO ? <X /> : <ClockEdit />)}
+                          </div>
+                          <span className="text-small">{capitalize(item.data?.label)}</span>
+                        </div>
+                      </div>
+                    ));
+                  }}
+                >
+                  {(item) => (
+                    <SelectItem key={item.label} textValue={capitalize(item.label)}>
+                      <div className="flex gap-2 items-center">
+                        <div className="flex flex-row items-center">
+                          <div className="mr-2 bg-primary text-white rounded-full p-1">
+                            {(item.label === ApplicationSubmissionEvaluationGrade.YES ? <Check /> :
+                              item.label === ApplicationSubmissionEvaluationGrade.MAYBE ? <QuestionMark /> :
+                                item.label === ApplicationSubmissionEvaluationGrade.NO ? <X /> : <ClockEdit />)}
+                          </div>
+                          <span className="text-small">{capitalize(item.label)}</span>
+                        </div>
+                      </div>
+                    </SelectItem>
+                  )}
+                </Select>
+              </CardBody>
             </Card>
           </div>
         </section>
 
         <Card className="mx-8 mb-8 w-full max-w-4xl bg-white">
-          <CardHeader>
-            <CardTitle>Submission Comments</CardTitle>
-          </CardHeader>
-          <CardContent>
+          <CardHeader>Submission Comments</CardHeader>
+          <CardBody>
             {applicationSubmissionEvaluation.comments.length > 0 ? (
               <section className="flex flex-col gap-4">
                 {applicationSubmissionEvaluation.comments.map(
-                  (comment: ApplicationSubmissionComment, index: number) => (
+                  (comment: (ApplicationSubmissionComment & {
+                    evaluator: Member & {
+                      user: User
+                    };
+                  }), index: number) => (
                     <div
-                      key={`${comment.evaluatorName}${comment.comment}${index}`}
+                      className="flex flex-row"
+                      key={`${comment.evaluator.userId}${comment.comment}${index}`}
                     >
-                      <h5 className="mb-2 w-full border-b border-black font-semibold uppercase">
-                        {comment.evaluatorName}{" "}
-                        <span className="text-primary">@</span>{" "}
-                        {dateToStringFormatted(comment.createdAt)},{" "}
-                        {dateToTimeStringFormatted(comment.createdAt)}
-                      </h5>
-                      <pre className="overflow-x-auto whitespace-pre-wrap font-sans">
-                        {comment.comment}
-                      </pre>
+                      <div className="w-full">
+                        <h5 className="mb-2 w-full font-semibold uppercase">
+                          {comment.evaluator.user.firstName}{" "}{comment.evaluator.user.lastName}
+                          <span className="text-primary">@</span>{" "}
+                          {dateToStringFormatted(comment.createdAt)},{" "}
+                          {dateToTimeStringFormatted(comment.createdAt)}
+                        </h5>
+                        <pre className="overflow-x-auto whitespace-pre-wrap font-sans">
+                          {comment.comment}
+                        </pre>
+                      </div>
+                      <div className="h-full w-full flex justify-end items-center">
+                        {
+                          comment.memberUserId === user.userId && (<Button onClick={() => {
+                            toast.dismiss();
+                            toast.loading("Deleting Comment...");
+                            deleteApplicationSubmissionComment.mutate({
+                              projectId,
+                              applicationSubmissionEvaluationId: applicationSubmissionEvaluation.id
+                            })
+                          }}>
+                            <Trash className="text-primary" />
+                          </Button>)
+                        }
+                      </div>
                     </div>
                   ),
                 )}
               </section>
             ) : (
               <>
-                <h5 className="mb-2 w-full border-b border-black text-center font-semibold uppercase">
+                <h5 className="mb-2 py-8 w-full text-center font-semibold uppercase">
                   No Comments!
                 </h5>
               </>
             )}
-          </CardContent>
+          </CardBody>
         </Card>
       </main>
     );

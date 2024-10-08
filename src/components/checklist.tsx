@@ -21,7 +21,7 @@ const Checklist = (props: PropType) => {
   return (
     <>
       <CheckboxGroup
-        label={<span className="text-white">{label}</span>}
+        label={<span className="text-white text-lg">{label}</span>}
         defaultValue={selectedAnswers}
         value={selectedAnswers}
       >

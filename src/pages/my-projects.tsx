@@ -96,12 +96,12 @@ const MyProjects: NextPageWithLayout = () => {
           </>
         ) : (
           <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">
-            <NoteOff className="h-44 w-44 text-secondary" />
+            {/* <NoteOff className="h-44 w-44 text-secondary" /> */}
             <h3 className="text-2xl font-semibold uppercase">
               You are not an admin or evaluator in any projects!
             </h3>
             <Divider />
-            <span className="mx-8 py-2 text-sm font-semibold uppercase text-secondary">
+            <span className="mx-8 py-2 text-sm font-normal text-secondary">
               If you think this may be a mistake, please contact the project
               owner
             </span>
