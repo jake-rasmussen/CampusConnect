@@ -1,12 +1,20 @@
+import { useContext } from "react";
+import { ProjectContext } from "lib/context";
+
 const SocialMediaOutline = ({
   children,
 }: {
   children: JSX.Element | JSX.Element[];
 }) => {
+  const { colors } = useContext(ProjectContext); // Access colors from context
+
   return (
     <>
       <section className="flex flex-col md:pt-0">
-        <h1 className="text-center text-2xl font-semibold underline decoration-secondary">
+        <h1
+          className="text-center text-2xl font-semibold underline"
+          style={{ textDecorationColor: colors.secondaryColor }} // Inline style for underline color
+        >
           Social Media
         </h1>
         <h1 className="text-md text-center text-gray">

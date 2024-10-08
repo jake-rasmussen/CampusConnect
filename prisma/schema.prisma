@@ -47,6 +47,13 @@ enum ApplicationSubmissionStatus {
   SUBMITTED
 }
 
+enum ApplicationSubmissionEvaluationGrade {
+  YES
+  NO
+  MAYBE
+  UNGRADED
+}
+
 model User {
   userId                 String                  @id @default(cuid())
   externalId             String                  @unique
@@ -70,16 +77,19 @@ model Project {
   updatedAt    DateTime      @updatedAt
   events       Event[]
   contactInfo  ContactInfo[]
+  colorsId     String
+  colors       Colors        @relation(fields: [colorsId], references: [id])
 }
 
 model Member {
-  projectId String
-  project   Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User              @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  type      ProjectMemberType
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  projectId                    String
+  project                      Project                        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId                       String
+  user                         User                           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  type                         ProjectMemberType
+  createdAt                    DateTime                       @default(now())
+  updatedAt                    DateTime                       @updatedAt
+  applicationSubmissionComment ApplicationSubmissionComment[]
 
   @@id([projectId, userId])
 }
@@ -171,20 +181,30 @@ model ApplicationSubmissionAnswer {
 }
 
 model ApplicationSubmissionEvaluation {
-  id                      String                         @id @default(cuid())
+  id                      String                               @id @default(cuid())
+  evaluation              ApplicationSubmissionEvaluationGrade @default(UNGRADED)
   comments                ApplicationSubmissionComment[]
-  createdAt               DateTime                       @default(now())
-  updatedAt               DateTime                       @updatedAt
-  applicationSubmission   ApplicationSubmission          @relation(fields: [applicationSubmissionId], references: [id])
-  applicationSubmissionId String                         @unique
+  createdAt               DateTime                             @default(now())
+  updatedAt               DateTime                             @updatedAt
+  applicationSubmission   ApplicationSubmission                @relation(fields: [applicationSubmissionId], references: [id])
+  applicationSubmissionId String                               @unique
 }
 
 model ApplicationSubmissionComment {
   id                                String                           @id @default(cuid())
-  evaluatorName                     String
+  evaluator                         Member                           @relation(fields: [memberProjectId, memberUserId], references: [projectId, userId])
   comment                           String
   applicationSubmissionEvaluation   ApplicationSubmissionEvaluation? @relation(fields: [applicationSubmissionEvaluationId], references: [id])
   applicationSubmissionEvaluationId String?
   createdAt                         DateTime                         @default(now())
   updatedAt                         DateTime                         @updatedAt
+  memberProjectId                   String
+  memberUserId                      String
+}
+
+model Colors {
+  id             String    @id @default(cuid())
+  primaryColor   String
+  secondaryColor String
+  project        Project[]
 }

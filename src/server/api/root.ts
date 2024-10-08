@@ -12,6 +12,7 @@ import { projectRouter } from "./routers/project";
 import { socialMediaRouter } from "./routers/socialMedia";
 import { supabaseRouter } from "./routers/supabase";
 import { usersRouter } from "./routers/users";
+import { colorsRouter } from "./routers/colors";
 
 /**
  * This is the primary router for your server.
@@ -32,6 +33,7 @@ export const appRouter = createTRPCRouter({
   usersRouter,
   applicationSubmissionEvaluationRouter,
   applicationSubmissionCommentRouter,
+  colorsRouter,
   supabaseRouter,
 });
 

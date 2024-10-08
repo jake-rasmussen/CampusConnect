@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import FilePreview from "./filePreview";
+import { Button, Input } from "@nextui-org/react";
 
 type PropType = {
   value?: string;
@@ -9,10 +10,12 @@ type PropType = {
   projectId: string;
   applicationId: string;
   userId?: string;
+  isRequired: boolean;
+  label: string
 };
 
 const FileUpload = (props: PropType) => {
-  const { readonly, value, onChange, projectId, applicationId, userId } = props;
+  const { readonly, value, onChange, projectId, applicationId, userId, isRequired, label } = props;
 
   const [filename, setFilename] = useState<string>();
 
@@ -22,42 +25,50 @@ const FileUpload = (props: PropType) => {
     }
   }, [value]);
 
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.currentTarget.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file) {
+        setFilename(file.name);
+        onChange(file);
+      }
+    }
+  };
+
+
   return (
-    <div className="relative">
+    <div>
       {readonly && filename ? (
-        <>
-          <FilePreview
-            projectId={projectId}
-            applicationId={applicationId}
-            userId={userId}
-            filename={filename}
-          />
-        </>
+        <FilePreview
+          projectId={projectId}
+          applicationId={applicationId}
+          userId={userId}
+          filename={filename}
+        />
       ) : (
-        <>
-          <input
-            className="absolute inset-0 h-full w-full cursor-pointer rounded-lg rounded-xl border bg-white p-3 opacity-0"
-            type="file"
-            onChange={(e) => {
-              const files = e.currentTarget.files;
-              if (files && files.length > 0) {
-                const file = files[0];
-                if (file) {
-                  setFilename(file.name);
-                  onChange(file);
-                }
-              }
-            }}
-            accept=".jpg,.jpeg,.png,.pdf"
-            disabled={readonly}
-          />
-          <label className="mr-8 block w-full cursor-pointer rounded-lg rounded-xl border bg-white p-3">
-            <span className="mr-2 rounded-full border-none bg-secondary px-4 py-2 font-black uppercase text-white shadow-xl">
-              Select File
-            </span>
-            {filename ? filename : "No file chosen..."}
-          </label>
-        </>
+        <div className="flex flex-col">
+          <label className="mb-2 text-white text-lg">{label}</label>
+          <div className="flex items-center gap-4 bg-white rounded-2xl p-2">
+            {/* Hidden file input */}
+            <Input
+              type="file"
+              className="hidden" // Hide the default file input
+              onChange={handleFileChange}
+              accept=".jpg,.jpeg,.png,.pdf"
+              isReadOnly={readonly}
+              isRequired={isRequired}
+              id="fileInput"
+            />
+
+            <Button as="label" htmlFor="fileInput" color="primary">
+              Choose File
+            </Button>
+
+            <span className="text-gray-500">{filename || "No file chosen"}</span>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -104,6 +104,48 @@ const generateRandomContactInfos = (
   return contactInfos;
 };
 
+const generateRandomColors = () => {
+  prisma.colors.create({
+    data: {
+      id: "default",
+      primaryColor: "#1746A2",
+      secondaryColor: "#5F9DF7",
+    }
+  })
+
+  const colorsOptions = [
+    {
+      primaryColor: "#FF6500",
+      secondaryColor: "#1E3E62",
+    },
+    {
+      primaryColor: "#640D5F",
+      secondaryColor: "#D91656",
+    },
+    {
+      primaryColor: "#384B70",
+      secondaryColor: "#507687",
+    },
+    {
+      primaryColor: "#FF885B",
+      secondaryColor: "#FFE5CF",
+    },
+    {
+      primaryColor: "#7695FF",
+      secondaryColor: "#9DBDFF",
+    },
+  ];
+
+  const colorsIndex = randomNumberBetweenInclusive(0, colorsOptions.length - 1);
+
+  const colors: Prisma.ColorsCreateWithoutProjectInput = {
+    primaryColor: colorsOptions[colorsIndex]!.primaryColor,
+    secondaryColor: colorsOptions[colorsIndex]!.secondaryColor
+  };
+
+  return colors;
+}
+
 const generateRandomQuestions = (
   numQuestions: number = randomNumberBetweenInclusive(2, 5),
 ) => {
@@ -326,6 +368,7 @@ const createMockProjectArray = (users: User[]) => {
       },
       events: { create: generateRandomEvents() },
       contactInfo: { create: generateRandomContactInfos() },
+      colors: { create: generateRandomColors() },
     };
     mockProjects.push(project);
   }

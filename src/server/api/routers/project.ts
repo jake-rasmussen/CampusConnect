@@ -28,6 +28,7 @@ export const projectRouter = createTRPCRouter({
               user: true,
             },
           },
+          colors: true,
         },
       });
       return project;
@@ -80,6 +81,9 @@ export const projectRouter = createTRPCRouter({
       orderBy: {
         name: "asc",
       },
+      include: {
+        colors: true
+      }
     });
   }),
   // Procedure to get the projects that a person is an admin in
@@ -132,10 +136,26 @@ export const projectRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { name, description } = input;
+
+      let colors = await ctx.prisma.colors.findFirst({
+        where: { id: "default" },
+      });
+
+      if (!colors) {
+        colors = await ctx.prisma.colors.create({
+          data: {
+            id: "default",
+            primaryColor: "#FFFFFF",
+            secondaryColor: "#000000",
+          },
+        });
+      }
+
       const project = await ctx.prisma.project.create({
         data: {
           name,
           description,
+          colorsId: colors.id,
         },
       });
 

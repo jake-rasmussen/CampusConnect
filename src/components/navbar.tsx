@@ -1,10 +1,9 @@
-import { UserButton, useUser } from "@clerk/nextjs";
-import { AnimatePresence, motion } from "framer-motion";
+import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Menu2, X } from "tabler-icons-react";
-import { Badge } from "./shadcn_ui/badge";
+import { HoveredLink, Menu, MenuItem } from "./aceternity-ui/navbar-menu";
+import { cn } from "lib/utils";
 
 type PropType = {
   isLoading: boolean;
@@ -64,7 +63,13 @@ const Navbar = (props: PropType) => {
   } else {
     return (
       <>
-        <header className="sticky top-0 z-50 w-full bg-white p-4 text-black shadow-xl">
+        <div className="relative w-full flex items-center justify-center">
+          <AceternityNavbar className="top-2" />
+        </div>
+
+
+
+        {/* <header className="sticky top-0 z-50 w-full bg-white p-4 text-black shadow-xl">
           <div className="mx-auto flex h-16 items-center">
             <Link
               href="/"
@@ -154,10 +159,56 @@ const Navbar = (props: PropType) => {
               }
             </AnimatePresence>
           </div>
-        </header>
+        </header> */}
       </>
     );
   }
 };
+
+function AceternityNavbar({ className }: { className?: string }) {
+  const [active, setActive] = useState<string | null>(null);
+  return (
+    <div
+      className={cn("fixed top-10 inset-x-0 max-w-2xl mx-auto z-50 shadow-xl rounded-full", className)}
+    >
+      <Menu setActive={setActive}>
+        <Link
+          href="/"
+          className="absolute left-0 transform translate-x-1/2 h-10 w-10"
+        >
+          <Image
+            priority
+            src={"/assets/SWEC Logo.svg"}
+            alt={"SWEC Logo"}
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="h-auto w-full"
+          />
+        </Link>
+
+        <div className="relative flex items-center justify-between gap-4">
+          <MenuItem setActive={setActive} active={active} item="Projects">
+            <div className="flex flex-col space-y-4 text-sm">
+              <HoveredLink href="/project">All Projects</HoveredLink>
+              <HoveredLink href="/my-projects">My Projects</HoveredLink>
+            </div>
+          </MenuItem>
+
+          <MenuItem setActive={setActive} active={active} item="Applications">
+            <div className="flex flex-col space-y-4 text-sm">
+              <HoveredLink href="/open-applications">Open Applications</HoveredLink>
+              <HoveredLink href="/my-applications">My Applications</HoveredLink>
+            </div>
+          </MenuItem>
+        </div>
+
+        <div className="absolute top-1/2 right-0 transform -translate-y-1/2 -translate-x-1/2">
+          <UserButton afterSignOutUrl="/" />
+        </div>
+      </Menu>
+    </div>
+  );
+}
 
 export default Navbar;

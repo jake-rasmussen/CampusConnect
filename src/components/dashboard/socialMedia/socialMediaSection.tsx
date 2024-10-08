@@ -2,7 +2,7 @@ import { SocialMedia } from "@prisma/client";
 
 import SocialMediaCard from "./socialMediaCard";
 import SocialMediaOutline from "./socialMediaOutline";
-import SocialMediasEditor from "./socialMediasEditor";
+import SocialMediaEditor from "./socialMediaEditor";
 
 type PropType = {
   socialMedias: SocialMedia[];
@@ -30,7 +30,7 @@ const SocialMediaSection = (props: PropType) => {
                 ))}
             </>
           </SocialMediaOutline>
-          {editable && <SocialMediasEditor projectId={projectId} />}
+          {editable && <SocialMediaEditor projectId={projectId} />}
         </section>
       </>
     )

@@ -23,7 +23,11 @@ const MyApplications = () => {
   } else {
     return (
       <main className="w-full pb-52">
-        <Header name={"My Applications"} editable={false} />
+        <section className="mb-14 mt-28">
+          <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
+            My Applications
+          </h1>
+        </section>
         <section className="mt-10 flex w-full justify-center">
           {applicationSubmissions.length > 0 ? (
             <div className="flex max-w-4xl flex-wrap justify-center gap-4">

@@ -5,12 +5,12 @@ import { NoteOff } from "tabler-icons-react";
 
 import ProjectMemberCard from "~/components/allProjects/projectMemberCard";
 import LoadingPage from "~/components/loadingPage";
-import CreateProjectDialog from "~/components/my-projects/createProjectDialog";
-import { Input } from "~/components/shadcn_ui/input";
-import { Separator } from "~/components/shadcn_ui/separator";
+import CreateProjectEditor from "~/components/my-projects/createProjectEditor";
+import { Input } from "@nextui-org/input";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 import { NextPageWithLayout } from "./_app";
+import { Divider } from "@nextui-org/react";
 
 const MyProjects: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
@@ -60,7 +60,7 @@ const MyProjects: NextPageWithLayout = () => {
   } else {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center ">
-        <section className="mb-14 mt-20">
+        <section className="mb-14 mt-28">
           <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
             My Projects
           </h1>
@@ -70,12 +70,12 @@ const MyProjects: NextPageWithLayout = () => {
           <>
             <section className="w-full max-w-2xl px-4">
               <Input
-                className="rounded-none border-x-0 border-b-2 border-t-0 border-secondary bg-transparent focus-visible:ring-0"
-                placeholder={"Search"}
+                label="Search Projects"
                 value={query}
                 onChange={(e) => {
                   setQuery(e.target.value);
                 }}
+                variant="underlined"
               />
             </section>
 
@@ -96,15 +96,12 @@ const MyProjects: NextPageWithLayout = () => {
           </>
         ) : (
           <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">
-            <NoteOff className="h-44 w-44 text-secondary" />
+            {/* <NoteOff className="h-44 w-44 text-secondary" /> */}
             <h3 className="text-2xl font-semibold uppercase">
               You are not an admin or evaluator in any projects!
             </h3>
-            <Separator
-              orientation="horizontal"
-              className="mx-2 my-2 bg-black"
-            />
-            <span className="mx-8 py-2 text-sm font-semibold uppercase text-secondary">
+            <Divider />
+            <span className="mx-8 py-2 text-sm font-normal text-secondary">
               If you think this may be a mistake, please contact the project
               owner
             </span>
@@ -112,7 +109,7 @@ const MyProjects: NextPageWithLayout = () => {
         )}
 
         <section className="my-10">
-          <CreateProjectDialog />
+          <CreateProjectEditor />
         </section>
       </div>
     );
