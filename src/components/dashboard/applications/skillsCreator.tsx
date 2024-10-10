@@ -5,10 +5,11 @@ import { X } from "tabler-icons-react";
 type PropType = {
   skills: string[];
   setSkills: Dispatch<SetStateAction<string[]>>;
+  placeholder?: string;
 };
 
 const SkillsCreator = (props: PropType) => {
-  const { skills, setSkills } = props;
+  const { skills, setSkills, placeholder } = props;
 
   const [value, setValue] = useState<string>("");
 
@@ -29,10 +30,10 @@ const SkillsCreator = (props: PropType) => {
     <>
       <section className="text-center">
         <h3 className="tracking-none text-xl font-black uppercase">
-          Create Skills
+          Add Skills
         </h3>
         <p className="py-2">
-          Make your application more discoverable by adding relevant skills!
+          Increase discoverability by adding relevant skills!
         </p>
         <Input
           size="lg"
@@ -41,7 +42,7 @@ const SkillsCreator = (props: PropType) => {
           onKeyDown={(e) => {
             if (e.key === "Enter" && value.length > 0) handleAddSkill(value);
           }}
-          placeholder="Enter skill for application..."
+          placeholder={placeholder}
           className="py-4"
         />
 

@@ -45,7 +45,7 @@ type PropType = {
   isAdminPage: boolean;
 };
 
-const DashboardPage = (props: PropType) => {
+const ProjectDashboard = (props: PropType) => {
   const {
     name,
     projectId,
@@ -145,4 +145,4 @@ const DashboardPage = (props: PropType) => {
   );
 };
 
-export default DashboardPage;
+export default ProjectDashboard;

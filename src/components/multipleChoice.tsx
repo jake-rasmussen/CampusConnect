@@ -18,8 +18,6 @@ const MultipleChoice = (props: PropType) => {
     setSelectedAnswer(value);
   }, [value]);
 
-  console.log(selectedAnswer)
-
   return (
     <>
       <RadioGroup

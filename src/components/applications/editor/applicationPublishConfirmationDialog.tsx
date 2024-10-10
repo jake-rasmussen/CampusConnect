@@ -153,7 +153,7 @@ const ApplicationPublishConfirmationDialog = ({
                         </Field>
                       </section>
 
-                      <SkillsCreator skills={skills} setSkills={setSkills} />
+                      <SkillsCreator skills={skills} setSkills={setSkills} placeholder="Add skills to your application..." />
                     </main>
 
                   </ModalBody>

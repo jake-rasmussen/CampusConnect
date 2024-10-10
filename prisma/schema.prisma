@@ -64,6 +64,28 @@ model User {
   updatedAt              DateTime                @updatedAt
   memberships            Member[]
   applicationSubmissions ApplicationSubmission[]
+  profile                Profile?
+}
+
+model Profile {
+  id                 String               @id @default(cuid())
+  user               User                 @relation(fields: [userId], references: [userId])
+  userId             String               @unique
+  skills             String[]
+  about              String
+  school             String
+  year               String
+  profileSocialMedia ProfileSocialMedia[]
+}
+
+model ProfileSocialMedia {
+  id        String                  @id @default(cuid())
+  profileId String
+  profile   Profile                 @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  platform  SocialMediaPlatformType
+  url       String
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
 }
 
 model Project {

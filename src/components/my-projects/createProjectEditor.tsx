@@ -43,7 +43,7 @@ const CreateProjectEditor = () => {
 
   return (
     <>
-      <Button onPress={onOpen} color="primary" className="uppercase font-black">
+      <Button onPress={onOpen} color="primary">
         Create your own project!
       </Button>
 

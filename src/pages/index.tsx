@@ -1,4 +1,4 @@
-import { useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { BackgroundBeams } from "~/components/aceternity-ui/background-beams";
@@ -10,7 +10,7 @@ import { BrandYoutube } from "tabler-icons-react";
 import { useEffect, useRef } from "react";
 import createGlobe from "cobe";
 import { cn } from "lib/utils";
-import { Button } from "@nextui-org/react";
+import { Button, ButtonGroup, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 
 const FeatureCard = ({
   children,
@@ -292,6 +292,7 @@ export const Globe = ({ className }: { className?: string }) => {
 
 const Home = () => {
   const { isLoaded, isSignedIn } = useUser();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const features = [
     {
@@ -351,9 +352,8 @@ const Home = () => {
               <p>Connect with students <br /> like never before</p>
             </div>
             <div className="flex flex-row gap-4 w-full items-center justify-center my-4">
-              <Button>Get started</Button>
+              <Button onPress={onOpen}>Get started</Button>
             </div>
-
           </motion.h1>
         </div>
 
