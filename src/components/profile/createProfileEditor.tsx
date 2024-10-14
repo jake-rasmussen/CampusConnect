@@ -5,7 +5,7 @@ import {
   ModalBody,
   ModalFooter
 } from "@nextui-org/modal";
-import { Button, Divider, Select, SelectItem, useDisclosure } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Button, Divider, Select, SelectItem, useDisclosure } from "@nextui-org/react";
 
 import { Field, Form } from "houseform";
 import { useRouter } from "next/router";
@@ -14,12 +14,15 @@ import { z } from "zod";
 
 import { api } from "~/utils/api";
 import { Input, Textarea } from "@nextui-org/react";
-import { ProfileSocialMedia, SocialMediaPlatformType } from "@prisma/client";
+import { Focus, ProfileSocialMedia } from "@prisma/client";
 import SkillsCreator from "../dashboard/applications/skillsCreator";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import ProfileSocialMediaEditor, { SocialMediaFormType } from "./profileSocialMediaEditor";
+import { uppercaseToCapitalize } from "~/utils/helpers";
 
 type ProfileFormType = {
+  majors: Focus;
+  minors?: Focus;
   about: string;
   school: string;
   year: string;
@@ -33,8 +36,10 @@ const CreateProfileEditor = () => {
   const [skills, setSkills] = useState<string[]>([]);
   const [socialMedias, setSocialMedias] = useState<SocialMediaFormType[]>([]);
 
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState("");
+
   const router = useRouter();
-  const queryClient = api.useContext();
 
   const createProfile = api.profileRouter.createProfile.useMutation({
     onSuccess() {
@@ -50,6 +55,18 @@ const CreateProfileEditor = () => {
       toast.error("Error...");
     },
   });
+
+  const handleSelectItem = (item: string) => {
+    if (!selectedItems.includes(item)) {
+      setSelectedItems((prev) => [...prev, item]);
+    }
+    setInputValue(""); // Clear input after selection
+  };
+
+  // Handle item removal
+  const handleRemoveItem = (item: string) => {
+    setSelectedItems((prev) => prev.filter((selected) => selected !== item));
+  };
 
   return (
     <>
@@ -77,6 +94,8 @@ const CreateProfileEditor = () => {
                   school: values.school,
                   year: values.year,
                   about: values.about,
+                  majors: values.majors,
+                  minors: values.minors,
                 });
               }}
             >
@@ -132,6 +151,57 @@ const CreateProfileEditor = () => {
                             </Select>
                           )}
                         </Field>
+
+                        <div className="flex flex-row gap-4">
+                          <Field
+                            name="majors"
+                            onChangeValidate={z
+                              .string()
+                              .min(1, "Select your major(s)")}
+                          >
+                            {({ value, setValue, onBlur, isValid, errors }) => (
+                              <Select
+                                label="Major(s)"
+                                selectionMode="multiple"
+                                onChange={(e) => setValue(e.target.value)}
+                                onBlur={onBlur}
+                                isInvalid={!isValid}
+                                errorMessage={errors[0]}
+                                isRequired
+                              >
+                                {
+                                  Object.values(Focus).sort().map((focus: Focus) =>
+                                    <SelectItem key={focus}>{uppercaseToCapitalize(focus)}</SelectItem>
+                                  )
+                                }
+                              </Select>
+                            )}
+                          </Field>
+
+                          <Field
+                            name="minors"
+                            onChangeValidate={z
+                              .string()
+                              .min(1, "Select your minor(s)")}
+                          >
+                            {({ value, setValue, onBlur, isValid, errors }) => (
+                              <Select
+                                label="Minor(s)"
+                                selectionMode="multiple"
+                                onChange={(e) => setValue(e.target.value)}
+                                onBlur={onBlur}
+                                isInvalid={!isValid}
+                                errorMessage={errors[0]}
+                              >
+                                {
+                                  Object.values(Focus).sort().map((focus: Focus) =>
+                                    <SelectItem key={focus}>{uppercaseToCapitalize(focus)}</SelectItem>
+                                  )
+                                }
+                              </Select>
+                            )}
+                          </Field>
+                        </div>
 
                         <Field
                           name="about"

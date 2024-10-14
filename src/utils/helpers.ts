@@ -60,7 +60,9 @@ export const applicationMemberTypeToString = (type: string) => {
 };
 
 export const uppercaseToCapitalize = (str: string) => {
-  str = str.toLocaleLowerCase();
-  str = str[0]?.toLocaleUpperCase() + str.slice(1);
-  return str;
+  return str
+    .toLowerCase()
+    .split("_")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };

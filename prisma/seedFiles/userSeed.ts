@@ -2,7 +2,7 @@ import { clerkClient } from "@clerk/nextjs/server";
 
 import { prisma } from "~/server/db";
 
-import type { Prisma } from "@prisma/client";
+import { Focus, type Prisma } from "@prisma/client";
 import { faker } from '@faker-js/faker';
 
 export const seedUsers = async () => {
@@ -40,11 +40,15 @@ export const seedProfiles = async () => {
     // Create the profile for each user
     const profile = await prisma.profile.create({
       data: {
-        userId: user.userId,
-        skills: Array.from({ length: 3 }, () => faker.hacker.verb()), // Generate 3 random skills
-        about: faker.lorem.paragraph(), // Random paragraph for about section
-        school: faker.company.name(), // Random company name as a placeholder for school name
+        skills: Array.from({ length: 3 }, () => faker.hacker.verb()),
+        about: faker.lorem.paragraph(),
+        school: faker.company.name(),
         year: faker.helpers.arrayElement(["Freshman", "Sophomore", "Junior", "Senior", "Graduate"]),
+        majors: [faker.helpers.arrayElement(Object.values(Focus))],
+        minors: faker.helpers.arrayElements(Object.values(Focus), 2),
+        user: {
+          connect: { userId: user.userId },
+        },
       },
     });
 

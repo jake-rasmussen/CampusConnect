@@ -12,7 +12,7 @@ const DescriptionOutline = ({
     <>
       <div className="relative max-w-6xl text-center md:px-6 md:py-0">
         <h1
-          className="text-2xl font-semibold underline"
+          className="text-2xl font-semibold"
           style={{ textDecorationColor: colors.secondaryColor }} // Inline style for underline color
         >
           Description

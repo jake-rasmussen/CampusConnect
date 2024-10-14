@@ -122,6 +122,7 @@ const CreateProjectEditor = () => {
                           return;
                         });
                       }}
+                      color="primary"
                     >
                       Submit
                     </Button>

@@ -1,5 +1,5 @@
 import { Button, Divider } from "@nextui-org/react";
-import { Profile, ProfileSocialMedia, SocialMediaPlatformType, User } from "@prisma/client";
+import { Focus, Profile, ProfileSocialMedia, SocialMediaPlatformType, User } from "@prisma/client";
 import { UserSearch, BrandInstagram, BrandLinkedin, BrandFacebook, BrandTwitter, Link, Trash, WorldWww } from "tabler-icons-react";
 import { uppercaseToCapitalize } from "~/utils/helpers";
 import { SocialMediaFormType } from "./profileSocialMediaEditor";
@@ -52,6 +52,24 @@ const ProfileDashboard = (props: PropType) => {
         <div className="relative flex flex-col gap-4 col-span-2">
           <div className="flex flex-col">
             <h1 className="text-center text-xl font-semibold">
+              Area of Focus
+            </h1>
+            <div className="flex flex-col text-left justify-center p-4">
+              <span>
+                Major(s): {profile.majors.map((major: Focus, index: number) =>
+                  uppercaseToCapitalize(major) + ((index + 1) !== profile.majors.length ? ", " : "")
+                )}
+              </span>
+              {profile.minors.length > 0 && <span>
+                Minor(s): {profile.minors.map((minor: Focus, index: number) =>
+                  uppercaseToCapitalize(minor) + ((index + 1) !== profile.minors.length ? ", " : "")
+                )}
+              </span>}
+            </div>
+          </div>
+          <Divider />
+          <div className="flex flex-col">
+            <h1 className="text-center text-xl font-semibold">
               Social Media
             </h1>
             <div className="flex flex-wrap items-center justify-center px-4">
@@ -79,15 +97,15 @@ const ProfileDashboard = (props: PropType) => {
             <div className="flex flex-wrap justify-center max-w-lg gap-2">
               {
                 profile.skills.map((skill: string, index: number) => <div
-                className="bg-secondary text-white p-2 px-3 uppercase font-black tracking-wide rounded-full shadow-xl"
-                key={`skill${skill}${index}`}>
+                  className="bg-secondary text-white p-2 px-3 uppercase font-black tracking-wide rounded-full shadow-xl"
+                  key={`skill${skill}${index}`}>
                   {skill}
                 </div>)
               }
             </div>
           </div>
         </div>
-        
+
         <div className="flex flex-col gap-4 col-span-3">
           <h1 className="text-left text-3xl font-semibold">
             About

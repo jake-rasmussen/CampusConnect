@@ -6,6 +6,7 @@ import { ProjectContext } from "lib/context";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
 import { upperCase } from "lodash";
+import DeleteProjectEditor from "./dashboard/deleteProjectEditor";
 
 enum SettingsSection {
   "COLORS",
@@ -76,7 +77,7 @@ const AdminSettings = (props: PropType) => {
                   </Button>
 
                   <div className="w-full grow items-end flex">
-                    <Button variant="light" color="danger" className="w-full">Delete Project</Button>
+                    <Button variant="light" color="danger" className="w-full" onPress={() => setSettingsSection(SettingsSection.DELETE)}>Delete Project</Button>
                   </div>
                 </div>
                 <div className="h-[50vh] col-span-4 flex flex-row">
@@ -135,6 +136,8 @@ const AdminSettings = (props: PropType) => {
                       </section>}
 
                     {settingsSection === SettingsSection.BANNER && <>Banner</>}
+
+                    {settingsSection === SettingsSection.DELETE && <DeleteProjectEditor projectId={projectId} />}
                   </div>
                 </div>
               </ModalBody>

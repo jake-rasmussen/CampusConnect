@@ -101,7 +101,7 @@ const MyProjects: NextPageWithLayout = () => {
         ) : (
           <section>
             <div className="mx-auto flex flex-col justify-center items-center px-4 py-16 text-center md:py-32 md:px-10 lg:px-32 xl:max-w-3xl">
-              <h1 className="text-4xl font-bold leading-none sm:text-5xl">
+              <h1 className="text-4xl font-bold leading-none">
                 You are not an admin or evaluator in any projects!
               </h1>
               <p className="px-8 mt-8 mb-12 text-lg">

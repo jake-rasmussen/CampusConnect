@@ -64,7 +64,7 @@ const ApplicationCreator = ({ projectId }: Props) => {
             return await submit().then((isValid) => {
               if (isValid) {
                 toast.dismiss();
-                toast.loading("Saving Contact...");
+                toast.loading("Saving Application...");
               }
               return isValid;
             }).catch((e) => {

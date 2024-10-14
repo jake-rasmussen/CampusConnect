@@ -111,7 +111,7 @@ function AceternityNavbar({ className }: { className?: string }) {
           <MenuItem setActive={setActive} active={active} item="Profile">
             <div className="flex flex-col space-y-4 text-sm">
               <HoveredLink href="/profile">My Profile</HoveredLink>
-              <HoveredLink href="/my-applications">
+              <HoveredLink href="/profile/connect">
                 Connect<span className="font-bold text-secondary text-lg">+</span>
               </HoveredLink>
             </div>
