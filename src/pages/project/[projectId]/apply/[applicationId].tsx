@@ -24,8 +24,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-      })
+      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+    })
     | undefined
   >();
 
@@ -48,9 +48,14 @@ const Apply: NextPageWithLayout = () => {
     isLoading: isLoadingFileList,
     isError: isErrorFileList,
     error: errorFileList,
-  } = api.supabaseRouter.getSupabaseFolder.useQuery({
-    applicationId,
-  });
+  } = api.supabaseRouter.getSupabaseFolder.useQuery(
+    {
+      applicationId,
+    },
+    {
+      enabled: !!applicationId,
+    }
+  );
 
   const {
     data: userSubmissions,

@@ -2,7 +2,7 @@ import Error from "next/error";
 import { useRouter } from "next/router";
 import React from "react";
 
-import ProjectDashboard from "~/components/dashboard/dashboardPage";
+import ProjectDashboard from "~/components/dashboard/projectDashboard";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";

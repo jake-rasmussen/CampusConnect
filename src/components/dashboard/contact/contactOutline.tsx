@@ -12,7 +12,7 @@ const ContactOutline = ({
     <>
       <section className="flex max-w-6xl flex-col md:pt-0">
         <h1
-          className="text-center text-2xl font-semibold underline"
+          className="text-center text-2xl font-semibold"
           style={{ textDecorationColor: colors.secondaryColor }} // Inline style for underline color
         >
           Contact

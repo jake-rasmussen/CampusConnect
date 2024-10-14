@@ -18,12 +18,6 @@ const ContactCard = (props: PropType) => {
   return (
     <>
       <div className="relative my-6 h-[10rem] w-[20rem] overscroll-none rounded-xl bg-white shadow-xl">
-        <Chip
-          className="absolute right-0 ml-4 h-[2rem] translate-x-[-1rem] translate-y-[-0.75rem] text-white shadow-xl"
-          style={{ backgroundColor: colors.secondaryColor }}
-        >
-          {contactInfo.role}
-        </Chip>
         <div className="flex h-full flex-row items-center pl-1 pr-4">
           <div>
             <div
@@ -36,9 +30,13 @@ const ContactCard = (props: PropType) => {
             />
           </div>
           <div className="ml-4 overflow-x-scroll">
-            <h1 className="mb-2 text-lg font-bold underline">
-              {contactInfo.firstName} {contactInfo.lastName}
-            </h1>
+            <div className="flex flex-col gap-0 mb-2">
+              <h1 className="text-lg font-bold">
+                {contactInfo.firstName} {contactInfo.lastName}
+              </h1>
+              {contactInfo.role}
+            </div>
+
             <p className="text-sm text-gray">{contactInfo.email}</p>
             <p className="text-sm text-gray">{contactInfo.phone}</p>
           </div>

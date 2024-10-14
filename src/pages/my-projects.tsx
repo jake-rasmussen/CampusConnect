@@ -10,7 +10,7 @@ import { Input } from "@nextui-org/input";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 import { NextPageWithLayout } from "./_app";
-import { Divider } from "@nextui-org/react";
+import { Button, Divider } from "@nextui-org/react";
 
 const MyProjects: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
@@ -59,7 +59,7 @@ const MyProjects: NextPageWithLayout = () => {
     );
   } else {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center ">
+      <div className="flex h-full w-full flex-col items-center justify-center">
         <section className="mb-14 mt-28">
           <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
             My Projects
@@ -93,24 +93,27 @@ const MyProjects: NextPageWithLayout = () => {
                   />
                 ))}
             </div>
+
+            <section className="my-10">
+              <CreateProjectEditor />
+            </section>
           </>
         ) : (
-          <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">
-            {/* <NoteOff className="h-44 w-44 text-secondary" /> */}
-            <h3 className="text-2xl font-semibold uppercase">
-              You are not an admin or evaluator in any projects!
-            </h3>
-            <Divider />
-            <span className="mx-8 py-2 text-sm font-normal text-secondary">
-              If you think this may be a mistake, please contact the project
-              owner
-            </span>
-          </div>
+          <section>
+            <div className="mx-auto flex flex-col justify-center items-center px-4 py-16 text-center md:py-32 md:px-10 lg:px-32 xl:max-w-3xl">
+              <h1 className="text-4xl font-bold leading-none">
+                You are not an admin or evaluator in any projects!
+              </h1>
+              <p className="px-8 mt-8 mb-12 text-lg">
+                If you think this may be a mistake, please contact the project owner
+              </p>
+              <div className="flex flex-wrap gap-8 justify-center">
+                <CreateProjectEditor />
+                <Button>Learn more</Button>
+              </div>
+            </div>
+          </section>
         )}
-
-        <section className="my-10">
-          <CreateProjectEditor />
-        </section>
       </div>
     );
   }

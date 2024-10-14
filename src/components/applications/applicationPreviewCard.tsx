@@ -99,11 +99,11 @@ const ApplicationPreviewCard = (props: PropType) => {
                   <Button color="danger" variant="light" onPress={onClose}>
                     Close
                   </Button>
-                  <Button color="primary" onPress={onClose}>
-                    <Link href={`/project/${application.projectId}/apply/${application.id}`}>
+                  <Link href={`/project/${application.projectId}/apply/${application.id}`}>
+                    <Button color="primary" onPress={onClose}>
                       Apply
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
                 </ModalFooter>
               </>
             )}

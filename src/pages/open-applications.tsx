@@ -62,6 +62,8 @@ const OpenApplications = () => {
   }, [openApplications, applicationSubmissions]);
 
   const skillInFilter = (application: Application) => {
+    if (filteredSkills.length === 0) return true;
+    
     for (const skill of application.desiredSkills) {
       if (filteredSkills.includes(skill)) return true;
     }
@@ -109,7 +111,6 @@ const OpenApplications = () => {
                 } else {
                   setFilteredSkills([...selectedSkills]);
                 }
-
               }}
             >
               {skills.map((skill: string) => (
@@ -123,7 +124,7 @@ const OpenApplications = () => {
             {applications.length > 0 ? (
               <div className="flex max-w-7xl flex-wrap justify-center">
                 {applications.filter(application => (
-                  skillInFilter(application) ||
+                  skillInFilter(application) &&
                   application.name.toLowerCase().includes(query.toLowerCase())
                 )).map((application, index) => (
                   <ApplicationPreviewCard

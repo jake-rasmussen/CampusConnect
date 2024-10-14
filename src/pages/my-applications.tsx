@@ -48,11 +48,14 @@ const MyApplications = () => {
               ))}
             </div>
           ) : (
-            <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">
+            <div className="flex max-w-3xl flex-col items-center justify-center gap-y-2 text-center">
               <LicenseOff className="h-44 w-44 text-secondary" />
-              <h3 className="text-2xl font-semibold uppercase">
-                You have not submitted any applications
-              </h3>
+              <h1 className="text-4xl font-bold leading-none">
+                You have not submitted any applications!
+              </h1>
+              <p className="max-w-xl">
+                To find applications, go to Open Applications, or find a project of interest and see if they have any open applications.
+              </p>
             </div>
           )}
         </section>
