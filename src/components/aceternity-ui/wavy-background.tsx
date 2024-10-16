@@ -1,7 +1,9 @@
 "use client";
-import { cn } from "~/utils/cn";
+
 import React, { useEffect, useRef, useState } from "react";
 import { createNoise3D } from "simplex-noise";
+
+import { cn } from "~/utils/cn";
 
 export const WavyBackground = ({
   children,
@@ -105,15 +107,15 @@ export const WavyBackground = ({
     setIsSafari(
       typeof window !== "undefined" &&
         navigator.userAgent.includes("Safari") &&
-        !navigator.userAgent.includes("Chrome")
+        !navigator.userAgent.includes("Chrome"),
     );
   }, []);
 
   return (
     <div
       className={cn(
-        "h-screen flex flex-col items-center justify-center",
-        containerClassName
+        "flex h-screen flex-col items-center justify-center",
+        containerClassName,
       )}
     >
       <canvas

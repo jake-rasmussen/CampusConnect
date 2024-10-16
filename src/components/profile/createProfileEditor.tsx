@@ -1,24 +1,34 @@
 import {
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/modal";
-import { Autocomplete, AutocompleteItem, Button, Divider, Select, SelectItem, useDisclosure } from "@nextui-org/react";
-
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Button,
+  Divider,
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+  useDisclosure,
+} from "@nextui-org/react";
+import { Focus, ProfileSocialMedia } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { api } from "~/utils/api";
-import { Input, Textarea } from "@nextui-org/react";
-import { Focus, ProfileSocialMedia } from "@prisma/client";
-import SkillsCreator from "../dashboard/applications/skillsCreator";
-import { useState } from "react";
-import ProfileSocialMediaEditor, { SocialMediaFormType } from "./profileSocialMediaEditor";
 import { uppercaseToCapitalize } from "~/utils/helpers";
+import SkillsCreator from "../dashboard/applications/skillsCreator";
+import ProfileSocialMediaEditor, {
+  SocialMediaFormType,
+} from "./profileSocialMediaEditor";
 
 type ProfileFormType = {
   majors: Focus;
@@ -70,11 +80,14 @@ const CreateProfileEditor = () => {
 
   return (
     <>
-      <Button onPress={() => {
-        onOpen();
-        setSkills([]);
-        setSocialMedias([]);
-      }} color="primary">
+      <Button
+        onPress={() => {
+          onOpen();
+          setSkills([]);
+          setSocialMedias([]);
+        }}
+        color="primary"
+      >
         Create Profile
       </Button>
 
@@ -99,11 +112,10 @@ const CreateProfileEditor = () => {
                 });
               }}
             >
-
               {({ submit }) => (
                 <>
                   <ModalHeader>Create Profile</ModalHeader>
-                  <ModalBody className="overflow-y-scroll max-h-[70vh] overflow-y-scroll">
+                  <ModalBody className="max-h-[70vh] overflow-y-scroll overflow-y-scroll">
                     <main className="flex w-full flex-col items-center gap-4">
                       <section className="flex w-full flex-col gap-4">
                         <Field
@@ -169,11 +181,13 @@ const CreateProfileEditor = () => {
                                 errorMessage={errors[0]}
                                 isRequired
                               >
-                                {
-                                  Object.values(Focus).sort().map((focus: Focus) =>
-                                    <SelectItem key={focus}>{uppercaseToCapitalize(focus)}</SelectItem>
-                                  )
-                                }
+                                {Object.values(Focus)
+                                  .sort()
+                                  .map((focus: Focus) => (
+                                    <SelectItem key={focus}>
+                                      {uppercaseToCapitalize(focus)}
+                                    </SelectItem>
+                                  ))}
                               </Select>
                             )}
                           </Field>
@@ -193,11 +207,13 @@ const CreateProfileEditor = () => {
                                 isInvalid={!isValid}
                                 errorMessage={errors[0]}
                               >
-                                {
-                                  Object.values(Focus).sort().map((focus: Focus) =>
-                                    <SelectItem key={focus}>{uppercaseToCapitalize(focus)}</SelectItem>
-                                  )
-                                }
+                                {Object.values(Focus)
+                                  .sort()
+                                  .map((focus: Focus) => (
+                                    <SelectItem key={focus}>
+                                      {uppercaseToCapitalize(focus)}
+                                    </SelectItem>
+                                  ))}
                               </Select>
                             )}
                           </Field>
@@ -224,12 +240,18 @@ const CreateProfileEditor = () => {
 
                         <Divider className="my-2 " />
 
-                        <SkillsCreator skills={skills} setSkills={setSkills} placeholder="Add skills to your profile..." />
+                        <SkillsCreator
+                          skills={skills}
+                          setSkills={setSkills}
+                          placeholder="Add skills to your profile..."
+                        />
 
                         <Divider className="mb-2 " />
 
-                        <ProfileSocialMediaEditor socialMedias={socialMedias} setSocialMedias={setSocialMedias} />
-
+                        <ProfileSocialMediaEditor
+                          socialMedias={socialMedias}
+                          setSocialMedias={setSocialMedias}
+                        />
                       </section>
                     </main>
                   </ModalBody>
@@ -252,8 +274,8 @@ const CreateProfileEditor = () => {
               )}
             </Form>
           )}
-        </ModalContent >
-      </Modal >
+        </ModalContent>
+      </Modal>
     </>
   );
 };

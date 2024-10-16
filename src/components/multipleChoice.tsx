@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { Radio, RadioGroup } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 
 type PropType = {
   answerChoices: string[];
@@ -22,7 +22,7 @@ const MultipleChoice = (props: PropType) => {
     <>
       <RadioGroup
         className="text-white"
-        label={<span className="text-white text-lg">{label}</span>}
+        label={<span className="text-xl text-white">{label}</span>}
         isRequired={isRequired}
         value={selectedAnswer}
       >
@@ -41,7 +41,7 @@ const MultipleChoice = (props: PropType) => {
                 }}
                 color="secondary"
               >
-                <span className="text-white">{answerChoice}</span>
+                <span className="text-white text-lg">{answerChoice}</span>
               </Radio>
             </div>
           );

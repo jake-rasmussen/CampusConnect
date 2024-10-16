@@ -1,8 +1,8 @@
 import { SocialMedia } from "@prisma/client";
 
 import SocialMediaCard from "./socialMediaCard";
-import SocialMediaOutline from "./socialMediaOutline";
 import SocialMediaEditor from "./socialMediaEditor";
+import SocialMediaOutline from "./socialMediaOutline";
 
 type PropType = {
   socialMedias: SocialMedia[];

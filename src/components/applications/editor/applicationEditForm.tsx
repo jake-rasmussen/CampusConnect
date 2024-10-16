@@ -1,15 +1,26 @@
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
+  useDisclosure,
+} from "@nextui-org/react";
 import { ApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
+
 import PreviewModal from "~/components/previewModal";
 import ApplicationForm from "../applicationForm";
 import ApplicationPublishConfirmationDialog, {
   ConfirmationFormType,
 } from "./applicationPublishConfirmationDialog";
 import QuestionsEditor from "./questionsEditor";
-import { Input, Textarea, Button, useDisclosure, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 
 type ApplicationFormType = {
   name: string;
@@ -110,8 +121,7 @@ const ApplicationEditForm = (props: PropType) => {
                 onBlurValidate={z
                   .string()
                   .min(1, "Enter an application name")
-                  .max(250, "Name must be less than 250 characters")
-                }
+                  .max(250, "Name must be less than 250 characters")}
               >
                 {({ value, setValue, onBlur, isValid, errors }) => (
                   <>
@@ -161,7 +171,7 @@ const ApplicationEditForm = (props: PropType) => {
               </Field>
             </section>
 
-            <section className="flex flex-col items-center gap-4 py-8 w-full">
+            <section className="flex w-full flex-col items-center gap-4 py-8">
               <span className="text-center text-4xl font-semibold ">
                 Questions
               </span>
@@ -195,10 +205,7 @@ const ApplicationEditForm = (props: PropType) => {
 
               <PreviewModal
                 triggerButton={
-                  <Button
-                    className="px-4 py-4"
-                    disabled={isSaving}
-                  >
+                  <Button className="px-4 py-4" disabled={isSaving}>
                     Preview
                   </Button>
                 }
@@ -230,11 +237,11 @@ const ApplicationEditForm = (props: PropType) => {
               <ModalContent>
                 {(onClose) => (
                   <>
-                    <ModalHeader className="flex flex-col gap-1">Error</ModalHeader>
+                    <ModalHeader className="flex flex-col gap-1">
+                      Error
+                    </ModalHeader>
                     <ModalBody>
-                      <p>
-                        Please make sure that all fields are filled!
-                      </p>
+                      <p>Please make sure that all fields are filled!</p>
                     </ModalBody>
                     <ModalFooter>
                       <Button color="danger" variant="light" onPress={onClose}>

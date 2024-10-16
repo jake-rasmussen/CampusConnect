@@ -1,7 +1,13 @@
 import "@prisma/client";
 
+import { ProjectContext } from "lib/context";
 import { twMerge } from "tailwind-merge";
 
+import AdminSettings from "../adminSettings";
+import Tab from "../tab/tab";
+import TabContent from "../tab/tabContent";
+import TabHeader from "../tab/tabHeader";
+import TabList from "../tab/tabList";
 import Applications from "./applications/applications";
 import ContactSection from "./contact/contactSection";
 import DescriptionSection from "./description/descriptionSection";
@@ -9,23 +15,17 @@ import Events from "./events/events";
 import Header from "./header/header";
 import Members from "./members/members";
 import SocialMediaSection from "./socialMedia/socialMediaSection";
-import Tab from "../tab/tab";
-import TabContent from "../tab/tabContent";
-import TabHeader from "../tab/tabHeader";
-import TabList from "../tab/tabList";
 
 import type {
   Application,
   ApplicationQuestion,
+  Colors,
   ContactInfo,
   Event,
   Member,
   SocialMedia,
   User,
-  Colors
 } from "@prisma/client";
-import AdminSettings from "../adminSettings";
-import { ProjectContext } from "lib/context";
 
 type PropType = {
   name: string;
@@ -134,12 +134,12 @@ const ProjectDashboard = (props: PropType) => {
             <>
               {isAdminPage && (
                 // <DeleteProjectEditor projectId={projectId} projectName={name} />
-                <AdminSettings projectId={projectId}  />
+                <AdminSettings projectId={projectId} />
               )}
             </>
           </Tab>
         </main>
-      </ProjectContext.Provider >
+      </ProjectContext.Provider>
     </>
   );
 };

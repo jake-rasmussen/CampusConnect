@@ -1,4 +1,12 @@
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import { motion, useAnimation } from "framer-motion";
 import toast from "react-hot-toast";
 import { Link, Trash } from "tabler-icons-react";
@@ -32,7 +40,10 @@ const ApplicationDeleteDialog = (props: PropType) => {
 
   return (
     <>
-      <div className="absolute right-0 top-0 -translate-x-px translate-y-px" onClick={onOpen}>
+      <div
+        className="absolute right-0 top-0 -translate-x-px translate-y-px"
+        onClick={onOpen}
+      >
         <Trash className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:rotate-12 hover:text-red-500" />
       </div>
 
@@ -44,26 +55,33 @@ const ApplicationDeleteDialog = (props: PropType) => {
                 Are you sure you want to delete this application?
               </ModalHeader>
               <ModalBody>
-                Please note, once this applicaiton is deleted, this action cannot be
-                undone. Access to any submitted submissions will be lost!
+                Please note, once this applicaiton is deleted, this action
+                cannot be undone. Access to any submitted submissions will be
+                lost!
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={() => {
-                  removeApplicationProject.mutate({ applicationId, projectId });
-                  toast.dismiss();
-                  toast.loading("Removing Application...");
-                  onClose();
-                }}>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    removeApplicationProject.mutate({
+                      applicationId,
+                      projectId,
+                    });
+                    toast.dismiss();
+                    toast.loading("Removing Application...");
+                    onClose();
+                  }}
+                >
                   Confirm
                 </Button>
               </ModalFooter>
             </>
           )}
         </ModalContent>
-      </Modal >
+      </Modal>
     </>
   );
 };

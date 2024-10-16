@@ -54,7 +54,8 @@ const MyApplications = () => {
                 You have not submitted any applications!
               </h1>
               <p className="max-w-xl">
-                To find applications, go to Open Applications, or find a project of interest and see if they have any open applications.
+                To find applications, go to Open Applications, or find a project
+                of interest and see if they have any open applications.
               </p>
             </div>
           )}

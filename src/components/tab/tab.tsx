@@ -1,10 +1,10 @@
-import React, { useState } from "react";
 import { Colors } from "@prisma/client";
+import React, { useState } from "react";
 
 type PropType = {
   project: {
     colors: Colors;
-  }
+  };
   children: JSX.Element[];
 };
 
@@ -31,9 +31,7 @@ const Tab = ({ project, children }: PropType) => {
 
   return (
     <>
-      <div className="w-full py-10">
-        {childrenWithProps}
-      </div>
+      <div className="w-full py-10">{childrenWithProps}</div>
     </>
   );
 };

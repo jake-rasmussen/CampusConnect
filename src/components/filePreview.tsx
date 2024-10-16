@@ -1,9 +1,17 @@
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { api } from "~/utils/api";
 import LoadingSection from "./loadingSection";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Button } from "@nextui-org/react";
 
 type PropType = {
   projectId: string;
@@ -41,7 +49,7 @@ const FilePreview = (props: PropType) => {
 
   return (
     <>
-      <div className="block w-full cursor-pointer items-center rounded-lg rounded-xl border bg-white p-3 text-left flex flex-row">
+      <div className="block flex w-full cursor-pointer flex-row items-center rounded-lg rounded-xl border bg-white p-3 text-left">
         <div
           className="mr-2 rounded-full border-none bg-secondary px-4 py-2 font-black uppercase text-white shadow-xl"
           onClick={onOpen}

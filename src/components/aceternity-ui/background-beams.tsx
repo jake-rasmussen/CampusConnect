@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+
 import { motion } from "framer-motion";
 import { cn } from "lib/utils";
+import React from "react";
 
 const paths = [
   "M-380 -189C-380 -189 -312 216 152 343C616 470 684 875 684 875",
@@ -58,16 +59,15 @@ const paths = [
 
 export const BackgroundBeams = React.memo(
   ({ className }: { className?: string }) => {
-    
     return (
       <div
         className={cn(
-          "absolute h-screen w-screen inset-0 [mask-size:40px] [mask-repeat:no-repeat] flex items-center justify-center",
-          className
+          "absolute inset-0 flex h-screen w-screen items-center justify-center [mask-repeat:no-repeat] [mask-size:40px]",
+          className,
         )}
       >
         <svg
-          className=" z-0 h-full w-full pointer-events-none absolute "
+          className=" pointer-events-none absolute z-0 h-full w-full "
           width="100%"
           height="100%"
           viewBox="0 0 696 316"
@@ -137,7 +137,7 @@ export const BackgroundBeams = React.memo(
         </svg>
       </div>
     );
-  }
+  },
 );
 
 BackgroundBeams.displayName = "BackgroundBeams";

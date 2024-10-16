@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+
 import { motion } from "framer-motion";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 const transition = {
   type: "spring",
@@ -39,15 +40,15 @@ export const MenuItem = ({
           transition={transition}
         >
           {active === item && (
-            <div className="absolute top-[calc(100%_+_0.6rem)] left-1/2 transform -translate-x-1/2 pt-4">
+            <div className="absolute left-1/2 top-[calc(100%_+_0.6rem)] -translate-x-1/2 transform pt-4">
               <motion.div
                 transition={transition}
                 layoutId="active" // layoutId ensures smooth animation
-                className="bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.2] dark:border-white/[0.2] shadow-xl"
+                className="overflow-hidden rounded-2xl border border-black/[0.2] bg-white shadow-xl backdrop-blur-sm dark:border-white/[0.2] dark:bg-black"
               >
                 <motion.div
                   layout // layout ensures smooth animation
-                  className="w-max h-full p-4"
+                  className="h-full w-max p-4"
                 >
                   {children}
                 </motion.div>
@@ -70,7 +71,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full border border-transparent dark:bg-black dark:border-white/[0.2] bg-white shadow-input flex justify-center items-center space-x-8 px-8 py-4"
+      className="shadow-input relative flex items-center justify-center space-x-8 rounded-full border border-transparent bg-white px-8 py-4 dark:border-white/[0.2] dark:bg-black"
     >
       {children}
     </nav>
@@ -81,7 +82,7 @@ export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <Link
       {...rest}
-      className="text-neutral-700 dark:text-neutral-200 hover:text-black "
+      className="text-neutral-700 hover:text-black dark:text-neutral-200 "
     >
       {children}
     </Link>

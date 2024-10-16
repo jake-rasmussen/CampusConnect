@@ -1,6 +1,6 @@
 import ContactCard from "./contactCard";
-import ContactOutline from "./contactOutline";
 import ContactsEditor from "./contactEditor";
+import ContactOutline from "./contactOutline";
 
 import type { ContactInfo } from "@prisma/client";
 

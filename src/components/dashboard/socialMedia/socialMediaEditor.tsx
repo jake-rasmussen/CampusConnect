@@ -1,12 +1,11 @@
+import { Input, Select, SelectItem } from "@nextui-org/react";
+import { SocialMediaPlatformType } from "@prisma/client";
+import { Field, Form } from "houseform";
 import toast from "react-hot-toast";
+import { z } from "zod";
 
 import { api } from "~/utils/api";
 import EditController from "../editController";
-
-import { SocialMediaPlatformType } from "@prisma/client";
-import { Field, Form } from "houseform";
-import { z } from "zod";
-import { Input, Select, SelectItem } from "@nextui-org/react";
 
 type SocialMediaFormType = {
   url: string;
@@ -103,16 +102,18 @@ const SocialMediaEditor = (props: PropType) => {
           createDescription="Create New Social Media"
           editType={socialMediaId ? "update" : "create"}
           handleSubmit={async () => {
-            return await submit().then((isValid) => {
-              if (isValid) {
-                toast.dismiss();
-                toast.loading("Saving Social Media...");
-              }
-              return isValid;
-            }).catch((e) => {
-              console.log(e);
-              return false;
-            });
+            return await submit()
+              .then((isValid) => {
+                if (isValid) {
+                  toast.dismiss();
+                  toast.loading("Saving Social Media...");
+                }
+                return isValid;
+              })
+              .catch((e) => {
+                console.log(e);
+                return false;
+              });
           }}
           handleDelete={socialMediaId ? handleDelete : undefined}
         >
@@ -127,7 +128,7 @@ const SocialMediaEditor = (props: PropType) => {
             >
               {({ value, setValue, onBlur, isValid, errors }) => (
                 <Input
-                 className="col-span-4"
+                  className="col-span-4"
                   placeholder="Enter URL"
                   value={value}
                   onChange={(e) => setValue(e.currentTarget.value)}
@@ -162,7 +163,9 @@ const SocialMediaEditor = (props: PropType) => {
                   label="Platform"
                   className="col-span-4"
                   selectedKeys={[value]}
-                  onChange={(e) => setValue(e.target.value as SocialMediaPlatformType)}
+                  onChange={(e) =>
+                    setValue(e.target.value as SocialMediaPlatformType)
+                  }
                   onBlur={onBlur}
                   isInvalid={!isValid}
                   errorMessage={errors[0]}

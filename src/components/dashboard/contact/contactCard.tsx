@@ -1,8 +1,9 @@
-import { ContactInfo } from "@prisma/client";
 import { Chip } from "@nextui-org/react";
-import ContactEditor from "./contactEditor";
-import { useContext } from "react";
+import { ContactInfo } from "@prisma/client";
 import { ProjectContext } from "lib/context";
+import { useContext } from "react";
+
+import ContactEditor from "./contactEditor";
 
 type PropType = {
   contactInfo: ContactInfo;
@@ -30,7 +31,7 @@ const ContactCard = (props: PropType) => {
             />
           </div>
           <div className="ml-4 overflow-x-scroll">
-            <div className="flex flex-col gap-0 mb-2">
+            <div className="mb-2 flex flex-col gap-0">
               <h1 className="text-lg font-bold">
                 {contactInfo.firstName} {contactInfo.lastName}
               </h1>

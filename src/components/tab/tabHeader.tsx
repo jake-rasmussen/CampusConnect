@@ -38,7 +38,9 @@ const TabHeader = (props: PropType) => {
       <span
         className={textClassName}
         style={{
-          color: isActive ? project.colors.primaryColor : project.colors.secondaryColor,
+          color: isActive
+            ? project.colors.primaryColor
+            : project.colors.secondaryColor,
         }}
       >
         {props.children}

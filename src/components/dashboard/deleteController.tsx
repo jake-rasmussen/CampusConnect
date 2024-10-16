@@ -1,7 +1,13 @@
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import toast from "react-hot-toast";
 import { Trash } from "tabler-icons-react";
-
-import { Button, Modal, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 
 type PropType = {
   dialogDescription: string;
@@ -33,12 +39,15 @@ const DeleteController = (props: PropType) => {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button color="primary" onPress={() => {
-                  toast.dismiss();
-                  toast.loading("Deleting Contact...");
-                  handleDelete();
-                  onClose();
-                }}>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    toast.dismiss();
+                    toast.loading("Deleting Contact...");
+                    handleDelete();
+                    onClose();
+                  }}
+                >
                   Submit
                 </Button>
               </ModalFooter>

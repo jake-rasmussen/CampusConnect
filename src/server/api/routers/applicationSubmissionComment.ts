@@ -23,7 +23,6 @@ export const applicationSubmissionCommentRouter = createTRPCRouter({
           memberProjectId: projectId,
           memberUserId: ctx.user.userId,
         },
-
       });
     }),
   deleteApplicationSubmissionComment: t.procedure
@@ -31,7 +30,7 @@ export const applicationSubmissionCommentRouter = createTRPCRouter({
       z.object({
         projectId: z.string(),
         applicationSubmissionEvaluationId: z.string(),
-      })
+      }),
     )
     .use(isEvaluator)
     .mutation(async ({ ctx, input }) => {
@@ -46,7 +45,9 @@ export const applicationSubmissionCommentRouter = createTRPCRouter({
       });
 
       if (!comment) {
-        throw new Error("Comment not found or you are not authorized to delete this comment.");
+        throw new Error(
+          "Comment not found or you are not authorized to delete this comment.",
+        );
       }
 
       return ctx.prisma.applicationSubmissionComment.delete({
@@ -54,5 +55,5 @@ export const applicationSubmissionCommentRouter = createTRPCRouter({
           id: comment.id,
         },
       });
-    })
+    }),
 });

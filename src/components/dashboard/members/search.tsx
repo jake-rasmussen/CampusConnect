@@ -1,5 +1,17 @@
 import "@prisma/client";
 
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Button,
+  Input,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+  user,
+} from "@nextui-org/react";
 import { debounce } from "lodash";
 import React, { Key, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -7,7 +19,6 @@ import toast from "react-hot-toast";
 import { api } from "~/utils/api";
 
 import type { Member, User } from "@prisma/client";
-import { Autocomplete, AutocompleteItem, Button, Input, Modal, ModalContent, ModalFooter, ModalHeader, useDisclosure, user } from "@nextui-org/react";
 
 type PropType = {
   projectId: string;
@@ -15,10 +26,10 @@ type PropType = {
 };
 
 type FieldStateType = {
-  selectedKey: Key | null,
-  inputValue: string,
-  items: User[],
-}
+  selectedKey: Key | null;
+  inputValue: string;
+  items: User[];
+};
 
 const Search = (props: PropType) => {
   const { projectId, members } = props;
@@ -36,11 +47,18 @@ const Search = (props: PropType) => {
   });
   const [selectedUser, setSelectedUser] = useState<User>();
 
-  const { data: users, isLoading, isError } = api.usersRouter.getUsersByQuery.useQuery({
-    query: search,
-  }, {
-    enabled: search.length > 0,
-  });
+  const {
+    data: users,
+    isLoading,
+    isError,
+  } = api.usersRouter.getUsersByQuery.useQuery(
+    {
+      query: search,
+    },
+    {
+      enabled: search.length > 0,
+    },
+  );
 
   const queryClient = api.useContext();
 
@@ -92,7 +110,9 @@ const Search = (props: PropType) => {
 
   const onSelectionChange = (key: Key | null) => {
     setFieldState((prevState: FieldStateType) => {
-      let selectedItem = (prevState.items || []).find((user) => user.emailAddress === key);
+      let selectedItem = (prevState.items || []).find(
+        (user) => user.emailAddress === key,
+      );
 
       return {
         inputValue: selectedItem?.emailAddress || "",
@@ -124,7 +144,7 @@ const Search = (props: PropType) => {
           onInputChange={onInputChange}
           onSelectionChange={onSelectionChange}
           listboxProps={{
-            emptyContent: "Search User By Email"
+            emptyContent: "Search User By Email",
           }}
           errorMessage={isError ? "Error Getting Users" : ""}
         >
@@ -136,10 +156,10 @@ const Search = (props: PropType) => {
                   setSelectedUser(query);
                   onOpen();
                 }}
-                className="flex flex-col justify-center items-start"
+                className="flex flex-col items-start justify-center"
               >
                 <div className="text-md font-semibold text-secondary">
-                  {query.emailAddress} 
+                  {query.emailAddress}
                 </div>
                 <div className="font-medium underline">
                   {query.firstName} {query.lastName}
@@ -154,18 +174,24 @@ const Search = (props: PropType) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader>Are you sure you want to add {selectedUser?.firstName} {selectedUser?.lastName}?</ModalHeader>
+              <ModalHeader>
+                Are you sure you want to add {selectedUser?.firstName}{" "}
+                {selectedUser?.lastName}?
+              </ModalHeader>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={() => {
-                  if (selectedUser) {
-                    handleAddMember(selectedUser.userId).then(() => {
-                      onClose();
-                    });
-                  }
-                }}>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    if (selectedUser) {
+                      handleAddMember(selectedUser.userId).then(() => {
+                        onClose();
+                      });
+                    }
+                  }}
+                >
                   Confirm
                 </Button>
               </ModalFooter>
@@ -174,7 +200,7 @@ const Search = (props: PropType) => {
         </ModalContent>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
 export default Search;

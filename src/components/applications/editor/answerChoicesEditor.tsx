@@ -2,7 +2,6 @@ import { Input } from "@nextui-org/react";
 import { ApplicationQuestion, ApplicationQuestionType } from "@prisma/client";
 import { Circle, SquarePlus, X } from "tabler-icons-react";
 
-
 type PropType = {
   question: ApplicationQuestion;
   questionIndex: number;
@@ -41,7 +40,7 @@ const AnswerChoicesEditor = (props: PropType) => {
         {question.answerChoices &&
           question.answerChoices.map((answerChoice: string, index: number) => (
             <div
-              className="flex flex-row items-center my-2 gap-4"
+              className="my-2 flex flex-row items-center gap-4"
               key={`answerChoice${answerChoice}${index}`}
             >
               <Circle className="mr-2 h-2 w-2 rounded-full text-white backdrop-invert" />

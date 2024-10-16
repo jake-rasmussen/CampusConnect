@@ -1,7 +1,16 @@
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import React from "react";
 import { Edit, SquarePlus } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+
 import DeleteController from "./deleteController";
 
 type PropType = {
@@ -22,7 +31,7 @@ const EditController = (props: PropType) => {
     className,
     children,
     handleSubmit,
-    handleDelete
+    handleDelete,
   } = props;
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -37,7 +46,7 @@ const EditController = (props: PropType) => {
           >
             <div
               className={twMerge(
-                "absolute h-full w-full rounded-2xl bg-black opacity-0 duration-300 group-hover:opacity-10",
+                "absolute h-full w-full rounded-xl bg-black opacity-0 duration-300 group-hover:opacity-10",
                 className,
               )}
             />
@@ -47,10 +56,7 @@ const EditController = (props: PropType) => {
       )}
       {editType === "create" && (
         <div className={className}>
-          <button
-            className="group flex flex-row items-center"
-            onClick={onOpen}
-          >
+          <button className="group flex flex-row items-center" onClick={onOpen}>
             <SquarePlus className="mx-auto h-14 w-14 text-gray duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
             <h1 className="tracking-none text-2xl font-black uppercase text-gray group-hover:cursor-pointer group-hover:text-secondary">
               {createDescription}
@@ -69,13 +75,11 @@ const EditController = (props: PropType) => {
                   <span className="font-normal">{dialogDescription}</span>
                 </div>
               </ModalHeader>
-              <ModalBody>
-                {children}
-              </ModalBody>
+              <ModalBody>{children}</ModalBody>
               <ModalFooter className="flex">
                 <div className="grow">
                   {handleDelete && (
-                    <div className="flex w-auto grow justify-start items-center">
+                    <div className="flex w-auto grow items-center justify-start">
                       <DeleteController
                         dialogDescription="Are you sure you want to delete the Contact Info?"
                         handleDelete={handleDelete}
@@ -86,10 +90,13 @@ const EditController = (props: PropType) => {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button color="primary" onPress={async () => {
-                  const isValid = await handleSubmit();
-                  if (isValid) onClose();
-                }}>
+                <Button
+                  color="primary"
+                  onPress={async () => {
+                    const isValid = await handleSubmit();
+                    if (isValid) onClose();
+                  }}
+                >
                   Submit
                 </Button>
               </ModalFooter>

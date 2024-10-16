@@ -1,25 +1,22 @@
 import {
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/modal";
-import { Button, useDisclosure } from "@nextui-org/react";
-
+import { Button, Input, Textarea, useDisclosure } from "@nextui-org/react";
 import { Field, Form } from "houseform";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { api } from "~/utils/api";
-import { Input, Textarea } from "@nextui-org/react";
 
 type ApplicationFormType = {
   name: string;
   description: string;
 };
-
 
 const CreateProjectEditor = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -44,7 +41,7 @@ const CreateProjectEditor = () => {
   return (
     <>
       <Button onPress={onOpen} color="primary">
-        Create your own project!
+        Create a project!
       </Button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -63,11 +60,10 @@ const CreateProjectEditor = () => {
                 });
               }}
             >
-
               {({ submit }) => (
                 <>
                   <ModalHeader>Create Project</ModalHeader>
-                  <ModalBody className="overflow-y-scroll max-h-[70vh] overflow-y-scroll">
+                  <ModalBody className="max-h-[70vh] overflow-y-scroll overflow-y-scroll">
                     <main className="flex w-full flex-col items-center gap-4">
                       <section className="mx-10 flex w-full flex-col gap-4">
                         <Field
@@ -75,7 +71,10 @@ const CreateProjectEditor = () => {
                           onBlurValidate={z
                             .string()
                             .min(1, "Enter a project name")
-                            .max(35, "Project name must be less than 35 characters")}
+                            .max(
+                              35,
+                              "Project name must be less than 35 characters",
+                            )}
                         >
                           {({ value, setValue, onBlur, isValid, errors }) => (
                             <Input
@@ -94,7 +93,10 @@ const CreateProjectEditor = () => {
                           onBlurValidate={z
                             .string()
                             .min(1, "Enter a description")
-                            .max(500, "Description must be less than 500 characters")}
+                            .max(
+                              500,
+                              "Description must be less than 500 characters",
+                            )}
                         >
                           {({ value, setValue, onBlur, isValid, errors }) => (
                             <Textarea
@@ -131,8 +133,8 @@ const CreateProjectEditor = () => {
               )}
             </Form>
           )}
-        </ModalContent >
-      </Modal >
+        </ModalContent>
+      </Modal>
     </>
   );
 };

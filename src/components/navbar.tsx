@@ -1,86 +1,53 @@
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { UserType } from "@prisma/client";
+import { cn } from "lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+
+import { api } from "~/utils/api";
 import { HoveredLink, Menu, MenuItem } from "./aceternity-ui/navbar-menu";
-import { cn } from "lib/utils";
 
 type PropType = {
-  isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<SetStateAction<boolean>>;
 };
 
 const Navbar = (props: PropType) => {
-  const { isLoading, setIsLoading } = props;
+  const { setIsLoading } = props;
 
-  useEffect(() => setIsLoading(false));
+  const router = useRouter();
+  const { user } = useUser();
 
-  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-
-  const menu = (
-    <>
-      <Link
-        href="/project"
-        className="flex items-center p-2"
-        onClick={() => setMenuIsOpen(false)}
-      >
-        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
-          All Projects
-        </h1>
-      </Link>
-      <Link
-        href="/open-applications"
-        className="flex items-center p-2"
-        onClick={() => setMenuIsOpen(false)}
-      >
-        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
-          Open Applications
-        </h1>
-      </Link>
-      <Link
-        href="/my-applications"
-        className="flex items-center p-2"
-        onClick={() => setMenuIsOpen(false)}
-      >
-        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
-          My Applications
-        </h1>
-      </Link>
-      <Link
-        href="/my-projects"
-        className="flex items-center p-2"
-        onClick={() => setMenuIsOpen(false)}
-      >
-        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
-          My Projects
-        </h1>
-      </Link>
-    </>
+  const { data: userData, isLoading } = api.usersRouter.getUserType.useQuery(
+    { externalId: user?.id || "" },
+    { enabled: !!user },
   );
 
-  if (isLoading) {
-    return <></>;
-  } else {
-    return (
-      <>
-        <div className="relative w-full flex items-center justify-center">
-          <AceternityNavbar className="top-2" />
-        </div>
-      </>
-    );
-  }
-};
+  useEffect(() => {
+    if (!isLoading) {
+      setIsLoading(false);
+      if (
+        userData?.userType === UserType.INCOMPLETE &&
+        router.pathname !== "/get-started" &&
+        router.pathname !== "/"
+      ) {
+        router.push("/get-started");
+      }
+    }
+  }, [userData, router, isLoading]);
 
-function AceternityNavbar({ className }: { className?: string }) {
+  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [active, setActive] = useState<string | null>(null);
-  return (
-    <div
-      className={cn("fixed top-10 inset-x-0 max-w-2xl mx-auto z-50 shadow-xl rounded-full", className)}
-    >
+
+  let menu: JSX.Element = <></>;
+
+  if (userData?.userType === UserType.EMPLOYEE) {
+    menu = (
       <Menu setActive={setActive}>
         <Link
           href="/"
-          className="absolute left-0 transform translate-x-1/2 h-10 w-10"
+          className="absolute left-0 h-10 w-10 translate-x-1/2 transform"
         >
           <Image
             priority
@@ -103,7 +70,9 @@ function AceternityNavbar({ className }: { className?: string }) {
 
           <MenuItem setActive={setActive} active={active} item="Applications">
             <div className="flex flex-col space-y-4 text-sm">
-              <HoveredLink href="/open-applications">Open Applications</HoveredLink>
+              <HoveredLink href="/open-applications">
+                Open Applications
+              </HoveredLink>
               <HoveredLink href="/my-applications">My Applications</HoveredLink>
             </div>
           </MenuItem>
@@ -112,18 +81,64 @@ function AceternityNavbar({ className }: { className?: string }) {
             <div className="flex flex-col space-y-4 text-sm">
               <HoveredLink href="/profile">My Profile</HoveredLink>
               <HoveredLink href="/profile/connect">
-                Connect<span className="font-bold text-secondary text-lg">+</span>
+                Connect
+                <span className="text-lg font-bold text-secondary">+</span>
               </HoveredLink>
             </div>
           </MenuItem>
         </div>
 
-        <div className="absolute top-1/2 right-0 transform -translate-y-1/2 -translate-x-1/2">
+        <div className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
           <UserButton afterSignOutUrl="/" />
         </div>
       </Menu>
-    </div>
+    );
+  } else if (userData?.userType === UserType.EMPLOYER) {
+    menu = (
+      <Menu setActive={setActive}>
+        <Link
+          href="/"
+          className="absolute left-0 h-10 w-10 translate-x-1/2 transform"
+        >
+          <Image
+            priority
+            src={"/assets/SWEC Logo.svg"}
+            alt={"SWEC Logo"}
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="h-auto w-full"
+          />
+        </Link>
+
+        <div className="relative flex items-center justify-between gap-4">
+          <Link href="/my-projects">
+            My Projects
+          </Link>
+          <Link href="/profile/connect">
+            Connect
+            <span className="font-bold text-secondary my-0">+</span>
+          </Link>
+        </div>
+
+        <div className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
+          <UserButton afterSignOutUrl="/" />
+        </div>
+      </Menu>
+    );
+  }
+
+  return (
+    <>
+      <div className="relative flex w-full items-center justify-center">
+        <div
+          className="fixed inset-x-0 top-10 z-50 mx-auto max-w-2xl rounded-full shadow-xl top-2"
+        >
+          {menu}
+        </div>
+      </div>
+    </>
   );
-}
+};
 
 export default Navbar;

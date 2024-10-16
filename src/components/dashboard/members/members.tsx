@@ -1,6 +1,16 @@
 import "@prisma/client";
 
 import { useUser } from "@clerk/nextjs";
+import {
+  Select,
+  SelectItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
 import lodash from "lodash";
 import toast from "react-hot-toast";
 import { TrashX } from "tabler-icons-react";
@@ -11,7 +21,6 @@ import MemberOutline from "./memberOutline";
 import Search from "./search";
 
 import type { Member, ProjectMemberType, User } from "@prisma/client";
-import { Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
 
 type PropType = {
   projectId: string;
@@ -84,7 +93,9 @@ const Members = (props: PropType) => {
                   {members.map(
                     (member: Member & { user: User }, index: number) => (
                       <TableRow key={`member${index}`}>
-                        <TableCell>{member.user.firstName} {member.user.lastName}</TableCell>
+                        <TableCell>
+                          {member.user.firstName} {member.user.lastName}
+                        </TableCell>
                         <TableCell>{member.user.emailAddress}</TableCell>
                         <TableCell>
                           {editable ? (
@@ -94,14 +105,15 @@ const Members = (props: PropType) => {
                                 onChange={(e) => {
                                   toast.dismiss();
                                   toast.loading("Updating Member...");
-                                  handleUpdateMemberType(member.userId, e.target.value as ProjectMemberType);
+                                  handleUpdateMemberType(
+                                    member.userId,
+                                    e.target.value as ProjectMemberType,
+                                  );
                                 }}
                                 isDisabled={member.user.externalId === user?.id}
                                 onClick={() => console.log(member.type)}
                               >
-                                <SelectItem key="ADMIN">
-                                  Admin
-                                </SelectItem>
+                                <SelectItem key="ADMIN">Admin</SelectItem>
                                 <SelectItem key="EVALUATOR">
                                   Evaluator
                                 </SelectItem>
@@ -109,7 +121,8 @@ const Members = (props: PropType) => {
                             </div>
                           ) : (
                             lodash.upperFirst(member.type.toLowerCase())
-                          )}</TableCell>
+                          )}
+                        </TableCell>
                       </TableRow>
                       // <TableRow key={`member${index}`} className="border-b">
                       //   <TableCell className="font-medium">

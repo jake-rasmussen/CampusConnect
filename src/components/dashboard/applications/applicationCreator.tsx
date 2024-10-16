@@ -1,3 +1,4 @@
+import { Input, Textarea } from "@nextui-org/react";
 import { Field, Form } from "houseform";
 import router from "next/router";
 import { useState } from "react";
@@ -7,8 +8,6 @@ import { z } from "zod";
 import Button from "~/components/button";
 import { api } from "~/utils/api";
 import EditController from "../editController";
-
-import { Input, Textarea } from "@nextui-org/react";
 
 type Props = {
   projectId: string;
@@ -61,16 +60,18 @@ const ApplicationCreator = ({ projectId }: Props) => {
           editType="create"
           createDescription="Create New Application"
           handleSubmit={async () => {
-            return await submit().then((isValid) => {
-              if (isValid) {
-                toast.dismiss();
-                toast.loading("Saving Application...");
-              }
-              return isValid;
-            }).catch((e) => {
-              console.log(e);
-              return false;
-            });
+            return await submit()
+              .then((isValid) => {
+                if (isValid) {
+                  toast.dismiss();
+                  toast.loading("Saving Application...");
+                }
+                return isValid;
+              })
+              .catch((e) => {
+                console.log(e);
+                return false;
+              });
           }}
         >
           <Field
@@ -81,15 +82,15 @@ const ApplicationCreator = ({ projectId }: Props) => {
               .max(30, "Please enter shorter application name")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-                <Input
-                  label="Application Name"
-                  value={value}
-                  onChange={(e) => setValue(e.currentTarget.value)}
-                  onBlur={onBlur}
-                  isInvalid={!isValid}
-                  errorMessage={errors[0]}
-                  isRequired
-                />
+              <Input
+                label="Application Name"
+                value={value}
+                onChange={(e) => setValue(e.currentTarget.value)}
+                onBlur={onBlur}
+                isInvalid={!isValid}
+                errorMessage={errors[0]}
+                isRequired
+              />
             )}
           </Field>
 
@@ -101,22 +102,21 @@ const ApplicationCreator = ({ projectId }: Props) => {
               .max(500, "Description must be less than 500 characters")}
           >
             {({ value, setValue, onBlur, isValid, errors }) => (
-                <Textarea
-                  label="Application Description"
-                  onChange={(e) => setValue(e.currentTarget.value)}
-                  value={value}
-                  onBlur={onBlur}
-                  minRows={4}
-                  isInvalid={!isValid}
-                  errorMessage={errors[0]}
-                  isRequired
-                />
+              <Textarea
+                label="Application Description"
+                onChange={(e) => setValue(e.currentTarget.value)}
+                value={value}
+                onBlur={onBlur}
+                minRows={4}
+                isInvalid={!isValid}
+                errorMessage={errors[0]}
+                isRequired
+              />
             )}
           </Field>
         </EditController>
-      )
-      }
-    </Form >
+      )}
+    </Form>
   );
 };
 

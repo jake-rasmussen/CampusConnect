@@ -1,5 +1,7 @@
 import { SocialMediaPlatformType } from "@prisma/client";
+import { ProjectContext } from "lib/context"; // Import the ProjectContext
 import Link from "next/link";
+import { useContext } from "react";
 import {
   BrandFacebook,
   BrandInstagram,
@@ -9,8 +11,6 @@ import {
 } from "tabler-icons-react";
 
 import SocialMediaEditor from "./socialMediaEditor";
-import { useContext } from "react";
-import { ProjectContext } from "lib/context"; // Import the ProjectContext
 
 import type { SocialMedia } from "@prisma/client";
 
@@ -36,15 +36,30 @@ const SocialMediaCard = (props: PropType) => {
 
   const icon: JSX.Element =
     socialMedia.platform === SocialMediaPlatformType.FACEBOOK ? (
-      <BrandFacebook style={iconStyle} className="w-full h-full hover:text-primary" />
+      <BrandFacebook
+        style={iconStyle}
+        className="h-full w-full hover:text-primary"
+      />
     ) : socialMedia.platform === SocialMediaPlatformType.INSTAGRAM ? (
-      <BrandInstagram style={iconStyle} className="w-full h-full hover:text-primary" />
+      <BrandInstagram
+        style={iconStyle}
+        className="h-full w-full hover:text-primary"
+      />
     ) : socialMedia.platform === SocialMediaPlatformType.LINKEDIN ? (
-      <BrandLinkedin style={iconStyle} className="w-full h-full hover:text-primary" />
+      <BrandLinkedin
+        style={iconStyle}
+        className="h-full w-full hover:text-primary"
+      />
     ) : socialMedia.platform === SocialMediaPlatformType.TWITTER ? (
-      <BrandTwitter style={iconStyle} className="w-full h-full hover:text-primary" />
+      <BrandTwitter
+        style={iconStyle}
+        className="h-full w-full hover:text-primary"
+      />
     ) : (
-      <WorldWww style={iconStyle} className="w-full h-full hover:text-primary" />
+      <WorldWww
+        style={iconStyle}
+        className="h-full w-full hover:text-primary"
+      />
     );
 
   return (
@@ -54,8 +69,12 @@ const SocialMediaCard = (props: PropType) => {
           className="h-full w-full"
           href={socialMedia.url}
           style={{ color: colors.secondaryColor }}
-          onMouseOver={(e) => (e.currentTarget.style.color = colors.primaryColor)}
-          onMouseOut={(e) => (e.currentTarget.style.color = colors.secondaryColor)}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.color = colors.primaryColor)
+          }
+          onMouseOut={(e) =>
+            (e.currentTarget.style.color = colors.secondaryColor)
+          }
         >
           {icon}
         </Link>

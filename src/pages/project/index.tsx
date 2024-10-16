@@ -1,9 +1,10 @@
+import { RedirectToSignIn } from "@clerk/nextjs";
+import { Input } from "@nextui-org/input";
 import Error from "next/error";
 import { useEffect, useState } from "react";
 
 import ProjectCard from "~/components/allProjects/projectCard";
 import LoadingPage from "~/components/loadingPage";
-import { Input } from "@nextui-org/input";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
@@ -12,9 +13,13 @@ import type { NextPageWithLayout } from "~/pages/_app";
 
 const AllProjects: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
-  const [projects, setProjects] = useState<Array<Project & {
-    colors: Colors;
-  }>>([]);
+  const [projects, setProjects] = useState<
+    Array<
+      Project & {
+        colors: Colors;
+      }
+    >
+  >([]);
 
   const {
     data: projectsData,

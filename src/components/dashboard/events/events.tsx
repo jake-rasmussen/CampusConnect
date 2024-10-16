@@ -1,8 +1,8 @@
 import { Event } from "@prisma/client";
 
 import EventCard from "./eventCard";
-import EventsOutline from "./eventsOutline";
 import EventEditor from "./eventEditor";
+import EventsOutline from "./eventsOutline";
 
 type PropType = {
   events: Event[];

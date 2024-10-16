@@ -1,3 +1,4 @@
+import { Input, Textarea } from "@nextui-org/react";
 import {
   ApplicationQuestion,
   ApplicationQuestionType,
@@ -15,7 +16,6 @@ import Checklist from "../checklist";
 import FileUpload from "../fileUpload";
 import LoadingPage from "../loadingPage";
 import MultipleChoice from "../multipleChoice";
-import { Input, Textarea } from "@nextui-org/react";
 
 type PropType = {
   projectId: string;
@@ -150,19 +150,20 @@ const ApplicationForm = (props: PropType) => {
         </h1>
         {!readonly && (
           <h2 className="text-center text-lg font-bold text-black">
-            {`Deadline: ${deadline
-              ? dateToStringFormatted(deadline) +
-              " at " +
-              dateToTimeStringFormatted(deadline)
-              : " TBD"
-              }`}
+            {`Deadline: ${
+              deadline
+                ? dateToStringFormatted(deadline) +
+                  " at " +
+                  dateToTimeStringFormatted(deadline)
+                : " TBD"
+            }`}
           </h2>
         )}
 
         <p className="text-center text-black">{description}</p>
 
-        <div className="border-1 flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
-          <form className="flex flex-col gap-y-10 py-10">
+        <div className="flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-1 border-black bg-gradient-to-r from-primary to-secondary p-10">
+          <form className="flex flex-col gap-y-10">
             {questions.map((question: ApplicationQuestion, index: number) => (
               <div key={`question${index}`}>
                 {question.type === ApplicationQuestionType.TEXT_INPUT && (
@@ -177,7 +178,12 @@ const ApplicationForm = (props: PropType) => {
                     isRequired={question.required}
                     placeholder=" "
                     labelPlacement="outside"
-                    label={<span className="text-white text-lg">{question.question}</span>}
+                    label={
+                      <span className="text-xl text-white">
+                        {question.question}
+                      </span>
+                    }
+                    size="lg"
                   />
                 )}
                 {question.type === ApplicationQuestionType.TEXT_FIELD && (
@@ -191,7 +197,11 @@ const ApplicationForm = (props: PropType) => {
                     }}
                     minRows={4}
                     isRequired={question.required}
-                    label={<span className="text-white text-lg">{question.question}</span>}
+                    label={
+                      <span className="text-xl text-white">
+                        {question.question}
+                      </span>
+                    }
                     labelPlacement="outside"
                   />
                 )}
