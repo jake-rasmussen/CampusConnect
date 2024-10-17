@@ -61,12 +61,9 @@ const Navbar = (props: PropType) => {
         </Link>
 
         <div className="relative flex items-center justify-between gap-4">
-          <MenuItem setActive={setActive} active={active} item="Projects">
-            <div className="flex flex-col space-y-4 text-sm">
-              <HoveredLink href="/project">All Projects</HoveredLink>
-              <HoveredLink href="/my-projects">My Projects</HoveredLink>
-            </div>
-          </MenuItem>
+          <Link href="/project">
+            All Projects
+          </Link>
 
           <MenuItem setActive={setActive} active={active} item="Applications">
             <div className="flex flex-col space-y-4 text-sm">
@@ -77,15 +74,9 @@ const Navbar = (props: PropType) => {
             </div>
           </MenuItem>
 
-          <MenuItem setActive={setActive} active={active} item="Profile">
-            <div className="flex flex-col space-y-4 text-sm">
-              <HoveredLink href="/profile">My Profile</HoveredLink>
-              <HoveredLink href="/profile/connect">
-                Connect
-                <span className="text-lg font-bold text-secondary">+</span>
-              </HoveredLink>
-            </div>
-          </MenuItem>
+          <Link href="/profile">
+            My Profile
+          </Link>
         </div>
 
         <div className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
