@@ -1,11 +1,20 @@
+import { CalendarDate, Time } from "@internationalized/date";
+import {
+  Button,
+  DatePicker,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  TimeInput,
+  useDisclosure,
+} from "@nextui-org/react";
 import { Field, Form } from "houseform";
 import React, { useState } from "react";
 import { z } from "zod";
 
 import SkillsCreator from "~/components/dashboard/applications/skillsCreator";
-import { Button, DatePicker, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, TimeInput, useDisclosure } from "@nextui-org/react";
-import { CalendarDate, Time } from "@internationalized/date";
-
 
 type PropTypes = {
   name: string;
@@ -34,7 +43,6 @@ const ApplicationPublishConfirmationDialog = ({
   isSaving,
   setIsSaving,
 }: PropTypes) => {
-
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [skills, setSkills] = useState<string[]>([]);
@@ -46,28 +54,24 @@ const ApplicationPublishConfirmationDialog = ({
       return new CalendarDate(
         date.getFullYear(),
         date.getMonth() + 1,
-        date.getDate());
+        date.getDate(),
+      );
     }
     return null;
   };
 
   const dateToTimeValue = (date: Date) => {
     if (date) {
-      return new Time(
-        date.getHours(),
-        date.getMinutes(),
-        date.getSeconds());
+      return new Time(date.getHours(), date.getMinutes(), date.getSeconds());
     }
     return null;
-  }
-
+  };
 
   return (
     <>
       <Button
         onClick={() => {
           if (!isApplicationFormValid(name, description)) {
-
           } else {
             onOpen();
           }
@@ -77,7 +81,6 @@ const ApplicationPublishConfirmationDialog = ({
       </Button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="5xl">
-
         <Form<ConfirmationFormType>
           onSubmit={(values) => {
             values.skills = skills;
@@ -92,10 +95,11 @@ const ApplicationPublishConfirmationDialog = ({
                   <ModalBody>
                     <main className="flex flex-col items-center gap-8">
                       <p>
-                        Please note, publishing an application will make it available to
-                        all users and cannot be undone. Editing will be disabled once
-                        published. Before you publish, make sure you have completed all
-                        the necessary changes and try previewing your application.
+                        Please note, publishing an application will make it
+                        available to all users and cannot be undone. Editing
+                        will be disabled once published. Before you publish,
+                        make sure you have completed all the necessary changes
+                        and try previewing your application.
                       </p>
                       <section className="flex w-fit flex-row items-center justify-center gap-4">
                         <Field
@@ -112,9 +116,11 @@ const ApplicationPublishConfirmationDialog = ({
                               size="lg"
                               value={dateToDateValue(value)}
                               onChange={(e) => {
-                                console.log(e)
+                                console.log(e);
                                 if (e) {
-                                  setValue(new Date(e.year, e.month - 1, e.day));
+                                  setValue(
+                                    new Date(e.year, e.month - 1, e.day),
+                                  );
                                 }
                               }}
                               onBlur={onBlur}
@@ -153,9 +159,12 @@ const ApplicationPublishConfirmationDialog = ({
                         </Field>
                       </section>
 
-                      <SkillsCreator skills={skills} setSkills={setSkills} placeholder="Add skills to your application..." />
+                      <SkillsCreator
+                        skills={skills}
+                        setSkills={setSkills}
+                        placeholder="Add skills to your application..."
+                      />
                     </main>
-
                   </ModalBody>
                   <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
@@ -171,7 +180,8 @@ const ApplicationPublishConfirmationDialog = ({
                           console.error(e);
                           setIsSaving(false);
                         });
-                      }}>
+                      }}
+                    >
                       Confirm
                     </Button>
                   </ModalFooter>

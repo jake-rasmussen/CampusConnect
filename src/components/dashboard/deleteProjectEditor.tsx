@@ -1,12 +1,22 @@
+import {
+  Button,
+  Divider,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
+import Error from "next/error";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Trash } from "tabler-icons-react";
 
 import { api } from "~/utils/api";
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, Divider } from "@nextui-org/react";
 import LoadingSection from "../loadingSection";
-import Error from "next/error";
 
 type PropType = {
   projectId: string;
@@ -19,10 +29,10 @@ const DeleteProjectEditor = (props: PropType) => {
     data: project,
     isLoading,
     isError,
-    error
+    error,
   } = api.projectRouter.getProjectByIdForAdmin.useQuery({
-    projectId
-  })
+    projectId,
+  });
 
   const [value, setValue] = useState<string>();
   const [confirm, setConfirm] = useState<boolean>();
@@ -55,11 +65,13 @@ const DeleteProjectEditor = (props: PropType) => {
         <ModalHeader>
           <div className="flex flex-col">
             <h1>Confirm Delete Project</h1>
-            <span className="font-normal">Are you sure you want to delete your project?</span>
+            <span className="font-normal">
+              Are you sure you want to delete your project?
+            </span>
           </div>
         </ModalHeader>
         <Divider className="w-full" />
-        <div className="flex flex-col gap-4 m-6">
+        <div className="m-6 flex flex-col gap-4">
           <span className="flex flex-row gap-2">
             Type the project name to confirm:{"    "}
             <h3 className="tracking-none font-black">{project.name}</h3>
@@ -71,13 +83,18 @@ const DeleteProjectEditor = (props: PropType) => {
           />
         </div>
 
-        <div className="w-full grow flex justify-end">
-          <Button isDisabled={!confirm} color="primary" onPress={() => {
-            toast.loading("Deleting Project...");
-            deleteProject.mutate({
-              projectId,
-            });
-          }} className="mr-6">
+        <div className="flex w-full grow justify-end">
+          <Button
+            isDisabled={!confirm}
+            color="primary"
+            onPress={() => {
+              toast.loading("Deleting Project...");
+              deleteProject.mutate({
+                projectId,
+              });
+            }}
+            className="mr-6"
+          >
             Confirm
           </Button>
         </div>

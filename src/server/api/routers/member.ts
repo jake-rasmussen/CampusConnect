@@ -64,7 +64,7 @@ export const memberRouter = createTRPCRouter({
       if (user) {
         try {
           await updateMetadata(user);
-        } catch (_) { }
+        } catch (_) {}
       }
 
       return member;
@@ -99,9 +99,8 @@ export const memberRouter = createTRPCRouter({
       if (user) {
         try {
           await updateMetadata(user);
-        } catch (_) { }
+        } catch (_) {}
       }
-
 
       return member;
     }),
@@ -139,9 +138,8 @@ export const memberRouter = createTRPCRouter({
       if (user) {
         try {
           await updateMetadata(user);
-        } catch (_) { }
+        } catch (_) {}
       }
-
 
       return member;
     }),

@@ -5,7 +5,12 @@ import {
   deleteProjects,
   seedProjects,
 } from "./seedFiles/projectSeed";
-import { deleteProfiles, deleteUsers, seedProfiles, seedUsers } from "./seedFiles/userSeed";
+import {
+  deleteProfiles,
+  deleteUsers,
+  seedProfiles,
+  seedUsers,
+} from "./seedFiles/userSeed";
 
 async function cleanupDb() {
   // Pass the Prisma promises directly to $transaction
@@ -14,11 +19,7 @@ async function cleanupDb() {
     deleteApplicationSubmissions,
   ]);
 
-  await prisma.$transaction([
-    deleteProjects,
-    deleteProfiles,
-    deleteUsers,
-  ]);
+  await prisma.$transaction([deleteProjects, deleteProfiles, deleteUsers]);
 }
 async function main() {
   await cleanupDb();

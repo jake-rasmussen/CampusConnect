@@ -8,8 +8,10 @@ const HeaderOutline = ({
   children: JSX.Element | JSX.Element[];
 }) => {
   return (
-    <header 
-      className={`relative w-full shadow-2xl ${colors ? "" : "bg-gradient-to-r from-secondary to-primary"}`}
+    <header
+      className={`relative w-full shadow-2xl ${
+        colors ? "" : "bg-gradient-to-r from-secondary to-primary"
+      }`}
       style={
         colors
           ? {

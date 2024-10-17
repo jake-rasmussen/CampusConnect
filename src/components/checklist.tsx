@@ -21,9 +21,9 @@ const Checklist = (props: PropType) => {
   return (
     <>
       <CheckboxGroup
-        label={<span className="text-white text-lg">{label}</span>}
+        label={<span className="text-xl text-white">{label}</span>}
         defaultValue={selectedAnswers}
-        value={selectedAnswers}
+        value={value}
       >
         {answerChoices.map((answerChoice: string, index: number) => {
           return (
@@ -47,7 +47,7 @@ const Checklist = (props: PropType) => {
                 }}
                 value={answerChoice}
               >
-                <span className="text-white">{answerChoice}</span>
+                <span className="text-white text-lg">{answerChoice}</span>
               </Checkbox>
             </div>
           );

@@ -1,7 +1,7 @@
+import { Button, Input } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
 import FilePreview from "./filePreview";
-import { Button, Input } from "@nextui-org/react";
 
 type PropType = {
   value?: string;
@@ -11,11 +11,20 @@ type PropType = {
   applicationId: string;
   userId?: string;
   isRequired: boolean;
-  label: string
+  label: string;
 };
 
 const FileUpload = (props: PropType) => {
-  const { readonly, value, onChange, projectId, applicationId, userId, isRequired, label } = props;
+  const {
+    readonly,
+    value,
+    onChange,
+    projectId,
+    applicationId,
+    userId,
+    isRequired,
+    label,
+  } = props;
 
   const [filename, setFilename] = useState<string>();
 
@@ -24,7 +33,6 @@ const FileUpload = (props: PropType) => {
       setFilename(value);
     }
   }, [value]);
-
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
@@ -37,7 +45,6 @@ const FileUpload = (props: PropType) => {
     }
   };
 
-
   return (
     <div>
       {readonly && filename ? (
@@ -49,8 +56,8 @@ const FileUpload = (props: PropType) => {
         />
       ) : (
         <div className="flex flex-col">
-          <label className="mb-2 text-white text-lg">{label}</label>
-          <div className="flex items-center gap-4 bg-white rounded-2xl p-2">
+          <label className="mb-2 text-xl text-white">{label}</label>
+          <div className="flex items-center gap-4 rounded-2xl bg-white p-2">
             {/* Hidden file input */}
             <Input
               type="file"
@@ -62,11 +69,13 @@ const FileUpload = (props: PropType) => {
               id="fileInput"
             />
 
-            <Button as="label" htmlFor="fileInput" color="primary">
+            <Button as="label" htmlFor="fileInput" color="primary" isDisabled={readonly}>
               Choose File
             </Button>
 
-            <span className="text-gray-500">{filename || "No file chosen"}</span>
+            <span className="text-gray-500">
+              {filename || "No file chosen"}
+            </span>
           </div>
         </div>
       )}

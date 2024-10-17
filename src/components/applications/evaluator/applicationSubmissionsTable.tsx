@@ -1,5 +1,18 @@
-import { Card, Checkbox, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
-import { ApplicationSubmissionEvaluation, ApplicationSubmissionEvaluationGrade, User } from "@prisma/client";
+import {
+  Card,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
+import {
+  ApplicationSubmissionEvaluation,
+  ApplicationSubmissionEvaluationGrade,
+  User,
+} from "@prisma/client";
 import Link from "next/link";
 import { Check, ClockEdit, Cross, QuestionMark, X } from "tabler-icons-react";
 
@@ -47,14 +60,29 @@ const ApplicationSubmissionsTable = (props: PropType) => {
                 <TableCell className="font-medium">
                   {applicationSubmission.id}
                 </TableCell>
-                <TableCell className="flex justify-center items-center">
-                  <Checkbox icon={
-                    applicationSubmission.applicationSubmissionEvaluation ?
-                      (applicationSubmission.applicationSubmissionEvaluation.evaluation === ApplicationSubmissionEvaluationGrade.YES ? <Check /> :
-                        applicationSubmission.applicationSubmissionEvaluation.evaluation === ApplicationSubmissionEvaluationGrade.MAYBE ? <QuestionMark /> :
-                          applicationSubmission.applicationSubmissionEvaluation.evaluation === ApplicationSubmissionEvaluationGrade.NO ? <X /> : <ClockEdit />) :
-                      <ClockEdit />
-                  }
+                <TableCell className="flex items-center justify-center">
+                  <Checkbox
+                    icon={
+                      applicationSubmission.applicationSubmissionEvaluation ? (
+                        applicationSubmission.applicationSubmissionEvaluation
+                          .evaluation ===
+                        ApplicationSubmissionEvaluationGrade.YES ? (
+                          <Check />
+                        ) : applicationSubmission
+                            .applicationSubmissionEvaluation.evaluation ===
+                          ApplicationSubmissionEvaluationGrade.MAYBE ? (
+                          <QuestionMark />
+                        ) : applicationSubmission
+                            .applicationSubmissionEvaluation.evaluation ===
+                          ApplicationSubmissionEvaluationGrade.NO ? (
+                          <X />
+                        ) : (
+                          <ClockEdit />
+                        )
+                      ) : (
+                        <ClockEdit />
+                      )
+                    }
                     isSelected
                     isReadOnly
                   />

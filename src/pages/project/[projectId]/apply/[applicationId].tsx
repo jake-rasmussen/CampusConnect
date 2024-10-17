@@ -24,8 +24,8 @@ const Apply: NextPageWithLayout = () => {
 
   const [savedSubmission, setSavedSubmission] = useState<
     | (ApplicationSubmission & {
-      applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
-    })
+        applicationSubmissionAnswers: ApplicationSubmissionAnswer[];
+      })
     | undefined
   >();
 
@@ -54,7 +54,7 @@ const Apply: NextPageWithLayout = () => {
     },
     {
       enabled: !!applicationId,
-    }
+    },
   );
 
   const {
@@ -216,7 +216,7 @@ const Apply: NextPageWithLayout = () => {
     ApplicationSubmissionStatus.SUBMITTED
   ) {
     return (
-      <section className="flex justify-center py-10 mt-28">
+      <section className="mt-28 flex justify-center py-10">
         <div className="min-w-[80vw] max-w-4xl">
           <ApplicationForm
             projectId={projectId}
@@ -233,7 +233,7 @@ const Apply: NextPageWithLayout = () => {
     );
   } else {
     return (
-      <section className="flex justify-center py-10 mt-28">
+      <section className="mt-28 flex justify-center py-10">
         <div className="min-w-[80vw] max-w-4xl">
           <ApplicationForm
             projectId={projectId}

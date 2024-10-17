@@ -1,11 +1,26 @@
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Select, SelectItem, Textarea } from "@nextui-org/react";
-import { ApplicationSubmissionComment, ApplicationSubmissionEvaluationGrade, Member, User } from "@prisma/client";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Select,
+  SelectItem,
+  Textarea,
+} from "@nextui-org/react";
+import {
+  ApplicationSubmissionComment,
+  ApplicationSubmissionEvaluationGrade,
+  Member,
+  User,
+} from "@prisma/client";
 import { capitalize } from "lodash";
 import Error from "next/error";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Check, QuestionMark, X, ClockEdit, Trash } from "tabler-icons-react";
+import { Check, ClockEdit, QuestionMark, Trash, X } from "tabler-icons-react";
 
 import ApplicationForm from "~/components/applications/applicationForm";
 import LoadingPage from "~/components/loadingPage";
@@ -93,7 +108,7 @@ const EvaluateApplicationSubmission = () => {
           toast.error("Error...");
         },
       },
-    )
+    );
 
   const updateApplicationSubmissionEvaluation =
     api.applicationSubmissionEvaluationRouter.updateApplicationSubmissionEvaluation.useMutation(
@@ -108,7 +123,7 @@ const EvaluateApplicationSubmission = () => {
           toast.error("Error...");
         },
       },
-    )
+    );
 
   const handleCreateApplicationSubmissionComment = () => {
     if (applicationSubmissionEvaluation) {
@@ -123,9 +138,11 @@ const EvaluateApplicationSubmission = () => {
     }
   };
 
-  const gradeOptions = Object.values(ApplicationSubmissionEvaluationGrade).map((grade) => ({
-    label: grade,
-  }));
+  const gradeOptions = Object.values(ApplicationSubmissionEvaluationGrade).map(
+    (grade) => ({
+      label: grade,
+    }),
+  );
 
   if (isLoadingApplicationSubmission || isLoadingEvaluation || isLoadingUser) {
     return <LoadingPage />;
@@ -161,7 +178,7 @@ const EvaluateApplicationSubmission = () => {
         </section>
 
         <section className="my-10 flex w-full justify-center">
-          <div className="flex flex-row mx-20">
+          <div className="mx-20 flex flex-row">
             <div className="min-w-[50vw]">
               <ApplicationForm
                 projectId={projectId as string}
@@ -178,9 +195,11 @@ const EvaluateApplicationSubmission = () => {
             </div>
 
             <Card className="ml-8 h-full min-w-[400px] bg-white">
-              <CardHeader className="font-bold py-4 flex flex-col justify-start items-start">
+              <CardHeader className="flex flex-col items-start justify-start py-4 font-bold">
                 <h1 className="font-black">Enter Comments</h1>
-                <h4 className="font-normal">Submit comments for this submission</h4>
+                <h4 className="font-normal">
+                  Submit comments for this submission
+                </h4>
               </CardHeader>
               <CardBody>
                 <Textarea
@@ -200,51 +219,85 @@ const EvaluateApplicationSubmission = () => {
                 </Button>
               </CardFooter>
               <Divider />
-              <CardHeader className="font-bold py-4 flex flex-col justify-start items-start">
+              <CardHeader className="flex flex-col items-start justify-start py-4 font-bold">
                 <h1 className="font-black">Enter Grade</h1>
-                <h4 className="font-normal">Submit next steps for this submission</h4>
+                <h4 className="font-normal">
+                  Submit next steps for this submission
+                </h4>
               </CardHeader>
               <CardBody>
                 <Select
                   items={gradeOptions}
-                  className="p-4 pt-0 pb-8"
+                  className="p-4 pb-8 pt-0"
                   placeholder="Select option"
                   size="lg"
-                  defaultSelectedKeys={[applicationSubmissionEvaluation.evaluation]}
+                  defaultSelectedKeys={[
+                    applicationSubmissionEvaluation.evaluation,
+                  ]}
                   onChange={(e) => {
                     toast.dismiss();
                     toast.loading("Updating Evaluation...");
                     updateApplicationSubmissionEvaluation.mutate({
                       projectId,
-                      applicationSubmissionEvaluationId: applicationSubmissionEvaluation.id,
-                      evaluation: e.target.value as ApplicationSubmissionEvaluationGrade,
-                    })
+                      applicationSubmissionEvaluationId:
+                        applicationSubmissionEvaluation.id,
+                      evaluation: e.target
+                        .value as ApplicationSubmissionEvaluationGrade,
+                    });
                   }}
                   renderValue={(gradeOptions) => {
                     return gradeOptions.map((item) => (
-                      <div className="flex gap-2 items-center" key={`selected${item.data?.label}`}>
+                      <div
+                        className="flex items-center gap-2"
+                        key={`selected${item.data?.label}`}
+                      >
                         <div className="flex flex-row items-center">
-                          <div className="mr-2 bg-primary text-white rounded-full p-1">
-                            {(item.data?.label === ApplicationSubmissionEvaluationGrade.YES ? <Check /> :
-                              item.data?.label === ApplicationSubmissionEvaluationGrade.MAYBE ? <QuestionMark /> :
-                                item.data?.label === ApplicationSubmissionEvaluationGrade.NO ? <X /> : <ClockEdit />)}
+                          <div className="mr-2 rounded-full bg-primary p-1 text-white">
+                            {item.data?.label ===
+                            ApplicationSubmissionEvaluationGrade.YES ? (
+                              <Check />
+                            ) : item.data?.label ===
+                              ApplicationSubmissionEvaluationGrade.MAYBE ? (
+                              <QuestionMark />
+                            ) : item.data?.label ===
+                              ApplicationSubmissionEvaluationGrade.NO ? (
+                              <X />
+                            ) : (
+                              <ClockEdit />
+                            )}
                           </div>
-                          <span className="text-small">{capitalize(item.data?.label)}</span>
+                          <span className="text-small">
+                            {capitalize(item.data?.label)}
+                          </span>
                         </div>
                       </div>
                     ));
                   }}
                 >
                   {(item) => (
-                    <SelectItem key={item.label} textValue={capitalize(item.label)}>
-                      <div className="flex gap-2 items-center">
+                    <SelectItem
+                      key={item.label}
+                      textValue={capitalize(item.label)}
+                    >
+                      <div className="flex items-center gap-2">
                         <div className="flex flex-row items-center">
-                          <div className="mr-2 bg-primary text-white rounded-full p-1">
-                            {(item.label === ApplicationSubmissionEvaluationGrade.YES ? <Check /> :
-                              item.label === ApplicationSubmissionEvaluationGrade.MAYBE ? <QuestionMark /> :
-                                item.label === ApplicationSubmissionEvaluationGrade.NO ? <X /> : <ClockEdit />)}
+                          <div className="mr-2 rounded-full bg-primary p-1 text-white">
+                            {item.label ===
+                            ApplicationSubmissionEvaluationGrade.YES ? (
+                              <Check />
+                            ) : item.label ===
+                              ApplicationSubmissionEvaluationGrade.MAYBE ? (
+                              <QuestionMark />
+                            ) : item.label ===
+                              ApplicationSubmissionEvaluationGrade.NO ? (
+                              <X />
+                            ) : (
+                              <ClockEdit />
+                            )}
                           </div>
-                          <span className="text-small">{capitalize(item.label)}</span>
+                          <span className="text-small">
+                            {capitalize(item.label)}
+                          </span>
                         </div>
                       </div>
                     </SelectItem>
@@ -261,18 +314,22 @@ const EvaluateApplicationSubmission = () => {
             {applicationSubmissionEvaluation.comments.length > 0 ? (
               <section className="flex flex-col gap-4">
                 {applicationSubmissionEvaluation.comments.map(
-                  (comment: (ApplicationSubmissionComment & {
-                    evaluator: Member & {
-                      user: User
-                    };
-                  }), index: number) => (
+                  (
+                    comment: ApplicationSubmissionComment & {
+                      evaluator: Member & {
+                        user: User;
+                      };
+                    },
+                    index: number,
+                  ) => (
                     <div
                       className="flex flex-row"
                       key={`${comment.evaluator.userId}${comment.comment}${index}`}
                     >
                       <div className="w-full">
                         <h5 className="mb-2 w-full font-semibold uppercase">
-                          {comment.evaluator.user.firstName}{" "}{comment.evaluator.user.lastName}
+                          {comment.evaluator.user.firstName}{" "}
+                          {comment.evaluator.user.lastName}
                           <span className="text-primary">@</span>{" "}
                           {dateToStringFormatted(comment.createdAt)},{" "}
                           {dateToTimeStringFormatted(comment.createdAt)}
@@ -281,19 +338,22 @@ const EvaluateApplicationSubmission = () => {
                           {comment.comment}
                         </pre>
                       </div>
-                      <div className="h-full w-full flex justify-end items-center">
-                        {
-                          comment.memberUserId === user.userId && (<Button onClick={() => {
-                            toast.dismiss();
-                            toast.loading("Deleting Comment...");
-                            deleteApplicationSubmissionComment.mutate({
-                              projectId,
-                              applicationSubmissionEvaluationId: applicationSubmissionEvaluation.id
-                            })
-                          }}>
+                      <div className="flex h-full w-full items-center justify-end">
+                        {comment.memberUserId === user.userId && (
+                          <Button
+                            onClick={() => {
+                              toast.dismiss();
+                              toast.loading("Deleting Comment...");
+                              deleteApplicationSubmissionComment.mutate({
+                                projectId,
+                                applicationSubmissionEvaluationId:
+                                  applicationSubmissionEvaluation.id,
+                              });
+                            }}
+                          >
                             <Trash className="text-primary" />
-                          </Button>)
-                        }
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ),
@@ -301,7 +361,7 @@ const EvaluateApplicationSubmission = () => {
               </section>
             ) : (
               <>
-                <h5 className="mb-2 py-8 w-full text-center font-semibold uppercase">
+                <h5 className="mb-2 w-full py-8 text-center font-semibold uppercase">
                   No Comments!
                 </h5>
               </>

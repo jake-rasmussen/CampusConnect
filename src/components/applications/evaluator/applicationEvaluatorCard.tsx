@@ -1,12 +1,15 @@
-import { Application, ApplicationSubmissionEvaluation, User } from "@prisma/client";
+import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
+import {
+  Application,
+  ApplicationSubmissionEvaluation,
+  User,
+} from "@prisma/client";
 import { Pencil } from "tabler-icons-react";
 
+import { MovingBorder } from "~/components/aceternity-ui/moving-border";
 import PreviewModal from "~/components/previewModal";
 import { DATE_TIME_FORMAT_OPTS } from "~/constants";
-
 import ApplicationSubmissionsTable from "./applicationSubmissionsTable";
-import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
-import { MovingBorder } from "~/components/aceternity-ui/moving-border";
 
 type PropType = {
   application: Application & {
@@ -23,15 +26,15 @@ const ApplicationEvaluatorCard = (props: PropType) => {
   const { application, projectId } = props;
 
   return (
-    <main className="group m-2 relative p-[3px] w-[17.5rem] h-fit overflow-visible">
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out overflow-hidden rounded-2xl">
+    <main className="group relative m-2 h-fit w-[17.5rem] overflow-visible p-[3px]">
+      <div className="absolute inset-0 overflow-hidden rounded-2xl opacity-0 transition duration-300 ease-in-out group-hover:opacity-100">
         <MovingBorder duration={3000} rx="30%" ry="30%">
-          <div className="h-80 w-80 opacity-[0.8] bg-[radial-gradient(var(--sky-500)_40%,transparent_60%)]" />
+          <div className="h-80 w-80 bg-[radial-gradient(var(--sky-500)_40%,transparent_60%)] opacity-[0.8]" />
         </MovingBorder>
       </div>
 
       <Card className="relative flex flex-col rounded-2xl bg-white shadow-xl">
-        <CardHeader className="font-bold py-4 flex flex-col justify-start items-start">
+        <CardHeader className="flex flex-col items-start justify-start py-4 font-bold">
           <h1 className="font-black">{application.name}</h1>
           <h4 className="font-semibold">{application.description}</h4>
         </CardHeader>
@@ -60,9 +63,9 @@ const ApplicationEvaluatorCard = (props: PropType) => {
 
         <PreviewModal
           triggerButton={
-            <div className="absolute w-full h-full opacity-0 group-hover:opacity-100 group-hover:cursor-pointer transition duration-300 ease-in-out z-30">
-              <div className="w-full h-full bg-white bg-opacity-50 select-none flex items-center justify-center rounded-2xl">
-                <Pencil className="w-[5rem] h-[5rem] transition duration-300 ease-in-out" />
+            <div className="absolute z-30 h-full w-full opacity-0 transition duration-300 ease-in-out group-hover:cursor-pointer group-hover:opacity-100">
+              <div className="flex h-full w-full select-none items-center justify-center rounded-2xl bg-white bg-opacity-50">
+                <Pencil className="h-[5rem] w-[5rem] transition duration-300 ease-in-out" />
               </div>
             </div>
           }

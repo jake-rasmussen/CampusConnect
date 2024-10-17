@@ -1,14 +1,13 @@
-import { twMerge } from "tailwind-merge";
-
 import {
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/modal";
 import { Button, useDisclosure } from "@nextui-org/react";
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 type PropType = {
   triggerButton: JSX.Element;
@@ -19,13 +18,8 @@ type PropType = {
 };
 
 const PreviewModal = (props: PropType) => {
-  const {
-    children,
-    dialogTitle,
-    dialogDescription,
-    triggerButton,
-    className,
-  } = props;
+  const { children, dialogTitle, dialogDescription, triggerButton, className } =
+    props;
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -38,12 +32,7 @@ const PreviewModal = (props: PropType) => {
       {triggerWithOnClick}
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent
-          className={twMerge(
-            "max-w-5xl",
-            className,
-          )}
-        >
+        <ModalContent className={twMerge("max-w-5xl", className)}>
           {(onClose) => (
             <>
               <ModalHeader>

@@ -1,7 +1,7 @@
+import { ApplicationSubmissionEvaluationGrade } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, isEvaluator, t } from "../trpc";
-import { ApplicationSubmissionEvaluationGrade } from "@prisma/client";
 
 export const applicationSubmissionEvaluationRouter = createTRPCRouter({
   // A procedure for creating or updating an evaluation for a submission
@@ -32,9 +32,9 @@ export const applicationSubmissionEvaluationRouter = createTRPCRouter({
               evaluator: {
                 include: {
                   user: true,
-                }
+                },
               },
-            }
+            },
           },
         },
       });
@@ -49,8 +49,8 @@ export const applicationSubmissionEvaluationRouter = createTRPCRouter({
           ApplicationSubmissionEvaluationGrade.NO,
           ApplicationSubmissionEvaluationGrade.MAYBE,
           ApplicationSubmissionEvaluationGrade.UNGRADED,
-        ])
-      })
+        ]),
+      }),
     )
     .use(isEvaluator)
     .mutation(async ({ ctx, input }) => {
@@ -58,11 +58,11 @@ export const applicationSubmissionEvaluationRouter = createTRPCRouter({
 
       return ctx.prisma.applicationSubmissionEvaluation.update({
         where: {
-          id: applicationSubmissionEvaluationId
+          id: applicationSubmissionEvaluationId,
         },
         data: {
-          evaluation
-        }
-      })
+          evaluation,
+        },
+      });
     }),
 });

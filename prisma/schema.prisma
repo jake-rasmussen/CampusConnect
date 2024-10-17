@@ -142,6 +142,12 @@ enum Focus {
   THEOLOGY
 }
 
+enum UserType {
+  INCOMPLETE
+  EMPLOYEE
+  EMPLOYER
+}
+
 model User {
   userId                 String                  @id @default(cuid())
   externalId             String                  @unique
@@ -150,6 +156,7 @@ model User {
   emailAddress           String
   createdAt              DateTime                @default(now())
   updatedAt              DateTime                @updatedAt
+  userType               UserType                @default(INCOMPLETE)
   memberships            Member[]
   applicationSubmissions ApplicationSubmission[]
   profile                Profile?

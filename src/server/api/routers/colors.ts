@@ -18,8 +18,8 @@ export const colorsRouter = createTRPCRouter({
           id: projectId,
         },
         include: {
-          colors: true
-        }
+          colors: true,
+        },
       });
 
       return project.colors;
@@ -40,8 +40,8 @@ export const colorsRouter = createTRPCRouter({
           id: projectId,
         },
         include: {
-          colors: true
-        }
+          colors: true,
+        },
       });
 
       if (project.colors.id === "default") {
@@ -59,13 +59,13 @@ export const colorsRouter = createTRPCRouter({
       } else {
         return await ctx.prisma.colors.update({
           where: {
-            id: project.colors.id
+            id: project.colors.id,
           },
           data: {
             primaryColor,
             secondaryColor,
-          }
-        })
+          },
+        });
       }
-    })
+    }),
 });

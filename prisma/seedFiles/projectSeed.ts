@@ -110,8 +110,8 @@ const generateRandomColors = () => {
       id: "default",
       primaryColor: "#1746A2",
       secondaryColor: "#5F9DF7",
-    }
-  })
+    },
+  });
 
   const colorsOptions = [
     {
@@ -140,11 +140,11 @@ const generateRandomColors = () => {
 
   const colors: Prisma.ColorsCreateWithoutProjectInput = {
     primaryColor: colorsOptions[colorsIndex]!.primaryColor,
-    secondaryColor: colorsOptions[colorsIndex]!.secondaryColor
+    secondaryColor: colorsOptions[colorsIndex]!.secondaryColor,
   };
 
   return colors;
-}
+};
 
 const generateRandomQuestions = (
   numQuestions: number = randomNumberBetweenInclusive(2, 5),

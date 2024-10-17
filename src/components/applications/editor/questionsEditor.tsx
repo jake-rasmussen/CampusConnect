@@ -55,7 +55,7 @@ const QuestionsEditor = (props: PropType) => {
 
   return (
     <>
-      <section className="w-full lg:w-[75vw] max-w-[75rem] rounded-2xl bg-gradient-to-r from-primary to-secondary p-10">
+      <section className="w-full max-w-[75rem] rounded-2xl bg-gradient-to-r from-primary to-secondary p-10 lg:w-[75vw]">
         {questions.map((question, index: number) => {
           return (
             <DraggableCard

@@ -1,9 +1,23 @@
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Chip,
+  Divider,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
 import Link from "next/link";
 import { Eye } from "tabler-icons-react";
 
 import { DATE_TIME_FORMAT_OPTS } from "~/constants";
-import { Card, CardBody, CardFooter, CardHeader, Chip, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Button, useDisclosure } from "@nextui-org/react";
 import { MovingBorder } from "../aceternity-ui/moving-border";
 
 type PropType = {
@@ -20,24 +34,24 @@ const ApplicationPreviewCard = (props: PropType) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <main className="group m-2 relative p-[3px] w-[20rem] md:w-[25rem] overflow-hidden rounded-2xl h-fit">
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out">
+    <main className="group relative m-2 h-fit w-[20rem] overflow-hidden rounded-2xl p-[3px] md:w-[25rem]">
+      <div className="absolute inset-0 opacity-0 transition duration-300 ease-in-out group-hover:opacity-100">
         <MovingBorder duration={3000} rx="30%" ry="30%">
-          <div className="h-80 w-80 opacity-[0.8] bg-[radial-gradient(var(--sky-500)_40%,transparent_60%)]" />
+          <div className="h-80 w-80 bg-[radial-gradient(var(--sky-500)_40%,transparent_60%)] opacity-[0.8]" />
         </MovingBorder>
       </div>
 
       <Card className="relative mb-0 flex w-full flex-col bg-white shadow-xl">
         <div
           onClick={onOpen}
-          className="absolute w-full h-full opacity-0 group-hover:opacity-100 group-hover:cursor-pointer transition duration-300 ease-in-out z-10"
+          className="absolute z-10 h-full w-full opacity-0 transition duration-300 ease-in-out group-hover:cursor-pointer group-hover:opacity-100"
         >
-          <div className="w-full h-full bg-white bg-opacity-50 select-none flex items-center justify-center">
-            <Eye className="w-[5rem] h-[5rem] transition duration-300 ease-in-out" />
+          <div className="flex h-full w-full select-none items-center justify-center bg-white bg-opacity-50">
+            <Eye className="h-[5rem] w-[5rem] transition duration-300 ease-in-out" />
           </div>
         </div>
 
-        <CardHeader className="font-bold py-4 flex flex-col justify-start items-start">
+        <CardHeader className="flex flex-col items-start justify-start py-4 font-bold">
           <h1 className="font-black">{application.name}</h1>
           <h4 className="font-semibold">{application.project?.name}</h4>
         </CardHeader>
@@ -47,14 +61,16 @@ const ApplicationPreviewCard = (props: PropType) => {
           {application.desiredSkills.length > 0 && (
             <div className="mx-auto">
               <div className="flex flex-wrap gap-2">
-                {application.desiredSkills.map((skill: string, index: number) => (
-                  <Chip
-                    className="h-[2rem] bg-secondary capitalize text-white hover:cursor-pointer"
-                    key={`skillBadge${index}`}
-                  >
-                    {skill}
-                  </Chip>
-                ))}
+                {application.desiredSkills.map(
+                  (skill: string, index: number) => (
+                    <Chip
+                      className="h-[2rem] bg-secondary capitalize text-white hover:cursor-pointer"
+                      key={`skillBadge${index}`}
+                    >
+                      {skill}
+                    </Chip>
+                  ),
+                )}
               </div>
             </div>
           )}
@@ -78,7 +94,9 @@ const ApplicationPreviewCard = (props: PropType) => {
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Preview Application</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">
+                  Preview Application
+                </ModalHeader>
                 <ModalBody>
                   <div>
                     {application.project ? (
@@ -99,7 +117,9 @@ const ApplicationPreviewCard = (props: PropType) => {
                   <Button color="danger" variant="light" onPress={onClose}>
                     Close
                   </Button>
-                  <Link href={`/project/${application.projectId}/apply/${application.id}`}>
+                  <Link
+                    href={`/project/${application.projectId}/apply/${application.id}`}
+                  >
                     <Button color="primary" onPress={onClose}>
                       Apply
                     </Button>
@@ -109,7 +129,7 @@ const ApplicationPreviewCard = (props: PropType) => {
             )}
           </ModalContent>
         </Modal>
-      </Card >
+      </Card>
     </main>
   );
 };

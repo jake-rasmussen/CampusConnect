@@ -1,12 +1,24 @@
+import {
+  CalendarDate,
+  parseDate,
+  Time,
+  toCalendarDate,
+} from "@internationalized/date";
+import {
+  DatePicker,
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+  TimeInput,
+} from "@nextui-org/react";
+import { Field, Form } from "houseform";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { z } from "zod";
 
 import { api } from "~/utils/api";
 import EditController from "../editController";
-import { Field, Form } from "houseform";
-import { z } from "zod";
-import { DatePicker, Input, Select, SelectItem, Textarea, TimeInput } from "@nextui-org/react";
-import { CalendarDate, parseDate, Time, toCalendarDate } from "@internationalized/date";
 
 type EventFormType = {
   name: string;
@@ -38,7 +50,7 @@ const EventEditor = (props: PropType) => {
     eventInPerson,
     eventStart,
     eventEnd,
-    eventId
+    eventId,
   } = props;
 
   const queryClient = api.useContext();
@@ -135,32 +147,30 @@ const EventEditor = (props: PropType) => {
         return ["NO"];
       }
     }
-  }
+  };
 
   const dateToDateValue = (date: Date) => {
     if (date) {
       return new CalendarDate(
         date.getFullYear(),
         date.getMonth() + 1,
-        date.getDate());
+        date.getDate(),
+      );
     }
     return null;
   };
 
   const dateToTimeValue = (date: Date) => {
     if (date) {
-      return new Time(
-        date.getHours(),
-        date.getMinutes(),
-        date.getSeconds());
+      return new Time(date.getHours(), date.getMinutes(), date.getSeconds());
     }
     return null;
-  }
+  };
 
   return (
     <Form<EventFormType>
       onSubmit={(values) => {
-        console.log("TEST", values)
+        console.log("TEST", values);
         handleSubmit(values);
       }}
     >
@@ -170,16 +180,18 @@ const EventEditor = (props: PropType) => {
           createDescription="Create New Event"
           editType={eventId ? "update" : "create"}
           handleSubmit={async () => {
-            return await submit().then((isValid) => {
-              if (isValid) {
-                toast.dismiss();
-                toast.loading("Saving Event...");
-              }
-              return isValid;
-            }).catch((e) => {
-              console.log(e);
-              return false;
-            });
+            return await submit()
+              .then((isValid) => {
+                if (isValid) {
+                  toast.dismiss();
+                  toast.loading("Saving Event...");
+                }
+                return isValid;
+              })
+              .catch((e) => {
+                console.log(e);
+                return false;
+              });
           }}
           handleDelete={eventId ? handleDelete : undefined}
         >
@@ -273,7 +285,7 @@ const EventEditor = (props: PropType) => {
                   className="col-span-8"
                   value={dateToDateValue(value)}
                   onChange={(e) => {
-                    console.log(e)
+                    console.log(e);
                     if (e) {
                       setValue(new Date(e.year, e.month - 1, e.day));
                     }
@@ -293,7 +305,6 @@ const EventEditor = (props: PropType) => {
                 required_error: "Enter a time",
                 invalid_type_error: "Enter a time",
               })}
-
             >
               {({ value, setValue, onBlur, isValid, errors }) => (
                 <TimeInput

@@ -1,38 +1,36 @@
+import { Focus, SocialMediaPlatformType } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { Focus, SocialMediaPlatformType } from "@prisma/client";
 
 export const profileRouter = createTRPCRouter({
   createProfile: protectedProcedure
-    .input(z.object({
-      skills: z.string().array(),
-      about: z.string(),
-      school: z.string(),
-      year: z.string(),
-      socialMedias: z.object({
-        url: z.string(),
-        platform: z.enum([
-          SocialMediaPlatformType.TWITTER,
-          SocialMediaPlatformType.INSTAGRAM,
-          SocialMediaPlatformType.FACEBOOK,
-          SocialMediaPlatformType.LINKEDIN,
-          SocialMediaPlatformType.WEBSITE,
-        ]),
-      }).array(),
-      majors: z.nativeEnum(Focus),
-      minors: z.nativeEnum(Focus).optional()
-    }))
+    .input(
+      z.object({
+        skills: z.string().array(),
+        about: z.string(),
+        school: z.string(),
+        year: z.string(),
+        socialMedias: z
+          .object({
+            url: z.string(),
+            platform: z.enum([
+              SocialMediaPlatformType.TWITTER,
+              SocialMediaPlatformType.INSTAGRAM,
+              SocialMediaPlatformType.FACEBOOK,
+              SocialMediaPlatformType.LINKEDIN,
+              SocialMediaPlatformType.WEBSITE,
+            ]),
+          })
+          .array(),
+        majors: z.nativeEnum(Focus),
+        minors: z.nativeEnum(Focus).optional(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
-      const {
-        skills,
-        about,
-        school,
-        year,
-        socialMedias
-      } = input;
+      const { skills, about, school, year, socialMedias } = input;
 
-      const userId = ctx.user.userId
+      const userId = ctx.user.userId;
 
       return await ctx.prisma.profile.create({
         data: {
@@ -43,46 +41,49 @@ export const profileRouter = createTRPCRouter({
           userId,
           profileSocialMedia: {
             create: socialMedias,
-          }
-        }
-      })
-    }),
-  getUserProfile: protectedProcedure
-    .query(async ({ ctx }) => {
-      const userId = ctx.user.userId;
-
-      return await ctx.prisma.profile.findUnique({
-        where: {
-          userId
+          },
         },
-        include: {
-          user: true,
-          profileSocialMedia: true,
-        }
       });
     }),
+  getUserProfile: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.userId;
+
+    return await ctx.prisma.profile.findUnique({
+      where: {
+        userId,
+      },
+      include: {
+        user: true,
+        profileSocialMedia: true,
+      },
+    });
+  }),
   getProfileById: protectedProcedure
-    .input(z.object({
-      id: z.string(),
-    }))
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const { id } = input;
 
       return await ctx.prisma.profile.findUnique({
         where: {
-          id
+          id,
         },
         include: {
           user: true,
           profileSocialMedia: true,
-        }
+        },
       });
     }),
   getProfiles: protectedProcedure
-    .input(z.object({
-      page: z.number().min(1).default(1), // Page number
-      limit: z.number().min(1).max(100).default(10), // Profiles per page
-    }))
+    .input(
+      z.object({
+        page: z.number().min(1).default(1), // Page number
+        limit: z.number().min(1).max(100).default(10), // Profiles per page
+      }),
+    )
     .query(async ({ input, ctx }) => {
       const { page, limit } = input;
 
@@ -103,5 +104,5 @@ export const profileRouter = createTRPCRouter({
         profiles,
         totalProfiles, // Return total count to calculate total pages
       };
-    })
+    }),
 });

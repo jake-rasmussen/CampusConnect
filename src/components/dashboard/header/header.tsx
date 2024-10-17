@@ -1,6 +1,7 @@
-import { InfoCircle } from "tabler-icons-react";
-import HeaderOutline from "./headerOutline";
 import { Colors } from "@prisma/client";
+import { InfoCircle } from "tabler-icons-react";
+
+import HeaderOutline from "./headerOutline";
 
 type PropType = {
   name: string;
@@ -14,12 +15,16 @@ const Header = (props: PropType) => {
 
   return (
     <HeaderOutline colors={colors}>
-      {editable ? <div className="absolute translate-y-20 rounded-xl px-8 py-2 backdrop-invert">
-        <h1 className="tracking-none md:text-md flex flex-row items-center text-sm font-black uppercase">
-          <InfoCircle className="mr-2" />
-          You are now in edit mode
-        </h1>
-      </div> : <></>}
+      {editable ? (
+        <div className="absolute translate-y-20 rounded-xl px-8 py-2 backdrop-invert">
+          <h1 className="tracking-none md:text-md flex flex-row items-center text-sm font-black uppercase">
+            <InfoCircle className="mr-2" />
+            You are now in edit mode
+          </h1>
+        </div>
+      ) : (
+        <></>
+      )}
 
       <div className="min-w-96 flex flex-col overflow-hidden">
         <h2 className="mb-6 font-sans text-5xl font-bold tracking-tight text-white sm:text-7xl sm:leading-none">
@@ -33,7 +38,7 @@ const Header = (props: PropType) => {
           <></>
         )}
       </div>
-    </HeaderOutline >
+    </HeaderOutline>
   );
 };
 

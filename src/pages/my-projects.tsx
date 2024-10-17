@@ -1,3 +1,5 @@
+import { Input } from "@nextui-org/input";
+import { Button, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 import { Project, ProjectMemberType } from "@prisma/client";
 import Error from "next/error";
 import React, { useEffect, useState } from "react";
@@ -6,15 +8,15 @@ import { NoteOff } from "tabler-icons-react";
 import ProjectMemberCard from "~/components/allProjects/projectMemberCard";
 import LoadingPage from "~/components/loadingPage";
 import CreateProjectEditor from "~/components/my-projects/createProjectEditor";
-import { Input } from "@nextui-org/input";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 import { NextPageWithLayout } from "./_app";
-import { Button, Divider } from "@nextui-org/react";
 
 const MyProjects: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
   const [projects, setProjects] = useState<[Project, ProjectMemberType][]>([]);
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const {
     data: adminProjects,
@@ -100,16 +102,37 @@ const MyProjects: NextPageWithLayout = () => {
           </>
         ) : (
           <section>
-            <div className="mx-auto flex flex-col justify-center items-center px-4 py-16 text-center md:py-32 md:px-10 lg:px-32 xl:max-w-3xl">
+            <div className="mx-auto flex flex-col items-center justify-center px-4 py-16 text-center md:px-10 md:py-32 lg:px-32 xl:max-w-3xl">
               <h1 className="text-4xl font-bold leading-none">
                 You are not an admin or evaluator in any projects!
               </h1>
-              <p className="px-8 mt-8 mb-12 text-lg">
-                If you think this may be a mistake, please contact the project owner
+              <p className="mb-12 mt-8 px-8 text-lg">
+                If you think this may be a mistake, please contact the project
+                owner
               </p>
-              <div className="flex flex-wrap gap-8 justify-center">
+              <div className="flex flex-wrap justify-center gap-8">
                 <CreateProjectEditor />
-                <Button>Learn more</Button>
+                <Button onPress={onOpen}>Learn more</Button>
+
+                <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                  <ModalContent>
+                    {(onClose) => (
+                      <>
+                        <ModalHeader className="flex flex-col gap-1">Create your own project!</ModalHeader>
+                        <ModalBody>
+                          Get started with creating project! With Campus Connect, creating a project homepage is completely free, and can help your startup
+                          gain visibility.
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button color="danger" variant="light" onPress={onClose}>
+                            Cancel
+                          </Button>
+                          <CreateProjectEditor />
+                        </ModalFooter>
+                      </>
+                    )}
+                  </ModalContent>
+                </Modal>
               </div>
             </div>
           </section>

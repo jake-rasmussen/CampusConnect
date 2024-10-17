@@ -1,6 +1,8 @@
+import { getAuth } from "@clerk/nextjs/dist/types/server";
+import { UserType } from "@prisma/client";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, t } from "../trpc";
 
 export const usersRouter = createTRPCRouter({
   // Procedure to get users by their email
@@ -35,4 +37,53 @@ export const usersRouter = createTRPCRouter({
   getUser: protectedProcedure.query(async ({ ctx }) => {
     return ctx.user;
   }),
+  updateUser: t.procedure
+    .input(
+      z.object({
+        externalId: z.string(),
+        firstName: z.string(),
+        lastName: z.string(),
+        emailAddress: z.string(),
+        userType: z.enum([
+          UserType.EMPLOYEE,
+          UserType.EMPLOYER,
+          UserType.INCOMPLETE,
+        ]),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { externalId, firstName, lastName, emailAddress, userType } = input;
+
+      const user = await ctx.prisma.user.update({
+        where: {
+          externalId,
+        },
+        data: {
+          firstName,
+          lastName,
+          emailAddress,
+          userType,
+        },
+      });
+
+      return user;
+    }),
+  getUserType: t.procedure
+    .input(
+      z.object({
+        externalId: z.string(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const { externalId } = input;
+
+      return await ctx.prisma.user.findUnique({
+        where: {
+          externalId,
+        },
+        select: {
+          userType: true,
+        },
+      });
+    }),
 });

@@ -82,8 +82,8 @@ export const projectRouter = createTRPCRouter({
         name: "asc",
       },
       include: {
-        colors: true
-      }
+        colors: true,
+      },
     });
   }),
   // Procedure to get the projects that a person is an admin in

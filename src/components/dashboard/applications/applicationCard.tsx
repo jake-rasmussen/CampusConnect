@@ -1,21 +1,28 @@
 import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+} from "@nextui-org/react";
+import {
   Application,
   ApplicationQuestion,
   ApplicationStatus,
   ApplicationSubmissionAnswer,
   ApplicationSubmissionStatus,
 } from "@prisma/client";
-import { ArrowRight, Check, Edit, Eye, ListCheck } from "tabler-icons-react";
+import { ProjectContext } from "lib/context"; // Import ProjectContext
 import Link from "next/link";
 import { useContext } from "react";
-import { ProjectContext } from "lib/context"; // Import ProjectContext
+import { ArrowRight, Check, Edit, Eye, ListCheck } from "tabler-icons-react";
+
+import { MovingBorder } from "~/components/aceternity-ui/moving-border";
 import ApplicationForm from "~/components/applications/applicationForm";
 import ApplicationWithdrawDialog from "~/components/applications/applicationWithdrawDialog";
 import ApplicationDeleteDialog from "~/components/applications/editor/applicationDeleteDialog";
 import PreviewModal from "~/components/previewModal";
 import { DATE_TIME_FORMAT_OPTS } from "~/constants";
-import { Card, CardBody, CardFooter, CardHeader, Divider } from "@nextui-org/react";
-import { MovingBorder } from "~/components/aceternity-ui/moving-border";
 
 type PropType = {
   application: Application & {
@@ -51,23 +58,23 @@ const ApplicationCard = (props: PropType) => {
     (editable && application.status !== ApplicationStatus.DRAFT) || previewable;
 
   return (
-    <main className="group m-2 relative p-[3px] w-[17.5rem] h-fit overflow-visible">
+    <main className="group relative m-2 h-fit w-[17.5rem] overflow-visible p-[3px]">
       {application.status !== ApplicationStatus.CLOSED && (
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out overflow-hidden rounded-2xl">
+        <div className="absolute inset-0 overflow-hidden rounded-2xl opacity-0 transition duration-300 ease-in-out group-hover:opacity-100">
           <MovingBorder duration={3000} rx="30%" ry="30%">
-            <div className="h-80 w-80 opacity-[0.8] bg-[radial-gradient(var(--sky-500)_40%,transparent_60%)]" />
+            <div className="h-80 w-80 bg-[radial-gradient(var(--sky-500)_40%,transparent_60%)] opacity-[0.8]" />
           </MovingBorder>
         </div>
       )}
 
-      <Card className="relative flex flex-col rounded-2xl bg-white shadow-xl overflow-visible">
-        <CardHeader className="font-bold py-4 flex flex-col justify-start items-start">
+      <Card className="relative flex flex-col overflow-visible rounded-2xl bg-white shadow-xl">
+        <CardHeader className="flex flex-col items-start justify-start py-4 font-bold">
           <h1 className="font-black">{application.name}</h1>
         </CardHeader>
         <Divider />
         <CardBody className="flex flex-col gap-4">
           <h4 className="font-normal">{application.description}</h4>
-          <div className="opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100 z-30">
+          <div className="z-30 opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100">
             {editable && (
               <ApplicationDeleteDialog
                 applicationId={application.id}
@@ -76,7 +83,7 @@ const ApplicationCard = (props: PropType) => {
             )}
           </div>
 
-          <div className="opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100 z-30">
+          <div className="z-30 opacity-0 transition duration-300 hover:cursor-pointer group-hover:opacity-100">
             {applicationSubmissionId &&
               (status === ApplicationSubmissionStatus.SUBMITTED ||
                 status === ApplicationSubmissionStatus.DRAFT) && (
@@ -90,7 +97,7 @@ const ApplicationCard = (props: PropType) => {
         </CardBody>
 
         <Divider />
-        <CardFooter className="flex flex-col grow items-end justify-end">
+        <CardFooter className="flex grow flex-col items-end justify-end">
           <div className="flex grow flex-col justify-end">
             <p>
               Status:{" "}
@@ -107,7 +114,7 @@ const ApplicationCard = (props: PropType) => {
                 <span className="text-sm font-semibold">
                   {application.deadline.toLocaleDateString(
                     undefined,
-                    DATE_TIME_FORMAT_OPTS
+                    DATE_TIME_FORMAT_OPTS,
                   )}
                 </span>
               </p>
@@ -149,7 +156,7 @@ const ApplicationCard = (props: PropType) => {
 
           {editable && application.status !== ApplicationStatus.DRAFT && (
             <Link href={`/evaluator/${projectId}`}>
-              <div className="border-1 z-30 rounded-full border border-black bg-white absolute left-1/2 -translate-x-1/2 -translate-y-[1rem]">
+              <div className="absolute left-1/2 z-30 -translate-x-1/2 -translate-y-[1rem] rounded-full border border-1 border-black bg-white">
                 <ListCheck
                   className="h-14 w-14 p-2 transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500"
                   style={{ color: primaryColor }} // Inline style for dynamic color
@@ -165,7 +172,7 @@ const ApplicationCard = (props: PropType) => {
               href={`/admin/${projectId}/application/${application.id}`}
               className="group flex h-full w-full items-center opacity-0 duration-300 group-hover:opacity-100"
             >
-              <div className="w-full h-full bg-white bg-opacity-50 select-none flex items-center justify-center">
+              <div className="flex h-full w-full select-none items-center justify-center bg-white bg-opacity-50">
                 <Edit
                   className="mx-auto h-24 w-24"
                   style={{ color: primaryColor }} // Inline style for dynamic color
@@ -178,9 +185,9 @@ const ApplicationCard = (props: PropType) => {
         {displayPreviewComponent && (
           <PreviewModal
             triggerButton={
-              <div className="absolute w-full h-full opacity-0 group-hover:opacity-100 group-hover:cursor-pointer transition duration-300 ease-in-out z-10">
-                <div className="w-full h-full bg-white bg-opacity-50 select-none flex items-center justify-center rounded-2xl">
-                  <Eye className="w-[5rem] h-[5rem] transition duration-300 ease-in-out" />
+              <div className="absolute z-10 h-full w-full opacity-0 transition duration-300 ease-in-out group-hover:cursor-pointer group-hover:opacity-100">
+                <div className="flex h-full w-full select-none items-center justify-center rounded-2xl bg-white bg-opacity-50">
+                  <Eye className="h-[5rem] w-[5rem] transition duration-300 ease-in-out" />
                 </div>
               </div>
             }

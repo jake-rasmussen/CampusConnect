@@ -1,11 +1,10 @@
+import { Input } from "@nextui-org/react";
+import { Field, Form } from "houseform";
 import toast from "react-hot-toast";
+import { z } from "zod";
 
 import { api } from "~/utils/api";
 import EditController from "../editController";
-
-import { Field, Form } from "houseform";
-import { Input } from "@nextui-org/react";
-import { z } from "zod";
 
 type ContactFormType = {
   firstName: string;
@@ -14,7 +13,6 @@ type ContactFormType = {
   phone: string;
   role: string;
 };
-
 
 type PropType = {
   projectId: string;
@@ -74,7 +72,8 @@ const ContactEditor = (props: PropType) => {
     });
 
   const handleSubmit = (values: ContactFormType) => {
-    if (contactInfoId) { // then we already have the contact, so we are updating it
+    if (contactInfoId) {
+      // then we already have the contact, so we are updating it
       updateContactInfo.mutate({
         id: contactInfoId,
         firstName: values.firstName,
@@ -113,20 +112,24 @@ const ContactEditor = (props: PropType) => {
     >
       {({ submit }) => (
         <EditController
-          dialogDescription={`${contactInfoId ? "Update" : "Create"} Contact Info`}
+          dialogDescription={`${
+            contactInfoId ? "Update" : "Create"
+          } Contact Info`}
           createDescription="Create New Contact"
           editType={`${contactInfoId ? "update" : "create"}`}
           handleSubmit={async () => {
-            return await submit().then((isValid) => {
-              if (isValid) {
-                toast.dismiss();
-                toast.loading("Saving Contact...");
-              }
-              return isValid;
-            }).catch((e) => {
-              console.log(e);
-              return false;
-            });
+            return await submit()
+              .then((isValid) => {
+                if (isValid) {
+                  toast.dismiss();
+                  toast.loading("Saving Contact...");
+                }
+                return isValid;
+              })
+              .catch((e) => {
+                console.log(e);
+                return false;
+              });
           }}
           handleDelete={contactInfoId ? handleDelete : undefined}
         >
@@ -244,7 +247,7 @@ const ContactEditor = (props: PropType) => {
           </main>
         </EditController>
       )}
-    </Form >
+    </Form>
   );
 };
 

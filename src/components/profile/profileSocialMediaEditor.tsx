@@ -1,15 +1,22 @@
-import toast from "react-hot-toast";
-
-import { api } from "~/utils/api";
-
+import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { SocialMediaPlatformType } from "@prisma/client";
 import { Field, Form } from "houseform";
-import { z } from "zod";
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
-import EditController from "../dashboard/editController";
-import { BrandFacebook, BrandInstagram, BrandLinkedin, BrandTwitter, SquarePlus, Trash, WorldWww } from "tabler-icons-react";
-import { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
+import { Dispatch, SetStateAction } from "react";
+import toast from "react-hot-toast";
+import {
+  BrandFacebook,
+  BrandInstagram,
+  BrandLinkedin,
+  BrandTwitter,
+  SquarePlus,
+  Trash,
+  WorldWww,
+} from "tabler-icons-react";
+import { z } from "zod";
+
+import { api } from "~/utils/api";
+import EditController from "../dashboard/editController";
 
 export type SocialMediaFormType = {
   url: string;
@@ -28,23 +35,22 @@ const ProfileSocialMediaEditor = (props: PropType) => {
   const { url, platform, socialMediaId, socialMedias, setSocialMedias } = props;
 
   const handleSubmit = (socialMedia: SocialMediaFormType) => {
-    setSocialMedias([
-      ...socialMedias,
-      socialMedia
-    ]);
-  }
+    setSocialMedias([...socialMedias, socialMedia]);
+  };
 
   const handleDelete = (targetSocialMedia: SocialMediaFormType) => {
     let socialMediaIndex = -1;
     socialMedias.forEach((socialMedia, index) => {
-      if (targetSocialMedia.platform === socialMedia.platform &&
+      if (
+        targetSocialMedia.platform === socialMedia.platform &&
         targetSocialMedia.url === socialMedia.url
-      ) socialMediaIndex = index;
-    })
+      )
+        socialMediaIndex = index;
+    });
     const newSocialMedias: SocialMediaFormType[] = socialMedias;
     newSocialMedias.splice(socialMediaIndex, 1);
     setSocialMedias([...newSocialMedias]);
-  }
+  };
 
   return (
     <Form<SocialMediaFormType>
@@ -67,7 +73,7 @@ const ProfileSocialMediaEditor = (props: PropType) => {
           </div>
 
           <div className="flex flex-row">
-            <div className="flex flex-col grow gap-4 py-4">
+            <div className="flex grow flex-col gap-4 py-4">
               <Field
                 name="url"
                 onSubmitValidate={z
@@ -110,7 +116,9 @@ const ProfileSocialMediaEditor = (props: PropType) => {
                     label="Platform"
                     className="col-span-4"
                     selectedKeys={[value]}
-                    onChange={(e) => setValue(e.target.value as SocialMediaPlatformType)}
+                    onChange={(e) =>
+                      setValue(e.target.value as SocialMediaPlatformType)
+                    }
                     onBlur={onBlur}
                     isInvalid={!isValid}
                     errorMessage={errors[0]}
@@ -126,49 +134,59 @@ const ProfileSocialMediaEditor = (props: PropType) => {
             </div>
 
             <button
-              className="group flex shrink flex-row items-center h-full w-40 h-40"
+              className="group flex h-40 h-full w-40 shrink flex-row items-center"
               onClick={() =>
-                submit()
-                  .catch(() => {
-                    return;
-                  })
+                submit().catch(() => {
+                  return;
+                })
               }
             >
-              <SquarePlus className="h-full w-full m-10 text-primary duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
+              <SquarePlus className="m-10 h-full w-full text-primary duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
             </button>
           </div>
 
           <div>
-            {socialMedias.map((socialMedia: SocialMediaFormType, index) => <div className="flex flex-row gap-2 items-center my-2"
-              key={`socialMedia${index}${url}`}>
-              {socialMedia.platform === SocialMediaPlatformType.FACEBOOK ? (
-                <BrandFacebook className="w-10 h-10" />
-              ) : socialMedia.platform === SocialMediaPlatformType.INSTAGRAM ? (
-                <BrandInstagram className="w-10 h-10" />
-              ) : socialMedia.platform === SocialMediaPlatformType.LINKEDIN ? (
-                <BrandLinkedin className="w-10 h-10" />
-              ) : socialMedia.platform === SocialMediaPlatformType.TWITTER ? (
-                <BrandTwitter className="w-10 h-10" />
-              ) : (
-                <WorldWww className="w-10 h-10" />
-              )}
-              <Link className="text-neutral-500 underline" href={socialMedia.url} target="_blank">
-                {socialMedia.url}
-              </Link>
+            {socialMedias.map((socialMedia: SocialMediaFormType, index) => (
+              <div
+                className="my-2 flex flex-row items-center gap-2"
+                key={`socialMedia${index}${url}`}
+              >
+                {socialMedia.platform === SocialMediaPlatformType.FACEBOOK ? (
+                  <BrandFacebook className="h-10 w-10" />
+                ) : socialMedia.platform ===
+                  SocialMediaPlatformType.INSTAGRAM ? (
+                  <BrandInstagram className="h-10 w-10" />
+                ) : socialMedia.platform ===
+                  SocialMediaPlatformType.LINKEDIN ? (
+                  <BrandLinkedin className="h-10 w-10" />
+                ) : socialMedia.platform === SocialMediaPlatformType.TWITTER ? (
+                  <BrandTwitter className="h-10 w-10" />
+                ) : (
+                  <WorldWww className="h-10 w-10" />
+                )}
+                <Link
+                  className="text-neutral-500 underline"
+                  href={socialMedia.url}
+                  target="_blank"
+                >
+                  {socialMedia.url}
+                </Link>
 
-              <div className="grow justify-end items-end flex">
-                <Button onPress={() => {
-                  handleDelete(socialMedia)
-                }}>
-                  <Trash />
-                </Button>
+                <div className="flex grow items-end justify-end">
+                  <Button
+                    onPress={() => {
+                      handleDelete(socialMedia);
+                    }}
+                  >
+                    <Trash />
+                  </Button>
+                </div>
               </div>
-
-            </div>)}
+            ))}
           </div>
         </div>
       )}
-    </Form >
+    </Form>
   );
 };
 

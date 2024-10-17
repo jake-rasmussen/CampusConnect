@@ -1,13 +1,20 @@
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+} from "@nextui-org/react";
 import { Event } from "@prisma/client";
+import { ProjectContext } from "lib/context";
+import { useContext } from "react";
 import { Calendar } from "tabler-icons-react";
+
 import {
   dateAndTimeToStringFormatted,
   dateToTimeStringFormatted,
 } from "~/utils/helpers";
 import EventEditor from "./eventEditor";
-import { Card, CardBody, CardFooter, CardHeader, Divider } from "@nextui-org/react";
-import { useContext } from "react";
-import { ProjectContext } from "lib/context";
 
 type PropType = {
   projectId: string;
@@ -32,11 +39,11 @@ const EventCard = (props: PropType) => {
             </button>
           </div>
 
-          <main className="w-[50vw] ml-4">
+          <main className="ml-4 w-[50vw]">
             <section>
-              <CardHeader className="text-xl flex flex-col items-start">
+              <CardHeader className="flex flex-col items-start text-xl">
                 <h1 className="text-2xl font-black">{event.name}</h1>
-                <span className="text-gray text-sm">
+                <span className="text-sm text-gray">
                   {dateAndTimeToStringFormatted(event.start)} to{" "}
                   {dateToTimeStringFormatted(event.end)}
                 </span>

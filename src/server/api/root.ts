@@ -5,15 +5,15 @@ import { applicationSubmissionRouter } from "./routers/applicationSubmission";
 import { applicationSubmissionAnswerRouter } from "./routers/applicationSubmissionAnswer";
 import { applicationSubmissionCommentRouter } from "./routers/applicationSubmissionComment";
 import { applicationSubmissionEvaluationRouter } from "./routers/applicationSubmissionEvaluation";
+import { colorsRouter } from "./routers/colors";
 import { contactInfoRouter } from "./routers/contactInfo";
 import { eventRouter } from "./routers/event";
 import { memberRouter } from "./routers/member";
+import { profileRouter } from "./routers/profile";
 import { projectRouter } from "./routers/project";
 import { socialMediaRouter } from "./routers/socialMedia";
 import { supabaseRouter } from "./routers/supabase";
 import { usersRouter } from "./routers/users";
-import { colorsRouter } from "./routers/colors";
-import { profileRouter } from "./routers/profile";
 
 /**
  * This is the primary router for your server.

@@ -5,6 +5,7 @@ import { capitalize } from "lodash";
 import Error from "next/error";
 import { useEffect, useState } from "react";
 import { LicenseOff } from "tabler-icons-react";
+
 import ApplicationPreviewCard from "~/components/applications/applicationPreviewCard";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
@@ -63,7 +64,7 @@ const OpenApplications = () => {
 
   const skillInFilter = (application: Application) => {
     if (filteredSkills.length === 0) return true;
-    
+
     for (const skill of application.desiredSkills) {
       if (filteredSkills.includes(skill)) return true;
     }
@@ -92,7 +93,7 @@ const OpenApplications = () => {
         </section>
 
         <section className="m-10">
-          <div className="mx-auto my-10 flex items-center text-center max-w-4xl">
+          <div className="mx-auto my-10 flex max-w-4xl items-center text-center">
             <Input
               label="Search Open Applications"
               variant="underlined"
@@ -105,16 +106,21 @@ const OpenApplications = () => {
               className="max-w-xs"
               variant="underlined"
               onChange={(e) => {
-                const selectedSkills = e.target.value.split(",").filter(skill => skill !== "");
+                const selectedSkills = e.target.value
+                  .split(",")
+                  .filter((skill) => skill !== "");
                 if (selectedSkills.length === 0) {
-                  setFilteredSkills([...skills])
+                  setFilteredSkills([...skills]);
                 } else {
                   setFilteredSkills([...selectedSkills]);
                 }
               }}
             >
               {skills.map((skill: string) => (
-                <SelectItem key={skill} onSelectCapture={(skill) => console.log("SELECTED", skill)}>
+                <SelectItem
+                  key={skill}
+                  onSelectCapture={(skill) => console.log("SELECTED", skill)}
+                >
                   {capitalize(skill)}
                 </SelectItem>
               ))}
@@ -123,16 +129,21 @@ const OpenApplications = () => {
           <div className="flex w-full items-center justify-center">
             {applications.length > 0 ? (
               <div className="flex max-w-7xl flex-wrap justify-center">
-                {applications.filter(application => (
-                  skillInFilter(application) &&
-                  application.name.toLowerCase().includes(query.toLowerCase())
-                )).map((application, index) => (
-                  <ApplicationPreviewCard
-                    application={application}
-                    projectId={application.projectId}
-                    key={`application${index}`}
-                  />
-                ))}
+                {applications
+                  .filter(
+                    (application) =>
+                      skillInFilter(application) &&
+                      application.name
+                        .toLowerCase()
+                        .includes(query.toLowerCase()),
+                  )
+                  .map((application, index) => (
+                    <ApplicationPreviewCard
+                      application={application}
+                      projectId={application.projectId}
+                      key={`application${index}`}
+                    />
+                  ))}
               </div>
             ) : (
               <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">

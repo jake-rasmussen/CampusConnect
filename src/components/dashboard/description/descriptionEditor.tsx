@@ -1,12 +1,11 @@
+import { Textarea } from "@nextui-org/react";
 import { Field, Form } from "houseform";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { api } from "~/utils/api";
-
 import EditController from "../editController";
-import { Textarea } from "@nextui-org/react";
 
 type EditorFormType = {
   description: string;
@@ -40,7 +39,7 @@ const DescriptionEditor = (props: PropType) => {
       projectId: projectId,
       description: values.description,
     });
-  }
+  };
 
   return (
     <Form<EditorFormType>
@@ -53,16 +52,18 @@ const DescriptionEditor = (props: PropType) => {
           dialogDescription={"Update the Description"}
           editType="update"
           handleSubmit={async () => {
-            return await submit().then((isValid) => {
-              if (isValid) {
-                toast.dismiss();
-                toast.loading("Saving Description...");
-              }
-              return isValid;
-            }).catch((e) => {
-              console.log(e);
-              return false;
-            });
+            return await submit()
+              .then((isValid) => {
+                if (isValid) {
+                  toast.dismiss();
+                  toast.loading("Saving Description...");
+                }
+                return isValid;
+              })
+              .catch((e) => {
+                console.log(e);
+                return false;
+              });
           }}
         >
           <main className="gap-4">

@@ -1,16 +1,15 @@
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@nextui-org/modal";
+import { Button, useDisclosure } from "@nextui-org/react";
 import toast from "react-hot-toast";
 import { LicenseOff } from "tabler-icons-react";
 
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody
-} from "@nextui-org/modal";
-
 import { api } from "~/utils/api";
-import { Button, useDisclosure } from "@nextui-org/react";
 
 type PropType = {
   projectId: string;
@@ -19,11 +18,7 @@ type PropType = {
 };
 
 const ApplicationWithdrawDialog = (props: PropType) => {
-  const {
-    projectId,
-    applicationId,
-    applicationSubmissionId,
-  } = props;
+  const { projectId, applicationId, applicationSubmissionId } = props;
 
   const queryClient = api.useContext();
 
@@ -62,28 +57,31 @@ const ApplicationWithdrawDialog = (props: PropType) => {
                 Are you sure you want to withdraw this application?
               </ModalHeader>
               <ModalBody>
-                Please note, once this applicaiton is withdrawn, this action cannot
-                be undone. Access to the submission will be lost!
+                Please note, once this applicaiton is withdrawn, this action
+                cannot be undone. Access to the submission will be lost!
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button color="primary" onPress={async () => {
-                  onClose();
+                <Button
+                  color="primary"
+                  onPress={async () => {
+                    onClose();
 
-                  toast.dismiss();
-                  toast.loading("Withdrawing Application...");
+                    toast.dismiss();
+                    toast.loading("Withdrawing Application...");
 
-                  await clearSupabaseFolder.mutateAsync({
-                    applicationId,
-                  });
+                    await clearSupabaseFolder.mutateAsync({
+                      applicationId,
+                    });
 
-                  withdrawApplicationSubmission.mutate({
-                    applicationSubmissionId,
-                    applicationId,
-                  });
-                }}>
+                    withdrawApplicationSubmission.mutate({
+                      applicationSubmissionId,
+                      applicationId,
+                    });
+                  }}
+                >
                   Confirm
                 </Button>
               </ModalFooter>

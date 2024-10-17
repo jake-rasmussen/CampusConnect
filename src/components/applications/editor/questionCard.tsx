@@ -1,10 +1,10 @@
+import { Input, Select, SelectItem } from "@nextui-org/react";
 import { ApplicationQuestionType } from "@prisma/client";
 import { DotsVertical, X } from "tabler-icons-react";
 
 import { applicationMemberTypeToString } from "~/utils/helpers";
 
 import type { ApplicationQuestion } from "@prisma/client";
-import { Input, Select, SelectItem } from "@nextui-org/react";
 
 type PropType = {
   question: ApplicationQuestion;
@@ -27,7 +27,7 @@ const QuestionCard = (props: PropType) => {
         <DotsVertical className="h-20 w-8 object-none" />
       </div>
 
-      <div className="grow grid grid-cols-8 gap-4">
+      <div className="grid grow grid-cols-8 gap-4">
         <Input
           className="col-span-4"
           label="Question"
@@ -65,8 +65,8 @@ const QuestionCard = (props: PropType) => {
             question.required
               ? ["YES"]
               : question.required !== undefined
-                ? ["NO"]
-                : [""]
+              ? ["NO"]
+              : [""]
           }
           onChange={(e) => {
             const isRequired = e.target.value === "YES";
