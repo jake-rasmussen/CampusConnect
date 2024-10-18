@@ -15,9 +15,8 @@ type PropType = {
 
 const Navbar = (props: PropType) => {
   const { setIsLoading } = props;
-
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
 
   const { data: userData, isLoading } = api.usersRouter.getUserType.useQuery(
     { externalId: user?.id || "" },
@@ -25,6 +24,10 @@ const Navbar = (props: PropType) => {
   );
 
   useEffect(() => {
+    if (!isSignedIn) {
+      setIsLoading(false);
+    }
+
     if (!isLoading) {
       setIsLoading(false);
       if (
@@ -35,7 +38,7 @@ const Navbar = (props: PropType) => {
         router.push("/get-started");
       }
     }
-  }, [userData, router, isLoading]);
+  }, [userData, router, isLoading, isSignedIn]);
 
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [active, setActive] = useState<string | null>(null);
@@ -61,7 +64,7 @@ const Navbar = (props: PropType) => {
         </Link>
 
         <div className="relative flex items-center justify-between gap-4">
-          <Link href="/project">
+          <Link href="/project" onMouseEnter={() => setActive("All Projects")}>
             All Projects
           </Link>
 
@@ -74,7 +77,7 @@ const Navbar = (props: PropType) => {
             </div>
           </MenuItem>
 
-          <Link href="/profile">
+          <Link href="/profile" onMouseEnter={() => setActive("My Profile")}>
             My Profile
           </Link>
         </div>
@@ -103,12 +106,18 @@ const Navbar = (props: PropType) => {
         </Link>
 
         <div className="relative flex items-center justify-between gap-4">
-          <Link href="/my-projects">
+          <Link
+            href="/my-projects"
+            onMouseEnter={() => setActive("My Projects")}
+          >
             My Projects
           </Link>
-          <Link href="/profile/connect">
+          <Link
+            href="/profile/connect"
+            onMouseEnter={() => setActive("Connect")}
+          >
             Connect
-            <span className="font-bold text-secondary my-0">+</span>
+            <span className="my-0 font-bold text-secondary">+</span>
           </Link>
         </div>
 
@@ -121,13 +130,13 @@ const Navbar = (props: PropType) => {
 
   return (
     <>
-      <div className="relative flex w-full items-center justify-center">
-        <div
-          className="fixed inset-x-0 top-10 z-50 mx-auto max-w-2xl rounded-full shadow-xl top-2"
-        >
-          {menu}
+      {isSignedIn && (
+        <div className="relative flex w-full items-center justify-center">
+          <div className="fixed inset-x-0 top-10 top-2 z-50 mx-auto max-w-2xl rounded-full shadow-xl">
+            {menu}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

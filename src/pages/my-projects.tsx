@@ -1,5 +1,14 @@
 import { Input } from "@nextui-org/input";
-import { Button, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import {
+  Button,
+  Divider,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import { Project, ProjectMemberType } from "@prisma/client";
 import Error from "next/error";
 import React, { useEffect, useState } from "react";
@@ -118,13 +127,20 @@ const MyProjects: NextPageWithLayout = () => {
                   <ModalContent>
                     {(onClose) => (
                       <>
-                        <ModalHeader className="flex flex-col gap-1">Create your own project!</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1">
+                          Create your own project!
+                        </ModalHeader>
                         <ModalBody>
-                          Get started with creating project! With Campus Connect, creating a project homepage is completely free, and can help your startup
-                          gain visibility.
+                          Get started with creating project! With Campus
+                          Connect, creating a project homepage is completely
+                          free, and can help your startup gain visibility.
                         </ModalBody>
                         <ModalFooter>
-                          <Button color="danger" variant="light" onPress={onClose}>
+                          <Button
+                            color="danger"
+                            variant="light"
+                            onPress={onClose}
+                          >
                             Cancel
                           </Button>
                           <CreateProjectEditor />

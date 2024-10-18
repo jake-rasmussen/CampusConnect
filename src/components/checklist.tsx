@@ -47,7 +47,7 @@ const Checklist = (props: PropType) => {
                 }}
                 value={answerChoice}
               >
-                <span className="text-white text-lg">{answerChoice}</span>
+                <span className="text-lg text-white">{answerChoice}</span>
               </Checkbox>
             </div>
           );

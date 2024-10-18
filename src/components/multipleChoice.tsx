@@ -41,7 +41,7 @@ const MultipleChoice = (props: PropType) => {
                 }}
                 color="secondary"
               >
-                <span className="text-white text-lg">{answerChoice}</span>
+                <span className="text-lg text-white">{answerChoice}</span>
               </Radio>
             </div>
           );

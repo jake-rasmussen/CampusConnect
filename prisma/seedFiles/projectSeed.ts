@@ -3,7 +3,9 @@ import {
   ApplicationQuestionType,
   ApplicationStatus,
   ApplicationSubmissionStatus,
+  School,
   SocialMediaPlatformType,
+  UserType,
 } from "@prisma/client";
 
 import { prisma } from "~/server/db";
@@ -12,8 +14,6 @@ import { randomNumberBetweenInclusive } from "~/utils/helpers";
 import type {
   Application,
   ApplicationQuestion,
-  ApplicationSubmission,
-  ApplicationSubmissionAnswer,
   Prisma,
   User,
 } from "@prisma/client";
@@ -336,6 +336,7 @@ const generateRandomUsers = () => {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       emailAddress: faker.internet.email(),
+      userType: UserType.INCOMPLETE,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -363,6 +364,7 @@ const createMockProjectArray = (users: User[]) => {
       name,
       socialMedia: { create: generateRandomSocialMedia() },
       description: faker.lorem.paragraph({ min: 1, max: 3 }),
+      school: faker.helpers.arrayElement(Object.values(School)),
       applications: {
         create: generateRandomApplications(users),
       },

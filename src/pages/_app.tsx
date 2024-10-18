@@ -44,9 +44,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <NextUIProvider>
           <Toaster position="bottom-center" />
           <DndProvider backend={HTML5Backend}>
-            <SignedIn>
-              <Navbar setIsLoading={setIsLoading} />
-            </SignedIn>
+            <Navbar setIsLoading={setIsLoading} />
 
             {isLoading ? (
               <LoadingPage />

@@ -1,4 +1,3 @@
-import { RedirectToSignIn } from "@clerk/nextjs";
 import { Input } from "@nextui-org/input";
 import Error from "next/error";
 import { useEffect, useState } from "react";
@@ -8,11 +7,16 @@ import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
-import type { Colors, Project } from "@prisma/client";
+import { School, type Colors, type Project } from "@prisma/client";
 import type { NextPageWithLayout } from "~/pages/_app";
+import { Autocomplete, AutocompleteItem, Select, SelectItem } from "@nextui-org/react";
+import { capitalize } from "lodash";
+import { uppercaseToCapitalize } from "~/utils/helpers";
 
 const AllProjects: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
+  const [selectedSchool, setSelectedSchool] = useState<School>();
+
   const [projects, setProjects] = useState<
     Array<
       Project & {
@@ -44,7 +48,7 @@ const AllProjects: NextPageWithLayout = () => {
           </h1>
         </section>
 
-        <section className="w-full max-w-2xl px-4">
+        <section className="w-full max-w-2xl px-4 flex">
           <Input
             label="Search Projects"
             value={query}
@@ -53,6 +57,22 @@ const AllProjects: NextPageWithLayout = () => {
             }}
             variant="underlined"
           />
+          <Autocomplete
+            label="Select School"
+            className="max-w-xs"
+            variant="underlined"
+            onSelectionChange={(e) => {
+              setSelectedSchool(e as School);
+            }}
+          >
+            {Object.values(School).map((school: School) => (
+              <AutocompleteItem
+                key={school}
+              >
+                {uppercaseToCapitalize(school)}
+              </AutocompleteItem>
+            ))}
+          </Autocomplete>
         </section>
 
         <div className="m-10 flex w-full max-w-6xl flex-wrap items-center justify-center">
@@ -60,13 +80,14 @@ const AllProjects: NextPageWithLayout = () => {
             .filter(
               (project) =>
                 project.name.toLowerCase().includes(query.toLowerCase()) &&
-                project.id !== "swec",
+                (selectedSchool ? project.school === selectedSchool : true),
             )
             .map((project, index) => (
               <ProjectCard
                 projectId={project.id}
                 name={project.name}
                 colors={project.colors}
+                school={project.school}
                 key={index}
               />
             ))}

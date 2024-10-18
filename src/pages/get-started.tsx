@@ -38,7 +38,8 @@ const GetStarted = () => {
       queryClient.invalidate().catch((e) => console.log(e));
 
       setTimeout(() => {
-        router.push("/project");
+        if (selected === "hire") router.push("/my-projects");
+        else router.push("/project");
       }, 1000);
     },
   });
@@ -201,15 +202,6 @@ const GetStarted = () => {
                           selected === "hire"
                             ? UserType.EMPLOYER
                             : UserType.EMPLOYEE;
-
-                        console.log({
-                          externalId: user.id || "",
-                          firstName: user.firstName || "",
-                          lastName: user.lastName || "",
-                          emailAddress:
-                            user.emailAddresses[0]?.toString() || "",
-                          userType,
-                        });
 
                         updateUser.mutate({
                           externalId: user.id || "",

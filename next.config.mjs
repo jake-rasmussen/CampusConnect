@@ -22,7 +22,7 @@ const config = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['images.unsplash.com', 'assets.aceternity.com'], // Add all external domains here
+    domains: ['images.unsplash.com', 'assets.aceternity.com', 'zsltvvwlimfimrpfkenb.supabase.co'], // Add all external domains here
   },
 };
 

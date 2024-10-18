@@ -69,7 +69,12 @@ const FileUpload = (props: PropType) => {
               id="fileInput"
             />
 
-            <Button as="label" htmlFor="fileInput" color="primary" isDisabled={readonly}>
+            <Button
+              as="label"
+              htmlFor="fileInput"
+              color="primary"
+              isDisabled={readonly}
+            >
               Choose File
             </Button>
 

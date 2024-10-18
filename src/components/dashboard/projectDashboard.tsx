@@ -3,7 +3,7 @@ import "@prisma/client";
 import { ProjectContext } from "lib/context";
 import { twMerge } from "tailwind-merge";
 
-import AdminSettings from "../adminSettings";
+import AdminSettings from "../admin/adminSettings";
 import Tab from "../tab/tab";
 import TabContent from "../tab/tabContent";
 import TabHeader from "../tab/tabHeader";

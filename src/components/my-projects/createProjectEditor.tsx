@@ -5,17 +5,27 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import { Button, Input, Textarea, useDisclosure } from "@nextui-org/react";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Button,
+  Input,
+  Textarea,
+  useDisclosure,
+} from "@nextui-org/react";
+import { School } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { api } from "~/utils/api";
+import { uppercaseToCapitalize } from "~/utils/helpers";
 
 type ApplicationFormType = {
   name: string;
   description: string;
+  school: School;
 };
 
 const CreateProjectEditor = () => {
@@ -57,6 +67,7 @@ const CreateProjectEditor = () => {
                 await createProject.mutateAsync({
                   name: values.name,
                   description: values.description,
+                  school: values.school,
                 });
               }}
             >
@@ -100,7 +111,6 @@ const CreateProjectEditor = () => {
                         >
                           {({ value, setValue, onBlur, isValid, errors }) => (
                             <Textarea
-                              className="rounded-xl bg-white"
                               label="Description"
                               onChange={(e) => setValue(e.target.value)}
                               value={value}
@@ -109,6 +119,44 @@ const CreateProjectEditor = () => {
                               isInvalid={!isValid}
                               errorMessage={errors[0]}
                             />
+                          )}
+                        </Field>
+
+                        <Field
+                          name="school"
+                          onBlurValidate={z.enum(
+                            Object.values(School) as [string, ...string[]],
+                            {
+                              errorMap: () => {
+                                return { message: "Select School" };
+                              },
+                            },
+                          )}
+                        >
+                          {({ value, setValue, onBlur, isValid, errors }) => (
+                            <Autocomplete
+                              label="School"
+                              selectedKey={value || ""}
+                              onSelectionChange={(e) => {
+                                if (e) {
+                                  setValue(e as School);
+                                } else {
+                                  setValue("");
+                                }
+                              }}
+                              onBlur={onBlur}
+                              isInvalid={!isValid}
+                              errorMessage={errors[0]}
+                              isRequired
+                            >
+                              {Object.values(School).map(
+                                (school: School, index: number) => (
+                                  <AutocompleteItem key={school} value={school}>
+                                    {uppercaseToCapitalize(school)}
+                                  </AutocompleteItem>
+                                ),
+                              )}
+                            </Autocomplete>
                           )}
                         </Field>
                       </section>

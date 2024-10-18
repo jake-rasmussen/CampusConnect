@@ -1,14 +1,22 @@
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import Error from "next/error";
 
 import LoadingPage from "~/components/loadingPage";
+import CreateProjectEditor from "~/components/my-projects/createProjectEditor";
 import CreateProfileEditor from "~/components/profile/createProfileEditor";
 import ProfileDashboard from "~/components/profile/profileDashboard";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
 import type { NextPageWithLayout } from "~/pages/_app";
-import CreateProjectEditor from "~/components/my-projects/createProjectEditor";
 
 const Profile: NextPageWithLayout = () => {
   const {
@@ -52,10 +60,14 @@ const Profile: NextPageWithLayout = () => {
               <ModalContent>
                 {(onClose) => (
                   <>
-                    <ModalHeader className="flex flex-col gap-1">Create a profile</ModalHeader>
+                    <ModalHeader className="flex flex-col gap-1">
+                      Create a profile
+                    </ModalHeader>
                     <ModalBody>
-                      Once you've created a profile, projects will be able to search you, and be able to contact you directly. You can still apply without having a profile, but having
-                      a profile boosts discoverability from projects!
+                      Once you've created a profile, projects will be able to
+                      search you, and be able to contact you directly. You can
+                      still apply without having a profile, but having a profile
+                      boosts discoverability from projects!
                     </ModalBody>
                     <ModalFooter>
                       <Button color="danger" variant="light" onPress={onClose}>

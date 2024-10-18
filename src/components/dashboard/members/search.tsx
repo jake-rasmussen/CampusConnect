@@ -147,6 +147,14 @@ const Search = (props: PropType) => {
             emptyContent: "Search User By Email",
           }}
           errorMessage={isError ? "Error Getting Users" : ""}
+          onBlur={() => {
+            setFieldState(() => ({
+              inputValue: "",
+              selectedKey: "",
+              items: [],
+            }));
+            setSearch("");
+          }}
         >
           {(fieldState.items || []).map((query: User, index: number) => {
             return (
@@ -156,7 +164,6 @@ const Search = (props: PropType) => {
                   setSelectedUser(query);
                   onOpen();
                 }}
-                className="flex flex-col items-start justify-center"
               >
                 <div className="text-md font-semibold text-secondary">
                   {query.emailAddress}

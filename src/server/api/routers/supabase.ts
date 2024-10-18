@@ -6,7 +6,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 export const supabaseRouter = createTRPCRouter({
   // Procedure to clear a folder for the current user
   // Only the current user should ever be able to clear their supabase folder
-  clearSupabaseFolder: protectedProcedure
+  clearSupabaseFolderApplication: protectedProcedure
     .input(
       z.object({
         applicationId: z.string(),
@@ -27,7 +27,7 @@ export const supabaseRouter = createTRPCRouter({
       }
     }),
   // Procedure to get the supabase folder for the current user
-  getSupabaseFolder: protectedProcedure
+  getSupabaseFolderApplication: protectedProcedure
     .input(
       z.object({
         applicationId: z.string(),
@@ -48,7 +48,7 @@ export const supabaseRouter = createTRPCRouter({
       }
     }),
   // Procedure to create a signed URL for uploading files to a specific folder in Supabase storage
-  createSignedUrlUpload: protectedProcedure
+  createSignedUrlUploadApplication: protectedProcedure
     .input(
       z.object({
         applicationId: z.string(),
@@ -66,7 +66,7 @@ export const supabaseRouter = createTRPCRouter({
 
       return data?.signedUrl || error;
     }),
-  createSignedUrlDownload: protectedProcedure
+  createSignedUrlDownloadApplication: protectedProcedure
     .input(
       z.object({
         applicationId: z.string(),
@@ -88,6 +88,45 @@ export const supabaseRouter = createTRPCRouter({
         .createSignedUrl(`${applicationId}/${updatedUserId}/${filename}`, 60, {
           download: !filename.includes(".pdf"),
         });
+
+      return data?.signedUrl || error;
+    }),
+  createSignedUrlUploadBanner: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { projectId } = input;
+
+      const { data, error } = await supabase.storage
+        .from("bucket")
+        .createSignedUploadUrl(`${projectId}/banner`);
+
+      await ctx.prisma.project.update({
+        where: {
+          id: projectId,
+        },
+        data: {
+          hasBanner: true,
+        },
+      });
+
+      return data?.signedUrl || error;
+    }),
+  createSignedUrlDownloadBanner: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string()
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { projectId } = input;
+
+      const { data, error } = await supabase.storage
+        .from("bucket")
+        .createSignedUrl(`${projectId}/banner`, 60);
 
       return data?.signedUrl || error;
     }),

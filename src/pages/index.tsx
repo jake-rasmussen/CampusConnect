@@ -1,4 +1,10 @@
-import { SignedOut, SignInButton, SignUp, SignUpButton, useUser } from "@clerk/nextjs";
+import {
+  SignedOut,
+  SignInButton,
+  SignUp,
+  SignUpButton,
+  useUser,
+} from "@clerk/nextjs";
 import {
   Button,
   ButtonGroup,
@@ -15,7 +21,6 @@ import { cn } from "lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { BrandYoutube } from "tabler-icons-react";
 
 import { BackgroundBeams } from "~/components/aceternity-ui/background-beams";
 import LoadingPage from "~/components/loadingPage";
@@ -290,7 +295,6 @@ export const Globe = ({ className }: { className?: string }) => {
 
 const Home = () => {
   const { isLoaded, isSignedIn } = useUser();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const features = [
     {
@@ -353,7 +357,7 @@ const Home = () => {
             <div className="my-4 flex w-full flex-row items-center justify-center gap-4">
               <SignedOut>
                 <SignUpButton mode="modal" redirectUrl="/get-started">
-                  <Button onPress={onOpen}>Get started</Button>
+                  <Button>Get started</Button>
                 </SignUpButton>
               </SignedOut>
             </div>
