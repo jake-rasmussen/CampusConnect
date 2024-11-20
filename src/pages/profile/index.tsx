@@ -49,7 +49,7 @@ const Profile: NextPageWithLayout = () => {
           </h1>
           <p className="mb-12 mt-8 px-8 text-lg">
             Increase your discoverability by creating a profile. Once you have
-            created a profile, projects will be able to see it and connect
+            created a profile, startups will be able to see it and connect
             directly with you
           </p>
           <div className="flex flex-wrap justify-center gap-8">
@@ -64,10 +64,10 @@ const Profile: NextPageWithLayout = () => {
                       Create a profile
                     </ModalHeader>
                     <ModalBody>
-                      Once you've created a profile, projects will be able to
+                      Once you've created a profile, startups will be able to
                       search you, and be able to contact you directly. You can
                       still apply without having a profile, but having a profile
-                      boosts discoverability from projects!
+                      boosts discoverability from startups!
                     </ModalBody>
                     <ModalFooter>
                       <Button color="danger" variant="light" onPress={onClose}>

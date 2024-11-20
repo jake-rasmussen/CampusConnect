@@ -328,5 +328,23 @@ export const projectRouter = createTRPCRouter({
           hasBanner: true
         }
       })
-    })
+    }),
+  createProjectCreationForm: protectedProcedure
+    .input(z.object({
+      name: z.string().min(1),
+      validation: z.string().min(1),
+      school: z.enum(Object.values(School) as [`${School}`])
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const { name, validation, school } = input;
+
+      return await ctx.prisma.projectCreationForm.create({
+        data: {
+          name,
+          validation,
+          school,
+          userId: ctx.user.userId
+        }
+      })
+    }),
 });

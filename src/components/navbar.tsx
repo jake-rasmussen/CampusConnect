@@ -29,13 +29,14 @@ const Navbar = (props: PropType) => {
     }
 
     if (!isLoading) {
-      setIsLoading(false);
       if (
         userData?.userType === UserType.INCOMPLETE &&
         router.pathname !== "/get-started" &&
         router.pathname !== "/"
       ) {
         router.push("/get-started");
+      } else {
+        setIsLoading(false);
       }
     }
   }, [userData, router, isLoading, isSignedIn]);
@@ -64,8 +65,8 @@ const Navbar = (props: PropType) => {
         </Link>
 
         <div className="relative flex items-center justify-between gap-4">
-          <Link href="/project" onMouseEnter={() => setActive("All Projects")}>
-            All Projects
+          <Link href="/project" onMouseEnter={() => setActive("All Startups")}>
+            All Startups
           </Link>
 
           <MenuItem setActive={setActive} active={active} item="Applications">
@@ -108,9 +109,9 @@ const Navbar = (props: PropType) => {
         <div className="relative flex items-center justify-between gap-4">
           <Link
             href="/my-projects"
-            onMouseEnter={() => setActive("My Projects")}
+            onMouseEnter={() => setActive("My Startups")}
           >
-            My Projects
+            My Startups
           </Link>
           <Link
             href="/profile/connect"

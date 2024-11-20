@@ -63,7 +63,7 @@ const BannerEditor = (props: PropType) => {
 
   return (
     <section className="h-full w-full">
-      <ModalHeader>Change Project Banner</ModalHeader>
+      <ModalHeader>Change Startup Banner</ModalHeader>
       <Divider className="w-full" />
       {
         <>
@@ -115,7 +115,7 @@ const BannerEditor = (props: PropType) => {
                     className="rounded-md object-cover" // Tailwind utility for object-fit cover
                   />
                   <h1 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-white">
-                    Project Title
+                    Startup Title
                   </h1>
                 </div>
               </div>

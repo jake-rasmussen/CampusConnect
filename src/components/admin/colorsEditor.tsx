@@ -45,7 +45,7 @@ const ColorsEditor = (props: PropType) => {
 
   return (
     <section className="h-full w-fit">
-      <ModalHeader>Change Project Colors</ModalHeader>
+      <ModalHeader>Change Startup Colors</ModalHeader>
       <Divider className="w-full" />
       <div className="m-6 flex flex-row items-center gap-14">
         <p>Primary Color</p>

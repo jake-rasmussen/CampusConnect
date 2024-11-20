@@ -57,7 +57,7 @@ const ProfileDashboard = (props: PropType) => {
                   <div>
                     <p className="text-neutral-400">
                       {uppercaseToCapitalize(profile.year)}{" "}
-                      <span className="text-secondary">@</span> {profile.school}
+                      <span className="text-secondary">@</span> {uppercaseToCapitalize(profile.school)}
                     </p>
                   </div>
                 </div>

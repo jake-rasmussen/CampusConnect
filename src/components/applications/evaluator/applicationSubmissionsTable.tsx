@@ -40,7 +40,7 @@ const ApplicationSubmissionsTable = (props: PropType) => {
         <TableHeader>
           <TableColumn>Candidate Name</TableColumn>
           <TableColumn>Application ID</TableColumn>
-          <TableColumn>Status</TableColumn>
+          <TableColumn className="text-center">Status</TableColumn>
         </TableHeader>
 
         <TableBody>
@@ -85,6 +85,7 @@ const ApplicationSubmissionsTable = (props: PropType) => {
                     }
                     isSelected
                     isReadOnly
+                    className="m-0 p-0"
                   />
                 </TableCell>
               </TableRow>

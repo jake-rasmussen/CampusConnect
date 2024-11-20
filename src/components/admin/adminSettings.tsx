@@ -48,7 +48,7 @@ const AdminSettings = (props: PropType) => {
             <>
               <ModalBody className="mb-8 grid grid-cols-5">
                 <div className="col-span-1 flex flex-col gap-y-2">
-                  <ModalHeader>Project Settings</ModalHeader>
+                  <ModalHeader>Startup Settings</ModalHeader>
                   <Button
                     variant="light"
                     onPress={() => setSettingsSection(SettingsSection.COLORS)}
@@ -71,7 +71,7 @@ const AdminSettings = (props: PropType) => {
                       className="w-full"
                       onPress={() => setSettingsSection(SettingsSection.DELETE)}
                     >
-                      Delete Project
+                      Delete Startup
                     </Button>
                   </div>
                 </div>

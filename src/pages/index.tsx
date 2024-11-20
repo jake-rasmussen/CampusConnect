@@ -300,7 +300,7 @@ const Home = () => {
     {
       title: "Create Customizable Homepages",
       description:
-        "Create project homepages with our no-code solution to help your project gain visibility.",
+        "Create startup homepages with our no-code solution to help your venture gain visibility.",
       skeleton: <SkeletonOne />,
       className:
         "col-span-1 lg:col-span-4 border-b lg:border-r border-neutral-800",

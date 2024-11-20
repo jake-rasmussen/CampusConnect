@@ -432,6 +432,10 @@ export const seedProjects = async () => {
 
 export const deleteProjects = prisma.project.deleteMany({});
 
+export const deleteApplicationSubmissionComments =
+  prisma.applicationSubmissionComment.deleteMany({});
+export const deleteApplicationSubmissionEvaluation =
+  prisma.applicationSubmissionEvaluation.deleteMany({});
 export const deleteApplicationSubmissionAnswers =
   prisma.applicationSubmissionAnswer.deleteMany({});
 export const deleteApplicationSubmissions =

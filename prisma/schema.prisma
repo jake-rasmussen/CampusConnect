@@ -371,3 +371,11 @@ model Colors {
   secondaryColor String
   project        Project[]
 }
+
+model ProjectCreationForm {
+  id         String @id @default(cuid())
+  name       String
+  validation String
+  school     School
+  userId     String
+}

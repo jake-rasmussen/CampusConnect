@@ -9,8 +9,7 @@ import { api } from "~/utils/api";
 
 import { School, type Colors, type Project } from "@prisma/client";
 import type { NextPageWithLayout } from "~/pages/_app";
-import { Autocomplete, AutocompleteItem, Select, SelectItem } from "@nextui-org/react";
-import { capitalize } from "lodash";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { uppercaseToCapitalize } from "~/utils/helpers";
 
 const AllProjects: NextPageWithLayout = () => {
@@ -50,7 +49,7 @@ const AllProjects: NextPageWithLayout = () => {
 
         <section className="w-full max-w-2xl px-4 flex">
           <Input
-            label="Search Projects"
+            label="Search Startups"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);

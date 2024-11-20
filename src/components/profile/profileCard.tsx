@@ -26,7 +26,7 @@ const ProfileCard = (props: PropType) => {
             {profile.user.firstName} {profile.user.lastName}
           </h1>
           <p className="text-neutral-400">
-            {profile.year} @ {profile.school}
+            {profile.year} @ {uppercaseToCapitalize(profile.school)}
           </p>
         </CardHeader>
         <Divider />

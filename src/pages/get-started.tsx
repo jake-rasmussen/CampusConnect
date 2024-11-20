@@ -110,10 +110,10 @@ const GetStarted = () => {
                             onValueChange={setSelected}
                           >
                             <Radio value="hire">
-                              I'm looking to hire for my project
+                              I'm looking to hire for my startup
                             </Radio>
                             <Radio value="work">
-                              I'm looking to join another project
+                              I'm looking to join another startup
                             </Radio>
                           </RadioGroup>
                         </div>
@@ -130,11 +130,11 @@ const GetStarted = () => {
                           <div className="py-4">
                             <p>
                               With our platform, get started with viewing a
-                              bunch of projects to see if there are any that
-                              interest you. You can allProjects go to the
-                              open-application section to see if there are any
+                              bunch of startups to see if there are any that
+                              interest you. You can view all startups hiring by going to the
+                              Open Applications section and see if there are any
                               applications related to your skillset. Moreover,
-                              set up a profile to help projects discover you!
+                              set up a profile to help startups discover you!
                             </p>
 
                             <Divider className="my-6" />
@@ -157,7 +157,7 @@ const GetStarted = () => {
                           <div className="py-4">
                             <p>
                               With our platform, get started with our no-code
-                              solution to create project homepages to gain
+                              solution to create startup homepages to gain
                               visibility for your startup. Additionally, use our
                               application management system to help get grow
                               your startup with fantastic personel.

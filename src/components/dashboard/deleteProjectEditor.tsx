@@ -64,16 +64,16 @@ const DeleteProjectEditor = (props: PropType) => {
       <>
         <ModalHeader>
           <div className="flex flex-col">
-            <h1>Confirm Delete Project</h1>
+            <h1>Confirm Delete Startup</h1>
             <span className="font-normal">
-              Are you sure you want to delete your project?
+              Are you sure you want to delete your startup?
             </span>
           </div>
         </ModalHeader>
         <Divider className="w-full" />
         <div className="m-6 flex flex-col gap-4">
           <span className="flex flex-row gap-2">
-            Type the project name to confirm:{"    "}
+            Type the startup's name to confirm:{"    "}
             <h3 className="tracking-none font-black">{project.name}</h3>
           </span>
           <Input
