@@ -1,6 +1,6 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { faker } from "@faker-js/faker";
-import { Focus } from "@prisma/client";
+import { Focus, School } from "@prisma/client";
 
 import { prisma } from "~/server/db";
 
@@ -43,7 +43,7 @@ export const seedProfiles = async () => {
       data: {
         skills: Array.from({ length: 3 }, () => faker.hacker.verb()),
         about: faker.lorem.paragraph(),
-        school: faker.company.name(),
+        school: faker.helpers.arrayElement(Object.values(School)),
         year: faker.helpers.arrayElement([
           "Freshman",
           "Sophomore",

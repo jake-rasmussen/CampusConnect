@@ -4,6 +4,7 @@ import {
   Member,
   Project,
   ProjectMemberType,
+  School,
 } from "@prisma/client";
 import { z } from "zod";
 
@@ -132,10 +133,11 @@ export const projectRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         description: z.string(),
+        school: z.enum(Object.values(School) as [string, ...string[]]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { name, description } = input;
+      const { name, description, school } = input;
 
       let colors = await ctx.prisma.colors.findFirst({
         where: { id: "default" },
@@ -145,8 +147,8 @@ export const projectRouter = createTRPCRouter({
         colors = await ctx.prisma.colors.create({
           data: {
             id: "default",
-            primaryColor: "#FFFFFF",
-            secondaryColor: "#000000",
+            primaryColor: "#1746A2",
+            secondaryColor: "#5F9DF7",
           },
         });
       }
@@ -155,6 +157,7 @@ export const projectRouter = createTRPCRouter({
         data: {
           name,
           description,
+          school: school as School,
           colorsId: colors.id,
         },
       });
@@ -308,5 +311,40 @@ export const projectRouter = createTRPCRouter({
           id: projectId,
         },
       });
+    }),
+  checkProjectBanner: t.procedure
+    .input(z.object({
+      projectId: z.string()
+    }))
+    .use(isAdmin)
+    .query(async ({ ctx, input }) => {
+      const { projectId } = input;
+
+      return await ctx.prisma.project.findUnique({
+        where: {
+          id: projectId
+        },
+        select: {
+          hasBanner: true
+        }
+      })
+    }),
+  createProjectCreationForm: protectedProcedure
+    .input(z.object({
+      name: z.string().min(1),
+      validation: z.string().min(1),
+      school: z.enum(Object.values(School) as [`${School}`])
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const { name, validation, school } = input;
+
+      return await ctx.prisma.projectCreationForm.create({
+        data: {
+          name,
+          validation,
+          school,
+          userId: ctx.user.userId
+        }
+      })
     }),
 });

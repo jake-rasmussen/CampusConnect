@@ -2,16 +2,22 @@ import { Colors } from "@prisma/client";
 import { InfoCircle } from "tabler-icons-react";
 
 import HeaderOutline from "./headerOutline";
+import { useEffect } from "react";
 
 type PropType = {
   name: string;
   subtext?: string;
   colors?: Colors;
+  bannerUrl?: string;
   editable: boolean;
 };
 
 const Header = (props: PropType) => {
-  const { name, subtext, colors, editable } = props;
+  const { name, subtext, colors, bannerUrl, editable } = props;
+
+  useEffect(() => {
+    
+  })
 
   return (
     <HeaderOutline colors={colors}>

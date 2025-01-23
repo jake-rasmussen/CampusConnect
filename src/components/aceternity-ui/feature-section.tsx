@@ -11,7 +11,7 @@ export function FeaturesSectionDemo() {
     {
       title: "Track issues effectively",
       description:
-        "Track and manage your project issues with ease using our intuitive interface.",
+        "Track and manage your startup issues with ease using our intuitive interface.",
       skeleton: <SkeletonOne />,
       className:
         "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",

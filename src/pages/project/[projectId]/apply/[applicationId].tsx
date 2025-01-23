@@ -48,7 +48,7 @@ const Apply: NextPageWithLayout = () => {
     isLoading: isLoadingFileList,
     isError: isErrorFileList,
     error: errorFileList,
-  } = api.supabaseRouter.getSupabaseFolder.useQuery(
+  } = api.supabaseRouter.getSupabaseFolderApplication.useQuery(
     {
       applicationId,
     },
@@ -89,10 +89,10 @@ const Apply: NextPageWithLayout = () => {
     api.applicationSubmissionAnswerRouter.deleteAllApplicationSubmissionAnswersByApplicationSubmissionId.useMutation();
 
   const createSignedUrlUpload =
-    api.supabaseRouter.createSignedUrlUpload.useMutation({});
+    api.supabaseRouter.createSignedUrlUploadApplication.useMutation({});
 
   const getPresignedUrlGet =
-    api.supabaseRouter.createSignedUrlDownload.useMutation();
+    api.supabaseRouter.createSignedUrlDownloadApplication.useMutation();
 
   const handleSaveAnswers = async (
     answers: ApplicationSubmissionAnswer[],

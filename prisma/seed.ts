@@ -1,6 +1,8 @@
 import { prisma } from "~/server/db";
 import {
   deleteApplicationSubmissionAnswers,
+  deleteApplicationSubmissionComments,
+  deleteApplicationSubmissionEvaluation,
   deleteApplicationSubmissions,
   deleteProjects,
   seedProjects,
@@ -15,6 +17,8 @@ import {
 async function cleanupDb() {
   // Pass the Prisma promises directly to $transaction
   await prisma.$transaction([
+    deleteApplicationSubmissionComments,
+    deleteApplicationSubmissionEvaluation,
     deleteApplicationSubmissionAnswers,
     deleteApplicationSubmissions,
   ]);

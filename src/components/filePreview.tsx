@@ -29,7 +29,7 @@ const FilePreview = (props: PropType) => {
   const [url, setUrl] = useState<string>();
 
   const getPresignedUrlGet =
-    api.supabaseRouter.createSignedUrlDownload.useMutation();
+    api.supabaseRouter.createSignedUrlDownloadApplication.useMutation();
 
   useEffect(() => {
     if (applicationId && filename) {

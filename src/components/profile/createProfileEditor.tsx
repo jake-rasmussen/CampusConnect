@@ -16,7 +16,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
-import { Focus, ProfileSocialMedia } from "@prisma/client";
+import { Focus, ProfileSocialMedia, School } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -126,15 +126,29 @@ const CreateProfileEditor = () => {
                             .max(250, "Enter a shorter school name")}
                         >
                           {({ value, setValue, onBlur, isValid, errors }) => (
-                            <Input
+                            <Autocomplete
                               label="School"
-                              value={value}
-                              isRequired
-                              onChange={(e) => setValue(e.currentTarget.value)}
+                              selectedKey={value || ""}
+                              onSelectionChange={(e) => {
+                                if (e) {
+                                  setValue(e as School);
+                                } else {
+                                  setValue("");
+                                }
+                              }}
                               onBlur={onBlur}
                               isInvalid={!isValid}
                               errorMessage={errors[0]}
-                            />
+                              isRequired
+                            >
+                              {Object.values(School).map((school: School) => (
+                                <AutocompleteItem
+                                  key={school}
+                                >
+                                  {uppercaseToCapitalize(school)}
+                                </AutocompleteItem>
+                              ))}
+                            </Autocomplete>
                           )}
                         </Field>
 

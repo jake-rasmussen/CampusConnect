@@ -88,6 +88,7 @@ const Members = (props: PropType) => {
                   <TableColumn>FULL NAME</TableColumn>
                   <TableColumn>EMAIL</TableColumn>
                   <TableColumn>ROLE</TableColumn>
+                  <TableColumn><></></TableColumn>
                 </TableHeader>
                 <TableBody>
                   {members.map(
@@ -123,115 +124,9 @@ const Members = (props: PropType) => {
                             lodash.upperFirst(member.type.toLowerCase())
                           )}
                         </TableCell>
-                      </TableRow>
-                      // <TableRow key={`member${index}`} className="border-b">
-                      //   <TableCell className="font-medium">
-                      //     {member.user.firstName} {member.user.lastName}
-                      //   </TableCell>
-                      //   <TableCell className="font-medium">
-                      //     {member.user.emailAddress}
-                      //   </TableCell>
-                      //   <TableCell className="font-medium">
-                      //     {editable ? (
-                      //       <div className="h-full w-32">
-                      //         <Select // TODO: create confirmation modal
-                      //           defaultValue={member.type}
-                      //           onValueChange={(input: ProjectMemberType) => {
-                      //             toast.dismiss();
-                      //             toast.loading("Updating Member...");
-                      //             handleUpdateMemberType(member.userId, input);
-                      //           }}
-                      //           disabled={member.user.externalId === user?.id}
-                      //         >
-                      //           <SelectTrigger className="h-[2rem] rounded-xl bg-white">
-                      //             <SelectValue placeholder="" />
-                      //           </SelectTrigger>
-                      //           <SelectContent className="bg-white">
-                      //             <SelectItem value="ADMIN">Admin</SelectItem>
-                      //             <SelectItem value="EVALUATOR">
-                      //               Evaluator
-                      //             </SelectItem>
-                      //           </SelectContent>
-                      //         </Select>
-                      //       </div>
-                      //     ) : (
-                      //       lodash.upperFirst(member.type.toLowerCase())
-                      //     )}
-                      //   </TableCell>
-                      //   {editable && member.user.externalId !== user?.id && (
-                      //     <TableCell className="text-right font-medium">
-                      //       <button
-                      //         className="h-8 w-8"
-                      //         onClick={() => {
-                      //           toast.dismiss();
-                      //           toast.loading("Deleting Member...");
-                      //           handleDeleteMember(member.userId);
-                      //         }}
-                      //       >
-                      //         <TrashX className="h-full w-full text-secondary transition duration-300 ease-in-out hover:text-primary" />
-                      //       </button>
-                      //     </TableCell>
-                      //   )}
-                      // </TableRow>
-                    ),
-                  )}
-                </TableBody>
-              </Table>
-              {/* <Table className="mx-auto">
-                <TableHeader className="text-lg">
-                  <TableRow className="uppercase">
-                    <TableHeader className="tracking-none w-40 font-black">
-                      <TableColumn className="tracking-none w-40 font-black">
-                        Full Name
-                      </TableColumn>
-                      <TableColumn className="tracking-none w-40 font-black">
-                        Email
-                      </TableColumn>
-                      <TableColumn className="tracking-none w-40 font-black">
-                        Role
-                      </TableColumn>
-                    </TableHeader>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {members.map(
-                    (member: Member & { user: User }, index: number) => (
-                      <TableRow key={`member${index}`} className="border-b">
-                        <TableCell className="font-medium">
-                          {member.user.firstName} {member.user.lastName}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {member.user.emailAddress}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {editable ? (
-                            <div className="h-full w-32">
-                              <Select // TODO: create confirmation modal
-                                defaultValue={member.type}
-                                onValueChange={(input: ProjectMemberType) => {
-                                  toast.dismiss();
-                                  toast.loading("Updating Member...");
-                                  handleUpdateMemberType(member.userId, input);
-                                }}
-                                disabled={member.user.externalId === user?.id}
-                              >
-                                <SelectTrigger className="h-[2rem] rounded-xl bg-white">
-                                  <SelectValue placeholder="" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-white">
-                                  <SelectItem value="ADMIN">Admin</SelectItem>
-                                  <SelectItem value="EVALUATOR">
-                                    Evaluator
-                                  </SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          ) : (
-                            lodash.upperFirst(member.type.toLowerCase())
-                          )}
-                        </TableCell>
-                        {editable && member.user.externalId !== user?.id && (
-                          <TableCell className="text-right font-medium">
+
+                        <TableCell className="text-right font-medium">
+                          {editable && member.user.externalId !== user?.id && (
                             <button
                               className="h-8 w-8"
                               onClick={() => {
@@ -242,13 +137,13 @@ const Members = (props: PropType) => {
                             >
                               <TrashX className="h-full w-full text-secondary transition duration-300 ease-in-out hover:text-primary" />
                             </button>
-                          </TableCell>
-                        )}
+                          )}
+                        </TableCell>
                       </TableRow>
                     ),
                   )}
                 </TableBody>
-              </Table> */}
+              </Table>
             </section>
           )}
         </>

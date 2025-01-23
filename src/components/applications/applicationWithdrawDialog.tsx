@@ -23,7 +23,7 @@ const ApplicationWithdrawDialog = (props: PropType) => {
   const queryClient = api.useContext();
 
   const clearSupabaseFolder =
-    api.supabaseRouter.clearSupabaseFolder.useMutation({});
+    api.supabaseRouter.clearSupabaseFolderApplication.useMutation({});
 
   const withdrawApplicationSubmission =
     api.applicationSubmissionRouter.withdrawApplicationSubmission.useMutation({

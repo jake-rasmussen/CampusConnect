@@ -1,4 +1,4 @@
-import { Focus, SocialMediaPlatformType } from "@prisma/client";
+import { Focus, School, SocialMediaPlatformType } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -28,7 +28,7 @@ export const profileRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { skills, about, school, year, socialMedias } = input;
+      const { skills, about, school, year, socialMedias, majors, minors } = input;
 
       const userId = ctx.user.userId;
 
@@ -36,12 +36,14 @@ export const profileRouter = createTRPCRouter({
         data: {
           skills,
           about,
-          school,
+          school: school as School,
           year,
-          userId,
+          user: { connect: { userId } },
           profileSocialMedia: {
             create: socialMedias,
           },
+          majors: [majors as Focus],
+          minors: [minors as Focus]
         },
       });
     }),
