@@ -34,14 +34,14 @@ const ProfileDashboard = (props: PropType) => {
     <div className="flex h-full w-full flex-col items-center justify-center gap-10">
       <header
         className="h-40 w-full bg-gradient-to-r from-secondary to-primary shadow-2xl md:h-48 lg:h-60"
-        // className={`relative w-full shadow-2xl ${colors ? "" : "bg-gradient-to-r from-secondary to-primary"}`}
-        // style={
-        //   colors
-        //     ? {
-        //       backgroundImage: `linear-gradient(to right, ${colors.primaryColor}, ${colors.secondaryColor})`,
-        //     }
-        //     : undefined
-        // }
+      // className={`relative w-full shadow-2xl ${colors ? "" : "bg-gradient-to-r from-secondary to-primary"}`}
+      // style={
+      //   colors
+      //     ? {
+      //       backgroundImage: `linear-gradient(to right, ${colors.primaryColor}, ${colors.secondaryColor})`,
+      //     }
+      //     : undefined
+      // }
       >
         <div className="relative mx-auto h-full max-w-4xl">
           <section className="absolute bottom-0 translate-y-1/2">
@@ -67,7 +67,7 @@ const ProfileDashboard = (props: PropType) => {
         </div>
       </header>
 
-      <section className="mt-28 grid max-w-4xl grid-cols-5">
+      <section className="mt-28 grid max-w-4xl grid-cols-5 gap-8">
         <div className="relative col-span-2 flex flex-col gap-4">
           <div className="flex flex-col">
             <h1 className="text-center text-xl font-semibold">Area of Focus</h1>
@@ -92,36 +92,42 @@ const ProfileDashboard = (props: PropType) => {
               )}
             </div>
           </div>
-          <Divider />
-          <div className="flex flex-col">
-            <h1 className="text-center text-xl font-semibold">Social Media</h1>
-            <div className="flex flex-wrap items-center justify-center px-4">
-              {profile.profileSocialMedia.map(
-                (socialMedia: SocialMediaFormType, index: number) => (
-                  <div
-                    className="my-2 flex flex-row items-center gap-2"
-                    key={`socialMedia${socialMedia.url}${index}`}
-                  >
-                    {socialMedia.platform ===
-                    SocialMediaPlatformType.FACEBOOK ? (
-                      <BrandFacebook className="h-16 w-16" />
-                    ) : socialMedia.platform ===
-                      SocialMediaPlatformType.INSTAGRAM ? (
-                      <BrandInstagram className="h-16 w-16" />
-                    ) : socialMedia.platform ===
-                      SocialMediaPlatformType.LINKEDIN ? (
-                      <BrandLinkedin className="h-16 w-16" />
-                    ) : socialMedia.platform ===
-                      SocialMediaPlatformType.TWITTER ? (
-                      <BrandTwitter className="h-16 w-16" />
-                    ) : (
-                      <WorldWww className="h-16 w-16" />
-                    )}
-                  </div>
-                ),
-              )}
-            </div>
-          </div>
+          {
+            profile.profileSocialMedia.length > 0 &&
+            <>
+              <Divider />
+              <div className="flex flex-col">
+                <h1 className="text-center text-xl font-semibold">Social Media</h1>
+                <div className="flex flex-wrap items-center justify-center px-4">
+                  {profile.profileSocialMedia.map(
+                    (socialMedia: SocialMediaFormType, index: number) => (
+                      <div
+                        className="my-2 flex flex-row items-center gap-2"
+                        key={`socialMedia${socialMedia.url}${index}`}
+                      >
+                        {socialMedia.platform ===
+                          SocialMediaPlatformType.FACEBOOK ? (
+                          <BrandFacebook className="h-16 w-16" />
+                        ) : socialMedia.platform ===
+                          SocialMediaPlatformType.INSTAGRAM ? (
+                          <BrandInstagram className="h-16 w-16" />
+                        ) : socialMedia.platform ===
+                          SocialMediaPlatformType.LINKEDIN ? (
+                          <BrandLinkedin className="h-16 w-16" />
+                        ) : socialMedia.platform ===
+                          SocialMediaPlatformType.TWITTER ? (
+                          <BrandTwitter className="h-16 w-16" />
+                        ) : (
+                          <WorldWww className="h-16 w-16" />
+                        )}
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
+            </>
+          }
+
           <Divider />
           <div className="flex flex-col gap-4">
             <h1 className="text-center text-xl font-semibold">Skills</h1>

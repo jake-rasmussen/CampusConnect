@@ -35,7 +35,7 @@ const ApplicationSubmissionsTable = (props: PropType) => {
   });
 
   return (
-    <Card className="mx-4">
+    <Card className="mx-4 max-h-[50vh] overflow-y-scroll">
       <Table className="rounded-2xl">
         <TableHeader>
           <TableColumn>Candidate Name</TableColumn>
