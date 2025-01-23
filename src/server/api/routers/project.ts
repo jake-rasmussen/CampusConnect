@@ -313,28 +313,32 @@ export const projectRouter = createTRPCRouter({
       });
     }),
   checkProjectBanner: t.procedure
-    .input(z.object({
-      projectId: z.string()
-    }))
+    .input(
+      z.object({
+        projectId: z.string(),
+      }),
+    )
     .use(isAdmin)
     .query(async ({ ctx, input }) => {
       const { projectId } = input;
 
       return await ctx.prisma.project.findUnique({
         where: {
-          id: projectId
+          id: projectId,
         },
         select: {
-          hasBanner: true
-        }
-      })
+          hasBanner: true,
+        },
+      });
     }),
   createProjectCreationForm: protectedProcedure
-    .input(z.object({
-      name: z.string().min(1),
-      validation: z.string().min(1),
-      school: z.enum(Object.values(School) as [`${School}`])
-    }))
+    .input(
+      z.object({
+        name: z.string().min(1),
+        validation: z.string().min(1),
+        school: z.enum(Object.values(School) as [`${School}`]),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const { name, validation, school } = input;
 
@@ -343,8 +347,8 @@ export const projectRouter = createTRPCRouter({
           name,
           validation,
           school,
-          userId: ctx.user.userId
-        }
-      })
+          userId: ctx.user.userId,
+        },
+      });
     }),
 });

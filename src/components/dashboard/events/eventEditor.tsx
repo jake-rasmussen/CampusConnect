@@ -170,7 +170,6 @@ const EventEditor = (props: PropType) => {
   return (
     <Form<EventFormType>
       onSubmit={(values) => {
-        console.log("TEST", values);
         handleSubmit(values);
       }}
     >

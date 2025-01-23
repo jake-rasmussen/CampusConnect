@@ -1,4 +1,6 @@
 import { Input } from "@nextui-org/input";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { School } from "@prisma/client";
 import Error from "next/error";
 import { useEffect, useState } from "react";
 
@@ -6,11 +8,10 @@ import ProjectCard from "~/components/allProjects/projectCard";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
-
-import { School, type Colors, type Project } from "@prisma/client";
-import type { NextPageWithLayout } from "~/pages/_app";
-import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { uppercaseToCapitalize } from "~/utils/helpers";
+
+import type { Colors, Project } from "@prisma/client";
+import type { NextPageWithLayout } from "~/pages/_app";
 
 const AllProjects: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
@@ -47,7 +48,7 @@ const AllProjects: NextPageWithLayout = () => {
           </h1>
         </section>
 
-        <section className="w-full max-w-2xl px-4 flex">
+        <section className="flex w-full max-w-2xl px-4">
           <Input
             label="Search Startups"
             value={query}
@@ -65,9 +66,7 @@ const AllProjects: NextPageWithLayout = () => {
             }}
           >
             {Object.values(School).map((school: School) => (
-              <AutocompleteItem
-                key={school}
-              >
+              <AutocompleteItem key={school}>
                 {uppercaseToCapitalize(school)}
               </AutocompleteItem>
             ))}

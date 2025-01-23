@@ -30,6 +30,7 @@ const establishMetadata = async (
     publicMetadata: {
       evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
       adminProjectIds: JSON.stringify(adminProjectIds),
+      userType: user.userType,
     },
   });
 };

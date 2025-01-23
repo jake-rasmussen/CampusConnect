@@ -142,9 +142,7 @@ const CreateProfileEditor = () => {
                               isRequired
                             >
                               {Object.values(School).map((school: School) => (
-                                <AutocompleteItem
-                                  key={school}
-                                >
+                                <AutocompleteItem key={school}>
                                   {uppercaseToCapitalize(school)}
                                 </AutocompleteItem>
                               ))}

@@ -1,25 +1,9 @@
-import {
-  SignedOut,
-  SignInButton,
-  SignUp,
-  SignUpButton,
-  useUser,
-} from "@clerk/nextjs";
-import {
-  Button,
-  ButtonGroup,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/react";
+import { SignedOut, SignUpButton, useUser } from "@clerk/nextjs";
+import { Button } from "@nextui-org/react";
 import createGlobe from "cobe";
 import { motion } from "framer-motion";
 import { cn } from "lib/utils";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 import { BackgroundBeams } from "~/components/aceternity-ui/background-beams";
@@ -294,7 +278,7 @@ export const Globe = ({ className }: { className?: string }) => {
 };
 
 const Home = () => {
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded } = useUser();
 
   const features = [
     {

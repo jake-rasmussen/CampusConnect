@@ -34,14 +34,14 @@ const ProfileDashboard = (props: PropType) => {
     <div className="flex h-full w-full flex-col items-center justify-center gap-10">
       <header
         className="h-40 w-full bg-gradient-to-r from-secondary to-primary shadow-2xl md:h-48 lg:h-60"
-      // className={`relative w-full shadow-2xl ${colors ? "" : "bg-gradient-to-r from-secondary to-primary"}`}
-      // style={
-      //   colors
-      //     ? {
-      //       backgroundImage: `linear-gradient(to right, ${colors.primaryColor}, ${colors.secondaryColor})`,
-      //     }
-      //     : undefined
-      // }
+        // className={`relative w-full shadow-2xl ${colors ? "" : "bg-gradient-to-r from-secondary to-primary"}`}
+        // style={
+        //   colors
+        //     ? {
+        //       backgroundImage: `linear-gradient(to right, ${colors.primaryColor}, ${colors.secondaryColor})`,
+        //     }
+        //     : undefined
+        // }
       >
         <div className="relative mx-auto h-full max-w-4xl">
           <section className="absolute bottom-0 translate-y-1/2">
@@ -57,7 +57,8 @@ const ProfileDashboard = (props: PropType) => {
                   <div>
                     <p className="text-neutral-400">
                       {uppercaseToCapitalize(profile.year)}{" "}
-                      <span className="text-secondary">@</span> {uppercaseToCapitalize(profile.school)}
+                      <span className="text-secondary">@</span>{" "}
+                      {uppercaseToCapitalize(profile.school)}
                     </p>
                   </div>
                 </div>
@@ -92,12 +93,13 @@ const ProfileDashboard = (props: PropType) => {
               )}
             </div>
           </div>
-          {
-            profile.profileSocialMedia.length > 0 &&
+          {profile.profileSocialMedia.length > 0 && (
             <>
               <Divider />
               <div className="flex flex-col">
-                <h1 className="text-center text-xl font-semibold">Social Media</h1>
+                <h1 className="text-center text-xl font-semibold">
+                  Social Media
+                </h1>
                 <div className="flex flex-wrap items-center justify-center px-4">
                   {profile.profileSocialMedia.map(
                     (socialMedia: SocialMediaFormType, index: number) => (
@@ -106,7 +108,7 @@ const ProfileDashboard = (props: PropType) => {
                         key={`socialMedia${socialMedia.url}${index}`}
                       >
                         {socialMedia.platform ===
-                          SocialMediaPlatformType.FACEBOOK ? (
+                        SocialMediaPlatformType.FACEBOOK ? (
                           <BrandFacebook className="h-16 w-16" />
                         ) : socialMedia.platform ===
                           SocialMediaPlatformType.INSTAGRAM ? (
@@ -126,7 +128,7 @@ const ProfileDashboard = (props: PropType) => {
                 </div>
               </div>
             </>
-          }
+          )}
 
           <Divider />
           <div className="flex flex-col gap-4">

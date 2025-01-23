@@ -118,7 +118,7 @@ export const supabaseRouter = createTRPCRouter({
   createSignedUrlDownloadBanner: protectedProcedure
     .input(
       z.object({
-        projectId: z.string()
+        projectId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

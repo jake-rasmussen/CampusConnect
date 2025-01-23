@@ -36,7 +36,7 @@ const AdminSettings = (props: PropType) => {
   return (
     <>
       <button
-        className="absolute right-0 top-0 m-4 transition duration-500 ease-in-out hover:scale-125 hover:cursor-pointer hover:rotate-180"
+        className="absolute right-0 top-0 m-4 transition duration-500 ease-in-out hover:rotate-180 hover:scale-125 hover:cursor-pointer"
         onClick={onOpen}
       >
         <Settings className="h-20 w-20 rounded-full p-1" />

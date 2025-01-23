@@ -88,7 +88,9 @@ const Members = (props: PropType) => {
                   <TableColumn>FULL NAME</TableColumn>
                   <TableColumn>EMAIL</TableColumn>
                   <TableColumn>ROLE</TableColumn>
-                  <TableColumn><></></TableColumn>
+                  <TableColumn>
+                    <></>
+                  </TableColumn>
                 </TableHeader>
                 <TableBody>
                   {members.map(

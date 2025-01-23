@@ -32,7 +32,12 @@ const PreviewModal = (props: PropType) => {
       {triggerWithOnClick}
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="4xl">
-        <ModalContent className={twMerge("max-w-5xl max-h-[75vh] overflow-y-scroll", className)}>
+        <ModalContent
+          className={twMerge(
+            "max-h-[75vh] max-w-5xl overflow-y-scroll",
+            className,
+          )}
+        >
           {(onClose) => (
             <>
               <ModalHeader>

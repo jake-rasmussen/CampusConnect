@@ -79,14 +79,17 @@ const BannerEditor = (props: PropType) => {
               />
 
               {file ? (
-                <Button color="danger" onPress={() => {
-                  setFile(undefined);
-                  setFileSrc(undefined);
+                <Button
+                  color="danger"
+                  onPress={() => {
+                    setFile(undefined);
+                    setFileSrc(undefined);
 
-                  if (fileInputRef.current) {
-                    fileInputRef.current.value = "";
-                  }
-                }}>
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = "";
+                    }
+                  }}
+                >
                   Clear File
                 </Button>
               ) : (
@@ -134,7 +137,8 @@ const BannerEditor = (props: PropType) => {
             >
               Save
             </Button>
-          </ModalFooter></>
+          </ModalFooter>
+        </>
       }
     </section>
   );

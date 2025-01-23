@@ -48,16 +48,17 @@ const CreateProjectEditor = () => {
   //   },
   // });
 
-  const createProjectCreationForm = api.projectRouter.createProjectCreationForm.useMutation({
-    onSuccess() {
-      toast.dismiss();
-      toast.success("Successfully Submitted Form!");
-    },
-    onError() {
-      toast.dismiss();
-      toast.error("Error...");
-    },
-  })
+  const createProjectCreationForm =
+    api.projectRouter.createProjectCreationForm.useMutation({
+      onSuccess() {
+        toast.dismiss();
+        toast.success("Successfully Submitted Form!");
+      },
+      onError() {
+        toast.dismiss();
+        toast.error("Error...");
+      },
+    });
 
   return (
     <>
@@ -88,8 +89,9 @@ const CreateProjectEditor = () => {
                   <ModalBody className="max-h-[70vh] overflow-y-scroll overflow-y-scroll">
                     <main className="flex w-full flex-col items-center gap-4">
                       <p>
-                        Please submit some information about your startup. It should take 1-2 business days
-                        to be approved, and you will receive an email once it is verified!
+                        Please submit some information about your startup. It
+                        should take 1-2 business days to be approved, and you
+                        will receive an email once it is verified!
                       </p>
 
                       <section className="mx-10 flex w-full flex-col gap-4">

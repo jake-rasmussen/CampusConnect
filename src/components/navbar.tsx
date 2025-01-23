@@ -1,47 +1,20 @@
 import { UserButton, useUser } from "@clerk/nextjs";
 import { UserType } from "@prisma/client";
-import { cn } from "lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { api } from "~/utils/api";
 import { HoveredLink, Menu, MenuItem } from "./aceternity-ui/navbar-menu";
 
-type PropType = {
-  setIsLoading: React.Dispatch<SetStateAction<boolean>>;
-};
-
-const Navbar = (props: PropType) => {
-  const { setIsLoading } = props;
-  const router = useRouter();
+const Navbar = () => {
   const { user, isSignedIn } = useUser();
 
-  const { data: userData, isLoading } = api.usersRouter.getUserType.useQuery(
+  const { data: userData } = api.usersRouter.getUserType.useQuery(
     { externalId: user?.id || "" },
     { enabled: !!user },
   );
 
-  useEffect(() => {
-    if (!isSignedIn) {
-      setIsLoading(false);
-    }
-
-    if (!isLoading) {
-      if (
-        userData?.userType === UserType.INCOMPLETE &&
-        router.pathname !== "/get-started" &&
-        router.pathname !== "/"
-      ) {
-        router.push("/get-started");
-      } else {
-        setIsLoading(false);
-      }
-    }
-  }, [userData, router, isLoading, isSignedIn]);
-
-  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [active, setActive] = useState<string | null>(null);
 
   let menu: JSX.Element = <></>;

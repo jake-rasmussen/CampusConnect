@@ -28,7 +28,8 @@ export const profileRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { skills, about, school, year, socialMedias, majors, minors } = input;
+      const { skills, about, school, year, socialMedias, majors, minors } =
+        input;
 
       const userId = ctx.user.userId;
 
@@ -43,7 +44,7 @@ export const profileRouter = createTRPCRouter({
             create: socialMedias,
           },
           majors: [majors as Focus],
-          minors: [minors as Focus]
+          minors: [minors as Focus],
         },
       });
     }),
