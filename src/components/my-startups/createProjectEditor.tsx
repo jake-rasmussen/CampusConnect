@@ -5,27 +5,17 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import {
-  Autocomplete,
-  AutocompleteItem,
-  Button,
-  Input,
-  Textarea,
-  useDisclosure,
-} from "@nextui-org/react";
-import { School } from "@prisma/client";
+import { Button, Input, Textarea, useDisclosure } from "@nextui-org/react";
 import { Field, Form } from "houseform";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { api } from "~/utils/api";
-import { uppercaseToCapitalize } from "~/utils/helpers";
 
 type ApplicationFormType = {
   name: string;
   description: string;
-  school: School;
 };
 
 const CreateProjectEditor = () => {
@@ -79,7 +69,6 @@ const CreateProjectEditor = () => {
                 await createProjectCreationForm.mutateAsync({
                   name: values.name,
                   validation: values.description,
-                  school: values.school,
                 });
               }}
             >
@@ -137,44 +126,6 @@ const CreateProjectEditor = () => {
                               isInvalid={!isValid}
                               errorMessage={errors[0]}
                             />
-                          )}
-                        </Field>
-
-                        <Field
-                          name="school"
-                          onBlurValidate={z.enum(
-                            Object.values(School) as [string, ...string[]],
-                            {
-                              errorMap: () => {
-                                return { message: "Select School" };
-                              },
-                            },
-                          )}
-                        >
-                          {({ value, setValue, onBlur, isValid, errors }) => (
-                            <Autocomplete
-                              label="School"
-                              selectedKey={value || ""}
-                              onSelectionChange={(e) => {
-                                if (e) {
-                                  setValue(e as School);
-                                } else {
-                                  setValue("");
-                                }
-                              }}
-                              onBlur={onBlur}
-                              isInvalid={!isValid}
-                              errorMessage={errors[0]}
-                              isRequired
-                            >
-                              {Object.values(School).map(
-                                (school: School, index: number) => (
-                                  <AutocompleteItem key={school} value={school}>
-                                    {uppercaseToCapitalize(school)}
-                                  </AutocompleteItem>
-                                ),
-                              )}
-                            </Autocomplete>
                           )}
                         </Field>
                       </section>

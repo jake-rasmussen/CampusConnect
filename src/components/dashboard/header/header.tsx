@@ -20,12 +20,12 @@ const Header = (props: PropType) => {
   return (
     <HeaderOutline colors={colors}>
       {editable ? (
-        <div className="absolute translate-y-20 rounded-xl px-8 py-2 backdrop-invert">
-          <h1 className="tracking-none md:text-md flex flex-row items-center text-sm font-black uppercase">
-            <InfoCircle className="mr-2" />
-            You are now in edit mode
-          </h1>
-        </div>
+      <div className="absolute translate-y-20 rounded-xl px-8 py-2 backdrop-invert">
+        <h1 className="tracking-none md:text-md flex flex-row items-center text-sm font-black uppercase invert">
+          <InfoCircle className="mr-2" />
+          You are now in edit mode
+        </h1>
+      </div>
       ) : (
         <></>
       )}

@@ -166,7 +166,7 @@ const EvaluateApplicationSubmission = () => {
           </span>
         </section>
 
-        <section className="mt-28">
+        <section className="mt-40">
           <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
             Evaluate Application
           </h1>

@@ -68,7 +68,7 @@ const ProfileDashboard = (props: PropType) => {
         </div>
       </header>
 
-      <section className="mt-28 grid max-w-4xl grid-cols-5 gap-8">
+      <section className="mt-40 grid max-w-4xl grid-cols-5 gap-8">
         <div className="relative col-span-2 flex flex-col gap-4">
           <div className="flex flex-col">
             <h1 className="text-center text-xl font-semibold">Area of Focus</h1>

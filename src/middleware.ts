@@ -76,7 +76,7 @@ function extractProjectId(
 export const config = {
   matcher: [
     "/((?!.*\\..*|_next).*)", // Matches all routes except static files and _next
-    "/",                      // Matches the root route
-    "/api/trpc(.*)",          // Matches all tRPC API routes
+    "/", // Matches the root route
+    "/api/trpc(.*)", // Matches all tRPC API routes
   ],
 };

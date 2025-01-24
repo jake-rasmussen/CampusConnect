@@ -1,6 +1,7 @@
 import {
   Button,
   Modal,
+  ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -31,8 +32,8 @@ const DeleteController = (props: PropType) => {
             <>
               <ModalHeader>
                 <div className="flex flex-col">
-                  <h1>Editor</h1>
-                  <span className="font-normal">{dialogDescription}</span>
+                  <h1>Confirm Delete</h1>
+                  <p className="text-xs font-normal text-gray">{dialogDescription}</p>
                 </div>
               </ModalHeader>
               <ModalFooter>

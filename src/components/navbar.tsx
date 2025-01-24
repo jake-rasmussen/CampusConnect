@@ -81,7 +81,7 @@ const Navbar = () => {
 
         <div className="relative flex items-center justify-between gap-4">
           <Link
-            href="/my-projects"
+            href="/my-startups"
             onMouseEnter={() => setActive("My Startups")}
           >
             My Startups

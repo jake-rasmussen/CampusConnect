@@ -70,10 +70,7 @@ const EditController = (props: PropType) => {
           {(onClose) => (
             <>
               <ModalHeader>
-                <div className="flex flex-col">
-                  <h1>Editor</h1>
-                  <span className="font-normal">{dialogDescription}</span>
-                </div>
+                {dialogDescription}
               </ModalHeader>
               <ModalBody>{children}</ModalBody>
               <ModalFooter className="flex">

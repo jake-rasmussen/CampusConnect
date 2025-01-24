@@ -24,6 +24,7 @@ const Checklist = (props: PropType) => {
         label={<span className="text-xl text-white">{label}</span>}
         defaultValue={selectedAnswers}
         value={value}
+        isRequired={isRequired}
       >
         {answerChoices.map((answerChoice: string, index: number) => {
           return (

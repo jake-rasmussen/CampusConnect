@@ -5,7 +5,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import { Button, useDisclosure } from "@nextui-org/react";
+import { Button, useDisclosure, Divider } from "@nextui-org/react";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -43,10 +43,10 @@ const PreviewModal = (props: PropType) => {
               <ModalHeader>
                 <div className="flex flex-col">
                   <h1>{dialogTitle}</h1>
-                  <span className="font-normal">{dialogDescription}</span>
+                  <p className="text-sm text-gray font-normal">{dialogDescription}</p>
                 </div>
               </ModalHeader>
-              <ModalBody className="overflow-y-scroll overflow-y-scroll">
+              <ModalBody className="overflow-y-scroll">
                 {children}
               </ModalBody>
               <ModalFooter>

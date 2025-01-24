@@ -10,7 +10,6 @@ import {
 import Error from "next/error";
 
 import LoadingPage from "~/components/loadingPage";
-import CreateProjectEditor from "~/components/my-projects/createProjectEditor";
 import CreateProfileEditor from "~/components/profile/createProfileEditor";
 import ProfileDashboard from "~/components/profile/profileDashboard";
 import UserLayout from "~/layouts/userLayout";
@@ -37,7 +36,7 @@ const Profile: NextPageWithLayout = () => {
   } else {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center">
-        <section className="mb-14 mt-28">
+        <section className="mb-14 mt-40">
           <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
             Profile
           </h1>

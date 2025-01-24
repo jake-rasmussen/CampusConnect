@@ -26,7 +26,7 @@ const SocialMediaCard = (props: PropType) => {
   const { colors } = useContext(ProjectContext);
 
   const iconStyle = {
-    color: colors.secondaryColor,
+    color: colors.primaryColor,
     transition: "color 0.3s ease-in-out",
   };
 

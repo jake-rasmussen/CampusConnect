@@ -216,7 +216,7 @@ const Apply: NextPageWithLayout = () => {
     ApplicationSubmissionStatus.SUBMITTED
   ) {
     return (
-      <section className="mt-28 flex justify-center py-10">
+      <section className="mt-40 flex justify-center py-10">
         <div className="min-w-[80vw] max-w-4xl">
           <ApplicationForm
             projectId={projectId}
@@ -233,7 +233,7 @@ const Apply: NextPageWithLayout = () => {
     );
   } else {
     return (
-      <section className="mt-28 flex justify-center py-10">
+      <section className="mt-40 flex justify-center py-10">
         <div className="min-w-[80vw] max-w-4xl">
           <ApplicationForm
             projectId={projectId}

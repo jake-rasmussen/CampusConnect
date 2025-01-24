@@ -1,6 +1,7 @@
 import { clerkClient } from "@clerk/nextjs";
 import {
   ApplicationStatus,
+  Colors,
   Member,
   Project,
   ProjectMemberType,
@@ -97,11 +98,17 @@ export const projectRouter = createTRPCRouter({
         type: ProjectMemberType.ADMIN,
       },
       include: {
-        project: true,
+        project: {
+          include: {
+            colors: true,
+          },
+        },
       },
     });
 
-    let projects: Project[] = [];
+    let projects: (Project & {
+      colors: Colors;
+    })[] = [];
     admins.forEach((member) => {
       projects.push(member.project);
     });
@@ -117,11 +124,17 @@ export const projectRouter = createTRPCRouter({
         type: ProjectMemberType.EVALUATOR,
       },
       include: {
-        project: true,
+        project: {
+          include: {
+            colors: true,
+          },
+        },
       },
     });
 
-    let projects: Project[] = [];
+    let projects: (Project & {
+      colors: Colors;
+    })[] = [];
     evaluators.forEach((evaluator) => {
       projects.push(evaluator.project);
     });
@@ -336,17 +349,16 @@ export const projectRouter = createTRPCRouter({
       z.object({
         name: z.string().min(1),
         validation: z.string().min(1),
-        school: z.enum(Object.values(School) as [`${School}`]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { name, validation, school } = input;
+      const { name, validation } = input;
 
       return await ctx.prisma.projectCreationForm.create({
         data: {
           name,
           validation,
-          school,
+          school: School.JOHNS_HOPKINS_UNIVERSITY,
           userId: ctx.user.userId,
         },
       });

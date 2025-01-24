@@ -5,7 +5,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import { Button, useDisclosure } from "@nextui-org/react";
+import { Button, Tooltip, useDisclosure } from "@nextui-org/react";
 import toast from "react-hot-toast";
 import { LicenseOff } from "tabler-icons-react";
 
@@ -18,7 +18,7 @@ type PropType = {
 };
 
 const ApplicationWithdrawDialog = (props: PropType) => {
-  const { projectId, applicationId, applicationSubmissionId } = props;
+  const { applicationId, applicationSubmissionId } = props;
 
   const queryClient = api.useContext();
 
@@ -42,12 +42,15 @@ const ApplicationWithdrawDialog = (props: PropType) => {
 
   return (
     <>
-      <div
-        className="absolute right-0 top-0 -translate-x-px translate-y-px"
-        onClick={onOpen}
-      >
-        <LicenseOff className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:rotate-12 hover:text-red-500" />
-      </div>
+      <Tooltip content="Withdraw Application?">
+        <div
+          className="absolute right-0 top-0 -translate-x-px translate-y-px"
+          onClick={onOpen}
+        >
+          <LicenseOff className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:rotate-12 hover:text-red-500" />
+        </div>
+      </Tooltip>
+
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>

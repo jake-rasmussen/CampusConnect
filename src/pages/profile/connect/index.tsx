@@ -31,7 +31,7 @@ const ProfilePage: NextPageWithLayout = () => {
 
   return (
     <div className="mb-20 flex h-full w-full flex-col items-center justify-center">
-      <section className="mb-14 mt-28">
+      <section className="mb-14 mt-40">
         <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
           Connect
         </h1>
@@ -40,17 +40,27 @@ const ProfilePage: NextPageWithLayout = () => {
       {isLoading ? (
         <LoadingSection />
       ) : (
-        <div className="my-20 flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-20">
-          {profileData.profiles.map((profile: Profile & { user: User }) => (
-            <ProfileCard key={profile.id} profile={profile} />
-          ))}
+        <div className="flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-20">
+          {profileData.totalProfiles > 0 ? (
+            <>
+              {profileData.profiles.map((profile: Profile & { user: User }) => (
+                <ProfileCard key={profile.id} profile={profile} />
+              ))}
 
-          <Pagination
-            total={totalPages}
-            initialPage={1}
-            page={page}
-            onChange={(newPage) => setPage(newPage)}
-          />
+              <Pagination
+                total={totalPages}
+                initialPage={1}
+                page={page}
+                onChange={(newPage) => setPage(newPage)}
+              />
+            </>
+          ) : (
+            <>
+              <p className="px-8 text-lg">
+                No profiles found. Please check back at a later date.
+              </p>
+            </>
+          )}
         </div>
       )}
     </div>

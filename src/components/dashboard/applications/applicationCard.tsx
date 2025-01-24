@@ -49,8 +49,8 @@ const ApplicationCard = (props: PropType) => {
 
   // Access the context if it's in the scope, or fallback to default colors
   const projectContext = useContext(ProjectContext);
-  const primaryColor = projectContext?.colors?.primaryColor || "#000000"; // Default black if no context
-  const secondaryColor = projectContext?.colors?.secondaryColor || "#4B5563"; // Default gray if no context
+  const primaryColor = projectContext?.colors?.primaryColor || "var(--primary)";
+  const secondaryColor = projectContext?.colors?.secondaryColor ||"var(--secondary)";
 
   const displayEditComponent =
     editable && application.status === ApplicationStatus.DRAFT;
@@ -137,7 +137,7 @@ const ApplicationCard = (props: PropType) => {
             {status === ApplicationSubmissionStatus.DRAFT && (
               <Link href={`/project/${projectId}/apply/${application.id}`}>
                 <button
-                  className="mr-1 flex flex-row transition duration-300 ease-in-out hover:translate-x-2"
+                  className="mr-1 flex flex-row transition duration-300 ease-in-out hover:translate-x-2 text-secondary"
                   style={{ color: secondaryColor }} // Inline style for dynamic color
                 >
                   Continue <ArrowRight className="mx-1 h-full" />
@@ -201,8 +201,6 @@ const ApplicationCard = (props: PropType) => {
               savedAnswers={savedAnswers}
               deadline={application.deadline || undefined}
               readonly
-              name={""}
-              description={""}
             />
           </PreviewModal>
         )}

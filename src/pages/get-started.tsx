@@ -37,7 +37,7 @@ const GetStarted = () => {
       queryClient.invalidate().catch((e) => console.log(e));
 
       setTimeout(() => {
-        if (selected === "hire") router.push("/my-projects");
+        if (selected === "hire") router.push("/my-startups");
         else router.push("/project");
       }, 1000);
     },
@@ -61,7 +61,7 @@ const GetStarted = () => {
     }),
   };
 
-  useEffect(() => { }, [selected]);
+  useEffect(() => {}, [selected]);
 
   if (!isLoaded) {
     return <LoadingPage />;
@@ -94,13 +94,19 @@ const GetStarted = () => {
                     {step === 0 && (
                       <div className="flex flex-col gap-3">
                         <p>
-                          We're thrilled to have you here! Campus Connect is a platform designed to connect ambitious student founders with talented students eager to get involved in exciting projects.
+                          We're thrilled to have you here! Campus Connect is a
+                          platform designed to connect ambitious student
+                          founders with talented students eager to get involved
+                          in exciting projects.
                         </p>
                         <p>
-                          To help us get started, we’d like to know: are you looking to hire for your project, or are you seeking an opportunity to work on one?
+                          To help us get started, we’d like to know: are you
+                          looking to hire for your project, or are you seeking
+                          an opportunity to work on one?
                         </p>
                         <i>
-                          Don’t worry—you can update this preference at any time to reflect your goals.
+                          Don’t worry—you can update this preference at any time
+                          to reflect your goals.
                         </i>
 
                         <div className="flex flex-col gap-3 py-4 text-left">
@@ -124,18 +130,25 @@ const GetStarted = () => {
                       (selected === "hire" ? (
                         <div className="flex flex-col gap-3">
                           <p>
-                            Fantastic! Thank you for choosing Campus Connect to help you grow your startup.
+                            Fantastic! Thank you for choosing Campus Connect to
+                            help you grow your startup.
                           </p>
                           <div className="py-4">
                             <p>
-                              With our platform, you can create a professional homepage for your startup, making it easy to gain visibility and attract top talent. Use our application management tools to find exceptional team members who can take your startup to the next level.
+                              With our platform, you can create a professional
+                              homepage for your startup, making it easy to gain
+                              visibility and attract top talent. Use our
+                              application management tools to find exceptional
+                              team members who can take your startup to the next
+                              level.
                             </p>
 
                             <Divider className="my-6" />
 
                             <div className="flex flex-col items-center justify-center text-center font-bold">
                               <p>
-                                What are you waiting for? Let Campus Connect help you build your dream team!
+                                What are you waiting for? Let Campus Connect
+                                help you build your dream team!
                               </p>
                             </div>
                           </div>
@@ -143,18 +156,25 @@ const GetStarted = () => {
                       ) : (
                         <div className="flex flex-col gap-3">
                           <p>
-                            Amazing! Thank you for choosing Campus Connect to help you discover your next great opportunity.
+                            Amazing! Thank you for choosing Campus Connect to
+                            help you discover your next great opportunity.
                           </p>
                           <div className="py-4">
                             <p>
-                              Browse a wide variety of startups hiring for exciting roles. Explore the "Open Applications" section to find opportunities that match your skills and interests. Set up your profile to showcase your talents and let startups find you!
+                              Browse a wide variety of startups hiring for
+                              exciting roles. Explore the "Open Applications"
+                              section to find opportunities that match your
+                              skills and interests. Set up your profile to
+                              showcase your talents and let startups find you!
                             </p>
 
                             <Divider className="my-6" />
 
                             <div className="flex flex-col items-center justify-center text-center font-bold">
                               <p>
-                                Start your journey with Campus Connect today and find the perfect opportunity to grow and succeed!
+                                Start your journey with Campus Connect today and
+                                find the perfect opportunity to grow and
+                                succeed!
                               </p>
                             </div>
                           </div>
@@ -209,7 +229,6 @@ const GetStarted = () => {
             )}
           </ModalContent>
         </Modal>
-
       </div>
     );
   }

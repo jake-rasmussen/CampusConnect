@@ -20,7 +20,7 @@ import type {
 
 function getRandomDate(): Date {
   const startDate = new Date();
-  const endDate = new Date("2024-12-31");
+  const endDate = new Date("2025-12-31");
 
   const randomTimestamp = faker.date
     .between({ from: startDate, to: endDate })
