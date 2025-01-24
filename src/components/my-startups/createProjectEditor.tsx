@@ -53,7 +53,7 @@ const CreateProjectEditor = () => {
   return (
     <>
       <Button onPress={onOpen} color="primary">
-        Create a startup!
+        Create Startup
       </Button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

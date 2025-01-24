@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 
 import StartupCard from "~/components/allProjects/startupCard";
 import LoadingPage from "~/components/loadingPage";
+import PageWrapper from "~/components/pageWrapper";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 import { uppercaseToCapitalize } from "~/utils/helpers";
 
 import type { Colors, Project } from "@prisma/client";
 import type { NextPageWithLayout } from "~/pages/_app";
-import PageWrapper from "~/components/pageWrapper";
 
 const AllProjects: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
@@ -46,12 +46,12 @@ const AllProjects: NextPageWithLayout = () => {
     const filteredProjects = projects.filter(
       (project) =>
         project.name.toLowerCase().includes(query.toLowerCase()) &&
-        (selectedSchool ? project.school === selectedSchool : true)
+        (selectedSchool ? project.school === selectedSchool : true),
     );
 
     const paginatedProjects = filteredProjects.slice(
       (page - 1) * limit,
-      page * limit
+      page * limit,
     );
 
     const totalPages = Math.ceil(filteredProjects.length / limit);
@@ -73,10 +73,7 @@ const AllProjects: NextPageWithLayout = () => {
 
           <div className="flex w-full max-w-6xl flex-wrap items-center justify-center gap-8">
             {paginatedProjects.map((project, index) => (
-              <StartupCard
-                project={project}
-                key={index}
-              />
+              <StartupCard project={project} key={index} />
             ))}
           </div>
 

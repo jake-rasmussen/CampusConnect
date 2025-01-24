@@ -20,7 +20,9 @@ export const dateToStringFormatted = (date: Date) => {
 };
 
 export const dateToStringFormattedWithYear = (date: Date) => {
-  return `${month[date.getMonth()] as string} ${date.getDate()}, ${date.getFullYear()}`;
+  return `${
+    month[date.getMonth()] as string
+  } ${date.getDate()}, ${date.getFullYear()}`;
 };
 
 export const dateToTimeStringFormatted = (date: Date) => {

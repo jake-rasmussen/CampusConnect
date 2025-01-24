@@ -10,6 +10,7 @@ import {
 import Error from "next/error";
 
 import LoadingPage from "~/components/loadingPage";
+import PageWrapper from "~/components/pageWrapper";
 import CreateProfileEditor from "~/components/profile/createProfileEditor";
 import ProfileDashboard from "~/components/profile/profileDashboard";
 import UserLayout from "~/layouts/userLayout";
@@ -35,18 +36,12 @@ const Profile: NextPageWithLayout = () => {
     return <ProfileDashboard profile={profile} />;
   } else {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center">
-        <section className="mb-14 mt-40">
-          <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
-            Profile
-          </h1>
-        </section>
-
-        <div className="mx-auto flex flex-col items-center justify-center px-4 py-16 text-center md:px-10 md:py-32 lg:px-32 xl:max-w-3xl">
-          <h1 className="text-4xl font-bold leading-none">
+      <PageWrapper title="My Profile">
+        <div className="flex w-full flex-col items-center gap-8">
+          <h1 className="text-2xl font-bold leading-none">
             You don't have a profile created!
           </h1>
-          <p className="mb-12 mt-8 px-8 text-lg">
+          <p className="max-w-lg text-center text-lg">
             Increase your discoverability by creating a profile. Once you have
             created a profile, startups will be able to see it and connect
             directly with you
@@ -59,9 +54,7 @@ const Profile: NextPageWithLayout = () => {
               <ModalContent>
                 {(onClose) => (
                   <>
-                    <ModalHeader className="flex flex-col gap-1">
-                      Create a profile
-                    </ModalHeader>
+                    <ModalHeader>Create a profile</ModalHeader>
                     <ModalBody>
                       Once you've created a profile, startups will be able to
                       search you, and be able to contact you directly. You can
@@ -80,7 +73,7 @@ const Profile: NextPageWithLayout = () => {
             </Modal>
           </div>
         </div>
-      </div>
+      </PageWrapper>
     );
   }
 };

@@ -51,7 +51,6 @@ const ApplicationWithdrawDialog = (props: PropType) => {
         </div>
       </Tooltip>
 
-
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (

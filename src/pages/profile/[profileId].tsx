@@ -1,9 +1,7 @@
-import { Button, useDisclosure } from "@nextui-org/react";
 import Error from "next/error";
 import { useRouter } from "next/router";
 
 import LoadingPage from "~/components/loadingPage";
-import CreateProfileEditor from "~/components/profile/createProfileEditor";
 import ProfileDashboard from "~/components/profile/profileDashboard";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
@@ -21,7 +19,11 @@ const Profile: NextPageWithLayout = () => {
     error,
   } = api.profileRouter.getProfileById.useQuery({
     id: profileId,
-  });
+  },
+    {
+      enabled: !!profileId,
+    }
+  );
 
   if (isLoading) {
     return <LoadingPage />;
