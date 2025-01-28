@@ -1,7 +1,6 @@
+import { Input } from "@nextui-org/react";
 import { ApplicationQuestion, ApplicationQuestionType } from "@prisma/client";
 import { Circle, SquarePlus, X } from "tabler-icons-react";
-
-import { Input } from "~/components/shadcn_ui/input";
 
 type PropType = {
   question: ApplicationQuestion;
@@ -41,16 +40,16 @@ const AnswerChoicesEditor = (props: PropType) => {
         {question.answerChoices &&
           question.answerChoices.map((answerChoice: string, index: number) => (
             <div
-              className="flex flex-row items-center"
+              className="my-2 flex flex-row items-center gap-4"
               key={`answerChoice${answerChoice}${index}`}
             >
-              <Circle className="mr-2 h-2 w-2 rounded-full bg-white/10 text-white backdrop-invert" />
+              <Circle className="mr-2 h-2 w-2 rounded-full text-white backdrop-invert" />
               <Input
-                className="h-[3rem] max-w-lg"
-                placeholder={"Answer Choice"}
+                className="max-w-lg"
+                label={`Answer Choice ${index + 1}`}
                 defaultValue={answerChoice}
                 onBlur={(e) => {
-                  updateAnswerChoice(index, e.currentTarget.value);
+                  updateAnswerChoice(index, e.target.value);
                 }}
               />
               <button

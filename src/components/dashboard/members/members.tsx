@@ -1,26 +1,21 @@
 import "@prisma/client";
 
 import { useUser } from "@clerk/nextjs";
+import {
+  Select,
+  SelectItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
 import lodash from "lodash";
 import toast from "react-hot-toast";
 import { TrashX } from "tabler-icons-react";
 
 import LoadingSection from "~/components/loadingSection";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/shadcn_ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/shadcn_ui/table";
 import { api } from "~/utils/api";
 import MemberOutline from "./memberOutline";
 import Search from "./search";
@@ -87,60 +82,53 @@ const Members = (props: PropType) => {
       >
         <>
           {members.length !== 0 && (
-            <section className="min-w-screen rounded-xl bg-white p-4 shadow-xl md:min-w-[40rem]">
-              <Table className="mx-auto">
-                <TableHeader className="text-lg">
-                  <TableRow className="uppercase">
-                    <TableHead className="tracking-none w-40 font-black">
-                      Full Name
-                    </TableHead>
-                    <TableHead className="tracking-none font-black">
-                      Email
-                    </TableHead>
-                    <TableHead className="tracking-none font-black">
-                      Role
-                    </TableHead>
-                  </TableRow>
+            <section className="min-w-screen md:min-w-[40rem]">
+              <Table aria-label="Example static collection table">
+                <TableHeader>
+                  <TableColumn>FULL NAME</TableColumn>
+                  <TableColumn>EMAIL</TableColumn>
+                  <TableColumn>ROLE</TableColumn>
+                  <TableColumn>
+                    <></>
+                  </TableColumn>
                 </TableHeader>
                 <TableBody>
                   {members.map(
                     (member: Member & { user: User }, index: number) => (
-                      <TableRow key={`member${index}`} className="border-b">
-                        <TableCell className="font-medium">
+                      <TableRow key={`member${index}`}>
+                        <TableCell>
                           {member.user.firstName} {member.user.lastName}
                         </TableCell>
-                        <TableCell className="font-medium">
-                          {member.user.emailAddress}
-                        </TableCell>
-                        <TableCell className="font-medium">
+                        <TableCell>{member.user.emailAddress}</TableCell>
+                        <TableCell>
                           {editable ? (
                             <div className="h-full w-32">
-                              <Select // TODO: create confirmation modal
-                                defaultValue={member.type}
-                                onValueChange={(input: ProjectMemberType) => {
+                              <Select
+                                defaultSelectedKeys={[member.type]}
+                                onChange={(e) => {
                                   toast.dismiss();
                                   toast.loading("Updating Member...");
-                                  handleUpdateMemberType(member.userId, input);
+                                  handleUpdateMemberType(
+                                    member.userId,
+                                    e.target.value as ProjectMemberType,
+                                  );
                                 }}
-                                disabled={member.user.externalId === user?.id}
+                                isDisabled={member.user.externalId === user?.id}
+                                onClick={() => console.log(member.type)}
                               >
-                                <SelectTrigger className="h-[2rem] rounded-xl bg-white">
-                                  <SelectValue placeholder="" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-white">
-                                  <SelectItem value="ADMIN">Admin</SelectItem>
-                                  <SelectItem value="EVALUATOR">
-                                    Evaluator
-                                  </SelectItem>
-                                </SelectContent>
+                                <SelectItem key="ADMIN">Admin</SelectItem>
+                                <SelectItem key="EVALUATOR">
+                                  Evaluator
+                                </SelectItem>
                               </Select>
                             </div>
                           ) : (
                             lodash.upperFirst(member.type.toLowerCase())
                           )}
                         </TableCell>
-                        {editable && member.user.externalId !== user?.id && (
-                          <TableCell className="text-right font-medium">
+
+                        <TableCell className="text-right font-medium">
+                          {editable && member.user.externalId !== user?.id && (
                             <button
                               className="h-8 w-8"
                               onClick={() => {
@@ -151,8 +139,8 @@ const Members = (props: PropType) => {
                             >
                               <TrashX className="h-full w-full text-secondary transition duration-300 ease-in-out hover:text-primary" />
                             </button>
-                          </TableCell>
-                        )}
+                          )}
+                        </TableCell>
                       </TableRow>
                     ),
                   )}

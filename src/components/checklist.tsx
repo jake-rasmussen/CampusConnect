@@ -1,15 +1,16 @@
+import { Checkbox, CheckboxGroup } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-
-import { Checkbox } from "./shadcn_ui/checkbox";
 
 type PropType = {
   answerChoices: string[];
   value?: string[];
+  isRequired: boolean;
+  label: string;
   onChange(values: string[]): void;
 };
 
 const Checklist = (props: PropType) => {
-  const { answerChoices, value, onChange } = props;
+  const { answerChoices, value, isRequired, label, onChange } = props;
 
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
 
@@ -19,7 +20,12 @@ const Checklist = (props: PropType) => {
 
   return (
     <>
-      <div className="flex flex-col gap-y-2 p-4 text-white">
+      <CheckboxGroup
+        label={<span className="text-xl text-white">{label}</span>}
+        defaultValue={selectedAnswers}
+        value={value}
+        isRequired={isRequired}
+      >
         {answerChoices.map((answerChoice: string, index: number) => {
           return (
             <div
@@ -28,7 +34,7 @@ const Checklist = (props: PropType) => {
             >
               <Checkbox
                 id={`${answerChoice}${index}`}
-                className="bg-white text-black checked:bg-white"
+                color="secondary"
                 onClick={() => {
                   let updatedAnswers = [...selectedAnswers];
                   if (selectedAnswers.includes(answerChoice)) {
@@ -40,18 +46,14 @@ const Checklist = (props: PropType) => {
                   setSelectedAnswers(updatedAnswers);
                   onChange(updatedAnswers);
                 }}
-                checked={value && value.includes(answerChoice)}
-              />
-              <label
-                htmlFor={`${answerChoice}${index}`}
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                value={answerChoice}
               >
-                {answerChoice}
-              </label>
+                <span className="text-lg text-white">{answerChoice}</span>
+              </Checkbox>
             </div>
           );
         })}
-      </div>
+      </CheckboxGroup>
     </>
   );
 };

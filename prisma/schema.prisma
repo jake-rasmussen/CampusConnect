@@ -47,6 +47,149 @@ enum ApplicationSubmissionStatus {
   SUBMITTED
 }
 
+enum ApplicationSubmissionEvaluationGrade {
+  YES
+  NO
+  MAYBE
+  UNGRADED
+}
+
+enum Focus {
+  // Arts and Humanities
+  ART_HISTORY
+  COMMUNICATION_STUDIES
+  ENGLISH
+  HISTORY
+  JOURNALISM
+  LINGUISTICS
+  MUSIC
+  PHILOSOPHY
+  THEATER
+  VISUAL_ARTS
+  FILM_STUDIES
+
+  // Business
+  ACCOUNTING
+  BUSINESS_ADMINISTRATION
+  ECONOMICS
+  FINANCE
+  HUMAN_RESOURCE_MANAGEMENT
+  MARKETING
+  ENTREPRENEURSHIP
+  SUPPLY_CHAIN_MANAGEMENT
+  INTERNATIONAL_BUSINESS
+
+  // Education
+  EARLY_CHILDHOOD_EDUCATION
+  ELEMENTARY_EDUCATION
+  SECONDARY_EDUCATION
+  SPECIAL_EDUCATION
+  EDUCATIONAL_LEADERSHIP
+
+  // Engineering and Technology
+  AEROSPACE_ENGINEERING
+  BIOMEDICAL_ENGINEERING
+  CHEMICAL_ENGINEERING
+  COMPUTER_SCIENCE
+  CIVIL_ENGINEERING
+  COMPUTER_ENGINEERING
+  ELECTRICAL_ENGINEERING
+  MECHANICAL_ENGINEERING
+  SOFTWARE_ENGINEERING
+  INFORMATION_TECHNOLOGY
+  ROBOTICS
+
+  // Health and Medicine
+  NURSING
+  PHARMACY
+  PHYSICAL_THERAPY
+  PUBLIC_HEALTH
+  NUTRITION
+  KINESIOLOGY
+  DENTISTRY
+  MEDICINE
+  VETERINARY_MEDICINE
+  HEALTH_INFORMATICS
+
+  // Social Sciences
+  ANTHROPOLOGY
+  CRIMINOLOGY
+  POLITICAL_SCIENCE
+  PSYCHOLOGY
+  SOCIOLOGY
+  GEOGRAPHY
+  INTERNATIONAL_RELATIONS
+
+  // STEM (Science, Technology, Engineering, Mathematics)
+  ASTRONOMY
+  BIOLOGY
+  BIOCHEMISTRY
+  CHEMISTRY
+  ENVIRONMENTAL_SCIENCE
+  GEOLOGY
+  MATHEMATICS
+  PHYSICS
+  STATISTICS
+
+  // Other
+  ARCHITECTURE
+  DESIGN
+  CULINARY_ARTS
+  FASHION_DESIGN
+  HOSPITALITY_MANAGEMENT
+  LAW
+  SOCIAL_WORK
+  THEOLOGY
+}
+
+enum School {
+  UNIVERSITY_OF_WASHINGTON
+  UNIVERSITY_OF_ILLINOIS_URBANA_CHAMPAIGN
+  NEW_YORK_UNIVERSITY
+  UNIVERSITY_OF_NOTRE_DAME
+  UNIVERSITY_OF_WISCONSIN_MADISON
+  UNIVERSITY_OF_CALIFORNIA_LOS_ANGELES
+  UNIVERSITY_OF_VIRGINIA
+  UNIVERSITY_OF_MINNESOTA
+  GEORGETOWN_UNIVERSITY
+  UNIVERSITY_OF_NORTH_CAROLINA_AT_CHAPEL_HILL
+  PENNSYLVANIA_STATE_UNIVERSITY
+  PURDUE_UNIVERSITY
+  UNIVERSITY_OF_COLORADO_BOULDER
+  RICE_UNIVERSITY
+  VANDERBILT_UNIVERSITY
+  UNIVERSITY_OF_MARYLAND_COLLEGE_PARK
+  UNIVERSITY_OF_CALIFORNIA_SAN_DIEGO
+  UNIVERSITY_OF_PITTSBURGH
+  UNIVERSITY_OF_IOWA
+  JOHNS_HOPKINS_UNIVERSITY
+  UNIVERSITY_OF_MIAMI
+  STANFORD_UNIVERSITY
+  HARVARD_UNIVERSITY
+  MASSACHUSETTS_INSTITUTE_OF_TECHNOLOGY
+  UNIVERSITY_OF_CALIFORNIA_BERKELEY
+  UNIVERSITY_OF_FLORIDA
+  UNIVERSITY_OF_TEXAS_AT_AUSTIN
+  PRINCETON_UNIVERSITY
+  COLUMBIA_UNIVERSITY
+  UNIVERSITY_OF_PENNSYLVANIA
+  YALE_UNIVERSITY
+  DUKE_UNIVERSITY
+  UNIVERSITY_OF_CHICAGO
+  UNIVERSITY_OF_SOUTHERN_CALIFORNIA
+  CORNELL_UNIVERSITY
+  BROWN_UNIVERSITY
+  NORTHWESTERN_UNIVERSITY
+  UNIVERSITY_OF_MICHIGAN
+  CARNEGIE_MELLON_UNIVERSITY
+}
+
+enum UserType {
+  INCOMPLETE
+  EMPLOYEE
+  EMPLOYER
+}
+
 model User {
   userId                 String                  @id @default(cuid())
   externalId             String                  @unique
@@ -55,14 +198,40 @@ model User {
   emailAddress           String
   createdAt              DateTime                @default(now())
   updatedAt              DateTime                @updatedAt
+  userType               UserType                @default(INCOMPLETE)
   memberships            Member[]
   applicationSubmissions ApplicationSubmission[]
+  profile                Profile?
+}
+
+model Profile {
+  id                 String               @id @default(cuid())
+  user               User                 @relation(fields: [userId], references: [userId])
+  userId             String               @unique
+  skills             String[]
+  about              String
+  school             School
+  year               String
+  majors             Focus[]
+  minors             Focus[]
+  profileSocialMedia ProfileSocialMedia[]
+}
+
+model ProfileSocialMedia {
+  id        String                  @id @default(cuid())
+  profileId String
+  profile   Profile                 @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  platform  SocialMediaPlatformType
+  url       String
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
 }
 
 model Project {
   id           String        @id @default(cuid())
   name         String        @unique
   description  String
+  school       School
   socialMedia  SocialMedia[]
   members      Member[]
   applications Application[]
@@ -70,16 +239,20 @@ model Project {
   updatedAt    DateTime      @updatedAt
   events       Event[]
   contactInfo  ContactInfo[]
+  colorsId     String
+  colors       Colors        @relation(fields: [colorsId], references: [id])
+  hasBanner    Boolean       @default(false)
 }
 
 model Member {
-  projectId String
-  project   Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User              @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  type      ProjectMemberType
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  projectId                    String
+  project                      Project                        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId                       String
+  user                         User                           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  type                         ProjectMemberType
+  createdAt                    DateTime                       @default(now())
+  updatedAt                    DateTime                       @updatedAt
+  applicationSubmissionComment ApplicationSubmissionComment[]
 
   @@id([projectId, userId])
 }
@@ -171,20 +344,38 @@ model ApplicationSubmissionAnswer {
 }
 
 model ApplicationSubmissionEvaluation {
-  id                      String                         @id @default(cuid())
+  id                      String                               @id @default(cuid())
+  evaluation              ApplicationSubmissionEvaluationGrade @default(UNGRADED)
   comments                ApplicationSubmissionComment[]
-  createdAt               DateTime                       @default(now())
-  updatedAt               DateTime                       @updatedAt
-  applicationSubmission   ApplicationSubmission          @relation(fields: [applicationSubmissionId], references: [id])
-  applicationSubmissionId String                         @unique
+  createdAt               DateTime                             @default(now())
+  updatedAt               DateTime                             @updatedAt
+  applicationSubmission   ApplicationSubmission                @relation(fields: [applicationSubmissionId], references: [id])
+  applicationSubmissionId String                               @unique
 }
 
 model ApplicationSubmissionComment {
   id                                String                           @id @default(cuid())
-  evaluatorName                     String
+  evaluator                         Member                           @relation(fields: [memberProjectId, memberUserId], references: [projectId, userId])
   comment                           String
   applicationSubmissionEvaluation   ApplicationSubmissionEvaluation? @relation(fields: [applicationSubmissionEvaluationId], references: [id])
   applicationSubmissionEvaluationId String?
   createdAt                         DateTime                         @default(now())
   updatedAt                         DateTime                         @updatedAt
+  memberProjectId                   String
+  memberUserId                      String
+}
+
+model Colors {
+  id             String    @id @default(cuid())
+  primaryColor   String
+  secondaryColor String
+  project        Project[]
+}
+
+model ProjectCreationForm {
+  id         String @id @default(cuid())
+  name       String
+  validation String
+  school     School
+  userId     String
 }

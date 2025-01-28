@@ -1,106 +1,353 @@
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignedOut, SignUpButton, useUser } from "@clerk/nextjs";
+import { Button } from "@nextui-org/react";
+import createGlobe from "cobe";
+import { motion } from "framer-motion";
+import { cn } from "lib/utils";
 import Image from "next/image";
-import Link from "next/link";
+import { useEffect, useRef } from "react";
 
-import { BackgroundBeams } from "~/components/aceternity_ui/background-beams";
+import { BackgroundBeams } from "~/components/aceternity-ui/background-beams";
 import LoadingPage from "~/components/loadingPage";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "~/components/shadcn_ui/card";
 import UserLayout from "~/layouts/userLayout";
 
+const FeatureCard = ({
+  children,
+  className,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn(`relative overflow-hidden p-4 sm:p-8`, className)}>
+      {children}
+    </div>
+  );
+};
+
+const FeatureTitle = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <p className=" mx-auto max-w-5xl text-left text-xl tracking-tight text-white md:text-2xl md:leading-snug">
+      {children}
+    </p>
+  );
+};
+
+const FeatureDescription = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <p
+      className={cn(
+        "mx-auto max-w-4xl  text-left text-sm md:text-base",
+        "text-center font-normal text-neutral-300 text-neutral-500",
+        "mx-0 my-2 max-w-sm text-left md:text-sm",
+      )}
+    >
+      {children}
+    </p>
+  );
+};
+
+export const SkeletonOne = () => {
+  return (
+    <div className="relative flex h-full gap-10 px-2 py-8">
+      <div className="group  mx-auto  h-full w-full bg-neutral-900 p-5 shadow-2xl">
+        <div className="flex h-full w-full flex-1 flex-col space-y-2  ">
+          <Image
+            src="/images/homepage.png"
+            alt="Homepage"
+            fill
+            className="aspect-square h-full w-full rounded-lg object-contain object-left-top"
+          />
+        </div>
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-60 w-full bg-gradient-to-t from-black via-black to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-40 h-60 w-full bg-gradient-to-b from-black via-transparent to-transparent" />
+    </div>
+  );
+};
+
+export const SkeletonThree = () => {
+  return (
+    <div className="group  mx-auto h-full w-full bg-transparent">
+      <div className="relative flex h-full w-full flex-1 flex-col space-y-2">
+        <Image
+          src="/images/demo-open-applications.jpeg"
+          alt="Open Applications"
+          fill
+          className="aspect-square h-full w-full rounded-sm object-cover object-center"
+        />
+      </div>
+    </div>
+  );
+};
+
+export const SkeletonTwo = () => {
+  const imageVariants = {
+    whileHover: {
+      scale: 1.1,
+      rotate: 0,
+      zIndex: 100,
+    },
+    whileTap: {
+      scale: 1.1,
+      rotate: 0,
+      zIndex: 100,
+    },
+  };
+  return (
+    <div className="relative flex h-full flex-col items-start gap-10 overflow-hidden p-8">
+      <div className="-ml-20 flex flex-row">
+        <motion.div
+          variants={imageVariants}
+          style={{
+            rotate: Math.random() * 20 - 10,
+          }}
+          whileHover="whileHover"
+          whileTap="whileTap"
+          className="-mr-4 mt-4 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-700 bg-white p-1"
+        >
+          <Image
+            src="/images/demo-application-1.jpeg"
+            alt="Demo Application"
+            width={80}
+            height={80}
+            sizes="(max-width: 768px) 80px, 240px"
+            className="h-20 w-20 flex-shrink-0 rounded-lg object-cover md:h-40 md:w-40"
+            quality={100}
+          />
+        </motion.div>
+        <motion.div
+          variants={imageVariants}
+          style={{
+            rotate: Math.random() * 20 - 10,
+          }}
+          whileHover="whileHover"
+          whileTap="whileTap"
+          className="-mr-4 mt-4 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-700 bg-white p-1"
+        >
+          <Image
+            src="/images/demo-application-2.jpeg"
+            alt="Demo Application"
+            width={80}
+            height={80}
+            sizes="(max-width: 768px) 80px, 240px"
+            className="h-20 w-20 flex-shrink-0 rounded-lg object-cover md:h-40 md:w-40"
+            quality={100}
+          />
+        </motion.div>
+        <motion.div
+          variants={imageVariants}
+          style={{
+            rotate: Math.random() * 20 - 10,
+          }}
+          whileHover="whileHover"
+          whileTap="whileTap"
+          className="-mr-4 mt-4 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-700 bg-white p-1"
+        >
+          <Image
+            src="/images/demo-application-1.jpeg"
+            alt="Demo Application"
+            width={80}
+            height={80}
+            sizes="(max-width: 768px) 80px, 240px"
+            className="h-20 w-20 flex-shrink-0 rounded-lg object-cover md:h-40 md:w-40"
+            quality={100}
+          />
+        </motion.div>
+      </div>
+      <div className="flex flex-row">
+        <motion.div
+          variants={imageVariants}
+          style={{
+            rotate: Math.random() * 20 - 10,
+          }}
+          whileHover="whileHover"
+          whileTap="whileTap"
+          className="-mr-4 mt-4 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-700 bg-white p-1"
+        >
+          <Image
+            src="/images/demo-application-2.jpeg"
+            alt="Demo Application"
+            width={80}
+            height={80}
+            sizes="(max-width: 768px) 80px, 240px"
+            className="h-20 w-20 flex-shrink-0 rounded-lg object-cover md:h-40 md:w-40"
+            quality={100}
+          />
+        </motion.div>
+        <motion.div
+          variants={imageVariants}
+          style={{
+            rotate: Math.random() * 20 - 10,
+          }}
+          whileHover="whileHover"
+          whileTap="whileTap"
+          className="-mr-4 mt-4 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-700 bg-white p-1"
+        >
+          <Image
+            src="/images/demo-application-1.jpeg"
+            alt="Demo Application"
+            width={80}
+            height={80}
+            sizes="(max-width: 768px) 80px, 240px"
+            className="h-20 w-20 flex-shrink-0 rounded-lg object-cover md:h-40 md:w-40"
+            quality={100}
+          />
+        </motion.div>
+        <motion.div
+          variants={imageVariants}
+          style={{
+            rotate: Math.random() * 20 - 10,
+          }}
+          whileHover="whileHover"
+          whileTap="whileTap"
+          className="-mr-4 mt-4 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-700 bg-white p-1"
+        >
+          <Image
+            src="/images/demo-application-2.jpeg"
+            alt="Demo Application"
+            width={80}
+            height={80}
+            sizes="(max-width: 768px) 80px, 240px"
+            className="h-20 w-20 flex-shrink-0 rounded-lg object-cover md:h-40 md:w-40"
+            quality={100}
+          />
+        </motion.div>
+      </div>
+
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-[100] h-full w-20 bg-gradient-to-r  from-black to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-[100] h-full w-20  bg-gradient-to-l from-black to-transparent" />
+    </div>
+  );
+};
+
+export const SkeletonFour = () => {
+  return (
+    <div className="max-h-lg relative mt-10 flex h-60 flex-col items-center bg-transparent">
+      <Globe className="absolute -bottom-80 -right-10 md:-bottom-72 md:-right-10" />
+    </div>
+  );
+};
+
+export const Globe = ({ className }: { className?: string }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    let phi = 0;
+
+    if (!canvasRef.current) return;
+
+    const globe = createGlobe(canvasRef.current, {
+      devicePixelRatio: 2,
+      width: 600 * 2,
+      height: 600 * 2,
+      phi: 0,
+      theta: 0,
+      dark: 1,
+      diffuse: 1.2,
+      mapSamples: 16000,
+      mapBrightness: 6,
+      baseColor: [0.3, 0.3, 0.3],
+      markerColor: [0.1, 0.8, 1],
+      glowColor: [1, 1, 1],
+      markers: [
+        // longitude latitude
+        { location: [37.7595, -122.4367], size: 0.03 },
+        { location: [40.7128, -74.006], size: 0.1 },
+      ],
+      onRender: (state) => {
+        // Called on every animation frame.
+        // `state` will be an empty object, return updated params.
+        state.phi = phi;
+        phi += 0.01;
+      },
+    });
+
+    return () => {
+      globe.destroy();
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ width: 600, height: 600, maxWidth: "100%", aspectRatio: 1 }}
+      className={className}
+    />
+  );
+};
+
 const Home = () => {
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded } = useUser();
+
+  const features = [
+    {
+      title: "Create Customizable Homepages",
+      description:
+        "Create startup homepages with our no-code solution to help your venture gain visibility.",
+      skeleton: <SkeletonOne />,
+      className:
+        "col-span-1 lg:col-span-4 border-b lg:border-r border-neutral-800",
+    },
+    {
+      title: "Easy-to-make Applications",
+      description:
+        "Use our robust application creation and management system to streamline hiring.",
+      skeleton: <SkeletonTwo />,
+      className: "border-b col-span-1 lg:col-span-2 border-neutral-800",
+    },
+    {
+      title: "Seamless Application Discoverability",
+      description:
+        "Get connected by exploring open applications, and help narrow down your next experience by relevant skills",
+      skeleton: <SkeletonThree />,
+      className: "col-span-1 lg:col-span-3 lg:border-r border-neutral-800",
+    },
+    {
+      title: "Unlock Limitless Connections",
+      description:
+        "What are you waiting for? Get started with CampusConnect to help you get connected with students!",
+      skeleton: <SkeletonFour />,
+      className: "col-span-1 lg:col-span-3 border-b lg:border-none",
+    },
+  ];
 
   if (!isLoaded) {
     return <LoadingPage />;
   } else {
     return (
-      <section>
-        <BackgroundBeams className="fixed top-0 z-0 h-screen w-screen" />
+      <div className="relative flex w-full flex-col bg-neutral-950">
+        <BackgroundBeams />
 
-        <div className="container flex flex-col items-center justify-center gap-y-8">
-          <section className="flex min-h-[93vh] w-full flex-col items-center justify-center gap-y-8">
-            <Image
-              priority
-              src={"/assets/SWEC Logo.svg"}
-              alt={"SWEC Logo"}
-              width="0"
-              height="0"
-              sizes="75vw"
-              className="z-30 h-auto w-2/3 md:w-1/3"
-            />
-            <span className="z-30 mt-10 text-2xl font-light text-white">
-              <div className="flex flex-row items-center">
-                Welcome to
-                <div className="ml-2 h-px grow bg-secondary"></div>
-              </div>
-
-              <h1 className="py-0 text-5xl font-semibold text-white md:text-6xl lg:text-7xl xl:text-8xl">
-                SWEConnect
-              </h1>
-            </span>
-          </section>
-
-          <Card className="z-30 mb-52 max-w-4xl bg-gradient-to-r from-primary to-secondary shadow-xl transition duration-300 ease-in-out">
-            <CardHeader>
-              <CardTitle className="text-center text-2xl font-black uppercase text-white lg:text-4xl">
-                What we do
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="group flex h-full flex-col items-center gap-8 text-center text-sm text-white md:mx-10 md:text-lg lg:text-xl">
-              <span>
-                Designed to seamlessly connect aspiring minds with exciting
-                opportunities right here on campus, SWEConnect enhances the way
-                students discover and engage in projects at Johns Hopkins.
-                Whether it's a student-led venture or a faculty-led research
-                project, our platform empowers you to find the perfect fit for
-                your passion and expertise.
-              </span>
-              <span>
-                SWEConnect provides a centralized hub where student and faculty
-                can connect with talented students who possess the skills needed
-                for their initiatives. As a leader of a venture, SWEConnect will
-                provide a centralized application system, and applicant
-                management system. As a student looking for work, check out the
-                open applications and project pages to see what interests you!
-              </span>
-
-              <div className="flex w-full items-center">
-                <div className="mr-1 h-px flex-grow bg-white/10 backdrop-invert" />
-                <span className="max-w-md">
-                  What are you waiting for? Say goodbye to endless searches and
-                  missed connections – join us and unlock a world of
-                  collaborative possibilities today!
-                </span>
-                <div className="ml-1 h-px flex-grow bg-white/10 backdrop-invert" />
-              </div>
-
-              {!isSignedIn ? (
-                <SignInButton mode="modal">
-                  <div className="w-fit rounded-xl bg-black px-14 py-4 py-6 shadow-xl transition duration-300 ease-in-out hover:scale-110 hover:cursor-pointer">
-                    <span className="tracking-none text-lg font-black uppercase text-white md:text-2xl">
-                      Get Started
-                    </span>
-                  </div>
-                </SignInButton>
-              ) : (
-                // </Button>
-                <Link href={"/project"}>
-                  <div className="w-fit rounded-xl bg-black px-14 py-4 py-6 shadow-xl transition duration-300 ease-in-out hover:scale-110 hover:cursor-pointer">
-                    <span className="tracking-none text-lg font-black uppercase text-white md:text-2xl">
-                      Get Started
-                    </span>
-                  </div>
-                </Link>
-              )}
-            </CardContent>
-          </Card>
+        <div className="mx-auto flex min-h-screen flex-col items-center justify-center p-4">
+          <motion.h1
+            initial={{ opacity: 0.5, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.3,
+              duration: 0.8,
+              ease: "easeInOut",
+            }}
+            className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 bg-clip-text py-4 text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
+          >
+            <div className="flex flex-col py-4 ">
+              <h4 className="bg-gradient-to-br from-neutral-500 to-slate-800 bg-clip-text text-lg tracking-wide">
+                Campus Connect
+              </h4>
+              <p>
+                Coming soon!
+              </p>
+            </div>
+            <div className="my-4 flex w-full flex-row items-center justify-center gap-4">
+              <SignedOut>
+                <SignUpButton mode="modal">
+                  <Button>Get started</Button>
+                </SignUpButton>
+              </SignedOut>
+            </div>
+          </motion.h1>
         </div>
-      </section>
+      </div>
     );
   }
 };
@@ -108,11 +355,7 @@ const Home = () => {
 Home.getLayout = (
   page: React.ReactElement<any, string | React.JSXElementConstructor<any>>,
 ) => {
-  return (
-    <UserLayout className="min-h-screen bg-gradient-to-b from-[#01325B] to-[#001530]">
-      {page}
-    </UserLayout>
-  );
+  return <UserLayout className="min-h-screen">{page}</UserLayout>;
 };
 
 export default Home;

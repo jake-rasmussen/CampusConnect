@@ -1,10 +1,14 @@
+import { Colors } from "@prisma/client";
 import React, { useState } from "react";
 
 type PropType = {
+  project: {
+    colors: Colors;
+  };
   children: JSX.Element[];
 };
 
-const Tab = ({ children }: PropType) => {
+const Tab = ({ project, children }: PropType) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const childrenWithProps = React.Children.map(

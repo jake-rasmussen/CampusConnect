@@ -1,15 +1,15 @@
+import { Input } from "@nextui-org/input";
+import { Select, SelectItem, Pagination } from "@nextui-org/react";
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
+import { capitalize } from "lodash";
 import Error from "next/error";
 import { useEffect, useState } from "react";
 import { LicenseOff } from "tabler-icons-react";
-import { twMerge } from "tailwind-merge";
 
 import ApplicationPreviewCard from "~/components/applications/applicationPreviewCard";
-import Header from "~/components/dashboard/header/header";
 import LoadingPage from "~/components/loadingPage";
-import { Badge } from "~/components/shadcn_ui/badge";
-import { Separator } from "~/components/shadcn_ui/separator";
 import UserLayout from "~/layouts/userLayout";
+import PageWrapper from "~/components/pageWrapper";
 import { api } from "~/utils/api";
 
 const OpenApplications = () => {
@@ -21,6 +21,9 @@ const OpenApplications = () => {
   >([]);
   const [skills, setSkills] = useState<string[]>([]);
   const [filteredSkills, setFilteredSkills] = useState<string[]>([]);
+  const [query, setQuery] = useState<string>("");
+  const [page, setPage] = useState(1);
+  const limit = 9; // Number of applications per page
 
   const {
     data: openApplications,
@@ -63,6 +66,8 @@ const OpenApplications = () => {
   }, [openApplications, applicationSubmissions]);
 
   const skillInFilter = (application: Application) => {
+    if (filteredSkills.length === 0) return true;
+
     for (const skill of application.desiredSkills) {
       if (filteredSkills.includes(skill)) return true;
     }
@@ -82,82 +87,89 @@ const OpenApplications = () => {
       />
     );
   } else {
+    const filteredApplications = applications.filter(
+      (application) =>
+        skillInFilter(application) &&
+        application.name.toLowerCase().includes(query.toLowerCase())
+    );
+
+    const paginatedApplications = filteredApplications.slice(
+      (page - 1) * limit,
+      page * limit
+    );
+
+    const totalPages = Math.ceil(filteredApplications.length / limit);
+
     return (
-      <main className="w-full">
-        <Header
-          name="Open Applications"
-          subtext="Check out projects that are hiring!"
-          editable={false}
-        />
-        <section className="py-10">
-          <div className="ml-4 flex flex-col items-center text-center">
-            {skills.length > 0 && (
-              <div className="max-w-3xl pb-8">
-                <div className="mx-auto max-w-xs">
-                  <h3 className="text-xl font-semibold uppercase text-black">
-                    Filter
-                  </h3>
-                  <Separator
-                    orientation="horizontal"
-                    className="my-4 w-full bg-secondary"
-                  />
-                </div>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {skills.map((skill: string, index: number) => (
-                    <Badge
-                      className={twMerge(
-                        "h-[2rem] bg-secondary capitalize text-white shadow-xl transition duration-300 hover:cursor-pointer hover:text-white",
-                        !filteredSkills.includes(skill) &&
-                          "border border-primary bg-white text-primary",
-                      )}
-                      onClick={() => {
-                        const updatedFilteredSkills = filteredSkills;
-                        if (!filteredSkills.includes(skill)) {
-                          updatedFilteredSkills.push(skill);
-                        } else {
-                          const index = updatedFilteredSkills.indexOf(skill);
-                          updatedFilteredSkills.splice(index, 1);
-                        }
-                        setFilteredSkills([...updatedFilteredSkills]);
-                      }}
-                      key={`skillBadge${index}`}
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
+      <PageWrapper title="Open Applications">
+        <div className="flex w-full flex-col items-center gap-8">
+          <div className="mx-auto flex max-w-4xl items-center text-center w-full">
+            <Input
+              label="Search Open Applications"
+              variant="underlined"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.currentTarget.value);
+                setPage(1); // Reset to the first page when searching
+              }}
+            />
+            <Select
+              label="Select Skills"
+              selectionMode="multiple"
+              className="max-w-xs"
+              variant="underlined"
+              onChange={(e) => {
+                const selectedSkills = e.target.value
+                  .split(",")
+                  .filter((skill) => skill !== "");
+                if (selectedSkills.length === 0) {
+                  setFilteredSkills([...skills]);
+                } else {
+                  setFilteredSkills([...selectedSkills]);
+                }
+              }}
+            >
+              {skills.map((skill: string) => (
+                <SelectItem
+                  key={skill}
+                  onSelectCapture={(skill) => console.log("SELECTED", skill)}
+                >
+                  {capitalize(skill)}
+                </SelectItem>
+              ))}
+            </Select>
           </div>
           <div className="flex w-full items-center justify-center">
             {applications.length > 0 ? (
-              <div className="flex max-w-7xl flex-wrap justify-center">
-                <>
-                  {applications.map((application, index) => (
-                    <div key={`application${index}`}>
-                      {(filteredSkills.length === 0 ||
-                        (filteredSkills.length > 0 &&
-                          skillInFilter(application))) && (
-                        <ApplicationPreviewCard
-                          application={application}
-                          projectId={application.projectId}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </>
+              <div className="flex max-w-7xl flex-wrap justify-center gap-4">
+                {paginatedApplications.map((application, index) => (
+                  <ApplicationPreviewCard
+                    application={application}
+                    projectId={application.projectId}
+                    key={`application${index}`}
+                  />
+                ))}
               </div>
             ) : (
               <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">
-                <LicenseOff className="h-44 w-44 text-secondary" />
+                <LicenseOff className="h-40 w-40 text-secondary" />
                 <h3 className="text-2xl font-semibold uppercase">
                   There are no open applications
                 </h3>
               </div>
             )}
           </div>
-        </section>
-      </main>
+
+          {filteredApplications.length > limit && (
+            <Pagination
+              total={totalPages}
+              initialPage={1}
+              page={page}
+              onChange={(newPage) => setPage(newPage)}
+            />
+          )}
+        </div>
+      </PageWrapper>
     );
   }
 };

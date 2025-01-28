@@ -1,18 +1,13 @@
-import { ClerkProvider, SignedIn } from "@clerk/nextjs";
-
-import { api } from "~/utils/api";
-
-import "react";
-import "~/styles/globals.css";
-import "react";
-
-import { useState } from "react";
+import { ClerkProvider } from "@clerk/nextjs";
+import { NextUIProvider } from "@nextui-org/react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Toaster } from "react-hot-toast";
 
-import LoadingPage from "~/components/loadingPage";
 import Navbar from "~/components/navbar";
+import { api } from "~/utils/api";
+
+import "~/styles/globals.css";
 
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
@@ -26,26 +21,27 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
+const Providers: React.FC<{ children: React.ReactNode; pageProps: any }> = ({
+  children,
+  pageProps,
+}) => (
+  <ClerkProvider {...pageProps}>
+    <NextUIProvider>
+      <Toaster position="bottom-center" />
+      <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+    </NextUIProvider>
+  </ClerkProvider>
+);
+
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
   return (
     <main className="min-h-screen w-screen overflow-y-hidden bg-background">
-      <ClerkProvider {...pageProps}>
-        <SignedIn>
-          <Navbar isLoading={isLoading} setIsLoading={setIsLoading} />
-        </SignedIn>
-        <Toaster />
-        {isLoading ? (
-          <LoadingPage />
-        ) : (
-          <DndProvider backend={HTML5Backend}>
-            {getLayout(<Component {...pageProps} />)}
-          </DndProvider>
-        )}
-      </ClerkProvider>
+      <Providers pageProps={pageProps}>
+        {/* <Navbar /> */}
+        {getLayout(<Component {...pageProps} />)}
+      </Providers>
     </main>
   );
 }

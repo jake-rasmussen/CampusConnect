@@ -1,163 +1,118 @@
 import { UserButton, useUser } from "@clerk/nextjs";
-import { AnimatePresence, motion } from "framer-motion";
+import { UserType } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Menu2, X } from "tabler-icons-react";
-import { Badge } from "./shadcn_ui/badge";
+import React, { useState } from "react";
 
-type PropType = {
-  isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
-};
+import { api } from "~/utils/api";
+import { HoveredLink, Menu, MenuItem } from "./aceternity-ui/navbar-menu";
 
-const Navbar = (props: PropType) => {
-  const { isLoading, setIsLoading } = props;
+const Navbar = () => {
+  const { user, isSignedIn } = useUser();
 
-  useEffect(() => setIsLoading(false));
-
-  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-
-  const menu = (
-    <>
-      <Link
-        href="/project"
-        className="flex items-center p-2"
-        onClick={() => setMenuIsOpen(false)}
-      >
-        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
-          All Projects
-        </h1>
-      </Link>
-      <Link
-        href="/open-applications"
-        className="flex items-center p-2"
-        onClick={() => setMenuIsOpen(false)}
-      >
-        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
-          Open Applications
-        </h1>
-      </Link>
-      <Link
-        href="/my-applications"
-        className="flex items-center p-2"
-        onClick={() => setMenuIsOpen(false)}
-      >
-        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
-          My Applications
-        </h1>
-      </Link>
-      <Link
-        href="/my-projects"
-        className="flex items-center p-2"
-        onClick={() => setMenuIsOpen(false)}
-      >
-        <h1 className="tracking-none text-2xl font-black uppercase transition duration-300 ease-in-out hover:text-secondary lg:text-lg">
-          My Projects
-        </h1>
-      </Link>
-    </>
+  const { data: userData } = api.usersRouter.getUserType.useQuery(
+    { externalId: user?.id || "" },
+    { enabled: !!user },
   );
 
-  if (isLoading) {
-    return <></>;
-  } else {
-    return (
-      <>
-        <header className="sticky top-0 z-50 w-full bg-white p-4 text-black shadow-xl">
-          <div className="mx-auto flex h-16 items-center">
-            <Link
-              href="/"
-              className="mx-4 h-10 w-10 lg:h-16 lg:w-16 relative"
-              onClick={() => setMenuIsOpen(false)}
-            >
-              <Image
-                priority
-                src={"/assets/SWEC Logo.svg"}
-                alt={"SWEC Logo"}
-                width="0"
-                height="0"
-                sizes="100vw"
-                className="h-auto w-full"
-              />
-              <Badge className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-white">Beta</Badge>
-            </Link>
-            <ul className="hidden grow items-stretch space-x-3 lg:flex">
-              {menu}
-            </ul>
-            <div className="flex grow items-center justify-center md:space-x-4 lg:flex-none">
-              <Link
-                href="/project/swec"
-                className="hidden items-center p-2 lg:flex"
-                onClick={() => setMenuIsOpen(false)}
-              >
-                <h1 className="tracking-none inline-block bg-gradient-to-r from-secondary to-primary bg-clip-text text-2xl font-black uppercase text-transparent transition duration-300 ease-in-out hover:text-black lg:text-lg">
-                  SWEC Page
-                </h1>
-              </Link>
-              <UserButton afterSignOutUrl="/" />
-            </div>
+  const [active, setActive] = useState<string | null>(null);
 
-            <div className="relative z-50 lg:hidden">
-              <button onClick={() => setMenuIsOpen(!menuIsOpen)}>
-                <AnimatePresence>
-                  {menuIsOpen ? (
-                    <motion.div
-                      className="absolute right-0 top-0"
-                      key="first"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <X className="h-7 w-7" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      className="absolute right-0 top-0"
-                      key="second"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <Menu2 className="h-7 w-7" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
-            </div>
-          </div>
+  let menu: JSX.Element = <></>;
 
-          <div className="block lg:hidden">
-            <AnimatePresence>
-              {
-                <motion.ul
-                  initial="closed"
-                  animate={menuIsOpen ? "open" : "closed"}
-                  transition={{ duration: 0.3 }}
-                  variants={{
-                    open: { opacity: 1, x: 0 },
-                    closed: { opacity: 0.5, x: "-100vw" },
-                  }}
-                  className="absolute right-0 top-full z-50 w-full"
-                >
-                  <div
-                    tabIndex={0}
-                    className={`flex h-[92vh] w-screen flex-col items-center justify-center overflow-y-scroll bg-white text-xl
-                transition duration-300 ease-in-out ${
-                  !menuIsOpen ? "pointer-events-none" : ""
-                }`}
-                    id="menu"
-                  >
-                    {menu}
-                  </div>
-                </motion.ul>
-              }
-            </AnimatePresence>
-          </div>
-        </header>
-      </>
+  if (userData?.userType === UserType.EMPLOYEE) {
+    menu = (
+      <Menu setActive={setActive}>
+        <Link
+          href="/"
+          className="absolute left-0 h-10 w-10 translate-x-1/2 transform"
+        >
+          <Image
+            priority
+            src={"/assets/SWEC Logo.svg"}
+            alt={"SWEC Logo"}
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="h-auto w-full"
+          />
+        </Link>
+
+        <div className="relative flex items-center justify-between gap-4">
+          <Link href="/project" onMouseEnter={() => setActive("All Startups")}>
+            All Startups
+          </Link>
+
+          <MenuItem setActive={setActive} active={active} item="Applications">
+            <div className="flex flex-col space-y-4 text-sm">
+              <HoveredLink href="/open-applications">
+                Open Applications
+              </HoveredLink>
+              <HoveredLink href="/my-applications">My Applications</HoveredLink>
+            </div>
+          </MenuItem>
+
+          <Link href="/profile" onMouseEnter={() => setActive("My Profile")}>
+            My Profile
+          </Link>
+        </div>
+
+        <div className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
+          <UserButton afterSignOutUrl="/" />
+        </div>
+      </Menu>
+    );
+  } else if (userData?.userType === UserType.EMPLOYER) {
+    menu = (
+      <Menu setActive={setActive}>
+        <Link
+          href="/"
+          className="absolute left-0 h-10 w-10 translate-x-1/2 transform"
+        >
+          <Image
+            priority
+            src={"/assets/SWEC Logo.svg"}
+            alt={"SWEC Logo"}
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="h-auto w-full"
+          />
+        </Link>
+
+        <div className="relative flex items-center justify-between gap-4">
+          <Link
+            href="/my-startups"
+            onMouseEnter={() => setActive("My Startups")}
+          >
+            My Startups
+          </Link>
+          <Link
+            href="/profile/connect"
+            onMouseEnter={() => setActive("Connect")}
+          >
+            Connect
+            <span className="my-0 font-bold text-secondary">+</span>
+          </Link>
+        </div>
+
+        <div className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
+          <UserButton afterSignOutUrl="/" />
+        </div>
+      </Menu>
     );
   }
+
+  return (
+    <>
+      {isSignedIn && (
+        <div className="relative flex w-full items-center justify-center">
+          <div className="fixed inset-x-0 top-10 top-2 z-50 mx-auto max-w-2xl rounded-full shadow-xl">
+            {menu}
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default Navbar;

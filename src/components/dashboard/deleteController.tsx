@@ -1,17 +1,14 @@
-import { DialogClose } from "@radix-ui/react-dialog";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import toast from "react-hot-toast";
 import { Trash } from "tabler-icons-react";
-
-import Button from "../button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../shadcn_ui/dialog";
 
 type PropType = {
   dialogDescription: string;
@@ -21,35 +18,44 @@ type PropType = {
 const DeleteController = (props: PropType) => {
   const { dialogDescription, handleDelete } = props;
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
     <>
-      <Dialog>
-        <DialogTrigger asChild>
-          <button className="my-4">
-            <Trash className="h-full w-full transition duration-300 ease-in-out hover:rotate-12 hover:scale-110 hover:text-red-600" />
-          </button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader className="pb-6">
-            <DialogTitle>Confirm Delete</DialogTitle>
-            <DialogDescription>{dialogDescription}</DialogDescription>
-          </DialogHeader>
-          <DialogClose className="flex w-full justify-center">
-            <div
-              className="mx-2 max-w-xs rounded-xl bg-secondary px-4 py-4 transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50"
-              onClick={() => {
-                toast.dismiss();
-                toast.loading("Deleting...");
-                handleDelete();
-              }}
-            >
-              <span className="tracking-none font-black uppercase text-white">
-                Confirm
-              </span>
-            </div>
-          </DialogClose>
-        </DialogContent>
-      </Dialog>
+      <Button className="group" onPress={onOpen}>
+        <Trash className="h-full w-full transition duration-300 ease-in-out group-hover:rotate-12 group-hover:scale-110 group-hover:text-red-600" />
+      </Button>
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>
+                <div className="flex flex-col">
+                  <h1>Confirm Delete</h1>
+                  <p className="text-xs font-normal text-gray">{dialogDescription}</p>
+                </div>
+              </ModalHeader>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    toast.dismiss();
+                    toast.loading("Deleting Contact...");
+                    handleDelete();
+                    onClose();
+                  }}
+                >
+                  Submit
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 };

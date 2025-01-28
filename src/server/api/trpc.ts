@@ -63,7 +63,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
     },
     include: {
       memberships: true,
-    }
+    },
   });
 
   return {

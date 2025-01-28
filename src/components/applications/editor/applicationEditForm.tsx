@@ -1,15 +1,21 @@
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
+  useDisclosure,
+} from "@nextui-org/react";
 import { ApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
-import ErrorDialog from "~/components/errorDialog";
-import PreviewDialog from "~/components/previewDialog";
-import { Textarea } from "~/components/shadcn_ui/textarea";
-import Button from "../../button";
-import ErrorMessage from "../../dashboard/errorMessage";
-import { Input } from "../../shadcn_ui/input";
+import PreviewModal from "~/components/previewModal";
 import ApplicationForm from "../applicationForm";
 import ApplicationPublishConfirmationDialog, {
   ConfirmationFormType,
@@ -51,9 +57,9 @@ const ApplicationEditForm = (props: PropType) => {
     publishApplication,
   } = props;
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const [questions, setQuestions] = useState<ApplicationQuestion[]>([]);
-  const [openErrorDialog, setOpenErrorDialog] = useState(false);
-  const [openPreviewDialog, setOpenPreviewDialog] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -97,7 +103,7 @@ const ApplicationEditForm = (props: PropType) => {
       <Form<ApplicationFormType>
         onSubmit={async (values) => {
           if (!isApplicationFormValid(values.name, values.description)) {
-            setOpenErrorDialog(true);
+            onOpen();
             toast.dismiss();
             return;
           }
@@ -112,7 +118,10 @@ const ApplicationEditForm = (props: PropType) => {
               <Field
                 name="name"
                 initialValue={name}
-                onBlurValidate={z.string().min(1, "Enter an application name")}
+                onBlurValidate={z
+                  .string()
+                  .min(1, "Enter an application name")
+                  .max(250, "Name must be less than 250 characters")}
               >
                 {({ value, setValue, onBlur, isValid, errors }) => (
                   <>
@@ -120,13 +129,15 @@ const ApplicationEditForm = (props: PropType) => {
                       Application Name
                     </span>
                     <Input
-                      className="h-[4rem]"
                       placeholder="Enter Application Name"
+                      size="lg"
                       value={value}
                       onChange={(e) => setValue(e.currentTarget.value)}
                       onBlur={onBlur}
+                      isInvalid={!isValid}
+                      errorMessage={errors[0]}
+                      isRequired
                     />
-                    {!isValid && <ErrorMessage message={errors[0]} />}
                   </>
                 )}
               </Field>
@@ -136,7 +147,7 @@ const ApplicationEditForm = (props: PropType) => {
                 initialValue={description}
                 onBlurValidate={z
                   .string()
-                  .min(1, "Please provide a description")
+                  .min(1, "Enter a description")
                   .max(500, "Description must be less than 500 characters")}
               >
                 {({ value, setValue, onBlur, isValid, errors }) => (
@@ -145,19 +156,22 @@ const ApplicationEditForm = (props: PropType) => {
                       Application Description
                     </span>
                     <Textarea
-                      className="rounded-xl bg-white p-4"
-                      placeholder={"Enter an application description"}
+                      placeholder="Enter an application description"
+                      size="lg"
                       onChange={(e) => setValue(e.target.value)}
                       value={value}
                       onBlur={onBlur}
-                      rows={4}
+                      minRows={4}
+                      isInvalid={!isValid}
+                      errorMessage={errors[0]}
+                      isRequired
                     />
-                    {!isValid && <ErrorMessage message={errors[0]} />}
                   </>
                 )}
               </Field>
             </section>
-            <section className="flex flex-col items-center gap-4 py-8">
+
+            <section className="flex w-full flex-col items-center gap-4 py-8">
               <span className="text-center text-4xl font-semibold ">
                 Questions
               </span>
@@ -169,7 +183,7 @@ const ApplicationEditForm = (props: PropType) => {
 
             <div className="flex grow flex-row justify-end gap-4">
               <Button
-                onClickFn={() => {
+                onClick={() => {
                   setIsSaving(true);
                   toast.dismiss();
                   toast.loading("Saving Application....");
@@ -189,21 +203,14 @@ const ApplicationEditForm = (props: PropType) => {
                 Save
               </Button>
 
-              <PreviewDialog
+              <PreviewModal
                 triggerButton={
-                  <button
-                    className="max-w-xs rounded-xl bg-white/10 px-4 py-4 backdrop-invert transition duration-300 ease-in-out hover:scale-110 disabled:opacity-50"
-                    disabled={isSaving}
-                  >
-                    <h1 className="tracking-none font-black uppercase text-white">
-                      Preview
-                    </h1>
-                  </button>
+                  <Button className="px-4 py-4" disabled={isSaving}>
+                    Preview
+                  </Button>
                 }
                 dialogTitle="Application Preview"
                 dialogDescription=""
-                openDialog={openPreviewDialog}
-                setOpenDialog={setOpenPreviewDialog}
               >
                 <ApplicationForm
                   projectId={projectId as string}
@@ -214,29 +221,37 @@ const ApplicationEditForm = (props: PropType) => {
                   isSaving={isSaving}
                   readonly
                 />
-              </PreviewDialog>
+              </PreviewModal>
 
               <ApplicationPublishConfirmationDialog
                 name={getFieldValue("name")?.value}
                 description={getFieldValue("description")?.value}
                 isApplicationFormValid={isApplicationFormValid}
                 confirmPublishApplication={confirmPublishApplication}
-                setErrorDialogOpen={setOpenErrorDialog}
                 isSaving={isSaving}
                 setIsSaving={setIsSaving}
               />
             </div>
 
-            <ErrorDialog
-              dialogDescription={
-                "Please make sure that all fields are filled out!"
-              }
-              openDialog={openErrorDialog}
-              setOpenDialog={setOpenErrorDialog}
-              onClose={() => {
-                setIsSaving(false);
-              }}
-            />
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1">
+                      Error
+                    </ModalHeader>
+                    <ModalBody>
+                      <p>Please make sure that all fields are filled!</p>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="danger" variant="light" onPress={onClose}>
+                        Close
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
           </main>
         )}
       </Form>

@@ -1,3 +1,4 @@
+import { Input, Textarea } from "@nextui-org/react";
 import { Field, Form } from "houseform";
 import router from "next/router";
 import { useState } from "react";
@@ -5,13 +6,8 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 import Button from "~/components/button";
-import { Input } from "~/components/shadcn_ui/input";
-import { Textarea } from "~/components/shadcn_ui/textarea";
 import { api } from "~/utils/api";
 import EditController from "../editController";
-import ErrorMessage from "../errorMessage";
-
-import type { FieldInstance } from "houseform";
 
 type Props = {
   projectId: string;
@@ -43,91 +39,84 @@ const ApplicationCreator = ({ projectId }: Props) => {
   );
 
   return (
-    <EditController
-      dialogDescription={"Create a new application"}
-      editType={"create"}
-      createDescription={"Create new application"}
-      openDialog={openDialog}
-      setOpenDialog={setOpenDialog}
+    <Form<ApplicationFormType>
+      onSubmit={(values, isValid) => {
+        if (isValid) {
+          toast.dismiss();
+          toast.loading("Entering Application View...");
+
+          const { name, description } = values;
+          createApplication.mutate({
+            projectId,
+            name,
+            description,
+          });
+        }
+      }}
     >
-      <Form<ApplicationFormType>
-        onSubmit={(values, isValid) => {
-          if (isValid) {
-            toast.dismiss();
-            toast.loading("Entering Application View...");
+      {({ submit }) => (
+        <EditController
+          dialogDescription="Create a New Application"
+          editType="create"
+          createDescription="Create New Application"
+          handleSubmit={async () => {
+            return await submit()
+              .then((isValid) => {
+                if (isValid) {
+                  toast.dismiss();
+                  toast.loading("Saving Application...");
+                }
+                return isValid;
+              })
+              .catch((e) => {
+                console.log(e);
+                return false;
+              });
+          }}
+        >
+          <Field
+            name={"name"}
+            onBlurValidate={z
+              .string()
+              .min(1, "Enter an application name")
+              .max(30, "Please enter shorter application name")}
+          >
+            {({ value, setValue, onBlur, isValid, errors }) => (
+              <Input
+                label="Application Name"
+                value={value}
+                onChange={(e) => setValue(e.currentTarget.value)}
+                onBlur={onBlur}
+                isInvalid={!isValid}
+                errorMessage={errors[0]}
+                isRequired
+              />
+            )}
+          </Field>
 
-            const { name, description } = values;
-            createApplication.mutate({
-              projectId,
-              name,
-              description,
-            });
-          }
-        }}
-      >
-        {({ submit }) => (
-          <>
-            <Field
-              name={"name"}
-              onBlurValidate={z
-                .string()
-                .min(1, "Enter an application name")
-                .max(30, "Please enter shorter application name")}
-            >
-              {(field: FieldInstance) => (
-                <div>
-                  <span className="font-semibold">Application Name</span>
-                  <Input
-                    className="h-[3rem] rounded-xl bg-white"
-                    placeholder={"Enter an application name"}
-                    onChange={(e) => field.setValue(e.target.value)}
-                    value={field.value as string}
-                    onBlur={field.onBlur}
-                  />
-                  {!field.isValid && <ErrorMessage message={field.errors[0]} />}
-                </div>
-              )}
-            </Field>
-
-            <Field
-              name={"description"}
-              onBlurValidate={z
-                .string()
-                .min(1, "Please provide a description")
-                .max(500, "Description must be less than 500 characters")}
-            >
-              {(field: FieldInstance) => (
-                <div>
-                  <span className="font-semibold">Application Description</span>
-                  <Textarea
-                    className="h-[3rem] rounded-xl bg-white"
-                    placeholder={"Enter an application description"}
-                    onChange={(e) => field.setValue(e.target.value)}
-                    value={field.value as string}
-                    onBlur={field.onBlur}
-                    rows={4}
-                  />
-                  {!field.isValid && <ErrorMessage message={field.errors[0]} />}
-                </div>
-              )}
-            </Field>
-
-            <div className="flex justify-end">
-              <Button
-                onClickFn={() => {
-                  submit().catch(() => {
-                    return;
-                  });
-                }}
-                className="my-4"
-              >
-                Submit
-              </Button>
-            </div>
-          </>
-        )}
-      </Form>
-    </EditController>
+          <Field
+            name="description"
+            onBlurValidate={z
+              .string()
+              .min(1, "Please provide a description")
+              .max(500, "Description must be less than 500 characters")}
+          >
+            {({ value, setValue, onBlur, isValid, errors }) => (
+              <Textarea
+                label="Application Description"
+                onChange={(e) => setValue(e.currentTarget.value)}
+                value={value}
+                onBlur={onBlur}
+                minRows={4}
+                isInvalid={!isValid}
+                errorMessage={errors[0]}
+                isRequired
+              />
+            )}
+          </Field>
+        </EditController>
+      )}
+    </Form>
   );
 };
 

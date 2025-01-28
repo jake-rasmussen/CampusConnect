@@ -5,9 +5,11 @@ import { applicationSubmissionRouter } from "./routers/applicationSubmission";
 import { applicationSubmissionAnswerRouter } from "./routers/applicationSubmissionAnswer";
 import { applicationSubmissionCommentRouter } from "./routers/applicationSubmissionComment";
 import { applicationSubmissionEvaluationRouter } from "./routers/applicationSubmissionEvaluation";
+import { colorsRouter } from "./routers/colors";
 import { contactInfoRouter } from "./routers/contactInfo";
 import { eventRouter } from "./routers/event";
 import { memberRouter } from "./routers/member";
+import { profileRouter } from "./routers/profile";
 import { projectRouter } from "./routers/project";
 import { socialMediaRouter } from "./routers/socialMedia";
 import { supabaseRouter } from "./routers/supabase";
@@ -30,8 +32,10 @@ export const appRouter = createTRPCRouter({
   applicationSubmissionRouter,
   applicationSubmissionAnswerRouter,
   usersRouter,
+  profileRouter,
   applicationSubmissionEvaluationRouter,
   applicationSubmissionCommentRouter,
+  colorsRouter,
   supabaseRouter,
 });
 

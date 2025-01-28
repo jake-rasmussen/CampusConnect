@@ -174,7 +174,7 @@ export const applicationSubmissionRouter = createTRPCRouter({
 
       // Create a caller and delete the supabase folder for the submission
       const supabaseCaller = supabaseRouter.createCaller(ctx);
-      await supabaseCaller.clearSupabaseFolder({ applicationId });
+      await supabaseCaller.clearSupabaseFolderApplication({ applicationId });
 
       const numSubmissions = await ctx.prisma.applicationSubmission.count({
         where: {

@@ -3,7 +3,9 @@ import {
   ApplicationQuestionType,
   ApplicationStatus,
   ApplicationSubmissionStatus,
+  School,
   SocialMediaPlatformType,
+  UserType,
 } from "@prisma/client";
 
 import { prisma } from "~/server/db";
@@ -12,15 +14,13 @@ import { randomNumberBetweenInclusive } from "~/utils/helpers";
 import type {
   Application,
   ApplicationQuestion,
-  ApplicationSubmission,
-  ApplicationSubmissionAnswer,
   Prisma,
   User,
 } from "@prisma/client";
 
 function getRandomDate(): Date {
   const startDate = new Date();
-  const endDate = new Date("2024-12-31");
+  const endDate = new Date("2025-12-31");
 
   const randomTimestamp = faker.date
     .between({ from: startDate, to: endDate })
@@ -102,6 +102,48 @@ const generateRandomContactInfos = (
   }
 
   return contactInfos;
+};
+
+const generateRandomColors = () => {
+  prisma.colors.create({
+    data: {
+      id: "default",
+      primaryColor: "#1746A2",
+      secondaryColor: "#5F9DF7",
+    },
+  });
+
+  const colorsOptions = [
+    {
+      primaryColor: "#FF6500",
+      secondaryColor: "#1E3E62",
+    },
+    {
+      primaryColor: "#640D5F",
+      secondaryColor: "#D91656",
+    },
+    {
+      primaryColor: "#384B70",
+      secondaryColor: "#507687",
+    },
+    {
+      primaryColor: "#FF885B",
+      secondaryColor: "#FFE5CF",
+    },
+    {
+      primaryColor: "#7695FF",
+      secondaryColor: "#9DBDFF",
+    },
+  ];
+
+  const colorsIndex = randomNumberBetweenInclusive(0, colorsOptions.length - 1);
+
+  const colors: Prisma.ColorsCreateWithoutProjectInput = {
+    primaryColor: colorsOptions[colorsIndex]!.primaryColor,
+    secondaryColor: colorsOptions[colorsIndex]!.secondaryColor,
+  };
+
+  return colors;
 };
 
 const generateRandomQuestions = (
@@ -294,6 +336,7 @@ const generateRandomUsers = () => {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       emailAddress: faker.internet.email(),
+      userType: UserType.INCOMPLETE,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -321,11 +364,13 @@ const createMockProjectArray = (users: User[]) => {
       name,
       socialMedia: { create: generateRandomSocialMedia() },
       description: faker.lorem.paragraph({ min: 1, max: 3 }),
+      school: faker.helpers.arrayElement(Object.values(School)),
       applications: {
         create: generateRandomApplications(users),
       },
       events: { create: generateRandomEvents() },
       contactInfo: { create: generateRandomContactInfos() },
+      colors: { create: generateRandomColors() },
     };
     mockProjects.push(project);
   }
@@ -387,6 +432,10 @@ export const seedProjects = async () => {
 
 export const deleteProjects = prisma.project.deleteMany({});
 
+export const deleteApplicationSubmissionComments =
+  prisma.applicationSubmissionComment.deleteMany({});
+export const deleteApplicationSubmissionEvaluation =
+  prisma.applicationSubmissionEvaluation.deleteMany({});
 export const deleteApplicationSubmissionAnswers =
   prisma.applicationSubmissionAnswer.deleteMany({});
 export const deleteApplicationSubmissions =

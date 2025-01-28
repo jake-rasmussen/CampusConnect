@@ -1,12 +1,22 @@
 import "@prisma/client";
 
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Button,
+  Input,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+  user,
+} from "@nextui-org/react";
 import { debounce } from "lodash";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Key, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 import { api } from "~/utils/api";
-import { Input } from "../../shadcn_ui/input";
-import MemberConfirmDialog from "./memberConfirmDialog";
 
 import type { Member, User } from "@prisma/client";
 
@@ -15,19 +25,40 @@ type PropType = {
   members: Member[];
 };
 
+type FieldStateType = {
+  selectedKey: Key | null;
+  inputValue: string;
+  items: User[];
+};
+
 const Search = (props: PropType) => {
   const { projectId, members } = props;
 
-  const [search, setSearch] = useState("");
-  const [query, setQuery] = useState("");
-  const [registeredUserIds, setRegisteredUserIds] = useState<string[]>(
-    Array.from(members, (member) => member.userId),
-  );
-  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { data: users } = api.usersRouter.getUsersByQuery.useQuery({
-    query: search,
+  const [search, setSearch] = useState<string>("");
+  const [registeredUserIds, setRegisteredUserIds] = useState<string[]>(
+    Array.from(members, (member) => member.userId), // Don't look up users who are already admin
+  );
+  const [fieldState, setFieldState] = useState<FieldStateType>({
+    selectedKey: "",
+    inputValue: "",
+    items: [],
   });
+  const [selectedUser, setSelectedUser] = useState<User>();
+
+  const {
+    data: users,
+    isLoading,
+    isError,
+  } = api.usersRouter.getUsersByQuery.useQuery(
+    {
+      query: search,
+    },
+    {
+      enabled: search.length > 0,
+    },
+  );
 
   const queryClient = api.useContext();
 
@@ -43,9 +74,6 @@ const Search = (props: PropType) => {
     },
   });
 
-  const [queryResult, setQueryResult] = useState<User[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User>();
-
   const debouncedSearch = useRef(
     debounce(async (input: string) => {
       setSearch(input);
@@ -53,12 +81,14 @@ const Search = (props: PropType) => {
   ).current;
 
   useEffect(() => {
-    setQueryResult([]);
+    setRegisteredUserIds(Array.from(members, (member) => member.userId));
+
     if (users !== undefined) {
-      setQueryResult(
-        users.filter((user) => !registeredUserIds.includes(user.userId)),
-      );
-      setRegisteredUserIds(Array.from(members, (member) => member.userId));
+      setFieldState((prevState: FieldStateType) => ({
+        inputValue: prevState.inputValue,
+        selectedKey: "",
+        items: users.filter((user) => !registeredUserIds.includes(user.userId)),
+      }));
     }
   }, [users]);
 
@@ -68,60 +98,114 @@ const Search = (props: PropType) => {
     };
   }, [debouncedSearch]);
 
-  const handleAddMember = (userId: string) => {
+  const handleAddMember = async (userId: string) => {
     toast.dismiss();
     toast.loading("Adding Member...");
 
-    addMember.mutate({
+    await addMember.mutateAsync({
       projectId,
       userId,
     });
-    setSearch("");
-    setQuery("");
+  };
+
+  const onSelectionChange = (key: Key | null) => {
+    setFieldState((prevState: FieldStateType) => {
+      let selectedItem = (prevState.items || []).find(
+        (user) => user.emailAddress === key,
+      );
+
+      return {
+        inputValue: selectedItem?.emailAddress || "",
+        selectedKey: "",
+        items: prevState.items,
+      };
+    });
+  };
+
+  const onInputChange = (value: string) => {
+    setFieldState((prevState: FieldStateType) => ({
+      inputValue: value,
+      selectedKey: "",
+      items: prevState.items,
+    }));
+    debouncedSearch(value);
   };
 
   return (
     <div className="relative flex max-w-sm flex-col items-center justify-center">
-      <Input
-        value={query}
-        onChange={(e) => {
-          debouncedSearch(e.currentTarget.value);
-          setQuery(e.currentTarget.value);
-        }}
-        placeholder="ADD A USER"
-        className="tracking-none border border-2 text-xl font-black uppercase text-secondary"
-      />
-
-      <MemberConfirmDialog
-        user={selectedUser}
-        onConfirm={() => handleAddMember(selectedUser!.userId)}
-        openDialog={openConfirmDialog}
-        setOpenDialog={setOpenConfirmDialog}
-      />
-
-      {queryResult && queryResult.length > 0 && search.length > 0 && (
-        <div className="absolute top-0 z-20 flex max-h-48 translate-y-12 flex-col overflow-y-scroll rounded-xl border border-2 border-secondary bg-white p-4 shadow-xl">
-          {queryResult.map((query: User, index: number) => {
+      <div className="flex w-full flex-wrap md:flex-nowrap">
+        <Autocomplete
+          className="w-[50rem]"
+          inputValue={fieldState.inputValue}
+          items={fieldState.items}
+          isLoading={!(search.length === 0) && isLoading}
+          label="Search User"
+          selectedKey={fieldState.selectedKey}
+          onInputChange={onInputChange}
+          onSelectionChange={onSelectionChange}
+          listboxProps={{
+            emptyContent: "Search User By Email",
+          }}
+          errorMessage={isError ? "Error Getting Users" : ""}
+          onBlur={() => {
+            setFieldState(() => ({
+              inputValue: "",
+              selectedKey: "",
+              items: [],
+            }));
+            setSearch("");
+          }}
+        >
+          {(fieldState.items || []).map((query: User, index: number) => {
             return (
-              <button
-                className="my-2 flex flex-row rounded-xl p-4 transition duration-300 ease-in-out hover:bg-gray"
+              <AutocompleteItem
                 key={`search${index}`}
                 onClick={() => {
-                  setOpenConfirmDialog(true);
                   setSelectedUser(query);
+                  onOpen();
                 }}
               >
-                <span className="text-md flex-none font-semibold text-secondary">
+                <div className="text-md font-semibold text-secondary">
                   {query.emailAddress}
-                </span>
-                <span className="ml-8 flex grow justify-end whitespace-nowrap font-medium underline">
+                </div>
+                <div className="font-medium underline">
                   {query.firstName} {query.lastName}
-                </span>
-              </button>
+                </div>
+              </AutocompleteItem>
             );
           })}
-        </div>
-      )}
+        </Autocomplete>
+      </div>
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>
+                Are you sure you want to add {selectedUser?.firstName}{" "}
+                {selectedUser?.lastName}?
+              </ModalHeader>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    if (selectedUser) {
+                      handleAddMember(selectedUser.userId).then(() => {
+                        onClose();
+                      });
+                    }
+                  }}
+                >
+                  Confirm
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

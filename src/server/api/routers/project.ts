@@ -1,9 +1,11 @@
 import { clerkClient } from "@clerk/nextjs";
 import {
   ApplicationStatus,
+  Colors,
   Member,
   Project,
   ProjectMemberType,
+  School,
 } from "@prisma/client";
 import { z } from "zod";
 
@@ -28,6 +30,7 @@ export const projectRouter = createTRPCRouter({
               user: true,
             },
           },
+          colors: true,
         },
       });
       return project;
@@ -80,6 +83,9 @@ export const projectRouter = createTRPCRouter({
       orderBy: {
         name: "asc",
       },
+      include: {
+        colors: true,
+      },
     });
   }),
   // Procedure to get the projects that a person is an admin in
@@ -92,11 +98,17 @@ export const projectRouter = createTRPCRouter({
         type: ProjectMemberType.ADMIN,
       },
       include: {
-        project: true,
+        project: {
+          include: {
+            colors: true,
+          },
+        },
       },
     });
 
-    let projects: Project[] = [];
+    let projects: (Project & {
+      colors: Colors;
+    })[] = [];
     admins.forEach((member) => {
       projects.push(member.project);
     });
@@ -112,11 +124,17 @@ export const projectRouter = createTRPCRouter({
         type: ProjectMemberType.EVALUATOR,
       },
       include: {
-        project: true,
+        project: {
+          include: {
+            colors: true,
+          },
+        },
       },
     });
 
-    let projects: Project[] = [];
+    let projects: (Project & {
+      colors: Colors;
+    })[] = [];
     evaluators.forEach((evaluator) => {
       projects.push(evaluator.project);
     });
@@ -128,14 +146,32 @@ export const projectRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         description: z.string(),
+        school: z.enum(Object.values(School) as [string, ...string[]]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { name, description } = input;
+      const { name, description, school } = input;
+
+      let colors = await ctx.prisma.colors.findFirst({
+        where: { id: "default" },
+      });
+
+      if (!colors) {
+        colors = await ctx.prisma.colors.create({
+          data: {
+            id: "default",
+            primaryColor: "#1746A2",
+            secondaryColor: "#5F9DF7",
+          },
+        });
+      }
+
       const project = await ctx.prisma.project.create({
         data: {
           name,
           description,
+          school: school as School,
+          colorsId: colors.id,
         },
       });
 
@@ -286,6 +322,44 @@ export const projectRouter = createTRPCRouter({
       await ctx.prisma.project.delete({
         where: {
           id: projectId,
+        },
+      });
+    }),
+  checkProjectBanner: t.procedure
+    .input(
+      z.object({
+        projectId: z.string(),
+      }),
+    )
+    .use(isAdmin)
+    .query(async ({ ctx, input }) => {
+      const { projectId } = input;
+
+      return await ctx.prisma.project.findUnique({
+        where: {
+          id: projectId,
+        },
+        select: {
+          hasBanner: true,
+        },
+      });
+    }),
+  createProjectCreationForm: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        validation: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { name, validation } = input;
+
+      return await ctx.prisma.projectCreationForm.create({
+        data: {
+          name,
+          validation,
+          school: School.JOHNS_HOPKINS_UNIVERSITY,
+          userId: ctx.user.userId,
         },
       });
     }),

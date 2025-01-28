@@ -1,15 +1,8 @@
+import { Input, Select, SelectItem } from "@nextui-org/react";
 import { ApplicationQuestionType } from "@prisma/client";
 import { DotsVertical, X } from "tabler-icons-react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/shadcn_ui/select";
 import { applicationMemberTypeToString } from "~/utils/helpers";
-import { Input } from "../../shadcn_ui/input";
 
 import type { ApplicationQuestion } from "@prisma/client";
 
@@ -33,69 +26,59 @@ const QuestionCard = (props: PropType) => {
       <div className="text-gray hover:cursor-pointer hover:text-white">
         <DotsVertical className="h-20 w-8 object-none" />
       </div>
-      <div className="grow">
-        <span className="font-semibold text-white">Question</span>
+
+      <div className="grid grow grid-cols-8 gap-4">
         <Input
-          className="h-[3rem]"
-          placeholder="Enter the Question"
+          className="col-span-4"
+          label="Question"
           defaultValue={question.question}
           onBlur={(e) => {
-            updateQuestion("question", e.currentTarget.value, index, question);
+            updateQuestion("question", e.target.value, index, question);
           }}
+          isRequired
         />
-      </div>
 
-      <div>
-        <span className="font-semibold text-white">Type</span>
         <Select
-          defaultValue={question.type}
-          onValueChange={(input: ApplicationQuestionType) => {
-            updateQuestion("type", input, index, question);
+          className="col-span-2"
+          label="Type"
+          defaultSelectedKeys={[question.type]}
+          onChange={(e) => {
+            updateQuestion("type", e.target.value, index, question);
           }}
+          isRequired
         >
-          <SelectTrigger className="col-span-3 h-[3rem] w-[10rem] rounded-xl bg-white">
-            <SelectValue placeholder="" />
-          </SelectTrigger>
-          <SelectContent className="bg-white">
-            {Object.values(ApplicationQuestionType).map(
-              (type: ApplicationQuestionType, index: number) => {
-                return (
-                  <SelectItem value={type} key={`type${index}`}>
-                    {applicationMemberTypeToString(type)}
-                  </SelectItem>
-                );
-              },
-            )}
-          </SelectContent>
+          {Object.values(ApplicationQuestionType).map(
+            (type: ApplicationQuestionType, index: number) => {
+              return (
+                <SelectItem value={type} key={type}>
+                  {applicationMemberTypeToString(type)}
+                </SelectItem>
+              );
+            },
+          )}
         </Select>
-      </div>
 
-      <div>
-        <span className="whitespace-nowrap font-semibold text-white">
-          Required?
-        </span>
         <Select
-          defaultValue={
+          className="col-span-2"
+          label="Is Required?"
+          defaultSelectedKeys={
             question.required
-              ? "yes"
+              ? ["YES"]
               : question.required !== undefined
-              ? "no"
-              : ""
+              ? ["NO"]
+              : [""]
           }
-          onValueChange={(input) => {
-            const isRequired = input === "yes";
+          onChange={(e) => {
+            const isRequired = e.target.value === "YES";
             updateQuestion("required", isRequired, index, question);
           }}
+          isRequired
         >
-          <SelectTrigger className="col-span-3 h-[3rem] w-[5rem] rounded-xl bg-white">
-            <SelectValue placeholder="" />
-          </SelectTrigger>
-          <SelectContent className="bg-white">
-            <SelectItem value="yes">Yes</SelectItem>
-            <SelectItem value="no">No</SelectItem>
-          </SelectContent>
+          <SelectItem key="YES">Yes</SelectItem>
+          <SelectItem key="NO">No</SelectItem>
         </Select>
       </div>
+
       <button
         className="flex items-end justify-end"
         onClick={() => {

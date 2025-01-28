@@ -1,25 +1,37 @@
 import { prisma } from "~/server/db";
 import {
   deleteApplicationSubmissionAnswers,
+  deleteApplicationSubmissionComments,
+  deleteApplicationSubmissionEvaluation,
   deleteApplicationSubmissions,
   deleteProjects,
   seedProjects,
 } from "./seedFiles/projectSeed";
-import { deleteUsers, seedUsers } from "./seedFiles/userSeed";
+import {
+  deleteProfiles,
+  deleteUsers,
+  seedProfiles,
+  seedUsers,
+} from "./seedFiles/userSeed";
 
 async function cleanupDb() {
+  // Pass the Prisma promises directly to $transaction
   await prisma.$transaction([
+    deleteApplicationSubmissionComments,
+    deleteApplicationSubmissionEvaluation,
     deleteApplicationSubmissionAnswers,
     deleteApplicationSubmissions,
   ]);
-  await prisma.$transaction([deleteProjects, deleteUsers]);
-}
 
+  await prisma.$transaction([deleteProjects, deleteProfiles, deleteUsers]);
+}
 async function main() {
   await cleanupDb();
-  await seedUsers();
   await seedProjects();
+  await seedUsers();
+  await seedProfiles();
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect();

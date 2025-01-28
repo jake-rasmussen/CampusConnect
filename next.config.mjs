@@ -21,6 +21,9 @@ const config = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    domains: ['images.unsplash.com', 'assets.aceternity.com', 'zsltvvwlimfimrpfkenb.supabase.co'], // Add all external domains here
+  },
 };
 
 export default config;

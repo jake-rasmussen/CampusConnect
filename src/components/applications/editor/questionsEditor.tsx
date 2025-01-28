@@ -55,11 +55,11 @@ const QuestionsEditor = (props: PropType) => {
 
   return (
     <>
-      <section className="border-1 w-[75vw] max-w-[75rem] rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
+      <section className="w-full max-w-[75rem] rounded-2xl bg-gradient-to-r from-primary to-secondary p-10 lg:w-[75vw]">
         {questions.map((question, index: number) => {
           return (
             <DraggableCard
-              className="border-1 my-4 rounded-xl border border-white p-4"
+              className="rounded-xl p-4"
               key={`question${index}${question.question}`}
               index={index}
               moveCard={moveQuestions}
@@ -105,7 +105,7 @@ const QuestionsEditor = (props: PropType) => {
           >
             <div className="flex flex-row items-center">
               <SquarePlus className="mx-auto h-14 w-14 text-white duration-300 group-hover:rotate-90 group-hover:cursor-pointer group-hover:text-secondary" />
-              <h1 className="tracking-none whitespace-nowrap text-2xl font-black uppercase text-white group-hover:cursor-pointer group-hover:text-gray">
+              <h1 className="tracking-none whitespace-nowrap text-2xl font-black uppercase text-white group-hover:cursor-pointer group-hover:text-secondary">
                 Create Question
               </h1>
             </div>

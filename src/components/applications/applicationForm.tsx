@@ -1,3 +1,4 @@
+import { Input, Textarea } from "@nextui-org/react";
 import {
   ApplicationQuestion,
   ApplicationQuestionType,
@@ -15,15 +16,13 @@ import Checklist from "../checklist";
 import FileUpload from "../fileUpload";
 import LoadingPage from "../loadingPage";
 import MultipleChoice from "../multipleChoice";
-import { Input } from "../shadcn_ui/input";
-import { Textarea } from "../shadcn_ui/textarea";
 
 type PropType = {
   projectId: string;
   applicationId: string;
   applicantId?: string;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   deadline?: Date;
   questions: ApplicationQuestion[];
   savedAnswers?: ApplicationSubmissionAnswer[];
@@ -145,37 +144,33 @@ const ApplicationForm = (props: PropType) => {
     return <LoadingPage />;
   } else {
     return (
-      <section className="flex flex-col gap-y-4">
-        <h1 className="text-center text-4xl font-black uppercase text-black underline">
-          {name}
-        </h1>
-        {!readonly && (
-          <h2 className="text-center text-lg font-bold text-black">
-            {`Deadline: ${
-              deadline
-                ? dateToStringFormatted(deadline) +
-                  " at " +
-                  dateToTimeStringFormatted(deadline)
-                : " TBD"
-            }`}
-          </h2>
-        )}
+      <section className="flex flex-col gap-4">
+        {
+          name && deadline && description && (
+            <>
+              <h1 className="text-center text-4xl font-black uppercase text-black underline">
+                {name}
+              </h1>
+              {!readonly && (
+                <h2 className="text-center text-lg font-bold text-black">
+                  {`Deadline: ${deadline
+                      ? dateToStringFormatted(deadline) +
+                      " at " +
+                      dateToTimeStringFormatted(deadline)
+                      : " TBD"
+                    }`}
+                </h2>
+              )}
 
-        <p className="text-center text-black">{description}</p>
-
-        <div className="border-1 flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-black bg-gradient-to-r from-primary to-secondary p-10">
-          <form className="flex flex-col gap-y-4">
+              <p className="text-center text-black">{description}</p>
+            </>
+          )
+        }
+        
+        <div className="flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-1 border-black bg-gradient-to-r from-primary to-secondary p-10">
+          <form className="flex flex-col gap-y-10">
             {questions.map((question: ApplicationQuestion, index: number) => (
               <div key={`question${index}`}>
-                <div className="flex flex-row items-start">
-                  {question.required && (
-                    <h1 className="mx-1 my-0.5 font-black text-red-600">*</h1>
-                  )}
-                  <h2 className="max-w-2xl capitalize text-white">
-                    {question.question}
-                  </h2>
-                </div>
-
                 {question.type === ApplicationQuestionType.TEXT_INPUT && (
                   <Input
                     value={
@@ -185,11 +180,19 @@ const ApplicationForm = (props: PropType) => {
                       if (!readonly)
                         handleUpdateAnswer(question.id, e.currentTarget.value);
                     }}
+                    isRequired={question.required}
+                    placeholder=" "
+                    labelPlacement="outside"
+                    label={
+                      <span className="text-xl text-white">
+                        {question.question}
+                      </span>
+                    }
+                    size="lg"
                   />
                 )}
                 {question.type === ApplicationQuestionType.TEXT_FIELD && (
                   <Textarea
-                    className="h-[3rem] rounded-xl bg-white"
                     value={
                       (answersMap?.get(question.id)?.answer as string) || ""
                     }
@@ -197,7 +200,14 @@ const ApplicationForm = (props: PropType) => {
                       if (!readonly)
                         handleUpdateAnswer(question.id, e.currentTarget.value);
                     }}
-                    rows={4}
+                    minRows={4}
+                    isRequired={question.required}
+                    label={
+                      <span className="text-xl text-white">
+                        {question.question}
+                      </span>
+                    }
+                    labelPlacement="outside"
                   />
                 )}
                 {question.type === ApplicationQuestionType.MULTIPLE_CHOICE && (
@@ -209,6 +219,8 @@ const ApplicationForm = (props: PropType) => {
                     onChange={(e: string) => {
                       if (!readonly) handleUpdateAnswer(question.id, e);
                     }}
+                    isRequired={question.required}
+                    label={question.question}
                   />
                 )}
                 {question.type === ApplicationQuestionType.MULTIPLE_SELECT && (
@@ -220,6 +232,8 @@ const ApplicationForm = (props: PropType) => {
                     onChange={(e: string[]) => {
                       if (!readonly) handleUpdateAnswer(question.id, e);
                     }}
+                    isRequired={question.required}
+                    label={question.question}
                   />
                 )}
 
@@ -238,6 +252,8 @@ const ApplicationForm = (props: PropType) => {
                     userId={applicantId}
                     applicationId={applicationId}
                     readonly={readonly}
+                    isRequired={question.required}
+                    label={question.question}
                   />
                 )}
               </div>

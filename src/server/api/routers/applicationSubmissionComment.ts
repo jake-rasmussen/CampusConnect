@@ -14,13 +14,45 @@ export const applicationSubmissionCommentRouter = createTRPCRouter({
     )
     .use(isEvaluator)
     .mutation(async ({ ctx, input }) => {
-      const { applicationSubmissionEvaluationId, comment } = input;
+      const { projectId, applicationSubmissionEvaluationId, comment } = input;
 
       return ctx.prisma.applicationSubmissionComment.create({
         data: {
           comment,
-          evaluatorName: ctx.user.firstName + " " + ctx.user.lastName,
           applicationSubmissionEvaluationId,
+          memberProjectId: projectId,
+          memberUserId: ctx.user.userId,
+        },
+      });
+    }),
+  deleteApplicationSubmissionComment: t.procedure
+    .input(
+      z.object({
+        projectId: z.string(),
+        applicationSubmissionEvaluationId: z.string(),
+      }),
+    )
+    .use(isEvaluator)
+    .mutation(async ({ ctx, input }) => {
+      const { projectId, applicationSubmissionEvaluationId } = input;
+
+      const comment = await ctx.prisma.applicationSubmissionComment.findFirst({
+        where: {
+          applicationSubmissionEvaluationId,
+          memberUserId: ctx.user.userId,
+          memberProjectId: projectId,
+        },
+      });
+
+      if (!comment) {
+        throw new Error(
+          "Comment not found or you are not authorized to delete this comment.",
+        );
+      }
+
+      return ctx.prisma.applicationSubmissionComment.delete({
+        where: {
+          id: comment.id,
         },
       });
     }),

@@ -48,9 +48,14 @@ const Apply: NextPageWithLayout = () => {
     isLoading: isLoadingFileList,
     isError: isErrorFileList,
     error: errorFileList,
-  } = api.supabaseRouter.getSupabaseFolder.useQuery({
-    applicationId,
-  });
+  } = api.supabaseRouter.getSupabaseFolderApplication.useQuery(
+    {
+      applicationId,
+    },
+    {
+      enabled: !!applicationId,
+    },
+  );
 
   const {
     data: userSubmissions,
@@ -84,10 +89,10 @@ const Apply: NextPageWithLayout = () => {
     api.applicationSubmissionAnswerRouter.deleteAllApplicationSubmissionAnswersByApplicationSubmissionId.useMutation();
 
   const createSignedUrlUpload =
-    api.supabaseRouter.createSignedUrlUpload.useMutation({});
+    api.supabaseRouter.createSignedUrlUploadApplication.useMutation({});
 
   const getPresignedUrlGet =
-    api.supabaseRouter.createSignedUrlDownload.useMutation();
+    api.supabaseRouter.createSignedUrlDownloadApplication.useMutation();
 
   const handleSaveAnswers = async (
     answers: ApplicationSubmissionAnswer[],
@@ -211,7 +216,7 @@ const Apply: NextPageWithLayout = () => {
     ApplicationSubmissionStatus.SUBMITTED
   ) {
     return (
-      <section className="flex justify-center py-10">
+      <section className="mt-40 flex justify-center py-10">
         <div className="min-w-[80vw] max-w-4xl">
           <ApplicationForm
             projectId={projectId}
@@ -228,7 +233,7 @@ const Apply: NextPageWithLayout = () => {
     );
   } else {
     return (
-      <section className="flex justify-center py-10">
+      <section className="mt-40 flex justify-center py-10">
         <div className="min-w-[80vw] max-w-4xl">
           <ApplicationForm
             projectId={projectId}

@@ -128,6 +128,7 @@ export const applicationRouter = createTRPCRouter({
               id: true,
               user: true,
               applicationSubmissionStatus: true,
+              applicationSubmissionEvaluation: true,
             },
           },
         },
