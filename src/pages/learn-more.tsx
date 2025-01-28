@@ -23,7 +23,7 @@ const Home = () => {
             <h4 className="bg-gradient-to-br from-neutral-500 to-slate-800 bg-clip-text text-lg tracking-wide">
               Campus Connect
             </h4>
-            <div className="flex flex-col py-4 text-4xl max-w-5xl tracking-normal mx-4">
+            <div className="flex flex-col py-4 text-2xl md:text-4xl max-w-5xl tracking-normal mx-4">
               <p>
                 Are you a student entrepreneur ready to turn your groundbreaking ideas into reality? Or are you looking for hands-on experience by joining a dynamic startup team? CampusConnect is here to bridge the gap.
               </p>

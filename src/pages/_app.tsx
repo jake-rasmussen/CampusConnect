@@ -25,12 +25,12 @@ const Providers: React.FC<{ children: React.ReactNode; pageProps: any }> = ({
   children,
   pageProps,
 }) => (
-  <ClerkProvider {...pageProps}>
-    <NextUIProvider>
-      <Toaster position="bottom-center" />
-      <DndProvider backend={HTML5Backend}>{children}</DndProvider>
-    </NextUIProvider>
-  </ClerkProvider>
+  //<ClerkProvider {...pageProps}>
+  <NextUIProvider>
+    <Toaster position="bottom-center" />
+    <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+  </NextUIProvider>
+  // </ClerkProvider>
 );
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {

@@ -278,7 +278,7 @@ export const Globe = ({ className }: { className?: string }) => {
 };
 
 const Home = () => {
-  const { isLoaded } = useUser();
+  // const { isLoaded } = useUser();
 
   const features = [
     {
@@ -312,37 +312,33 @@ const Home = () => {
     },
   ];
 
-  if (!isLoaded) {
-    return <LoadingPage />;
-  } else {
-    return (
-      <div className="relative flex w-full flex-col bg-neutral-950">
-        <BackgroundBeams />
+  return (
+    <div className="relative flex w-full flex-col bg-neutral-950">
+      <BackgroundBeams />
 
-        <div className="mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-          <motion.h1
-            initial={{ opacity: 0.5, y: 100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.3,
-              duration: 0.8,
-              ease: "easeInOut",
-            }}
-            className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 bg-clip-text py-4 text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
-          >
-            <div className="flex flex-col py-4 ">
-              <h4 className="bg-gradient-to-br from-neutral-500 to-slate-800 bg-clip-text text-lg tracking-wide">
-                Campus Connect
-              </h4>
-              <p>
-                Coming soon!
-              </p>
-            </div>
-          </motion.h1>
-        </div>
+      <div className="mx-auto flex min-h-screen flex-col items-center justify-center p-4">
+        <motion.h1
+          initial={{ opacity: 0.5, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 bg-clip-text py-4 text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
+        >
+          <div className="flex flex-col py-4 ">
+            <h4 className="bg-gradient-to-br from-neutral-500 to-slate-800 bg-clip-text text-lg tracking-wide">
+              Campus Connect
+            </h4>
+            <p>
+              Coming soon!
+            </p>
+          </div>
+        </motion.h1>
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 Home.getLayout = (
