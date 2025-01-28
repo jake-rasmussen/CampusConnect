@@ -33,9 +33,7 @@ const DeleteController = (props: PropType) => {
               <ModalHeader>
                 <div className="flex flex-col">
                   <h1>Confirm Delete</h1>
-                  <p className="text-xs font-normal text-gray">
-                    {dialogDescription}
-                  </p>
+                  <p className="text-xs font-normal text-gray">{dialogDescription}</p>
                 </div>
               </ModalHeader>
               <ModalFooter>

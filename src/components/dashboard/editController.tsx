@@ -69,7 +69,9 @@ const EditController = (props: PropType) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader>{dialogDescription}</ModalHeader>
+              <ModalHeader>
+                {dialogDescription}
+              </ModalHeader>
               <ModalBody>{children}</ModalBody>
               <ModalFooter className="flex">
                 <div className="grow">

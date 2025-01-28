@@ -9,6 +9,7 @@ export const profileRouter = createTRPCRouter({
       z.object({
         skills: z.string().array(),
         about: z.string(),
+        school: z.string(),
         year: z.string(),
         socialMedias: z
           .object({
@@ -22,12 +23,12 @@ export const profileRouter = createTRPCRouter({
             ]),
           })
           .array(),
-        majors: z.array(z.nativeEnum(Focus)),
-        minors: z.array(z.nativeEnum(Focus).optional()),
+        majors: z.nativeEnum(Focus),
+        minors: z.nativeEnum(Focus).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { skills, about, year, socialMedias, majors, minors } =
+      const { skills, about, school, year, socialMedias, majors, minors } =
         input;
 
       const userId = ctx.user.userId;
@@ -36,14 +37,14 @@ export const profileRouter = createTRPCRouter({
         data: {
           skills,
           about,
-          school: School.JOHNS_HOPKINS_UNIVERSITY,
+          school: school as School,
           year,
           user: { connect: { userId } },
           profileSocialMedia: {
             create: socialMedias,
           },
-          majors: majors as Focus[],
-          minors: (minors || []) as Focus[],
+          majors: [majors as Focus],
+          minors: [minors as Focus],
         },
       });
     }),

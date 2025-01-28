@@ -1,5 +1,5 @@
 import { Input } from "@nextui-org/input";
-import { Pagination, Select, SelectItem } from "@nextui-org/react";
+import { Select, SelectItem, Pagination } from "@nextui-org/react";
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
 import { capitalize } from "lodash";
 import Error from "next/error";
@@ -8,8 +8,8 @@ import { LicenseOff } from "tabler-icons-react";
 
 import ApplicationPreviewCard from "~/components/applications/applicationPreviewCard";
 import LoadingPage from "~/components/loadingPage";
-import PageWrapper from "~/components/pageWrapper";
 import UserLayout from "~/layouts/userLayout";
+import PageWrapper from "~/components/pageWrapper";
 import { api } from "~/utils/api";
 
 const OpenApplications = () => {
@@ -90,12 +90,12 @@ const OpenApplications = () => {
     const filteredApplications = applications.filter(
       (application) =>
         skillInFilter(application) &&
-        application.name.toLowerCase().includes(query.toLowerCase()),
+        application.name.toLowerCase().includes(query.toLowerCase())
     );
 
     const paginatedApplications = filteredApplications.slice(
       (page - 1) * limit,
-      page * limit,
+      page * limit
     );
 
     const totalPages = Math.ceil(filteredApplications.length / limit);
@@ -103,7 +103,7 @@ const OpenApplications = () => {
     return (
       <PageWrapper title="Open Applications">
         <div className="flex w-full flex-col items-center gap-8">
-          <div className="mx-auto flex w-full max-w-4xl items-center text-center">
+          <div className="mx-auto flex max-w-4xl items-center text-center w-full">
             <Input
               label="Search Open Applications"
               variant="underlined"

@@ -31,8 +31,8 @@ import ProfileSocialMediaEditor, {
 } from "./profileSocialMediaEditor";
 
 type ProfileFormType = {
-  majors: Focus[];
-  minors?: Focus[];
+  majors: Focus;
+  minors?: Focus;
   about: string;
   school: string;
   year: string;
@@ -45,6 +45,9 @@ const CreateProfileEditor = () => {
 
   const [skills, setSkills] = useState<string[]>([]);
   const [socialMedias, setSocialMedias] = useState<SocialMediaFormType[]>([]);
+
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState("");
 
   const router = useRouter();
 
@@ -62,6 +65,18 @@ const CreateProfileEditor = () => {
       toast.error("Error...");
     },
   });
+
+  const handleSelectItem = (item: string) => {
+    if (!selectedItems.includes(item)) {
+      setSelectedItems((prev) => [...prev, item]);
+    }
+    setInputValue(""); // Clear input after selection
+  };
+
+  // Handle item removal
+  const handleRemoveItem = (item: string) => {
+    setSelectedItems((prev) => prev.filter((selected) => selected !== item));
+  };
 
   return (
     <>
@@ -89,10 +104,11 @@ const CreateProfileEditor = () => {
                 await createProfile.mutateAsync({
                   skills,
                   socialMedias,
+                  school: values.school,
                   year: values.year,
                   about: values.about,
                   majors: values.majors,
-                  minors: values.minors || [],
+                  minors: values.minors,
                 });
               }}
             >
@@ -102,6 +118,38 @@ const CreateProfileEditor = () => {
                   <ModalBody className="max-h-[70vh] overflow-y-scroll overflow-y-scroll">
                     <main className="flex w-full flex-col items-center gap-4">
                       <section className="flex w-full flex-col gap-4">
+                        <Field
+                          name="school"
+                          onBlurValidate={z
+                            .string()
+                            .min(1, "Enter your school")
+                            .max(250, "Enter a shorter school name")}
+                        >
+                          {({ value, setValue, onBlur, isValid, errors }) => (
+                            <Autocomplete
+                              label="School"
+                              selectedKey={value || ""}
+                              onSelectionChange={(e) => {
+                                if (e) {
+                                  setValue(e as School);
+                                } else {
+                                  setValue("");
+                                }
+                              }}
+                              onBlur={onBlur}
+                              isInvalid={!isValid}
+                              errorMessage={errors[0]}
+                              isRequired
+                            >
+                              {Object.values(School).map((school: School) => (
+                                <AutocompleteItem key={school}>
+                                  {uppercaseToCapitalize(school)}
+                                </AutocompleteItem>
+                              ))}
+                            </Autocomplete>
+                          )}
+                        </Field>
+
                         <Field
                           name="year"
                           onChangeValidate={z
@@ -128,19 +176,18 @@ const CreateProfileEditor = () => {
                           )}
                         </Field>
 
-                        <div className="flex flex-row gap-4 max-w-full">
+                        <div className="flex flex-row gap-4">
                           <Field
                             name="majors"
                             onChangeValidate={z
-                              .array(z.nativeEnum(Focus))
-                              .min(1, "Select at least one major")}
+                              .string()
+                              .min(1, "Select your major(s)")}
                           >
-                            {({ value = [], setValue, onBlur, isValid, errors }) => (
+                            {({ value, setValue, onBlur, isValid, errors }) => (
                               <Select
                                 label="Major(s)"
                                 selectionMode="multiple"
-                                selectedKeys={new Set(value)} // Use Set for compatibility with NextUI
-                                onSelectionChange={(keys) => setValue(Array.from(keys))} // Convert Set to array
+                                onChange={(e) => setValue(e.target.value)}
                                 onBlur={onBlur}
                                 isInvalid={!isValid}
                                 errorMessage={errors[0]}
@@ -148,7 +195,7 @@ const CreateProfileEditor = () => {
                               >
                                 {Object.values(Focus)
                                   .sort()
-                                  .map((focus) => (
+                                  .map((focus: Focus) => (
                                     <SelectItem key={focus}>
                                       {uppercaseToCapitalize(focus)}
                                     </SelectItem>
@@ -159,21 +206,22 @@ const CreateProfileEditor = () => {
 
                           <Field
                             name="minors"
-                            onChangeValidate={z.array(z.nativeEnum(Focus)).optional()}
+                            onChangeValidate={z
+                              .string()
+                              .min(1, "Select your minor(s)")}
                           >
-                            {({ value = [], setValue, onBlur, isValid, errors }) => (
+                            {({ value, setValue, onBlur, isValid, errors }) => (
                               <Select
                                 label="Minor(s)"
                                 selectionMode="multiple"
-                                selectedKeys={new Set(value)} // Use Set for compatibility with NextUI
-                                onSelectionChange={(keys) => setValue(Array.from(keys))} // Convert Set to array
+                                onChange={(e) => setValue(e.target.value)}
                                 onBlur={onBlur}
                                 isInvalid={!isValid}
                                 errorMessage={errors[0]}
                               >
                                 {Object.values(Focus)
                                   .sort()
-                                  .map((focus) => (
+                                  .map((focus: Focus) => (
                                     <SelectItem key={focus}>
                                       {uppercaseToCapitalize(focus)}
                                     </SelectItem>
@@ -187,7 +235,7 @@ const CreateProfileEditor = () => {
                           name="about"
                           onBlurValidate={z
                             .string()
-                            .min(250, "Enter a little more details about yourself")
+                            .min(1, "Enter details about yourself")
                             .max(3000, "Enter a shorter profile description")}
                         >
                           {({ value, setValue, onBlur, isValid, errors }) => (
@@ -198,7 +246,6 @@ const CreateProfileEditor = () => {
                               onBlur={onBlur}
                               isInvalid={!isValid}
                               errorMessage={errors[0]}
-                              isRequired
                             />
                           )}
                         </Field>
@@ -240,7 +287,7 @@ const CreateProfileEditor = () => {
             </Form>
           )}
         </ModalContent>
-      </Modal >
+      </Modal>
     </>
   );
 };

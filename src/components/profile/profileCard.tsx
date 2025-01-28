@@ -26,7 +26,7 @@ const ProfileCard = (props: PropType) => {
             {profile.user.firstName} {profile.user.lastName}
           </h1>
           <p className="text-neutral-400">
-            {uppercaseToCapitalize(profile.year)}
+            {profile.year} @ {uppercaseToCapitalize(profile.school)}
           </p>
         </CardHeader>
         <Divider />
@@ -38,21 +38,14 @@ const ProfileCard = (props: PropType) => {
                 uppercaseToCapitalize(major) +
                 (index + 1 !== profile.majors.length ? ", " : "") +
                 (index + 2 === profile.majors.length ? " and " : ""),
+            )}{" "}
+            and minoring in{" "}
+            {profile.minors.map(
+              (minor: Focus, index: number) =>
+                uppercaseToCapitalize(minor) +
+                (index + 1 !== profile.minors.length ? ", " : "") +
+                (index + 2 === profile.minors.length ? " and " : ""),
             )}
-            {
-              profile.minors.length > 0 && (
-                <>
-                  {" "}
-                  and minoring in{" "}
-                  {profile.minors.map(
-                    (minor: Focus, index: number) =>
-                      uppercaseToCapitalize(minor) +
-                      (index + 1 !== profile.minors.length ? ", " : "") +
-                      (index + 2 === profile.minors.length ? " and " : ""),
-                  )}
-                </>
-              )
-            }
           </span>
         </CardBody>
       </Card>
