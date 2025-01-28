@@ -338,13 +338,6 @@ const Home = () => {
                 Coming soon!
               </p>
             </div>
-            <div className="my-4 flex w-full flex-row items-center justify-center gap-4">
-              <SignedOut>
-                <SignUpButton mode="modal">
-                  <Button>Get started</Button>
-                </SignUpButton>
-              </SignedOut>
-            </div>
           </motion.h1>
         </div>
       </div>

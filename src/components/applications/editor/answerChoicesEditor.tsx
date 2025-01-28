@@ -49,7 +49,8 @@ const AnswerChoicesEditor = (props: PropType) => {
                 label={`Answer Choice ${index + 1}`}
                 defaultValue={answerChoice}
                 onBlur={(e) => {
-                  updateAnswerChoice(index, e.target.value);
+                  const value = (e.target as HTMLInputElement).value;
+                  updateAnswerChoice(index, value);
                 }}
               />
               <button

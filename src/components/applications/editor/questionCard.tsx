@@ -33,7 +33,8 @@ const QuestionCard = (props: PropType) => {
           label="Question"
           defaultValue={question.question}
           onBlur={(e) => {
-            updateQuestion("question", e.target.value, index, question);
+            const value = (e.target as HTMLInputElement).value;
+            updateQuestion("question", value, index, question);
           }}
           isRequired
         />
