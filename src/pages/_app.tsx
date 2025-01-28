@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <main className="min-h-screen w-screen overflow-y-hidden bg-background">
       <Providers pageProps={pageProps}>
-        <Navbar />
+        {/* <Navbar /> */}
         {getLayout(<Component {...pageProps} />)}
       </Providers>
     </main>

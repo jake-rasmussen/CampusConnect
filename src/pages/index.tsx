@@ -335,40 +335,17 @@ const Home = () => {
                 Campus Connect
               </h4>
               <p>
-                Connect with students <br /> like never before
+                Coming soon!
               </p>
             </div>
             <div className="my-4 flex w-full flex-row items-center justify-center gap-4">
               <SignedOut>
-                <SignUpButton mode="modal" redirectUrl="/get-started">
+                <SignUpButton mode="modal">
                   <Button>Get started</Button>
                 </SignUpButton>
               </SignedOut>
             </div>
           </motion.h1>
-        </div>
-
-        <div className="relative z-20 mx-auto max-w-7xl py-10 lg:py-40">
-          <div className="px-8">
-            <h4 className="mx-auto max-w-5xl text-center text-3xl font-medium tracking-tight text-white lg:text-5xl lg:leading-tight">
-              Help grow your startup
-            </h4>
-
-            <p className="mx-auto my-4  max-w-2xl  text-center text-sm font-normal text-neutral-300 lg:text-base">
-              CampusConnect looks to provide startups with tools to connect with
-              students, bringing the student led start up ecosystem to the next
-              level.
-            </p>
-            <div className="mt-12 grid max-w-7xl grid-cols-1 rounded-2xl border-neutral-800 bg-black lg:grid-cols-6 xl:border">
-              {features.map((feature) => (
-                <FeatureCard key={feature.title} className={feature.className}>
-                  <FeatureTitle>{feature.title}</FeatureTitle>
-                  <FeatureDescription>{feature.description}</FeatureDescription>
-                  <div className="h-full w-full">{feature.skeleton}</div>
-                </FeatureCard>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     );

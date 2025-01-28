@@ -6,12 +6,7 @@ export default authMiddleware({
     const url = new URL(req.url);
 
     // Allow public routes
-    if (url.pathname === "/" || url.pathname.startsWith("/api/webhook")) return;
-
-    // Redirect unauthenticated users to sign-in
-    if (!auth.userId && !auth.isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: req.url });
-    }
+    if (url.pathname.startsWith("/api/webhook")) return;
 
     // Extract user metadata
     const metadata = auth.sessionClaims?.publicMetadata as {
@@ -19,6 +14,20 @@ export default authMiddleware({
       evaluatorProjectIds?: string;
       userType: UserType;
     };
+
+
+    // Redirect unauthenticated users to sign-in
+    if (!auth.userId && !auth.isPublicRoute) {
+      return redirectToSignIn({ returnBackUrl: req.url });
+    }
+
+    if (url.pathname === "/") {
+      if (metadata.userType === UserType.INCOMPLETE) {
+        return Response.redirect(new URL("/get-started", req.url));
+      } else {
+        return
+      }
+    }
 
     if (metadata) {
       // Redirect users with INCOMPLETE user type to /get-started
@@ -41,7 +50,7 @@ export default authMiddleware({
       if (url.pathname.startsWith("/admin/")) {
         const projectId = extractProjectId(url.pathname, "admin");
         if (projectId && !adminProjectIds.includes(projectId)) {
-          return redirectToSignIn({ returnBackUrl: req.url });
+          return Response.redirect(new URL("/", req.url));
         }
       }
 
@@ -53,7 +62,7 @@ export default authMiddleware({
           !evaluatorProjectIds.includes(projectId) &&
           !adminProjectIds.includes(projectId)
         ) {
-          return redirectToSignIn({ returnBackUrl: req.url });
+          return Response.redirect(new URL("/", req.url));
         }
       }
     }
