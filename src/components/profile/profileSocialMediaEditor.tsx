@@ -177,6 +177,8 @@ const ProfileSocialMediaEditor = (props: PropType) => {
                     onPress={() => {
                       handleDelete(socialMedia);
                     }}
+                    variant="light"
+                    isIconOnly
                   >
                     <Trash />
                   </Button>

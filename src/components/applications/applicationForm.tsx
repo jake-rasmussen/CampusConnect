@@ -145,28 +145,27 @@ const ApplicationForm = (props: PropType) => {
   } else {
     return (
       <section className="flex flex-col gap-4">
-        {
-          name && deadline && description && (
-            <>
-              <h1 className="text-center text-4xl font-black uppercase text-black underline">
-                {name}
-              </h1>
-              {!readonly && (
-                <h2 className="text-center text-lg font-bold text-black">
-                  {`Deadline: ${deadline
-                      ? dateToStringFormatted(deadline) +
+        {name && deadline && description && (
+          <>
+            <h1 className="text-center text-4xl font-black uppercase text-black underline">
+              {name}
+            </h1>
+            {!readonly && (
+              <h2 className="text-center text-lg font-bold text-black">
+                {`Deadline: ${
+                  deadline
+                    ? dateToStringFormatted(deadline) +
                       " at " +
                       dateToTimeStringFormatted(deadline)
-                      : " TBD"
-                    }`}
-                </h2>
-              )}
+                    : " TBD"
+                }`}
+              </h2>
+            )}
 
-              <p className="text-center text-black">{description}</p>
-            </>
-          )
-        }
-        
+            <p className="text-center text-black">{description}</p>
+          </>
+        )}
+
         <div className="flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-1 border-black bg-gradient-to-r from-primary to-secondary p-10">
           <form className="flex flex-col gap-y-10">
             {questions.map((question: ApplicationQuestion, index: number) => (

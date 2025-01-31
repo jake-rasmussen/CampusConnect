@@ -3,7 +3,7 @@ import Error from "next/error";
 import { useRouter } from "next/router";
 
 import LoadingPage from "~/components/loadingPage";
-import CreateProfileEditor from "~/components/profile/createProfileEditor";
+import ProfileEditor from "~/components/profile/profileEditor";
 import ProfileDashboard from "~/components/profile/profileDashboard";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";

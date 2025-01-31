@@ -28,7 +28,7 @@ const MyApplications = () => {
   } else {
     const paginatedApplications = applicationSubmissions.slice(
       (page - 1) * limit,
-      page * limit
+      page * limit,
     );
 
     const totalPages = Math.ceil(applicationSubmissions.length / limit);
