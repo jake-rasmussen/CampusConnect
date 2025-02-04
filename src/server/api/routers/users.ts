@@ -1,7 +1,7 @@
-import { getAuth } from "@clerk/nextjs/dist/types/server";
 import { UserType } from "@prisma/client";
 import { z } from "zod";
 
+import { establishMetadata } from "~/pages/api/webhook";
 import { createTRPCRouter, protectedProcedure, t } from "../trpc";
 
 export const usersRouter = createTRPCRouter({
@@ -64,8 +64,12 @@ export const usersRouter = createTRPCRouter({
           emailAddress,
           userType,
         },
+        include: {
+          memberships: true,
+        },
       });
 
+      await establishMetadata(user);
       return user;
     }),
   getUserType: t.procedure

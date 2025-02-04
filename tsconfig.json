@@ -28,6 +28,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs"
-, ".prettierrc.cjs", "src/pages/project/[projectId]"  ],
+, ".prettierrc.cjs", "src/pages/startups/[projectId]"  ],
   "exclude": ["node_modules"]
 }

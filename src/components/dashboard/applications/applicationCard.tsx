@@ -126,7 +126,7 @@ const ApplicationCard = (props: PropType) => {
             {status === ApplicationSubmissionStatus.NEW &&
               application.status !== ApplicationStatus.CLOSED &&
               application.status !== ApplicationStatus.DRAFT && (
-                <Link href={`/project/${projectId}/apply/${application.id}`}>
+                <Link href={`/startups/${projectId}/apply/${application.id}`}>
                   <button
                     className="mr-1 flex flex-row transition duration-300 ease-in-out hover:translate-x-2"
                     style={{ color: secondaryColor }} // Inline style for dynamic color
@@ -136,7 +136,7 @@ const ApplicationCard = (props: PropType) => {
                 </Link>
               )}
             {status === ApplicationSubmissionStatus.DRAFT && (
-              <Link href={`/project/${projectId}/apply/${application.id}`}>
+              <Link href={`/startups/${projectId}/apply/${application.id}`}>
                 <button
                   className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
                   style={{ color: secondaryColor }} // Inline style for dynamic color

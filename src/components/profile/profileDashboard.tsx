@@ -70,7 +70,7 @@ const ProfileDashboard = ({ profile }: PropType) => {
         </div>
       </header>
 
-      <section className="mx-4 my-40 flex max-w-5xl flex-col-reverse gap-8 rounded-3xl bg-gradient-to-r  from-secondary to-primary p-8 text-white shadow-2xl md:flex-row">
+      <section className="mx-4 my-40 flex w-full max-w-5xl flex-col-reverse gap-8 rounded-3xl bg-gradient-to-r from-secondary to-primary p-8 text-white shadow-2xl md:flex-row">
         <div className="flex w-full flex-none flex-col gap-4 md:w-56">
           <div className="flex flex-col gap-2">
             <h1 className="text-xl font-semibold">Area of Focus</h1>

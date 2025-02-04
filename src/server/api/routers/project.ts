@@ -175,47 +175,47 @@ export const projectRouter = createTRPCRouter({
         },
       });
 
-      // Automatically make the user an admin in the project that they had created
-      const userId = ctx.user.userId;
-      await ctx.prisma.member.create({
-        data: {
-          projectId: project.id,
-          userId,
-          type: ProjectMemberType.ADMIN,
-        },
-      });
+      // // Automatically make the user an admin in the project that they had created
+      // const userId = ctx.user.userId;
+      // await ctx.prisma.member.create({
+      //   data: {
+      //     projectId: project.id,
+      //     userId,
+      //     type: ProjectMemberType.ADMIN,
+      //   },
+      // });
 
-      // Update the user's Clerk metadata
-      const user = await ctx.prisma.user.findUnique({
-        where: {
-          userId,
-        },
-        include: {
-          memberships: true,
-        },
-      });
+      // // Update the user's Clerk metadata
+      // const user = await ctx.prisma.user.findUnique({
+      //   where: {
+      //     userId,
+      //   },
+      //   include: {
+      //     memberships: true,
+      //   },
+      // });
 
-      if (user) {
-        const evaluatorProjectIds: string[] = [];
-        const adminProjectIds: string[] = [];
+      // if (user) {
+      //   const evaluatorProjectIds: string[] = [];
+      //   const adminProjectIds: string[] = [];
 
-        user.memberships.forEach((membership: Member) => {
-          if (membership.type === ProjectMemberType.ADMIN) {
-            adminProjectIds.push(membership.projectId);
-          } else {
-            evaluatorProjectIds.push(membership.projectId);
-          }
-        });
+      //   user.memberships.forEach((membership: Member) => {
+      //     if (membership.type === ProjectMemberType.ADMIN) {
+      //       adminProjectIds.push(membership.projectId);
+      //     } else {
+      //       evaluatorProjectIds.push(membership.projectId);
+      //     }
+      //   });
 
-        adminProjectIds.push(project.id);
+      //   adminProjectIds.push(project.id);
 
-        await clerkClient.users.updateUserMetadata(user.externalId, {
-          publicMetadata: {
-            evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
-            adminProjectIds: JSON.stringify(adminProjectIds),
-          },
-        });
-      }
+      //   await clerkClient.users.updateUserMetadata(user.externalId, {
+      //     publicMetadata: {
+      //       evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
+      //       adminProjectIds: JSON.stringify(adminProjectIds),
+      //     },
+      //   });
+      // }
 
       return project;
     }),
@@ -360,6 +360,28 @@ export const projectRouter = createTRPCRouter({
           validation,
           school: School.JOHNS_HOPKINS_UNIVERSITY,
           userId: ctx.user.userId,
+        },
+      });
+    }),
+  getAllProjectCreationForms: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.projectCreationForm.findMany({
+      include: {
+        user: true,
+      },
+    });
+  }),
+  deleteProjectCreationForm: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+
+      return await ctx.prisma.projectCreationForm.delete({
+        where: {
+          id,
         },
       });
     }),

@@ -64,7 +64,7 @@ const ProfileEditor = ({ editType, initialValues = {} }: PropType) => {
         year: initialValues.year || "",
       });
     }
-  }, [initialValues]);
+  }, []);
 
   const createProfile = api.profileRouter.createProfile.useMutation({
     onSuccess() {

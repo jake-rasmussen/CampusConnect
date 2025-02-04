@@ -6,7 +6,7 @@ export default authMiddleware({
     const url = new URL(req.url);
 
     // Allow public routes
-    if (url.pathname === "/" || url.pathname.startsWith("/api/webhook")) return;
+    if (url.pathname === "/" || url.pathname.startsWith("/api/")) return;
 
     // Redirect unauthenticated users to sign-in
     if (!auth.userId && !auth.isPublicRoute) {
@@ -21,9 +21,21 @@ export default authMiddleware({
     };
 
     if (metadata) {
+      if (
+        url.pathname === "/get-started" &&
+        metadata.userType &&
+        metadata.userType !== UserType.INCOMPLETE
+      ) {
+        if (metadata.userType === UserType.EMPLOYEE) {
+          return Response.redirect(new URL("/startups", req.url));
+        } else {
+          return Response.redirect(new URL("/my-startups", req.url));
+        }
+      }
+
       // Redirect users with INCOMPLETE user type to /get-started
       if (
-        (!metadata || metadata.userType === UserType.INCOMPLETE) &&
+        metadata.userType === UserType.INCOMPLETE &&
         url.pathname !== "/get-started"
       ) {
         return Response.redirect(new URL("/get-started", req.url));
@@ -41,7 +53,11 @@ export default authMiddleware({
       if (url.pathname.startsWith("/admin/")) {
         const projectId = extractProjectId(url.pathname, "admin");
         if (projectId && !adminProjectIds.includes(projectId)) {
-          return redirectToSignIn({ returnBackUrl: req.url });
+          if (!auth.userId) {
+            return redirectToSignIn({ returnBackUrl: req.url });
+          } else {
+            return Response.redirect(new URL("/", req.url));
+          }
         }
       }
 
@@ -53,7 +69,21 @@ export default authMiddleware({
           !evaluatorProjectIds.includes(projectId) &&
           !adminProjectIds.includes(projectId)
         ) {
-          return redirectToSignIn({ returnBackUrl: req.url });
+          if (!auth.userId) {
+            return redirectToSignIn({ returnBackUrl: req.url });
+          } else {
+            return Response.redirect(new URL("/", req.url));
+          }
+        }
+      }
+
+      if (url.pathname.startsWith("/school-admin/")) {
+        if (metadata.userType !== "SCHOOL_ADMIN") {
+          if (!auth.userId) {
+            return redirectToSignIn({ returnBackUrl: req.url });
+          } else {
+            return Response.redirect(new URL("/", req.url));
+          }
         }
       }
     }

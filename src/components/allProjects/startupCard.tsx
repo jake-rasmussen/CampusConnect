@@ -30,7 +30,7 @@ const StartupCard = (props: PropTypes) => {
               ? role === ProjectMemberType.ADMIN
                 ? `/admin/${project.id}`
                 : `/evaluator/${project.id}`
-              : `/project/${project.id}`
+              : `/startups/${project.id}`
           }
           className="h-full w-full"
         >

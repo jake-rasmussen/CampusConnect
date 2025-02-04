@@ -118,7 +118,7 @@ const ApplicationPreviewCard = (props: PropType) => {
                     Close
                   </Button>
                   <Link
-                    href={`/project/${application.projectId}/apply/${application.id}`}
+                    href={`/startups/${application.projectId}/apply/${application.id}`}
                   >
                     <Button color="primary" onPress={onClose}>
                       Apply

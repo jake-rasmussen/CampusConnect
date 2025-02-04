@@ -112,8 +112,8 @@ const CreateProjectEditor = () => {
                             .string()
                             .min(1, "Enter a description")
                             .max(
-                              500,
-                              "Description must be less than 500 characters",
+                              1000,
+                              "Description must be less than 1000 characters",
                             )}
                         >
                           {({ value, setValue, onBlur, isValid, errors }) => (

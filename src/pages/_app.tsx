@@ -9,10 +9,13 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 
+import { useState } from "react";
+
+import LoadingPage from "~/components/loadingPage";
+
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import { useEffect, useState, type ReactElement, type ReactNode } from "react";
-import LoadingPage from "~/components/loadingPage";
+import type { ReactElement, ReactNode } from "react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -42,9 +45,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     <main className="min-h-screen w-screen overflow-y-hidden bg-background">
       <Providers pageProps={pageProps}>
         <Navbar setIsLoadingNavbar={setIsNavbarLoading} />
-        {
-          !isNavbarLoading && <>{getLayout(<Component {...pageProps} />)}</>
-        }
+        {isNavbarLoading ? (
+          <LoadingPage />
+        ) : (
+          <>{getLayout(<Component {...pageProps} />)}</>
+        )}
       </Providers>
     </main>
   );

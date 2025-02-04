@@ -188,6 +188,7 @@ enum UserType {
   INCOMPLETE
   EMPLOYEE
   EMPLOYER
+  SCHOOL_ADMIN
 }
 
 model User {
@@ -202,6 +203,7 @@ model User {
   memberships            Member[]
   applicationSubmissions ApplicationSubmission[]
   profile                Profile?
+  projectCreationForm    ProjectCreationForm[]
 }
 
 model Profile {
@@ -378,4 +380,5 @@ model ProjectCreationForm {
   validation String
   school     School
   userId     String
+  user       User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }

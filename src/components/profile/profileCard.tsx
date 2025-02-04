@@ -25,9 +25,7 @@ const ProfileCard = (props: PropType) => {
           <h1>
             {profile.user.firstName} {profile.user.lastName}
           </h1>
-          <p className="text-neutral-400 text-center">
-            {profile.year}
-          </p>
+          <p className="text-center text-neutral-400">{profile.year}</p>
         </CardHeader>
         <Divider />
         <CardBody className="flex flex-row">
