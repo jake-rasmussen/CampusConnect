@@ -28,8 +28,15 @@ export const profileRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { skills, about, school, year, socialMedias, majors, minors = [] } =
-        input;
+      const {
+        skills,
+        about,
+        school,
+        year,
+        socialMedias,
+        majors,
+        minors = [],
+      } = input;
 
       const userId = ctx.user.userId;
 
@@ -70,7 +77,7 @@ export const profileRouter = createTRPCRouter({
           .optional(),
         majors: z.array(z.nativeEnum(Focus)).optional(),
         minors: z.array(z.nativeEnum(Focus)).optional(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.userId;

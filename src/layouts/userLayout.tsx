@@ -1,7 +1,5 @@
 import { type ReactElement } from "react";
 
-import Navbar from "~/components/navbar";
-
 type Layout = ({
   children,
   className,

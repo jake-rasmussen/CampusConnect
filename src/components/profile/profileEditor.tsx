@@ -10,13 +10,13 @@ import { Focus, ProfileSocialMedia, School } from "@prisma/client";
 import { motion } from "framer-motion";
 import { Form } from "houseform";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Edit } from "tabler-icons-react";
 
 import { api } from "~/utils/api";
-import { SocialMediaFormType } from "./profileSocialMediaEditor";
 import ProfileForm from "./profileForm";
-import { Edit } from "tabler-icons-react";
+import { SocialMediaFormType } from "./profileSocialMediaEditor";
 
 export type ProfileFormType = {
   majors: Focus[];
@@ -37,7 +37,9 @@ const ProfileEditor = ({ editType, initialValues = {} }: PropType) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [skills, setSkills] = useState<string[]>(initialValues.skills || []);
-  const [socialMedias, setSocialMedias] = useState<SocialMediaFormType[]>(initialValues.socialMedia || []);
+  const [socialMedias, setSocialMedias] = useState<SocialMediaFormType[]>(
+    initialValues.socialMedia || [],
+  );
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState<Partial<ProfileFormType>>({
     majors: initialValues.majors || [],
@@ -100,18 +102,23 @@ const ProfileEditor = ({ editType, initialValues = {} }: PropType) => {
   return (
     <>
       {editType === "create" ? (
-        <Button onPress={() => {
-          setStep(0);
-          onOpen();
-        }} color="primary">
+        <Button
+          onPress={() => {
+            setStep(0);
+            onOpen();
+          }}
+          color="primary"
+        >
           Create Profile
         </Button>
       ) : (
-        <button onClick={() => {
-          setStep(0);
-          onOpen();
-        }}>
-          <Edit className="h-20 w-20 text-primary hover:text-secondary transition duration-300 ease-in-out" />
+        <button
+          onClick={() => {
+            setStep(0);
+            onOpen();
+          }}
+        >
+          <Edit className="h-20 w-20 text-primary transition duration-300 ease-in-out hover:text-secondary" />
         </button>
       )}
 
@@ -153,7 +160,7 @@ const ProfileEditor = ({ editType, initialValues = {} }: PropType) => {
                   <ModalHeader>
                     {editType === "create" ? "Create Profile" : "Edit Profile"}
                   </ModalHeader>
-                  <ModalBody className="max-h-[70vh] overflow-y-scroll overflow-visible">
+                  <ModalBody className="max-h-[70vh] overflow-visible overflow-y-scroll">
                     <motion.div
                       key={step}
                       initial="enter"

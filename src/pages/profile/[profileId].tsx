@@ -3,8 +3,8 @@ import Error from "next/error";
 import { useRouter } from "next/router";
 
 import LoadingPage from "~/components/loadingPage";
-import ProfileEditor from "~/components/profile/profileEditor";
 import ProfileDashboard from "~/components/profile/profileDashboard";
+import ProfileEditor from "~/components/profile/profileEditor";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 

@@ -3,13 +3,13 @@ import { Profile, User } from "@prisma/client";
 import Error from "next/error";
 import React, { useState } from "react";
 
-import LoadingPage from "~/components/loadingPage";
 import LoadingSection from "~/components/loadingSection";
 import ProfileCard from "~/components/profile/profileCard";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
 import type { NextPageWithLayout } from "~/pages/_app";
+import PageWrapper from "~/components/pageWrapper";
 
 const ProfilePage: NextPageWithLayout = () => {
   const [page, setPage] = useState(1);
@@ -30,17 +30,11 @@ const ProfilePage: NextPageWithLayout = () => {
   const totalPages = Math.ceil(totalProfiles / limit);
 
   return (
-    <div className="mb-20 flex h-full w-full flex-col items-center justify-center">
-      <section className="mb-14 mt-40">
-        <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
-          Connect
-        </h1>
-      </section>
-
+    <PageWrapper title="Discover">
       {isLoading ? (
         <LoadingSection />
       ) : (
-        <div className="flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-20">
+        <div className="flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-20 mt-20">
           {profileData.totalProfiles > 0 ? (
             <>
               {profileData.profiles.map((profile: Profile & { user: User }) => (
@@ -63,7 +57,7 @@ const ProfilePage: NextPageWithLayout = () => {
           )}
         </div>
       )}
-    </div>
+    </PageWrapper>
   );
 };
 

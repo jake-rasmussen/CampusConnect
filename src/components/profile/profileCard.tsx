@@ -2,7 +2,7 @@ import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/react";
 import { Focus, Profile, User } from "@prisma/client";
 import Link from "next/link";
-import { UserSearch } from "tabler-icons-react";
+import { User as UserIcon } from "tabler-icons-react";
 
 import { uppercaseToCapitalize } from "~/utils/helpers";
 
@@ -19,14 +19,14 @@ const ProfileCard = (props: PropType) => {
       <Card className="max-w-[400px] overflow-visible transition duration-300 ease-in-out hover:scale-110 hover:cursor-pointer">
         <CardHeader className="relative flex flex-col pt-20">
           <div className="absolute top-0 -translate-y-1/2">
-            <UserSearch className="h-36 w-36 rounded-full border border-8 bg-secondary p-4 text-white shadow-xl" />
+            <UserIcon className="h-36 w-36 rounded-full border border-8 bg-secondary p-4 text-white shadow-xl" />
           </div>
 
           <h1>
             {profile.user.firstName} {profile.user.lastName}
           </h1>
-          <p className="text-neutral-400">
-            {profile.year} @ {uppercaseToCapitalize(profile.school)}
+          <p className="text-neutral-400 text-center">
+            {profile.year}
           </p>
         </CardHeader>
         <Divider />

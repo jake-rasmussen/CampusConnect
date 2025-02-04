@@ -11,7 +11,8 @@ import "~/styles/globals.css";
 
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import type { ReactElement, ReactNode } from "react";
+import { useEffect, useState, type ReactElement, type ReactNode } from "react";
+import LoadingPage from "~/components/loadingPage";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -35,12 +36,15 @@ const Providers: React.FC<{ children: React.ReactNode; pageProps: any }> = ({
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
+  const [isNavbarLoading, setIsNavbarLoading] = useState(true);
 
   return (
     <main className="min-h-screen w-screen overflow-y-hidden bg-background">
       <Providers pageProps={pageProps}>
-        <Navbar />
-        {getLayout(<Component {...pageProps} />)}
+        <Navbar setIsLoadingNavbar={setIsNavbarLoading} />
+        {
+          !isNavbarLoading && <>{getLayout(<Component {...pageProps} />)}</>
+        }
       </Providers>
     </main>
   );
