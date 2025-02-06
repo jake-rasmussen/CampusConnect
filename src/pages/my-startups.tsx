@@ -102,7 +102,7 @@ const MyStartups: NextPageWithLayout = () => {
     return (
       <PageWrapper title="My Startups">
         <div className="flex w-full flex-col items-center gap-8">
-          {totalProjects > 0 && false ? (
+          {totalProjects > 0 ? (
             <>
               <section className="min-w-2xl flex w-full max-w-2xl flex-row items-end gap-4">
                 <Input
@@ -120,7 +120,7 @@ const MyStartups: NextPageWithLayout = () => {
                 </div>
               </section>
 
-              <div className="flex w-full max-w-6xl flex-wrap items-center justify-center">
+              <div className="flex w-full max-w-6xl flex-wrap items-center justify-center gap-8">
                 {displayedProjects.map(([project, type], index) => (
                   <StartupCard project={project} role={type} key={index} />
                 ))}

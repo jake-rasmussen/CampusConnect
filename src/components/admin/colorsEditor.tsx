@@ -51,8 +51,8 @@ const ColorsEditor = (props: PropType) => {
         <p>Primary Color</p>
 
         <div className="flex grow flex-row items-center justify-end gap-4">
-          <Popover placement="bottom-start">
-            <PopoverTrigger>
+          <Popover placement="bottom-start" backdrop="blur">
+            <PopoverTrigger className="focus:outline-none focus:ring-0 active:bg-transparent focus:opacity-100">
               <div
                 className="h-8 w-14 rounded-sm ring ring-black ring-offset-2"
                 style={{ backgroundColor: primaryColor }}
@@ -66,6 +66,8 @@ const ColorsEditor = (props: PropType) => {
               />
             </PopoverContent>
           </Popover>
+
+
 
           <Input
             value={primaryColor}
@@ -82,7 +84,7 @@ const ColorsEditor = (props: PropType) => {
         <p>Secondary Color</p>
 
         <div className="flex flex-row items-center justify-end gap-4">
-          <Popover placement="bottom-start">
+          <Popover placement="bottom-start" backdrop="blur">
             <PopoverTrigger>
               <div
                 className="h-8 w-14 rounded-sm ring ring-black ring-offset-2"

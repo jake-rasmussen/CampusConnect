@@ -14,50 +14,49 @@ type PropType = {
 const CreateProjectCard = (props: PropType) => {
   const { projectCreationForm } = props;
 
-  const createProject = api.projectRouter.createProject.useMutation();
-  const createMembership = api.memberRouter.createMember.useMutation();
+  const createProject = api.projectRouter.createProjectAsSchoolAdmin.useMutation({
+    onSuccess() {
+      toast.dismiss();
+      toast.success("Successfully created project!");
 
-  const deleteProjectCreationForm = api.projectRouter.deleteProjectCreationForm.useMutation();
+      queryClient.invalidate();
+    },
+    onError() {
+      toast.dismiss();
+      toast.error("Error...")
+    }
+  });
+
+  const deleteProjectCreationForm = api.projectRouter.deleteProjectCreationForm.useMutation({
+    onSuccess() {
+      toast.dismiss();
+      toast.success("Successfully deleted project!");
+
+      queryClient.invalidate();
+    },
+    onError() {
+      toast.dismiss();
+      toast.error("Error...")
+    }
+  });
 
   const queryClient = api.useContext();
 
   const handleCreateProject = async () => {
     toast.loading("Creating project...");
 
-    createProject.mutateAsync({
+    createProject.mutate({
       name: projectCreationForm.name,
-      description: "Please enter a description",
-      school: School.JOHNS_HOPKINS_UNIVERSITY,
-    }).then((project) => {
-      createMembership.mutateAsync({
-        userId: projectCreationForm.userId,
-        projectId: project.id,
-      }).then(() => {
-        deleteProjectCreationForm.mutateAsync({
-          id: projectCreationForm.id
-        }).then(() => {
-          toast.dismiss();
-          toast.success("Successfully created project!");
-
-          queryClient.invalidate();
-        });
-      })
-    }).catch(() => {
-      toast.dismiss();
-      toast.error("Error...")
+      userId: projectCreationForm.userId,
+      projectCreationFormId: projectCreationForm.id,
     });
   }
 
   const handleDeleteProjectCreationForm = async () => {
     toast.loading("Deleting project...");
 
-    deleteProjectCreationForm.mutateAsync({
+    deleteProjectCreationForm.mutate({
       id: projectCreationForm.id
-    }).then(() => {
-      toast.dismiss();
-      toast.success("Successfully deleted project!");
-
-      queryClient.invalidate();
     });
   }
 

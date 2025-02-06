@@ -244,6 +244,7 @@ model Project {
   colorsId     String
   colors       Colors        @relation(fields: [colorsId], references: [id])
   hasBanner    Boolean       @default(false)
+  isVisible    Boolean       @default(false)
 }
 
 model Member {

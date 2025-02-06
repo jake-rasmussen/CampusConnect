@@ -22,7 +22,7 @@ const DescriptionEditor = (props: PropType) => {
   const queryClient = api.useContext();
 
   const updateDescription =
-    api.projectRouter.updateDescriptionByProjectId.useMutation({
+    api.projectRouter.updateProject.useMutation({
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Updated Description!");

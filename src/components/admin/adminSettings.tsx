@@ -13,11 +13,13 @@ import { Brush, Flag2, Settings } from "tabler-icons-react";
 import DeleteProjectEditor from "../dashboard/deleteProjectEditor";
 import BannerEditor from "./bannerEditor";
 import ColorsEditor from "./colorsEditor";
+import VisibilityEditor from "./visibilityEditor";
 
 enum SettingsSection {
   "COLORS",
   "BANNER",
   "DELETE",
+  "VISIBILITY"
 }
 
 type PropType = {
@@ -58,10 +60,10 @@ const AdminSettings = (props: PropType) => {
                   </Button>
                   <Button
                     variant="light"
-                    onPress={() => setSettingsSection(SettingsSection.BANNER)}
-                    endContent={<Flag2 />}
+                    onPress={() => setSettingsSection(SettingsSection.VISIBILITY)}
+                    endContent={<Brush />}
                   >
-                    Change Banner
+                    Change Visibility
                   </Button>
 
                   <div className="flex w-full grow items-end">
@@ -84,6 +86,10 @@ const AdminSettings = (props: PropType) => {
 
                     {settingsSection === SettingsSection.BANNER && (
                       <BannerEditor projectId={projectId} />
+                    )}
+
+                    {settingsSection === SettingsSection.VISIBILITY && (
+                      <VisibilityEditor projectId={projectId} />
                     )}
 
                     {settingsSection === SettingsSection.DELETE && (
