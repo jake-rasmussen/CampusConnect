@@ -4,8 +4,8 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/modal";
-import { Button, useDisclosure } from "@nextui-org/react";
+} from "@heroui/modal";
+import { Button, useDisclosure } from "@heroui/react";
 import { Focus, ProfileSocialMedia, School } from "@prisma/client";
 import { motion } from "framer-motion";
 import { Form } from "houseform";
@@ -160,7 +160,7 @@ const ProfileEditor = ({ editType, initialValues = {} }: PropType) => {
                   <ModalHeader>
                     {editType === "create" ? "Create Profile" : "Edit Profile"}
                   </ModalHeader>
-                  <ModalBody className="max-h-[70vh] overflow-visible overflow-y-scroll">
+                  <ModalBody className="max-h-[70vh] overflow-visible overflow-y-scroll overflow-visible">
                     <motion.div
                       key={step}
                       initial="enter"

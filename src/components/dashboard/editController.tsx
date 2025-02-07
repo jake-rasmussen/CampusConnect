@@ -6,7 +6,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 import { Edit, SquarePlus } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";

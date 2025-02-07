@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/input";
+import { Input } from "@heroui/input";
 import {
   Button,
   Modal,
@@ -8,7 +8,7 @@ import {
   ModalHeader,
   Pagination,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Colors, Project, ProjectMemberType } from "@prisma/client";
 import Error from "next/error";
 import React, { useEffect, useState } from "react";

@@ -1,4 +1,4 @@
-import { Pagination } from "@nextui-org/react";
+import { Pagination } from "@heroui/react";
 import { Profile, Project, ProjectCreationForm, User } from "@prisma/client";
 import Error from "next/error";
 import { useState } from "react";
@@ -58,7 +58,8 @@ const CreateProject: NextPageWithLayout = () => {
           ) : (
             <>
               <p className="px-8 text-lg">
-                No project creation forms found. Please check back at a later date.
+                No project creation forms found. Please check back at a later
+                date.
               </p>
             </>
           )}

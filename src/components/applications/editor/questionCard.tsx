@@ -1,4 +1,4 @@
-import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Input, Select, SelectItem } from "@heroui/react";
 import { ApplicationQuestionType } from "@prisma/client";
 import { DotsVertical, X } from "tabler-icons-react";
 

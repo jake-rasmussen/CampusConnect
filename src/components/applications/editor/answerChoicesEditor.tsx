@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 import { ApplicationQuestion, ApplicationQuestionType } from "@prisma/client";
 import { Circle, SquarePlus, X } from "tabler-icons-react";
 

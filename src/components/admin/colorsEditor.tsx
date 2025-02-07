@@ -7,7 +7,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ProjectContext } from "lib/context";
 import { useContext, useState } from "react";
 import { HexColorPicker } from "react-colorful";
@@ -52,7 +52,7 @@ const ColorsEditor = (props: PropType) => {
 
         <div className="flex grow flex-row items-center justify-end gap-4">
           <Popover placement="bottom-start" backdrop="blur">
-            <PopoverTrigger className="focus:outline-none focus:ring-0 active:bg-transparent focus:opacity-100">
+            <PopoverTrigger className="focus:opacity-100 focus:outline-none focus:ring-0 active:bg-transparent">
               <div
                 className="h-8 w-14 rounded-sm ring ring-black ring-offset-2"
                 style={{ backgroundColor: primaryColor }}
@@ -66,8 +66,6 @@ const ColorsEditor = (props: PropType) => {
               />
             </PopoverContent>
           </Popover>
-
-
 
           <Input
             value={primaryColor}

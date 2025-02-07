@@ -1,6 +1,5 @@
-import { Button, Divider } from "@nextui-org/react";
+import { Divider } from "@heroui/react";
 import {
-  Focus,
   Profile,
   ProfileSocialMedia,
   SocialMediaPlatformType,
@@ -12,7 +11,6 @@ import {
   BrandLinkedin,
   BrandTwitter,
   User as UserIcon,
-  UserSearch,
   WorldWww,
 } from "tabler-icons-react";
 
@@ -24,10 +22,12 @@ type PropType = {
     user: User;
     profileSocialMedia: ProfileSocialMedia[];
   };
+  editable?: boolean;
 };
 
-const ProfileDashboard = ({ profile }: PropType) => {
-  // Prepare initial values
+const ProfileDashboard = (props: PropType) => {
+  const { profile, editable = false } = props;
+
   const initialValues = {
     about: profile.about || "",
     skills: profile.skills || [],
@@ -40,9 +40,11 @@ const ProfileDashboard = ({ profile }: PropType) => {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-10">
-      <div className="absolute right-0 top-0 mx-4 mt-64">
-        <ProfileEditor editType="update" initialValues={initialValues} />
-      </div>
+      {editable && (
+        <div className="absolute right-0 top-0 mx-4 mt-64">
+          <ProfileEditor editType="update" initialValues={initialValues} />
+        </div>
+      )}
 
       <header className="h-60 w-full bg-gradient-to-r from-secondary to-primary shadow-2xl">
         <div className="relative mx-auto flex h-full max-w-4xl justify-center px-4 md:justify-start">

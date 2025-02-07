@@ -1,5 +1,5 @@
-import { Card, CardBody } from "@nextui-org/card";
-import { Chip, Divider } from "@nextui-org/react";
+import { Card, CardBody } from "@heroui/card";
+import { Chip, Divider } from "@heroui/react";
 import { Colors, Project, ProjectMemberType, School } from "@prisma/client";
 import Link from "next/link";
 import React from "react";

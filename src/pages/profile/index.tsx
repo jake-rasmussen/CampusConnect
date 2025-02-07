@@ -6,7 +6,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import Error from "next/error";
 
 import LoadingPage from "~/components/loadingPage";
@@ -33,7 +33,7 @@ const Profile: NextPageWithLayout = () => {
   } else if (isError) {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else if (profile) {
-    return <ProfileDashboard profile={profile} />;
+    return <ProfileDashboard profile={profile} editable />;
   } else {
     return (
       <PageWrapper title="My Profile">

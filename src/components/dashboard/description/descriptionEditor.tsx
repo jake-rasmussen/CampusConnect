@@ -1,4 +1,4 @@
-import { Textarea } from "@nextui-org/react";
+import { Textarea } from "@heroui/react";
 import { Field, Form } from "houseform";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -21,18 +21,17 @@ const DescriptionEditor = (props: PropType) => {
 
   const queryClient = api.useContext();
 
-  const updateDescription =
-    api.projectRouter.updateProject.useMutation({
-      onSuccess() {
-        toast.dismiss();
-        toast.success("Successfully Updated Description!");
-        queryClient.invalidate().catch((e) => console.log(e));
-      },
-      onError() {
-        toast.dismiss();
-        toast.error("Error...");
-      },
-    });
+  const updateDescription = api.projectRouter.updateProject.useMutation({
+    onSuccess() {
+      toast.dismiss();
+      toast.success("Successfully Updated Description!");
+      queryClient.invalidate().catch((e) => console.log(e));
+    },
+    onError() {
+      toast.dismiss();
+      toast.error("Error...");
+    },
+  });
 
   const handleSubmit = (values: EditorFormType) => {
     updateDescription.mutate({

@@ -9,7 +9,7 @@ import {
   ModalHeader,
   Radio,
   RadioGroup,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { UserType } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";

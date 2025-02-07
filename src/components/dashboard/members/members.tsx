@@ -10,7 +10,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import lodash from "lodash";
 import toast from "react-hot-toast";
 import { TrashX } from "tabler-icons-react";

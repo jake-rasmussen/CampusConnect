@@ -4,8 +4,8 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/modal";
-import { Button, Input, Textarea, useDisclosure } from "@nextui-org/react";
+} from "@heroui/modal";
+import { Button, Input, Textarea, useDisclosure } from "@heroui/react";
 import { Field, Form } from "houseform";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";

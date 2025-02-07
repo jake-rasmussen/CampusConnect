@@ -6,9 +6,9 @@ import {
   ModalContent,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useState } from "react";
-import { Brush, Flag2, Settings } from "tabler-icons-react";
+import { Brush, Eye, Flag2, Settings } from "tabler-icons-react";
 
 import DeleteProjectEditor from "../dashboard/deleteProjectEditor";
 import BannerEditor from "./bannerEditor";
@@ -19,7 +19,7 @@ enum SettingsSection {
   "COLORS",
   "BANNER",
   "DELETE",
-  "VISIBILITY"
+  "VISIBILITY",
 }
 
 type PropType = {
@@ -60,8 +60,10 @@ const AdminSettings = (props: PropType) => {
                   </Button>
                   <Button
                     variant="light"
-                    onPress={() => setSettingsSection(SettingsSection.VISIBILITY)}
-                    endContent={<Brush />}
+                    onPress={() =>
+                      setSettingsSection(SettingsSection.VISIBILITY)
+                    }
+                    endContent={<Eye />}
                   >
                     Change Visibility
                   </Button>

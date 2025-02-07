@@ -1,12 +1,11 @@
 import {
   Button,
   Modal,
-  ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import toast from "react-hot-toast";
 import { Trash } from "tabler-icons-react";
 
@@ -22,7 +21,7 @@ const DeleteController = (props: PropType) => {
 
   return (
     <>
-      <Button className="group" onPress={onOpen}>
+      <Button className="group" onPress={onOpen} isIconOnly variant="light">
         <Trash className="h-full w-full transition duration-300 ease-in-out group-hover:rotate-12 group-hover:scale-110 group-hover:text-red-600" />
       </Button>
 

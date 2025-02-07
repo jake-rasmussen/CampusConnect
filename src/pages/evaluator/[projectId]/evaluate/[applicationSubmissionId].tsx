@@ -8,7 +8,7 @@ import {
   Select,
   SelectItem,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   ApplicationSubmissionComment,
   ApplicationSubmissionEvaluationGrade,
@@ -178,7 +178,7 @@ const EvaluateApplicationSubmission = () => {
         </section>
 
         <section className="my-10 flex w-full justify-center">
-          <div className="mx-20 flex flex-row">
+          <div className="mx-20 flex flex-col gap-8 xl:flex-row">
             <div className="min-w-[50vw]">
               <ApplicationForm
                 projectId={projectId as string}
@@ -194,7 +194,7 @@ const EvaluateApplicationSubmission = () => {
               />
             </div>
 
-            <Card className="ml-8 h-full min-w-[400px] bg-white">
+            <Card className="h-full min-w-[400px] bg-white">
               <CardHeader className="flex flex-col items-start justify-start py-4 font-bold">
                 <h1 className="font-black">Enter Comments</h1>
                 <h4 className="font-normal">

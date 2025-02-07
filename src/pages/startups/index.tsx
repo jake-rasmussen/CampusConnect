@@ -1,5 +1,5 @@
-import { Input } from "@nextui-org/input";
-import { Pagination } from "@nextui-org/react";
+import { Input } from "@heroui/input";
+import { Pagination } from "@heroui/react";
 import { School } from "@prisma/client";
 import Error from "next/error";
 import { useEffect, useState } from "react";
@@ -46,9 +46,9 @@ const AllProjects: NextPageWithLayout = () => {
     const filteredProjects = projects.filter(
       (project) =>
         project.name.toLowerCase().includes(query.toLowerCase()) &&
-        (selectedSchool ? project.school === selectedSchool : true &&
-          project.isVisible
-        ),
+        (selectedSchool
+          ? project.school === selectedSchool
+          : true && project.isVisible),
     );
 
     const paginatedProjects = filteredProjects.slice(
@@ -61,46 +61,44 @@ const AllProjects: NextPageWithLayout = () => {
     return (
       <PageWrapper title="All Startups">
         <>
-          {
-            filteredProjects.length > 0 ? (
-              <div className="flex w-full flex-col items-center gap-8">
-                <section className="flex w-full max-w-2xl">
-                  <Input
-                    label="Search Startups"
-                    value={query}
-                    onChange={(e) => {
-                      setQuery(e.target.value);
-                      setPage(1); // Reset to the first page when searching
-                    }}
-                    variant="underlined"
-                  />
-                </section>
+          {filteredProjects.length > 0 ? (
+            <div className="flex w-full flex-col items-center gap-8">
+              <section className="flex w-full max-w-2xl">
+                <Input
+                  label="Search Startups"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setPage(1); // Reset to the first page when searching
+                  }}
+                  variant="underlined"
+                />
+              </section>
 
-                <div className="flex w-full max-w-6xl flex-wrap items-center justify-center gap-8">
-                  {paginatedProjects.map((project, index) => (
-                    <StartupCard project={project} key={index} />
-                  ))}
-                </div>
-
-                {filteredProjects.length > limit && (
-                  <Pagination
-                    total={totalPages}
-                    initialPage={1}
-                    page={page}
-                    onChange={(newPage) => setPage(newPage)}
-                  />
-                )}
+              <div className="flex w-full max-w-6xl flex-wrap items-center justify-center gap-8">
+                {paginatedProjects.map((project, index) => (
+                  <StartupCard project={project} key={index} />
+                ))}
               </div>
-            ) : (
-              <>
-                <h3 className="tracking-none my-4 text-lg font-black uppercase underline md:text-xl">
-                  There are no startups
-                </h3>
-              </>
-            )
-          }
+
+              {filteredProjects.length > limit && (
+                <Pagination
+                  total={totalPages}
+                  initialPage={1}
+                  page={page}
+                  onChange={(newPage) => setPage(newPage)}
+                />
+              )}
+            </div>
+          ) : (
+            <>
+              <h3 className="tracking-none my-4 text-lg font-black uppercase underline md:text-xl">
+                There are no startups
+              </h3>
+            </>
+          )}
         </>
-      </PageWrapper >
+      </PageWrapper>
     );
   }
 };

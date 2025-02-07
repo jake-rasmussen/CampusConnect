@@ -7,14 +7,14 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   ApplicationSubmissionEvaluation,
   ApplicationSubmissionEvaluationGrade,
   User,
 } from "@prisma/client";
 import Link from "next/link";
-import { Check, ClockEdit, Cross, QuestionMark, X } from "tabler-icons-react";
+import { Check, ClockEdit, QuestionMark, X } from "tabler-icons-react";
 
 type PropType = {
   projectId: string;
@@ -29,9 +29,7 @@ const ApplicationSubmissionsTable = (props: PropType) => {
   const { projectId, applicationSubmissions } = props;
 
   const sortedApplicationSubmissions = applicationSubmissions.sort((a, b) => {
-    const firstCharA = a.user.firstName.charAt(0);
-    const firstCharB = b.user.firstName.charAt(0);
-    return firstCharA.localeCompare(firstCharB);
+    return a.user.firstName.localeCompare(b.user.firstName);
   });
 
   return (
@@ -43,9 +41,22 @@ const ApplicationSubmissionsTable = (props: PropType) => {
           <TableColumn className="text-center">Status</TableColumn>
         </TableHeader>
 
-        <TableBody>
-          {sortedApplicationSubmissions.map(
-            (applicationSubmission, index: number) => (
+        <TableBody emptyContent="There are no application submissions.">
+          {sortedApplicationSubmissions.map((applicationSubmission, index) => {
+            let evaluationIcon = <ClockEdit className="text-primary" />; // Default icon
+
+            if (applicationSubmission.applicationSubmissionEvaluation) {
+              const { evaluation } = applicationSubmission.applicationSubmissionEvaluation;
+              if (evaluation === ApplicationSubmissionEvaluationGrade.YES) {
+                evaluationIcon = <Check className="text-primary" />;
+              } else if (evaluation === ApplicationSubmissionEvaluationGrade.MAYBE) {
+                evaluationIcon = <QuestionMark className="text-primary" />;
+              } else if (evaluation === ApplicationSubmissionEvaluationGrade.NO) {
+                evaluationIcon = <X className="text-primary" />;
+              }
+            }
+
+            return (
               <TableRow key={`submissionRow${index}`}>
                 <TableCell className="font-medium text-primary underline">
                   <Link
@@ -53,44 +64,20 @@ const ApplicationSubmissionsTable = (props: PropType) => {
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    {applicationSubmission.user.firstName}{" "}
-                    {applicationSubmission.user.lastName}
+                    {applicationSubmission.user.firstName} {applicationSubmission.user.lastName}
                   </Link>
                 </TableCell>
                 <TableCell className="font-medium">
                   {applicationSubmission.id}
                 </TableCell>
                 <TableCell className="flex items-center justify-center">
-                  <Checkbox
-                    icon={
-                      applicationSubmission.applicationSubmissionEvaluation ? (
-                        applicationSubmission.applicationSubmissionEvaluation
-                          .evaluation ===
-                        ApplicationSubmissionEvaluationGrade.YES ? (
-                          <Check />
-                        ) : applicationSubmission
-                            .applicationSubmissionEvaluation.evaluation ===
-                          ApplicationSubmissionEvaluationGrade.MAYBE ? (
-                          <QuestionMark />
-                        ) : applicationSubmission
-                            .applicationSubmissionEvaluation.evaluation ===
-                          ApplicationSubmissionEvaluationGrade.NO ? (
-                          <X />
-                        ) : (
-                          <ClockEdit />
-                        )
-                      ) : (
-                        <ClockEdit />
-                      )
-                    }
-                    isSelected
-                    isReadOnly
-                    className="m-0 p-0"
-                  />
+                  <span className="flex items-center justify-center h-6 w-6">
+                    {evaluationIcon}
+                  </span>
                 </TableCell>
               </TableRow>
-            ),
-          )}
+            );
+          })}
         </TableBody>
       </Table>
     </Card>

@@ -371,7 +371,7 @@ const createMockProjectArray = (users: User[]) => {
       events: { create: generateRandomEvents() },
       contactInfo: { create: generateRandomContactInfos() },
       colors: { create: generateRandomColors() },
-      isVisible: true
+      isVisible: true,
     };
     mockProjects.push(project);
   }

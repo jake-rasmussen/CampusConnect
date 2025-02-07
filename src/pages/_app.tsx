@@ -1,5 +1,4 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { NextUIProvider } from "@nextui-org/react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Toaster } from "react-hot-toast";
@@ -16,6 +15,7 @@ import LoadingPage from "~/components/loadingPage";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import type { ReactElement, ReactNode } from "react";
+import { HeroUIProvider } from "@heroui/react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -30,10 +30,10 @@ const Providers: React.FC<{ children: React.ReactNode; pageProps: any }> = ({
   pageProps,
 }) => (
   <ClerkProvider {...pageProps}>
-    <NextUIProvider>
+    <HeroUIProvider>
       <Toaster position="bottom-center" />
       <DndProvider backend={HTML5Backend}>{children}</DndProvider>
-    </NextUIProvider>
+    </HeroUIProvider>
   </ClerkProvider>
 );
 

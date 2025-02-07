@@ -1,4 +1,4 @@
-import { Chip, Input } from "@nextui-org/react";
+import { Chip, Input } from "@heroui/react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { X } from "tabler-icons-react";
 
@@ -49,7 +49,7 @@ const SkillsCreator = (props: PropType) => {
         <div className="mx-auto flex max-w-xs flex-wrap items-center justify-center gap-2 pt-4">
           {skills.map((skill, index) => (
             <div className="relative" onClick={() => handleRemoveSkill(index)}>
-              <Chip className="h-[2rem] bg-secondary capitalize text-white shadow-xl hover:cursor-pointer">
+              <Chip className="h-[2rem] bg-secondary capitalize text-white shadow-xl hover:cursor-pointer" key={skill}>
                 {skill}
               </Chip>
 

@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Divider } from "@heroui/react";
 import {
   Application,
   ApplicationSubmissionEvaluation,
@@ -20,10 +20,11 @@ type PropType = {
     }[];
   };
   projectId: string;
+  isOpen?: boolean;
 };
 
 const ApplicationEvaluatorCard = (props: PropType) => {
-  const { application, projectId } = props;
+  const { application, projectId, isOpen=false } = props;
 
   return (
     <main className="group relative m-2 h-fit w-[17.5rem] overflow-visible p-[3px]">
@@ -72,6 +73,7 @@ const ApplicationEvaluatorCard = (props: PropType) => {
           dialogTitle="Preview Application Submissions"
           dialogDescription="Click a row to evaluate the candidate"
           className="max-w-3xl"
+          isOpen={isOpen}
         >
           <ApplicationSubmissionsTable
             projectId={projectId}

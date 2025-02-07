@@ -1,4 +1,4 @@
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { SocialMediaPlatformType } from "@prisma/client";
 import { Field, Form } from "houseform";
 import Link from "next/link";

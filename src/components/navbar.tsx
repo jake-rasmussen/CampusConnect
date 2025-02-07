@@ -1,4 +1,5 @@
 import { UserButton, useUser } from "@clerk/nextjs";
+import { Button, Chip } from "@heroui/react";
 import { UserType } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -76,6 +77,10 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
         <div className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
           <UserButton afterSignOutUrl="/" />
         </div>
+
+        {/* <Link href="" className="absolute bottom-0 translate-y-[125%]">
+          <Chip size="sm" color="warning">Give Feedback</Chip>
+        </Link> */}
       </Menu>
     );
   } else if (userData?.userType === UserType.EMPLOYER) {
@@ -118,6 +123,10 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
         <div className="absolute right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
           <UserButton afterSignOutUrl="/" />
         </div>
+
+        {/* <Link href="" className="absolute bottom-0 translate-y-[125%]">
+          <Chip size="sm" color="warning">Give Feedback</Chip>
+        </Link> */}
       </Menu>
     );
   }

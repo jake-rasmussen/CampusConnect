@@ -11,7 +11,7 @@ import {
   ModalHeader,
   useDisclosure,
   user,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { debounce } from "lodash";
 import React, { Key, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";

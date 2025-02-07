@@ -12,7 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
 import Link from "next/link";
 import { Eye } from "tabler-icons-react";

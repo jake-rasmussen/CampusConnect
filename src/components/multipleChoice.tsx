@@ -1,4 +1,4 @@
-import { Radio, RadioGroup } from "@nextui-org/react";
+import { Radio, RadioGroup } from "@heroui/react";
 import { useEffect, useState } from "react";
 
 type PropType = {
@@ -7,13 +7,14 @@ type PropType = {
   isRequired: boolean;
   label: string;
   onChange: (e: string) => void;
+  readonly?: boolean;
 };
 
 const MultipleChoice = (props: PropType) => {
-  const { answerChoices, value, isRequired, label, onChange } = props;
+  const { answerChoices, value, isRequired, label, onChange, readonly } = props;
 
   const [selectedAnswer, setSelectedAnswer] = useState<string>();
-
+  
   useEffect(() => {
     setSelectedAnswer(value);
   }, [value]);
@@ -24,7 +25,9 @@ const MultipleChoice = (props: PropType) => {
         className="text-white"
         label={<span className="text-xl text-white">{label}</span>}
         isRequired={isRequired}
+        onValueChange={(answerChoice) => onChange(answerChoice)}
         value={selectedAnswer}
+        isReadOnly={readonly}
       >
         {answerChoices.map((answerChoice: string, index: number) => {
           return (
@@ -35,10 +38,6 @@ const MultipleChoice = (props: PropType) => {
               <Radio
                 value={answerChoice}
                 id={`${answerChoice}${index}`}
-                onClick={() => {
-                  // setSelectedAnswer(answerChoice);
-                  onChange(answerChoice);
-                }}
                 color="secondary"
               >
                 <span className="text-lg text-white">{answerChoice}</span>

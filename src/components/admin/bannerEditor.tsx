@@ -4,7 +4,7 @@ import {
   Input,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";

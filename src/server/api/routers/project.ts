@@ -10,7 +10,13 @@ import {
 } from "@prisma/client";
 import { z } from "zod";
 
-import { createTRPCRouter, isAdmin, isSchoolAdmin, protectedProcedure, t } from "../trpc";
+import {
+  createTRPCRouter,
+  isAdmin,
+  isSchoolAdmin,
+  protectedProcedure,
+  t,
+} from "../trpc";
 import { updateMetadata } from "./member";
 
 export const projectRouter = createTRPCRouter({
@@ -401,7 +407,8 @@ export const projectRouter = createTRPCRouter({
         name: z.string().min(1),
         userId: z.string().min(1),
         projectCreationFormId: z.string().min(1),
-      }))
+      }),
+    )
     .use(isSchoolAdmin)
     .mutation(async ({ ctx, input }) => {
       const { name, userId, projectCreationFormId } = input;
@@ -434,7 +441,7 @@ export const projectRouter = createTRPCRouter({
       if (user) {
         try {
           await updateMetadata(user);
-        } catch (_) { }
+        } catch (_) {}
       }
 
       // Delete the project creation form after the project is created

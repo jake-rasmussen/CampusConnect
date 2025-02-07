@@ -1,5 +1,5 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
-import { Divider } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Divider } from "@heroui/react";
 import { Focus, Profile, User } from "@prisma/client";
 import Link from "next/link";
 import { User as UserIcon } from "tabler-icons-react";

@@ -1,5 +1,5 @@
-import { Input } from "@nextui-org/input";
-import { Pagination, Select, SelectItem } from "@nextui-org/react";
+import { Input } from "@heroui/input";
+import { Pagination, Select, SelectItem } from "@heroui/react";
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
 import { capitalize } from "lodash";
 import Error from "next/error";
@@ -45,22 +45,28 @@ const OpenApplications = () => {
         questions: ApplicationQuestion[];
         project: Project | null;
       })[] = [];
+
+      let newSkills = [...skills]; // Create a copy to avoid direct mutation
+
       openApplications.forEach((application) => {
         const previousSubmission = applicationSubmissions.find(
           (applicationSubmission) =>
-            applicationSubmission.applicationId === application.id,
+            applicationSubmission.applicationId === application.id
         );
+
         if (!previousSubmission) {
           applications.push(application);
           application.desiredSkills.forEach((skill) => {
-            const updatedSkills = skills;
-            if (updatedSkills.indexOf(skill) === -1) {
-              updatedSkills.push(skill);
+            if (!newSkills.includes(skill)) {
+              newSkills.push(skill);
             }
-            setSkills(updatedSkills);
           });
         }
       });
+
+      newSkills = newSkills.sort((a, b) => a.localeCompare(b));
+
+      setSkills(newSkills);
       setApplications(applications);
     }
   }, [openApplications, applicationSubmissions]);
@@ -140,7 +146,7 @@ const OpenApplications = () => {
             </Select>
           </div>
           <div className="flex w-full items-center justify-center">
-            {applications.length > 0 ? (
+            {openApplications.length > 0 ? (
               <div className="flex max-w-7xl flex-wrap justify-center gap-4">
                 {paginatedApplications.map((application, index) => (
                   <ApplicationPreviewCard

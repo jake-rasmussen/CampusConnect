@@ -4,7 +4,7 @@ import {
   ModalFooter,
   ModalHeader,
   Switch,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ProjectContext } from "lib/context";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
@@ -47,7 +47,7 @@ const VisibilityEditor = (props: PropType) => {
         endContent={<EyeOff />}
         size="lg"
         startContent={<Eye />}
-        isSelected={isVisible} 
+        isSelected={isVisible}
         onValueChange={setIsVisible}
         className="m-6"
       >
@@ -62,8 +62,8 @@ const VisibilityEditor = (props: PropType) => {
             toast.loading("Saving Colors...");
             updateProject.mutate({
               projectId,
-              isVisible
-            })
+              isVisible,
+            });
           }}
         >
           Save

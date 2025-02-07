@@ -3,6 +3,7 @@ import {
   parseDate,
   Time,
   toCalendarDate,
+  ZonedDateTime,
 } from "@internationalized/date";
 import {
   DatePicker,
@@ -11,9 +12,9 @@ import {
   SelectItem,
   Textarea,
   TimeInput,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Field, Form } from "houseform";
-import React, { useState } from "react";
+import React from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
@@ -22,9 +23,9 @@ import EditController from "../editController";
 
 type EventFormType = {
   name: string;
-  date: Date;
-  start: Date;
-  end: Date;
+  date: CalendarDate;
+  start: Time;
+  end: Time;
   description: string;
   inPerson: boolean;
   location: string;
@@ -39,6 +40,20 @@ type PropType = {
   eventEnd?: Date;
   eventId?: string;
   projectId: string;
+};
+
+const dateToCalendarDate = (date?: Date): CalendarDate | null => {
+  return date
+    ? new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
+    : null;
+};
+
+const dateToTimeValue = (date?: Date): Time | null => {
+  return date ? new Time(date.getHours(), date.getMinutes(), date.getSeconds()) : null;
+};
+
+const dateTimeToJSDate = (date: CalendarDate, time: Time): Date => {
+  return new Date(date.year, date.month - 1, date.day, time.hour, time.minute, time.second);
 };
 
 const EventEditor = (props: PropType) => {
@@ -92,16 +107,10 @@ const EventEditor = (props: PropType) => {
   });
 
   const handleSubmit = (values: EventFormType) => {
+    const startDate = dateTimeToJSDate(values.date, values.start);
+    const endDate = dateTimeToJSDate(values.date, values.end);
+
     if (eventId) {
-      let startDate = values.date;
-      let endDate = values.date;
-
-      startDate.setHours(values.start.getHours());
-      startDate.setMinutes(values.start.getMinutes());
-
-      endDate.setHours(values.end.getHours());
-      endDate.setMinutes(values.end.getMinutes());
-
       updateEvent.mutate({
         id: eventId,
         name: values.name,
@@ -113,14 +122,11 @@ const EventEditor = (props: PropType) => {
         projectId,
       });
     } else {
-      values.start.setDate(values.date.getDate());
-      values.end.setDate(values.date.getDate());
-
       createEvent.mutate({
         projectId,
         name: values.name,
-        start: values.start,
-        end: values.end,
+        start: startDate,
+        end: endDate,
         description: values.description,
         inPerson: values.inPerson,
         location: values.location,
@@ -149,24 +155,6 @@ const EventEditor = (props: PropType) => {
     }
   };
 
-  const dateToDateValue = (date: Date) => {
-    if (date) {
-      return new CalendarDate(
-        date.getFullYear(),
-        date.getMonth() + 1,
-        date.getDate(),
-      );
-    }
-    return null;
-  };
-
-  const dateToTimeValue = (date: Date) => {
-    if (date) {
-      return new Time(date.getHours(), date.getMinutes(), date.getSeconds());
-    }
-    return null;
-  };
-
   return (
     <Form<EventFormType>
       onSubmit={(values) => {
@@ -187,8 +175,7 @@ const EventEditor = (props: PropType) => {
                 }
                 return isValid;
               })
-              .catch((e) => {
-                console.log(e);
+              .catch(() => {
                 return false;
               });
           }}
@@ -270,25 +257,14 @@ const EventEditor = (props: PropType) => {
               )}
             </Field>
 
-            <Field
-              name="date"
-              initialValue={eventStart}
-              onBlurValidate={z.date({
-                required_error: "Enter a date",
-                invalid_type_error: "Enter a valid date",
-              })}
-            >
+            <Field name="date" initialValue={dateToCalendarDate(eventStart)}>
               {({ value, setValue, onBlur, isValid, errors }) => (
                 <DatePicker
                   label="Date"
                   className="col-span-8"
-                  value={dateToDateValue(value)}
-                  onChange={(e) => {
-                    console.log(e);
-                    if (e) {
-                      setValue(new Date(e.year, e.month - 1, e.day));
-                    }
-                  }}
+                  //@ts-ignore
+                  value={value}
+                  onChange={setValue}
                   onBlur={onBlur}
                   isInvalid={!isValid}
                   errorMessage={errors[0]}
@@ -297,26 +273,13 @@ const EventEditor = (props: PropType) => {
               )}
             </Field>
 
-            <Field
-              name="start"
-              initialValue={eventStart}
-              onBlurValidate={z.date({
-                required_error: "Enter a time",
-                invalid_type_error: "Enter a time",
-              })}
-            >
+            <Field name="start" initialValue={dateToTimeValue(eventStart)}>
               {({ value, setValue, onBlur, isValid, errors }) => (
                 <TimeInput
                   label="Start Time"
                   className="col-span-4"
-                  value={dateToTimeValue(value)}
-                  onChange={(e) => {
-                    if (e) {
-                      const newDate = new Date();
-                      newDate.setHours(e.hour, e.minute, e.second);
-                      setValue(newDate);
-                    }
-                  }}
+                  value={value}
+                  onChange={setValue}
                   onBlur={onBlur}
                   isInvalid={!isValid}
                   errorMessage={errors[0]}
@@ -325,26 +288,14 @@ const EventEditor = (props: PropType) => {
               )}
             </Field>
 
-            <Field
-              name="end"
-              initialValue={eventEnd}
-              onBlurValidate={z.date({
-                required_error: "Enter a time",
-                invalid_type_error: "Enter a time",
-              })}
-            >
+            {/* End Time */}
+            <Field name="end" initialValue={dateToTimeValue(eventEnd)}>
               {({ value, setValue, onBlur, isValid, errors }) => (
                 <TimeInput
                   label="End Time"
                   className="col-span-4"
-                  value={dateToTimeValue(value)}
-                  onChange={(e) => {
-                    if (e) {
-                      const newDate = new Date();
-                      newDate.setHours(e.hour, e.minute, e.second);
-                      setValue(newDate);
-                    }
-                  }}
+                  value={value}
+                  onChange={setValue}
                   onBlur={onBlur}
                   isInvalid={!isValid}
                   errorMessage={errors[0]}

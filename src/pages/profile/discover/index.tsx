@@ -1,4 +1,4 @@
-import { Pagination } from "@nextui-org/react"; // Import NextUI Pagination component
+import { Pagination } from "@heroui/react"; // Import NextUI Pagination component
 import { Profile, User } from "@prisma/client";
 import Error from "next/error";
 import React, { useState } from "react";

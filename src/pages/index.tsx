@@ -1,45 +1,157 @@
 import { SignedIn, SignedOut, SignUpButton, useUser } from "@clerk/nextjs";
-import { Button } from "@nextui-org/react";
+import {
+  Button,
+  Divider,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@heroui/react";
 import { UserType } from "@prisma/client";
-import createGlobe from "cobe";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
-import { Briefcase, HomeStats, License } from "tabler-icons-react";
+import { useEffect } from "react";
 
 import { BackgroundBeams } from "~/components/aceternity-ui/background-beams";
+import { HeroParallax } from "~/components/aceternity-ui/hero-parallax";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
 
-const FeatureCard = ({
-  header,
-  body,
-  icon,
-}: {
-  header: string;
-  body: string;
-  icon: JSX.Element;
-}) => {
-  return (
-    <div className="flex max-w-xs flex-col items-center justify-center p-4 text-center">
-      <div className="text-primary">{icon}</div>
-      <h3 className="my-3 text-2xl font-semibold">{header}</h3>
-      <p className="text-center text-neutral-500">{body}</p>
-    </div>
-  );
-};
+export const products = [
+  {
+    title: "Moonbeam",
+    link: "https://gomoonbeam.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/moonbeam.png",
+  },
+  {
+    title: "Cursor",
+    link: "https://cursor.so",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/cursor.png",
+  },
+  {
+    title: "Rogue",
+    link: "https://userogue.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/rogue.png",
+  },
+
+  {
+    title: "Editorially",
+    link: "https://editorially.org",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/editorially.png",
+  },
+  {
+    title: "Editrix AI",
+    link: "https://editrix.ai",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/editrix.png",
+  },
+  {
+    title: "Pixel Perfect",
+    link: "https://app.pixelperfect.quest",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/pixelperfect.png",
+  },
+
+  {
+    title: "Algochurn",
+    link: "https://algochurn.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/algochurn.png",
+  },
+  {
+    title: "Aceternity UI",
+    link: "https://ui.aceternity.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/aceternityui.png",
+  },
+  {
+    title: "Tailwind Master Kit",
+    link: "https://tailwindmasterkit.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/tailwindmasterkit.png",
+  },
+  {
+    title: "SmartBridge",
+    link: "https://smartbridgetech.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/smartbridge.png",
+  },
+  {
+    title: "Renderwork Studio",
+    link: "https://renderwork.studio",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/renderwork.png",
+  },
+
+  {
+    title: "Creme Digital",
+    link: "https://cremedigital.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/cremedigital.png",
+  },
+  {
+    title: "Golden Bells Academy",
+    link: "https://goldenbellsacademy.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/goldenbellsacademy.png",
+  },
+  {
+    title: "Invoker Labs",
+    link: "https://invoker.lol",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/invoker.png",
+  },
+  {
+    title: "E Free Invoice",
+    link: "https://efreeinvoice.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/efreeinvoice.png",
+  },
+];
 
 const Home = () => {
   const { user, isLoaded } = useUser();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    onOpen();
+  }, [onOpen]);
 
   if (!isLoaded) {
     return <LoadingPage />;
   }
 
   return (
-    <div className="relative mb-40 flex w-full flex-col">
-      <div className="custom-clip-path relative flex min-h-screen flex-col items-center justify-center bg-black text-white">
+    <div className="relative flex w-full flex-col bg-black">
+      {/* Beta Mode Modal (Only for Signed-Out Users) */}
+      <SignedOut>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
+          <ModalContent>
+            <ModalHeader className="text-xl font-semibold">
+              🚀 Beta Mode
+            </ModalHeader>
+            <ModalBody>
+              <p>
+                CampusConnect is currently in <b>Beta Mode</b>. We're actively
+                improving the platform and appreciate your feedback!
+              </p>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onPress={onOpenChange}>
+                Got it!
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </SignedOut>
+      {/* Hero Section */}
+      <div className="relative flex min-h-screen flex-col items-center justify-center bg-black text-white">
         <div className="absolute inset-0">
           <BackgroundBeams />
         </div>
@@ -52,7 +164,7 @@ const Home = () => {
         >
           <div className="flex flex-col py-4">
             <h4 className="bg-gradient-to-br from-neutral-500 to-slate-800 bg-clip-text text-lg tracking-wide">
-              Campus Connect
+              CampusConnect
             </h4>
             <p>
               Connect with students <br /> like never before
@@ -62,29 +174,30 @@ const Home = () => {
           <div className="my-4 flex w-full justify-center">
             <SignedOut>
               <SignUpButton mode="modal" afterSignUpUrl="/get-started">
-                <Button>Get started</Button>
+                <Button variant="shadow">Get started</Button>
               </SignUpButton>
             </SignedOut>
             <SignedIn>
               {user?.publicMetadata.userType === UserType.INCOMPLETE && (
                 <Link href="/get-started" className="inline-flex">
-                  <Button>Get started</Button>
+                  <Button variant="shadow">Get started</Button>
                 </Link>
               )}
             </SignedIn>
           </div>
         </motion.h1>
       </div>
-
+      <Divider className="bg-white w-[80%] mx-auto"/>
+      <HeroParallax products={products} />;
+      
       {/* Features Section */}
-      <section className="m-4 md:m-8">
-        <div className="container mx-auto my-6 space-y-2 p-4 text-center">
+      {/* <section className="flex w-full flex-col bg-background p-4 md:p-8">
+        <div className="container mx-auto space-y-2 p-4 text-center">
           <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
             Help grow your startup
           </h1>
           <p className="mx-auto my-4 max-w-2xl text-center text-sm font-normal text-neutral-500 lg:text-base">
-            CampusConnect provides startups with tools to connect with students,
-            enhancing the student-led startup ecosystem.
+            CampusConnect provides startups with tools to connect with students, enhancing the student-led startup ecosystem.
           </p>
         </div>
 
@@ -105,7 +218,7 @@ const Home = () => {
             icon={<Briefcase className="h-20 w-20" />}
           />
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

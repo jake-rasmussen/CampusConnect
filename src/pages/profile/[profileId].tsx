@@ -1,10 +1,8 @@
-import { Button, useDisclosure } from "@nextui-org/react";
 import Error from "next/error";
 import { useRouter } from "next/router";
 
 import LoadingPage from "~/components/loadingPage";
 import ProfileDashboard from "~/components/profile/profileDashboard";
-import ProfileEditor from "~/components/profile/profileEditor";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 

@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
   Divider,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   Application,
   ApplicationQuestion,
@@ -156,7 +156,7 @@ const ApplicationCard = (props: PropType) => {
           </div>
 
           {editable && application.status !== ApplicationStatus.DRAFT && (
-            <Link href={`/evaluator/${projectId}`}>
+            <Link href={`/evaluator/${projectId}?applicationId=${application.id}`}>
               <div className="absolute left-1/2 z-30 -translate-x-1/2 -translate-y-[1rem] rounded-full border border-1 border-black bg-white">
                 <ListCheck
                   className="h-14 w-14 p-2 transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500"
@@ -193,7 +193,6 @@ const ApplicationCard = (props: PropType) => {
               </div>
             }
             dialogTitle="Application Preview"
-            dialogDescription="Preview Your Submitted Application"
           >
             <ApplicationForm
               projectId={projectId}

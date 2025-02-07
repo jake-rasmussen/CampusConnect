@@ -1,6 +1,8 @@
 import "@prisma/client";
 
+import { Tooltip } from "@heroui/react";
 import { ProjectContext } from "lib/context";
+import { EyeOff } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
 import AdminSettings from "../admin/adminSettings";
@@ -26,8 +28,6 @@ import type {
   SocialMedia,
   User,
 } from "@prisma/client";
-import { EyeOff } from "tabler-icons-react";
-import { Tooltip } from "@nextui-org/react";
 
 type PropType = {
   name: string;
@@ -149,7 +149,6 @@ const ProjectDashboard = (props: PropType) => {
                     <EyeOff className="h-16 w-16 rounded-full p-1" />
                   </div>
                 </Tooltip>
-
               )}
             </>
           </Tab>
