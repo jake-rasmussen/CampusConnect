@@ -76,7 +76,7 @@ const EditController = (props: PropType) => {
                   {handleDelete && (
                     <div className="flex w-auto grow items-center justify-start">
                       <DeleteController
-                        dialogDescription="Are you sure you want to delete the Contact Info?"
+                        dialogDescription="Are you sure you want to delete this?"
                         handleDelete={handleDelete}
                       />
                     </div>

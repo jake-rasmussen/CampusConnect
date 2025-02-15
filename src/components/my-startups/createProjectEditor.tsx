@@ -79,8 +79,7 @@ const CreateProjectEditor = () => {
                     <main className="flex w-full flex-col items-center gap-4">
                       <p>
                         Please submit some information about your startup. It
-                        should take 1-2 business days to be approved, and you
-                        will receive an email once it is verified!
+                        should take 1-2 business days to be approved.
                       </p>
 
                       <section className="mx-10 flex w-full flex-col gap-4">

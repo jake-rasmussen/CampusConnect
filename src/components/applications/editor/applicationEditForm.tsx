@@ -199,13 +199,14 @@ const ApplicationEditForm = (props: PropType) => {
                   }
                 }}
                 isDisabled={isSaving}
+                color="primary"
               >
                 Save
               </Button>
 
               <PreviewModal
                 triggerButton={
-                  <Button className="px-4 py-4" isDisabled={isSaving}>
+                  <Button className="px-4 py-4" isDisabled={isSaving} color="primary">
                     Preview
                   </Button>
                 }

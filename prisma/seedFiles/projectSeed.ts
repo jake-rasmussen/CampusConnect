@@ -18,14 +18,8 @@ import type {
   User,
 } from "@prisma/client";
 
-function getRandomDate(): Date {
-  const startDate = new Date();
-  const endDate = new Date("2025-12-31");
-
-  const randomTimestamp = faker.date
-    .between({ from: startDate, to: endDate })
-    .getTime();
-  return new Date(randomTimestamp);
+function getRandomDate(startDate: Date = new Date("2025-01-01"), endDate: Date = new Date()): Date {
+  return faker.date.between({ from: startDate, to: endDate });
 }
 
 const generateRandomSocialMedia = (numSocialMedias?: number) => {
@@ -224,6 +218,7 @@ const generateRandomApplications = (users: User[]) => {
   for (let i = 0; i < numApplications; i++) {
     const applicationId = faker.string.uuid();
     const questions = generateRandomQuestions();
+    const date = getRandomDate();
 
     const application: Prisma.ApplicationCreateWithoutProjectInput = {
       id: applicationId,
@@ -236,6 +231,8 @@ const generateRandomApplications = (users: User[]) => {
       deadline,
       desiredSkills,
       questions: { create: questions },
+      createdAt: date,
+      updatedAt: date,
     };
 
     applications.push(application);
@@ -254,14 +251,15 @@ const generateRandomApplicationSubmissions = (
   for (let i = 0; i < numSubmissions; i++) {
     const userIndex = randomNumberBetweenInclusive(0, 99);
     const user = users[userIndex];
+    const date = getRandomDate(application.createdAt);
 
     const applicationSubmission = {
       id: faker.string.uuid(),
       user: { connect: { userId: user!.userId } },
       application: { connect: { id: application.id } },
       applicationSubmissionStatus: ApplicationSubmissionStatus.SUBMITTED,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: date,
+      updatedAt: date,
     };
 
     applicationSubmissions.push(applicationSubmission);
@@ -330,6 +328,8 @@ const generateRandomUsers = () => {
   const users: User[] = [];
 
   for (let i = 0; i < 100; i++) {
+    const date = getRandomDate();
+
     const user: User = {
       userId: faker.string.uuid(),
       externalId: faker.string.nanoid(),
@@ -337,50 +337,31 @@ const generateRandomUsers = () => {
       lastName: faker.person.lastName(),
       emailAddress: faker.internet.email(),
       userType: UserType.INCOMPLETE,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: date,
+      updatedAt: date,
     };
     users.push(user);
   }
   return users;
 };
 
-const createMockProjectArray = (users: User[]) => {
-  const mockProjects: Array<Prisma.ProjectCreateInput> = [];
-  const names = [
-    "Tech Wizards",
-    "Artistic Expression",
-    "Eco Warriors",
-    "Adventure Seekers",
-    "Health and Fitness Enthusiasts",
-    "Debate and Discourse Society",
-    "Music and Melodies",
-    "Culinary Explorers",
-    "Film Fanatics",
-  ];
-
-  for (const name of names) {
-    const project = {
-      name,
-      socialMedia: { create: generateRandomSocialMedia() },
-      description: faker.lorem.paragraph({ min: 1, max: 3 }),
-      school: faker.helpers.arrayElement(Object.values(School)),
-      applications: {
-        create: generateRandomApplications(users),
-      },
-      events: { create: generateRandomEvents() },
-      contactInfo: { create: generateRandomContactInfos() },
-      colors: { create: generateRandomColors() },
-      isVisible: true,
-    };
-    mockProjects.push(project);
-  }
-  return mockProjects;
+const generateRandomProjects = (numProjects: number = 20) => {
+  return Array.from({ length: numProjects }, () => ({
+    name: faker.company.name(),
+    description: faker.lorem.paragraph({ min: 1, max: 3 }),
+    school: faker.helpers.arrayElement(Object.values(School)),
+    socialMedia: { create: generateRandomSocialMedia() },
+    applications: { create: generateRandomApplications(generateRandomUsers()) },
+    events: { create: generateRandomEvents() },
+    contactInfo: { create: generateRandomContactInfos() },
+    colors: { create: generateRandomColors() },
+    isVisible: true,
+  }));
 };
 
 export const seedProjects = async () => {
   const mockUsers = generateRandomUsers();
-  const mockProjects = createMockProjectArray(mockUsers);
+  const mockProjects = generateRandomProjects();
 
   await prisma.user.createMany({
     data: mockUsers,
@@ -388,9 +369,12 @@ export const seedProjects = async () => {
   });
 
   for (const project of mockProjects) {
+    const date = getRandomDate();
     await prisma.project.create({
       data: {
         ...project,
+        createdAt: date,
+        updatedAt: date,
       },
     });
 

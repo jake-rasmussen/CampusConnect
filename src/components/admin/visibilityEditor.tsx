@@ -39,20 +39,22 @@ const VisibilityEditor = (props: PropType) => {
 
   return (
     <section className="h-full w-fit">
-      <ModalHeader>Change Startup Colors</ModalHeader>
+      <ModalHeader>Change Project Visibility</ModalHeader>
       <Divider className="w-full" />
-      <Switch
-        defaultSelected
-        color="success"
-        endContent={<EyeOff />}
-        size="lg"
-        startContent={<Eye />}
-        isSelected={isVisible}
-        onValueChange={setIsVisible}
-        className="m-6"
-      >
-        Change Visibility
-      </Switch>
+      <div className="flex flex-col gap-2 m-6">
+        <Switch
+          defaultSelected
+          color="success"
+          endContent={<EyeOff />}
+          size="lg"
+          startContent={<Eye />}
+          isSelected={isVisible}
+          onValueChange={setIsVisible}
+        >
+          Change Visibility
+        </Switch>
+        <p className="text-small text-default-500">Selected: {isVisible ? "Visible" : "Invisible"}</p>
+      </div>
 
       <ModalFooter className="absolute bottom-0 right-0 m-4">
         <Button

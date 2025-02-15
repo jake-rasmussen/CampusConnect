@@ -173,15 +173,13 @@ const ProfileSocialMediaEditor = (props: PropType) => {
                 </Link>
 
                 <div className="flex grow items-end justify-end">
-                  <Button
-                    onPress={() => {
+                  <button className="group w-10 h-10"
+                    onClick={() => {
                       handleDelete(socialMedia);
                     }}
-                    variant="light"
-                    isIconOnly
                   >
                     <Trash />
-                  </Button>
+                  </button>
                 </div>
               </div>
             ))}

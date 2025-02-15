@@ -21,9 +21,9 @@ const DeleteController = (props: PropType) => {
 
   return (
     <>
-      <Button className="group" onPress={onOpen} isIconOnly variant="light">
+      <button className="group w-10 h-10" onClick={onOpen}>
         <Trash className="h-full w-full transition duration-300 ease-in-out group-hover:rotate-12 group-hover:scale-110 group-hover:text-red-600" />
-      </Button>
+      </button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>

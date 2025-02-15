@@ -7,8 +7,8 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@heroui/react";
-import { useState } from "react";
-import { Brush, Eye, Flag2, Settings } from "tabler-icons-react";
+import { useState, useEffect } from "react";
+import { Brush, Eye, Settings } from "tabler-icons-react";
 
 import DeleteProjectEditor from "../dashboard/deleteProjectEditor";
 import BannerEditor from "./bannerEditor";
@@ -26,14 +26,23 @@ type PropType = {
   projectId: string;
 };
 
-const AdminSettings = (props: PropType) => {
-  const { projectId } = props;
-
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
+const AdminSettings = ({ projectId }: PropType) => {
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [settingsSection, setSettingsSection] = useState<SettingsSection>(
     SettingsSection.COLORS,
   );
+
+  // Automatically close modal when window width reaches "md" (768px)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        onClose(); // Close modal at md: breakpoint
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [onClose]);
 
   return (
     <>
@@ -54,7 +63,7 @@ const AdminSettings = (props: PropType) => {
                   <Button
                     variant="light"
                     onPress={() => setSettingsSection(SettingsSection.COLORS)}
-                    endContent={<Brush />}
+                    endContent={<Brush className="hidden lg:block" />}
                   >
                     Change Colors
                   </Button>
@@ -63,7 +72,7 @@ const AdminSettings = (props: PropType) => {
                     onPress={() =>
                       setSettingsSection(SettingsSection.VISIBILITY)
                     }
-                    endContent={<Eye />}
+                    endContent={<Eye className="hidden lg:block" />}
                   >
                     Change Visibility
                   </Button>

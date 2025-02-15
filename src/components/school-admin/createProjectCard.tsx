@@ -65,7 +65,7 @@ const CreateProjectCard = (props: PropType) => {
 
   return (
     <div className="relative">
-      <Card className="group max-w-[400px] overflow-visible transition duration-300 ease-in-out hover:scale-110 hover:cursor-pointer">
+      <Card className="group w-[400px] overflow-visible transition duration-300 ease-in-out hover:scale-110 hover:cursor-pointer">
         <CardHeader className="relative flex flex-col">
           <h1>{projectCreationForm.name}</h1>
           <p className="text-center text-neutral-400">

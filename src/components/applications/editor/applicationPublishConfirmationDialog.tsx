@@ -74,6 +74,7 @@ const ApplicationPublishConfirmationDialog = ({
             onOpen();
           }
         }}
+        color="primary"
       >
         Publish
       </Button>

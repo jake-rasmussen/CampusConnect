@@ -14,6 +14,7 @@ import { projectRouter } from "./routers/project";
 import { socialMediaRouter } from "./routers/socialMedia";
 import { supabaseRouter } from "./routers/supabase";
 import { usersRouter } from "./routers/users";
+import { schoolAdminRouter } from "./routers/schoolAdmin";
 
 /**
  * This is the primary router for your server.
@@ -37,6 +38,7 @@ export const appRouter = createTRPCRouter({
   applicationSubmissionCommentRouter,
   colorsRouter,
   supabaseRouter,
+  schoolAdminRouter,
 });
 
 // export type definition of API

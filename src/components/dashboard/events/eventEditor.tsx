@@ -1,20 +1,22 @@
 import {
   CalendarDate,
+  DateValue,
   parseDate,
   Time,
   toCalendarDate,
   ZonedDateTime,
 } from "@internationalized/date";
 import {
-  DatePicker,
   Input,
   Select,
   SelectItem,
   Textarea,
   TimeInput,
+  TimeInputValue,
 } from "@heroui/react";
+import { DatePicker } from "@heroui/date-picker";
 import { Field, Form } from "houseform";
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
@@ -42,14 +44,25 @@ type PropType = {
   projectId: string;
 };
 
-const dateToCalendarDate = (date?: Date): CalendarDate | null => {
-  return date
-    ? new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
-    : null;
+const dateToDateValue = (date?: Date) => {
+  if (date) {
+    return new CalendarDate(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      date.getDate(),
+    );
+  }
+  return null;
 };
 
-const dateToTimeValue = (date?: Date): Time | null => {
-  return date ? new Time(date.getHours(), date.getMinutes(), date.getSeconds()) : null;
+const dateToTimeValue = (date?: Date): TimeInputValue | null => {
+  return date
+    ? {
+      hour: date.getHours(),
+      minute: date.getMinutes(),
+      second: date.getSeconds(),
+    } as TimeInputValue
+    : null;
 };
 
 const dateTimeToJSDate = (date: CalendarDate, time: Time): Date => {
@@ -257,13 +270,15 @@ const EventEditor = (props: PropType) => {
               )}
             </Field>
 
-            <Field name="date" initialValue={dateToCalendarDate(eventStart)}>
+            <Field
+              name="date"
+              initialValue={dateToDateValue(eventStart)}
+            >
               {({ value, setValue, onBlur, isValid, errors }) => (
                 <DatePicker
                   label="Date"
                   className="col-span-8"
-                  //@ts-ignore
-                  value={value}
+                  value={value || null}
                   onChange={setValue}
                   onBlur={onBlur}
                   isInvalid={!isValid}
@@ -272,6 +287,7 @@ const EventEditor = (props: PropType) => {
                 />
               )}
             </Field>
+
 
             <Field name="start" initialValue={dateToTimeValue(eventStart)}>
               {({ value, setValue, onBlur, isValid, errors }) => (
@@ -288,7 +304,6 @@ const EventEditor = (props: PropType) => {
               )}
             </Field>
 
-            {/* End Time */}
             <Field name="end" initialValue={dateToTimeValue(eventEnd)}>
               {({ value, setValue, onBlur, isValid, errors }) => (
                 <TimeInput

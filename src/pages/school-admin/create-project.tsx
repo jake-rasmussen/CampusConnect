@@ -34,7 +34,7 @@ const CreateProject: NextPageWithLayout = () => {
       {isLoading ? (
         <LoadingSection />
       ) : (
-        <div className="mt-20 flex max-w-7xl flex-col items-center justify-center gap-y-20">
+        <div className="flex max-w-7xl flex-col items-center justify-center gap-y-20">
           {totalForms > 0 ? (
             <>
               <div className="flex w-full flex-wrap items-center justify-center gap-x-6 gap-y-20">

@@ -34,10 +34,10 @@ const ProfilePage: NextPageWithLayout = () => {
       {isLoading ? (
         <LoadingSection />
       ) : (
-        <div className="mt-20 flex max-w-7xl flex-col items-center justify-center gap-y-20">
+        <div className="mt-20 mx-20 flex max-w-7xl flex-col items-center justify-center gap-y-20">
           {profileData.totalProfiles > 0 ? (
             <>
-              <div className="flex w-full flex-wrap items-center justify-center gap-x-6 gap-y-20">
+              <div className="flex w-full flex-wrap items-center justify-center gap-x-6 gap-y-24">
                 {profileData.profiles.map(
                   (profile: Profile & { user: User }) => (
                     <ProfileCard key={profile.id} profile={profile} />

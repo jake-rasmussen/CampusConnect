@@ -254,7 +254,7 @@ const EvaluateApplicationSubmission = () => {
                         <div className="flex flex-row items-center">
                           <div className="mr-2 rounded-full bg-primary p-1 text-white">
                             {item.data?.label ===
-                            ApplicationSubmissionEvaluationGrade.YES ? (
+                              ApplicationSubmissionEvaluationGrade.YES ? (
                               <Check />
                             ) : item.data?.label ===
                               ApplicationSubmissionEvaluationGrade.MAYBE ? (
@@ -283,7 +283,7 @@ const EvaluateApplicationSubmission = () => {
                         <div className="flex flex-row items-center">
                           <div className="mr-2 rounded-full bg-primary p-1 text-white">
                             {item.label ===
-                            ApplicationSubmissionEvaluationGrade.YES ? (
+                              ApplicationSubmissionEvaluationGrade.YES ? (
                               <Check />
                             ) : item.label ===
                               ApplicationSubmissionEvaluationGrade.MAYBE ? (
@@ -340,7 +340,7 @@ const EvaluateApplicationSubmission = () => {
                       </div>
                       <div className="flex h-full w-full items-center justify-end">
                         {comment.memberUserId === user.userId && (
-                          <Button
+                          <button
                             onClick={() => {
                               toast.dismiss();
                               toast.loading("Deleting Comment...");
@@ -352,7 +352,7 @@ const EvaluateApplicationSubmission = () => {
                             }}
                           >
                             <Trash className="text-primary" />
-                          </Button>
+                          </button>
                         )}
                       </div>
                     </div>

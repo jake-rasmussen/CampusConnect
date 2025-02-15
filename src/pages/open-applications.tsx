@@ -1,9 +1,10 @@
 import { Input } from "@heroui/input";
 import { Pagination, Select, SelectItem } from "@heroui/react";
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
+import { ProjectContext } from "lib/context";
 import { capitalize } from "lodash";
 import Error from "next/error";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LicenseOff } from "tabler-icons-react";
 
 import ApplicationPreviewCard from "~/components/applications/applicationPreviewCard";
@@ -23,6 +24,9 @@ const OpenApplications = () => {
   const [filteredSkills, setFilteredSkills] = useState<string[]>([]);
   const [query, setQuery] = useState<string>("");
   const [page, setPage] = useState(1);
+
+  const project = useContext(ProjectContext);
+
   const limit = 9; // Number of applications per page
 
   const {
@@ -54,7 +58,7 @@ const OpenApplications = () => {
             applicationSubmission.applicationId === application.id
         );
 
-        if (!previousSubmission) {
+        if (!previousSubmission && application) {
           applications.push(application);
           application.desiredSkills.forEach((skill) => {
             if (!newSkills.includes(skill)) {
@@ -138,7 +142,6 @@ const OpenApplications = () => {
               {skills.map((skill: string) => (
                 <SelectItem
                   key={skill}
-                  onSelectCapture={(skill) => console.log("SELECTED", skill)}
                 >
                   {capitalize(skill)}
                 </SelectItem>
@@ -158,7 +161,7 @@ const OpenApplications = () => {
               </div>
             ) : (
               <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">
-                <LicenseOff className="h-40 w-40 text-secondary" />
+                <LicenseOff className="h-40 w-40" />
                 <h3 className="text-2xl font-semibold uppercase">
                   There are no open applications
                 </h3>
