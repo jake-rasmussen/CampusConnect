@@ -205,7 +205,7 @@ const generateRandomQuestions = (
 const generateRandomApplications = (users: User[]) => {
   const numApplications: number = randomNumberBetweenInclusive(0, 4);
   const applications: Array<Prisma.ApplicationCreateWithoutProjectInput> = [];
-  let deadline: Date | null = getRandomDate();
+  let deadline: Date | null = getRandomDate(new Date("2025-01-01"), new Date("2026-01-01"));
 
   const randomSkills = randomNumberBetweenInclusive(2, 4);
   let desiredSkills: string[] = [];

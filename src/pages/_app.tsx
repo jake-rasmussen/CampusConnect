@@ -15,7 +15,9 @@ import LoadingPage from "~/components/loadingPage";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import type { ReactElement, ReactNode } from "react";
-import { HeroUIProvider } from "@heroui/react";
+import { Chip, HeroUIProvider, Button } from "@heroui/react";
+import Link from "next/link";
+import { Pencil } from "tabler-icons-react";
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -48,7 +50,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         {isNavbarLoading ? (
           <LoadingPage />
         ) : (
-          <>{getLayout(<Component {...pageProps} />)}</>
+          <>
+            {getLayout(<Component {...pageProps} />)}
+
+
+            <Link href="" className="fixed left-0 bottom-0 translate-x-[1rem] -translate-y-[1rem]">
+              <Button color="warning" endContent={<Pencil />}>Give Feedback</Button>
+            </Link>
+          </>
         )}
       </Providers>
     </main>

@@ -119,10 +119,6 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
                 <Link href="/profile" onMouseEnter={() => setActive("My Profile")}>
                   My Profile
                 </Link>
-
-                <Link href="" className="absolute bottom-0 left-0 translate-x-1/2 translate-y-[75%]">
-                  <Chip size="sm" color="warning">Give Feedback</Chip>
-                </Link>
               </>
             )
           }
@@ -136,24 +132,20 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
   } else if (userData?.userType === UserType.EMPLOYER) {
     menu = (
       <Menu setActive={setActive}>
-        {
-          !isMobile && (
-            <Link
-              href="/"
-              className="absolute left-0 h-10 w-10 translate-x-1/2 transform"
-            >
-              <Image
-                priority
-                src={"/assets/SWEC Logo.svg"}
-                alt={"SWEC Logo"}
-                width="0"
-                height="0"
-                sizes="100vw"
-                className="h-auto w-full"
-              />
-            </Link>
-          )
-        }
+        <Link
+          href="/"
+          className={twMerge("absolute left-0 h-10 w-10 translate-x-1/2 transform", isMobile && "left-1/2 -translate-x-1/2")}
+        >
+          <Image
+            priority
+            src={"/assets/SWEC Logo.svg"}
+            alt={"SWEC Logo"}
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="h-auto w-full"
+          />
+        </Link>
 
         <div className="h-8 flex items-center justify-between gap-4">
           {
@@ -200,10 +192,6 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
                 >
                   Discover
                 </Link>
-
-                <Link href="" className="absolute bottom-0 left-0 translate-x-1/2 translate-y-[75%]">
-                  <Chip size="sm" color="warning">Give Feedback</Chip>
-                </Link>
               </>
             )
           }
@@ -217,24 +205,20 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
   } else if (userData?.userType === UserType.SCHOOL_ADMIN) {
     menu = (
       <Menu setActive={setActive}>
-        {
-          !isMobile && (
-            <Link
-              href="/"
-              className="absolute left-0 h-10 w-10 translate-x-1/2 transform"
-            >
-              <Image
-                priority
-                src={"/assets/SWEC Logo.svg"}
-                alt={"SWEC Logo"}
-                width="0"
-                height="0"
-                sizes="100vw"
-                className="h-auto w-full"
-              />
-            </Link>
-          )
-        }
+        <Link
+          href="/"
+          className={twMerge("absolute left-0 h-10 w-10 translate-x-1/2 transform", isMobile && "left-1/2 -translate-x-1/2")}
+        >
+          <Image
+            priority
+            src={"/assets/SWEC Logo.svg"}
+            alt={"SWEC Logo"}
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="h-auto w-full"
+          />
+        </Link>
 
         <div className="h-8 flex items-center justify-between gap-4">
           {
@@ -295,7 +279,7 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
     <>
       {isSignedIn && (
         <div className="relative flex w-full items-center justify-center">
-          <div className="fixed inset-x-0 top-10 top-2 z-50 mx-auto max-w-2xl rounded-full shadow-xl">
+          <div className="fixed inset-x-0 top-10 top-2 z-50 max-w-2xl rounded-full shadow-xl mx-auto px-4">
             {menu}
           </div>
         </div>

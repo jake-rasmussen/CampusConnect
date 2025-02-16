@@ -148,7 +148,7 @@ const ApplicationForm = (props: PropType) => {
       <section className="flex flex-col gap-4">
         {name && deadline && description && (
           <>
-            <h1 className="text-center text-4xl font-black uppercase text-black underline">
+            <h1 className="text-center text-4xl font-black text-black">
               {name}
             </h1>
             {!readonly && (
@@ -278,7 +278,7 @@ const ApplicationForm = (props: PropType) => {
                   }}
                   disabled={isSaving}
                 >
-                  Save for later
+                  Save
                 </Button>
                 <Button
                   className="bg-white/10 backdrop-invert"
@@ -292,7 +292,7 @@ const ApplicationForm = (props: PropType) => {
                   }
                   disabled={isSaving}
                 >
-                  Submit application
+                  Submit
                 </Button>
               </div>
             )}

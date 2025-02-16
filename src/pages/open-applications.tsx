@@ -25,8 +25,6 @@ const OpenApplications = () => {
   const [query, setQuery] = useState<string>("");
   const [page, setPage] = useState(1);
 
-  const project = useContext(ProjectContext);
-
   const limit = 9; // Number of applications per page
 
   const {

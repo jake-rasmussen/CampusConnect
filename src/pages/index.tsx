@@ -189,36 +189,6 @@ const Home = () => {
       </div>
       <Divider className="bg-white w-[80%] mx-auto"/>
       <HeroParallax products={products} />;
-      
-      {/* Features Section */}
-      {/* <section className="flex w-full flex-col bg-background p-4 md:p-8">
-        <div className="container mx-auto space-y-2 p-4 text-center">
-          <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
-            Help grow your startup
-          </h1>
-          <p className="mx-auto my-4 max-w-2xl text-center text-sm font-normal text-neutral-500 lg:text-base">
-            CampusConnect provides startups with tools to connect with students, enhancing the student-led startup ecosystem.
-          </p>
-        </div>
-
-        <div className="flex w-full flex-wrap items-center justify-center gap-4">
-          <FeatureCard
-            header="Showcase your startup"
-            body="Startup leaders can create a homepage to highlight their mission, vision, and key details, making it easier to attract talent."
-            icon={<HomeStats className="h-20 w-20" />}
-          />
-          <FeatureCard
-            header="Application Management"
-            body="Startup leaders can create job applications and efficiently manage all submissions in one place."
-            icon={<License className="h-20 w-20" />}
-          />
-          <FeatureCard
-            header="Explore Opportunities"
-            body="Students seeking work can easily browse startups and job applications, ensuring they never miss an opportunity."
-            icon={<Briefcase className="h-20 w-20" />}
-          />
-        </div>
-      </section> */}
     </div>
   );
 };
