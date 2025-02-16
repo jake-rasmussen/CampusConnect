@@ -20,7 +20,7 @@ const HeaderOutline = ({
           : undefined
       }
     >
-      <div className="flex justify-center px-4 py-20 md:px-24 lg:px-8 lg:py-28">
+      <div className="flex justify-center px-4 py-28 md:px-24 lg:px-8">
         <div className="flex w-full items-center justify-center text-center">
           {children}
         </div>

@@ -5,7 +5,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import toast from "react-hot-toast";
 import { Trash } from "tabler-icons-react";
 
@@ -21,9 +21,9 @@ const DeleteController = (props: PropType) => {
 
   return (
     <>
-      <Button className="group" onPress={onOpen}>
+      <button className="group w-10 h-10" onClick={onOpen}>
         <Trash className="h-full w-full transition duration-300 ease-in-out group-hover:rotate-12 group-hover:scale-110 group-hover:text-red-600" />
-      </Button>
+      </button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
@@ -31,8 +31,10 @@ const DeleteController = (props: PropType) => {
             <>
               <ModalHeader>
                 <div className="flex flex-col">
-                  <h1>Editor</h1>
-                  <span className="font-normal">{dialogDescription}</span>
+                  <h1>Confirm Delete</h1>
+                  <p className="text-xs font-normal text-gray">
+                    {dialogDescription}
+                  </p>
                 </div>
               </ModalHeader>
               <ModalFooter>

@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 import { ApplicationQuestion, ApplicationQuestionType } from "@prisma/client";
 import { Circle, SquarePlus, X } from "tabler-icons-react";
 
@@ -49,7 +49,8 @@ const AnswerChoicesEditor = (props: PropType) => {
                 label={`Answer Choice ${index + 1}`}
                 defaultValue={answerChoice}
                 onBlur={(e) => {
-                  updateAnswerChoice(index, e.target.value);
+                  const value = (e.target as HTMLInputElement).value;
+                  updateAnswerChoice(index, value);
                 }}
               />
               <button

@@ -6,7 +6,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 import { Edit, SquarePlus } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
@@ -69,19 +69,14 @@ const EditController = (props: PropType) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader>
-                <div className="flex flex-col">
-                  <h1>Editor</h1>
-                  <span className="font-normal">{dialogDescription}</span>
-                </div>
-              </ModalHeader>
+              <ModalHeader>{dialogDescription}</ModalHeader>
               <ModalBody>{children}</ModalBody>
               <ModalFooter className="flex">
                 <div className="grow">
                   {handleDelete && (
                     <div className="flex w-auto grow items-center justify-start">
                       <DeleteController
-                        dialogDescription="Are you sure you want to delete the Contact Info?"
+                        dialogDescription="Are you sure you want to delete this?"
                         handleDelete={handleDelete}
                       />
                     </div>

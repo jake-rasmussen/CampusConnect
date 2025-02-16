@@ -10,7 +10,7 @@ import type { WebhookRequiredHeaders } from "svix";
 const webhookSecret: string = process.env.WEBHOOK_SECRET!;
 const prisma = new PrismaClient();
 
-const establishMetadata = async (
+export const establishMetadata = async (
   user: User & {
     memberships: Member[];
   },
@@ -30,6 +30,7 @@ const establishMetadata = async (
     publicMetadata: {
       evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
       adminProjectIds: JSON.stringify(adminProjectIds),
+      userType: user.userType,
     },
   });
 };

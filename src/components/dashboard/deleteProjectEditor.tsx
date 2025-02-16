@@ -8,7 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import Error from "next/error";
 import router from "next/router";
 import { useEffect, useState } from "react";
@@ -47,7 +47,7 @@ const DeleteProjectEditor = (props: PropType) => {
     onSuccess() {
       toast.loading("Redirecting...");
       toast.dismiss();
-      router.push(`/my-projects`);
+      router.push(`/my-startups`);
     },
     onError() {
       toast.dismiss();

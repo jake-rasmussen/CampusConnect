@@ -10,7 +10,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import lodash from "lodash";
 import toast from "react-hot-toast";
 import { TrashX } from "tabler-icons-react";
@@ -88,7 +88,9 @@ const Members = (props: PropType) => {
                   <TableColumn>FULL NAME</TableColumn>
                   <TableColumn>EMAIL</TableColumn>
                   <TableColumn>ROLE</TableColumn>
-                  <TableColumn><></></TableColumn>
+                  <TableColumn>
+                    <></>
+                  </TableColumn>
                 </TableHeader>
                 <TableBody>
                   {members.map(

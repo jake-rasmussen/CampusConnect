@@ -1,4 +1,4 @@
-import { clerkClient, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import {
   Button,
   Divider,
@@ -9,7 +9,7 @@ import {
   ModalHeader,
   Radio,
   RadioGroup,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { UserType } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -19,7 +19,6 @@ import toast from "react-hot-toast";
 import { BackgroundBeams } from "~/components/aceternity-ui/background-beams";
 import LoadingPage from "~/components/loadingPage";
 import UserLayout from "~/layouts/userLayout";
-import { createTRPCContext } from "~/server/api/trpc";
 import { api } from "~/utils/api";
 
 const GetStarted = () => {
@@ -32,15 +31,14 @@ const GetStarted = () => {
   const [step, setStep] = useState(0);
 
   const updateUser = api.usersRouter.updateUser.useMutation({
-    onSuccess() {
+    onSuccess: async () => {
       toast.dismiss();
       toast.success("Welcome to Campus Connect!");
-      queryClient.invalidate().catch((e) => console.log(e));
 
-      setTimeout(() => {
-        if (selected === "hire") router.push("/my-projects");
-        else router.push("/project");
-      }, 1000);
+      await user?.reload();
+
+      queryClient.invalidate();
+      router.reload();
     },
   });
 
@@ -70,14 +68,14 @@ const GetStarted = () => {
     return (
       <div className="relative flex min-h-screen w-full flex-col bg-neutral-950">
         <BackgroundBeams />
-        <Modal isOpen={true} hideCloseButton size="2xl">
+        <Modal isOpen={true} hideCloseButton size="xl">
           <ModalContent>
             {() => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
                   Welcome to Campus Connect!
                 </ModalHeader>
-                <ModalBody className="min-h-[30vh]">
+                <ModalBody>
                   <motion.div
                     key={step}
                     style={{ willChange: "transform, opacity" }}
@@ -95,13 +93,20 @@ const GetStarted = () => {
                     {step === 0 && (
                       <div className="flex flex-col gap-3">
                         <p>
-                          Thank you so much for joining Campus Connect! To
-                          start, are you looking to hire or looking for work?
+                          We're thrilled to have you here! Campus Connect is a
+                          platform designed to connect ambitious student
+                          founders with talented students eager to get involved
+                          in exciting projects.
                         </p>
                         <p>
-                          You will be able to change this information down the
-                          road if you'd like to change your profile.
+                          To help us get started, we’d like to know: are you
+                          looking to hire for your project, or are you seeking
+                          an opportunity to work on one?
                         </p>
+                        <i>
+                          Don’t worry—you can update this preference at any time
+                          to reflect your goals.
+                        </i>
 
                         <div className="flex flex-col gap-3 py-4 text-left">
                           <RadioGroup
@@ -124,25 +129,25 @@ const GetStarted = () => {
                       (selected === "hire" ? (
                         <div className="flex flex-col gap-3">
                           <p>
-                            Great! Thank you so much for choosing Campus Connect
-                            for helping you look for your next great experience
+                            Fantastic! Thank you for choosing Campus Connect to
+                            help you grow your startup.
                           </p>
                           <div className="py-4">
                             <p>
-                              With our platform, get started with viewing a
-                              bunch of startups to see if there are any that
-                              interest you. You can view all startups hiring by going to the
-                              Open Applications section and see if there are any
-                              applications related to your skillset. Moreover,
-                              set up a profile to help startups discover you!
+                              With our platform, you can create a professional
+                              homepage for your startup, making it easy to gain
+                              visibility and attract top talent. Use our
+                              application management tools to find exceptional
+                              team members who can take your startup to the next
+                              level.
                             </p>
 
                             <Divider className="my-6" />
 
-                            <div className="flex flex-col items-center justify-center text-center">
+                            <div className="flex flex-col items-center justify-center text-center font-bold">
                               <p>
-                                What are you waiting for! Let Campus Connect
-                                help you get connected!
+                                What are you waiting for? Let Campus Connect
+                                help you build your dream team!
                               </p>
                             </div>
                           </div>
@@ -150,25 +155,25 @@ const GetStarted = () => {
                       ) : (
                         <div className="flex flex-col gap-3">
                           <p>
-                            Great! Thank you so much for choosing Campus Connect
-                            for helping you bring your startup to the next
-                            level.
+                            Amazing! Thank you for choosing Campus Connect to
+                            help you discover your next great opportunity.
                           </p>
                           <div className="py-4">
                             <p>
-                              With our platform, get started with our no-code
-                              solution to create startup homepages to gain
-                              visibility for your startup. Additionally, use our
-                              application management system to help get grow
-                              your startup with fantastic personel.
+                              Browse a wide variety of startups hiring for
+                              exciting roles. Explore the "Open Applications"
+                              section to find opportunities that match your
+                              skills and interests. Set up your profile to
+                              showcase your talents and let startups find you!
                             </p>
 
                             <Divider className="my-6" />
 
                             <div className="flex flex-col items-center justify-center text-center font-bold">
                               <p>
-                                What are you waiting for! Let Campus Connect
-                                help you grow your startup!
+                                Start your journey with Campus Connect today and
+                                find the perfect opportunity to grow and
+                                succeed!
                               </p>
                             </div>
                           </div>
@@ -198,6 +203,8 @@ const GetStarted = () => {
                     className={step !== 1 ? "hidden" : ""}
                     onPress={() => {
                       if (user) {
+                        toast.loading("Getting you set up...");
+
                         const userType =
                           selected === "hire"
                             ? UserType.EMPLOYER

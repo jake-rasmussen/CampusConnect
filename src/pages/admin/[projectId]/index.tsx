@@ -120,6 +120,7 @@ const AdminDashboardPage = () => {
         socialMedias={socialMedia}
         members={members}
         colors={colors}
+        isVisible={project.isVisible}
         isAdminPage={true}
       />
     );

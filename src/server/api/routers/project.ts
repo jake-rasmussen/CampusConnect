@@ -1,14 +1,23 @@
 import { clerkClient } from "@clerk/nextjs";
 import {
   ApplicationStatus,
+  Colors,
   Member,
   Project,
   ProjectMemberType,
   School,
+  UserType,
 } from "@prisma/client";
 import { z } from "zod";
 
-import { createTRPCRouter, isAdmin, protectedProcedure, t } from "../trpc";
+import {
+  createTRPCRouter,
+  isAdmin,
+  isSchoolAdmin,
+  protectedProcedure,
+  t,
+} from "../trpc";
+import { updateMetadata } from "./member";
 
 export const projectRouter = createTRPCRouter({
   // Procedure to get project information by project ID for any signed in user
@@ -16,10 +25,9 @@ export const projectRouter = createTRPCRouter({
     .input(z.object({ projectId: z.string() }))
     .query(async ({ ctx, input }) => {
       const { projectId } = input;
-      const project = await ctx.prisma.project.findUniqueOrThrow({
-        where: {
-          id: projectId,
-        },
+
+      const project = await ctx.prisma.project.findUnique({
+        where: { id: projectId },
         include: {
           events: true,
           contactInfo: true,
@@ -32,6 +40,12 @@ export const projectRouter = createTRPCRouter({
           colors: true,
         },
       });
+
+      // If project exists but `isVisible` is true, return null or throw an error
+      if (!project?.isVisible) {
+        throw new Error("This project is not available.");
+      }
+
       return project;
     }),
   // Admin-only procedure to get project information for a project admin
@@ -56,22 +70,24 @@ export const projectRouter = createTRPCRouter({
       return project;
     }),
   // Admin-only procedure to update a project's description
-  updateDescriptionByProjectId: t.procedure
+  updateProject: t.procedure
     .input(
       z.object({
         projectId: z.string(),
-        description: z.string(),
+        description: z.string().optional(),
+        isVisible: z.boolean().optional(),
       }),
     )
     .use(isAdmin)
     .mutation(async ({ ctx, input }) => {
-      const { projectId, description } = input;
+      const { projectId, description, isVisible } = input;
       const project = await ctx.prisma.project.update({
         where: {
           id: projectId,
         },
         data: {
           description,
+          isVisible,
         },
       });
       return project;
@@ -97,14 +113,21 @@ export const projectRouter = createTRPCRouter({
         type: ProjectMemberType.ADMIN,
       },
       include: {
-        project: true,
+        project: {
+          include: {
+            colors: true,
+          },
+        },
       },
     });
 
-    let projects: Project[] = [];
+    let projects: (Project & {
+      colors: Colors;
+    })[] = [];
     admins.forEach((member) => {
       projects.push(member.project);
     });
+
     return projects;
   }),
   // Procedure to get the projects that a person is an evaluator in
@@ -117,11 +140,17 @@ export const projectRouter = createTRPCRouter({
         type: ProjectMemberType.EVALUATOR,
       },
       include: {
-        project: true,
+        project: {
+          include: {
+            colors: true,
+          },
+        },
       },
     });
 
-    let projects: Project[] = [];
+    let projects: (Project & {
+      colors: Colors;
+    })[] = [];
     evaluators.forEach((evaluator) => {
       projects.push(evaluator.project);
     });
@@ -162,47 +191,47 @@ export const projectRouter = createTRPCRouter({
         },
       });
 
-      // Automatically make the user an admin in the project that they had created
-      const userId = ctx.user.userId;
-      await ctx.prisma.member.create({
-        data: {
-          projectId: project.id,
-          userId,
-          type: ProjectMemberType.ADMIN,
-        },
-      });
+      // // Automatically make the user an admin in the project that they had created
+      // const userId = ctx.user.userId;
+      // await ctx.prisma.member.create({
+      //   data: {
+      //     projectId: project.id,
+      //     userId,
+      //     type: ProjectMemberType.ADMIN,
+      //   },
+      // });
 
-      // Update the user's Clerk metadata
-      const user = await ctx.prisma.user.findUnique({
-        where: {
-          userId,
-        },
-        include: {
-          memberships: true,
-        },
-      });
+      // // Update the user's Clerk metadata
+      // const user = await ctx.prisma.user.findUnique({
+      //   where: {
+      //     userId,
+      //   },
+      //   include: {
+      //     memberships: true,
+      //   },
+      // });
 
-      if (user) {
-        const evaluatorProjectIds: string[] = [];
-        const adminProjectIds: string[] = [];
+      // if (user) {
+      //   const evaluatorProjectIds: string[] = [];
+      //   const adminProjectIds: string[] = [];
 
-        user.memberships.forEach((membership: Member) => {
-          if (membership.type === ProjectMemberType.ADMIN) {
-            adminProjectIds.push(membership.projectId);
-          } else {
-            evaluatorProjectIds.push(membership.projectId);
-          }
-        });
+      //   user.memberships.forEach((membership: Member) => {
+      //     if (membership.type === ProjectMemberType.ADMIN) {
+      //       adminProjectIds.push(membership.projectId);
+      //     } else {
+      //       evaluatorProjectIds.push(membership.projectId);
+      //     }
+      //   });
 
-        adminProjectIds.push(project.id);
+      //   adminProjectIds.push(project.id);
 
-        await clerkClient.users.updateUserMetadata(user.externalId, {
-          publicMetadata: {
-            evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
-            adminProjectIds: JSON.stringify(adminProjectIds),
-          },
-        });
-      }
+      //   await clerkClient.users.updateUserMetadata(user.externalId, {
+      //     publicMetadata: {
+      //       evaluatorProjectIds: JSON.stringify(evaluatorProjectIds),
+      //       adminProjectIds: JSON.stringify(adminProjectIds),
+      //     },
+      //   });
+      // }
 
       return project;
     }),
@@ -313,38 +342,113 @@ export const projectRouter = createTRPCRouter({
       });
     }),
   checkProjectBanner: t.procedure
-    .input(z.object({
-      projectId: z.string()
-    }))
+    .input(
+      z.object({
+        projectId: z.string(),
+      }),
+    )
     .use(isAdmin)
     .query(async ({ ctx, input }) => {
       const { projectId } = input;
 
       return await ctx.prisma.project.findUnique({
         where: {
-          id: projectId
+          id: projectId,
         },
         select: {
-          hasBanner: true
-        }
-      })
+          hasBanner: true,
+        },
+      });
     }),
   createProjectCreationForm: protectedProcedure
-    .input(z.object({
-      name: z.string().min(1),
-      validation: z.string().min(1),
-      school: z.enum(Object.values(School) as [`${School}`])
-    }))
+    .input(
+      z.object({
+        name: z.string().min(1),
+        validation: z.string().min(1),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
-      const { name, validation, school } = input;
+      const { name, validation } = input;
 
       return await ctx.prisma.projectCreationForm.create({
         data: {
           name,
           validation,
-          school,
-          userId: ctx.user.userId
-        }
-      })
+          school: School.JOHNS_HOPKINS_UNIVERSITY,
+          userId: ctx.user.userId,
+        },
+      });
+    }),
+  getAllProjectCreationForms: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.projectCreationForm.findMany({
+      include: {
+        user: true,
+      },
+    });
+  }),
+  deleteProjectCreationForm: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+
+      return await ctx.prisma.projectCreationForm.delete({
+        where: {
+          id,
+        },
+      });
+    }),
+  createProjectAsSchoolAdmin: t.procedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        userId: z.string().min(1),
+        projectCreationFormId: z.string().min(1),
+      }),
+    )
+    .use(isSchoolAdmin)
+    .mutation(async ({ ctx, input }) => {
+      const { name, userId, projectCreationFormId } = input;
+
+      // Create the project
+      const project = await ctx.prisma.project.create({
+        data: {
+          name,
+          description: "Please enter a description.",
+          school: School.JOHNS_HOPKINS_UNIVERSITY,
+          colorsId: "default",
+        },
+      });
+
+      await ctx.prisma.member.create({
+        data: {
+          projectId: project.id,
+          userId,
+          type: ProjectMemberType.ADMIN,
+        },
+      });
+
+      // Fetch user with memberships
+      const user = await ctx.prisma.user.findFirst({
+        where: { userId },
+        include: { memberships: true },
+      });
+
+      // Update metadata if user exists
+      if (user) {
+        try {
+          await updateMetadata(user);
+        } catch (_) {}
+      }
+
+      // Delete the project creation form after the project is created
+      await ctx.prisma.projectCreationForm.delete({
+        where: { id: projectCreationFormId },
+      });
+
+      return project;
     }),
 });

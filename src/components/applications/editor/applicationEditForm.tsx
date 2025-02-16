@@ -8,7 +8,7 @@ import {
   ModalHeader,
   Textarea,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ApplicationQuestion } from "@prisma/client";
 import { Field, Form } from "houseform";
 import { useEffect, useState } from "react";
@@ -57,8 +57,6 @@ const ApplicationEditForm = (props: PropType) => {
     publishApplication,
   } = props;
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
   const [questions, setQuestions] = useState<ApplicationQuestion[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -103,13 +101,15 @@ const ApplicationEditForm = (props: PropType) => {
       <Form<ApplicationFormType>
         onSubmit={async (values) => {
           if (!isApplicationFormValid(values.name, values.description)) {
-            onOpen();
             toast.dismiss();
-            return;
+            toast.error("Please make sure that all fields are filled!");
+
+            setIsSaving(false);
+          } else {
+            saveApplication(values.name, values.description, questions).then(() =>
+              setIsSaving(false),
+            );
           }
-          saveApplication(values.name, values.description, questions).then(() =>
-            setIsSaving(false),
-          );
         }}
       >
         {({ submit, getFieldValue, errors }) => (
@@ -183,7 +183,7 @@ const ApplicationEditForm = (props: PropType) => {
 
             <div className="flex grow flex-row justify-end gap-4">
               <Button
-                onClick={() => {
+                onPress={() => {
                   setIsSaving(true);
                   toast.dismiss();
                   toast.loading("Saving Application....");
@@ -191,21 +191,22 @@ const ApplicationEditForm = (props: PropType) => {
                   if (errors.length > 0) {
                     setIsSaving(false);
                     toast.dismiss();
+                  } else {
+                    submit().catch(() => {
+                      setIsSaving(false);
+                      toast.dismiss();
+                    });
                   }
-
-                  submit().catch((e) => {
-                    setIsSaving(false);
-                    toast.dismiss();
-                  });
                 }}
-                disabled={isSaving}
+                isDisabled={isSaving}
+                color="primary"
               >
                 Save
               </Button>
 
               <PreviewModal
                 triggerButton={
-                  <Button className="px-4 py-4" disabled={isSaving}>
+                  <Button className="px-4 py-4" isDisabled={isSaving} color="primary">
                     Preview
                   </Button>
                 }
@@ -232,26 +233,6 @@ const ApplicationEditForm = (props: PropType) => {
                 setIsSaving={setIsSaving}
               />
             </div>
-
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-              <ModalContent>
-                {(onClose) => (
-                  <>
-                    <ModalHeader className="flex flex-col gap-1">
-                      Error
-                    </ModalHeader>
-                    <ModalBody>
-                      <p>Please make sure that all fields are filled!</p>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="danger" variant="light" onPress={onClose}>
-                        Close
-                      </Button>
-                    </ModalFooter>
-                  </>
-                )}
-              </ModalContent>
-            </Modal>
           </main>
         )}
       </Form>

@@ -1,6 +1,8 @@
 import "@prisma/client";
 
+import { Tooltip } from "@heroui/react";
 import { ProjectContext } from "lib/context";
+import { EyeOff } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
 
 import AdminSettings from "../admin/adminSettings";
@@ -41,6 +43,7 @@ type PropType = {
     user: User;
   })[];
   colors: Colors;
+  isVisible: boolean;
   isAdminPage: boolean;
 };
 
@@ -55,12 +58,13 @@ const ProjectDashboard = (props: PropType) => {
     socialMedias,
     members,
     colors,
+    isVisible,
     isAdminPage,
   } = props;
 
   return (
     <>
-      <ProjectContext.Provider value={{ colors }}>
+      <ProjectContext.Provider value={{ colors, isVisible }}>
         <section
           className={twMerge(
             isAdminPage
@@ -135,6 +139,16 @@ const ProjectDashboard = (props: PropType) => {
               {isAdminPage && (
                 // <DeleteProjectEditor projectId={projectId} projectName={name} />
                 <AdminSettings projectId={projectId} />
+              )}
+            </>
+
+            <>
+              {!isVisible && (
+                <Tooltip content="Project is invisible" placement="right">
+                  <div className="absolute left-0 top-0 m-4">
+                    <EyeOff className="h-16 w-16 rounded-full p-1" />
+                  </div>
+                </Tooltip>
               )}
             </>
           </Tab>

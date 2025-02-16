@@ -4,48 +4,67 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/modal";
-import { Button, useDisclosure } from "@nextui-org/react";
-import React from "react";
+} from "@heroui/modal";
+import { Button } from "@heroui/react";
+import React, { useState, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 
 type PropType = {
   triggerButton: JSX.Element;
   dialogTitle: string;
-  dialogDescription: string;
+  dialogDescription?: string;
   children?: JSX.Element | JSX.Element[];
   className?: string;
+  isOpen?: boolean;
+  onClose?: () => void;
 };
 
 const PreviewModal = (props: PropType) => {
-  const { children, dialogTitle, dialogDescription, triggerButton, className } =
-    props;
+  const {
+    children,
+    dialogTitle,
+    dialogDescription = "",
+    triggerButton,
+    className,
+    isOpen: isOpenDefault,
+    onClose
+  } = props;
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(isOpenDefault ?? false);
+
+  // Sync internal state when `isOpenDefault` changes
+  useEffect(() => {
+    setIsOpen(isOpenDefault ?? false);
+  }, [isOpenDefault]);
 
   const triggerWithOnClick = React.cloneElement(triggerButton, {
-    onClick: onOpen,
+    onClick: () => setIsOpen(true),
   });
 
   return (
     <>
       {triggerWithOnClick}
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="4xl">
-        <ModalContent className={twMerge("max-w-5xl max-h-[75vh] overflow-y-scroll", className)}>
-          {(onClose) => (
+      <Modal isOpen={isOpen} onOpenChange={() => setIsOpen(!isOpen)} size="4xl">
+        <ModalContent
+          className={twMerge("max-h-[75vh] max-w-5xl overflow-y-scroll", className)}
+        >
+          {() => (
             <>
               <ModalHeader>
                 <div className="flex flex-col">
                   <h1>{dialogTitle}</h1>
-                  <span className="font-normal">{dialogDescription}</span>
+                  <p className="text-sm font-normal text-gray">
+                    {dialogDescription}
+                  </p>
                 </div>
               </ModalHeader>
-              <ModalBody className="overflow-y-scroll overflow-y-scroll">
-                {children}
-              </ModalBody>
+              <ModalBody className="overflow-y-scroll">{children}</ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button color="danger" variant="light" onPress={() => {
+                  setIsOpen(false);
+                  if (onClose) onClose();
+                }}>
                   Close
                 </Button>
               </ModalFooter>

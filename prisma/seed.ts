@@ -11,7 +11,7 @@ import {
   deleteProfiles,
   deleteUsers,
   seedProfiles,
-  seedUsers,
+  // seedUsers,
 } from "./seedFiles/userSeed";
 
 async function cleanupDb() {
@@ -28,7 +28,7 @@ async function cleanupDb() {
 async function main() {
   await cleanupDb();
   await seedProjects();
-  await seedUsers();
+  // await seedUsers();
   await seedProfiles();
 }
 

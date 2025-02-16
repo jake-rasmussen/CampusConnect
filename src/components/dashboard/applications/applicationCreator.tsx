@@ -1,4 +1,4 @@
-import { Input, Textarea } from "@nextui-org/react";
+import { Input, Textarea } from "@heroui/react";
 import { Field, Form } from "houseform";
 import router from "next/router";
 import { useState } from "react";

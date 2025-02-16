@@ -12,7 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
 import Link from "next/link";
 import { Eye } from "tabler-icons-react";
@@ -34,7 +34,7 @@ const ApplicationPreviewCard = (props: PropType) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <main className="group relative m-2 h-fit w-[20rem] overflow-hidden rounded-2xl p-[3px] md:w-[25rem]">
+    <main className="group relative h-fit w-[20rem] overflow-hidden rounded-2xl p-[3px] md:w-[25rem]">
       <div className="absolute inset-0 opacity-0 transition duration-300 ease-in-out group-hover:opacity-100">
         <MovingBorder duration={3000} rx="30%" ry="30%">
           <div className="h-80 w-80 bg-[radial-gradient(var(--sky-500)_40%,transparent_60%)] opacity-[0.8]" />
@@ -118,7 +118,7 @@ const ApplicationPreviewCard = (props: PropType) => {
                     Close
                   </Button>
                   <Link
-                    href={`/project/${application.projectId}/apply/${application.id}`}
+                    href={`/startups/${application.projectId}/apply/${application.id}`}
                   >
                     <Button color="primary" onPress={onClose}>
                       Apply

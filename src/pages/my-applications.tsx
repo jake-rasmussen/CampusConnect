@@ -1,10 +1,12 @@
+import { Pagination } from "@heroui/react";
 import { ApplicationSubmissionStatus } from "@prisma/client";
 import Error from "next/error";
+import { useState } from "react";
 import { LicenseOff } from "tabler-icons-react";
 
 import ApplicationCard from "~/components/dashboard/applications/applicationCard";
-import Header from "~/components/dashboard/header/header";
 import LoadingPage from "~/components/loadingPage";
+import PageWrapper from "~/components/pageWrapper";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
@@ -16,51 +18,67 @@ const MyApplications = () => {
     error,
   } = api.applicationSubmissionRouter.getApplicationSubmissionsForUser.useQuery();
 
+  const [page, setPage] = useState(1);
+  const limit = 9; // Number of applications per page
+
   if (isLoading) {
     return <LoadingPage />;
   } else if (isError) {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else {
+    const paginatedApplications = applicationSubmissions.slice(
+      (page - 1) * limit,
+      page * limit,
+    );
+
+    const totalPages = Math.ceil(applicationSubmissions.length / limit);
+
     return (
-      <main className="w-full pb-52">
-        <section className="mb-14 mt-28">
-          <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
-            My Applications
-          </h1>
-        </section>
-        <section className="mt-10 flex w-full justify-center">
+      <PageWrapper title="My Applications">
+        <div className="flex w-full flex-col items-center gap-8">
           {applicationSubmissions.length > 0 ? (
-            <div className="flex max-w-4xl flex-wrap justify-center gap-4">
-              {applicationSubmissions.map((savedApplication, index) => (
-                <ApplicationCard
-                  application={savedApplication.application}
-                  projectId={savedApplication.application.projectId as string}
-                  editable={false}
-                  previewable={
-                    savedApplication.applicationSubmissionStatus !==
-                    ApplicationSubmissionStatus.DRAFT
-                  }
-                  savedAnswers={savedApplication.applicationSubmissionAnswers}
-                  applicationSubmissionId={savedApplication.id}
-                  status={savedApplication.applicationSubmissionStatus}
-                  key={`applicationSubmission${index}`}
+            <>
+              <div className="flex max-w-5xl flex-wrap justify-center gap-4">
+                {paginatedApplications.map((savedApplication, index) => (
+                  <ApplicationCard
+                    application={savedApplication.application}
+                    projectId={savedApplication.application.projectId as string}
+                    editable={false}
+                    previewable={
+                      savedApplication.applicationSubmissionStatus !==
+                      ApplicationSubmissionStatus.DRAFT
+                    }
+                    savedAnswers={savedApplication.applicationSubmissionAnswers}
+                    applicationSubmissionId={savedApplication.id}
+                    status={savedApplication.applicationSubmissionStatus}
+                    key={`applicationSubmission${index}`}
+                  />
+                ))}
+              </div>
+
+              {applicationSubmissions.length > limit && (
+                <Pagination
+                  total={totalPages}
+                  initialPage={1}
+                  page={page}
+                  onChange={(newPage) => setPage(newPage)}
                 />
-              ))}
-            </div>
+              )}
+            </>
           ) : (
-            <div className="flex max-w-3xl flex-col items-center justify-center gap-y-2 text-center">
-              <LicenseOff className="h-44 w-44 text-secondary" />
-              <h1 className="text-4xl font-bold leading-none">
+            <div className="flex max-w-2xl flex-col items-center justify-center gap-y-2 text-center">
+              <LicenseOff className="h-40 w-40 text-secondary" />
+              <h1 className="text-2xl font-bold leading-none">
                 You have not submitted any applications!
               </h1>
-              <p className="max-w-xl">
+              <p className="max-w-xl text-gray">
                 To find applications, go to Open Applications, or find a project
                 of interest and see if they have any open applications.
               </p>
             </div>
           )}
-        </section>
-      </main>
+        </div>
+      </PageWrapper>
     );
   }
 };

@@ -6,37 +6,48 @@ import {
   ModalContent,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
-import { useState } from "react";
-import { Brush, Flag2, Settings } from "tabler-icons-react";
+} from "@heroui/react";
+import { useState, useEffect } from "react";
+import { Brush, Eye, Settings } from "tabler-icons-react";
 
 import DeleteProjectEditor from "../dashboard/deleteProjectEditor";
 import BannerEditor from "./bannerEditor";
 import ColorsEditor from "./colorsEditor";
+import VisibilityEditor from "./visibilityEditor";
 
 enum SettingsSection {
   "COLORS",
   "BANNER",
   "DELETE",
+  "VISIBILITY",
 }
 
 type PropType = {
   projectId: string;
 };
 
-const AdminSettings = (props: PropType) => {
-  const { projectId } = props;
-
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
+const AdminSettings = ({ projectId }: PropType) => {
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [settingsSection, setSettingsSection] = useState<SettingsSection>(
     SettingsSection.COLORS,
   );
 
+  // Automatically close modal when window width reaches "md" (768px)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        onClose(); // Close modal at md: breakpoint
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [onClose]);
+
   return (
     <>
       <button
-        className="absolute right-0 top-0 m-4 transition duration-500 ease-in-out hover:scale-125 hover:cursor-pointer hover:rotate-180"
+        className="absolute right-0 top-0 m-4 transition duration-500 ease-in-out hover:rotate-180 hover:scale-125 hover:cursor-pointer"
         onClick={onOpen}
       >
         <Settings className="h-20 w-20 rounded-full p-1" />
@@ -52,16 +63,18 @@ const AdminSettings = (props: PropType) => {
                   <Button
                     variant="light"
                     onPress={() => setSettingsSection(SettingsSection.COLORS)}
-                    endContent={<Brush />}
+                    endContent={<Brush className="hidden lg:block" />}
                   >
                     Change Colors
                   </Button>
                   <Button
                     variant="light"
-                    onPress={() => setSettingsSection(SettingsSection.BANNER)}
-                    endContent={<Flag2 />}
+                    onPress={() =>
+                      setSettingsSection(SettingsSection.VISIBILITY)
+                    }
+                    endContent={<Eye className="hidden lg:block" />}
                   >
-                    Change Banner
+                    Change Visibility
                   </Button>
 
                   <div className="flex w-full grow items-end">
@@ -84,6 +97,10 @@ const AdminSettings = (props: PropType) => {
 
                     {settingsSection === SettingsSection.BANNER && (
                       <BannerEditor projectId={projectId} />
+                    )}
+
+                    {settingsSection === SettingsSection.VISIBILITY && (
+                      <VisibilityEditor projectId={projectId} />
                     )}
 
                     {settingsSection === SettingsSection.DELETE && (

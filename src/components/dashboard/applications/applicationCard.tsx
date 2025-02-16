@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
   Divider,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   Application,
   ApplicationQuestion,
@@ -49,8 +49,9 @@ const ApplicationCard = (props: PropType) => {
 
   // Access the context if it's in the scope, or fallback to default colors
   const projectContext = useContext(ProjectContext);
-  const primaryColor = projectContext?.colors?.primaryColor || "#000000"; // Default black if no context
-  const secondaryColor = projectContext?.colors?.secondaryColor || "#4B5563"; // Default gray if no context
+  const primaryColor = projectContext?.colors?.primaryColor || "var(--primary)";
+  const secondaryColor =
+    projectContext?.colors?.secondaryColor || "var(--secondary)";
 
   const displayEditComponent =
     editable && application.status === ApplicationStatus.DRAFT;
@@ -125,7 +126,7 @@ const ApplicationCard = (props: PropType) => {
             {status === ApplicationSubmissionStatus.NEW &&
               application.status !== ApplicationStatus.CLOSED &&
               application.status !== ApplicationStatus.DRAFT && (
-                <Link href={`/project/${projectId}/apply/${application.id}`}>
+                <Link href={`/startups/${projectId}/apply/${application.id}`}>
                   <button
                     className="mr-1 flex flex-row transition duration-300 ease-in-out hover:translate-x-2"
                     style={{ color: secondaryColor }} // Inline style for dynamic color
@@ -135,9 +136,9 @@ const ApplicationCard = (props: PropType) => {
                 </Link>
               )}
             {status === ApplicationSubmissionStatus.DRAFT && (
-              <Link href={`/project/${projectId}/apply/${application.id}`}>
+              <Link href={`/startups/${projectId}/apply/${application.id}`}>
                 <button
-                  className="mr-1 flex flex-row transition duration-300 ease-in-out hover:translate-x-2"
+                  className="mr-1 flex flex-row text-secondary transition duration-300 ease-in-out hover:translate-x-2"
                   style={{ color: secondaryColor }} // Inline style for dynamic color
                 >
                   Continue <ArrowRight className="mx-1 h-full" />
@@ -155,7 +156,7 @@ const ApplicationCard = (props: PropType) => {
           </div>
 
           {editable && application.status !== ApplicationStatus.DRAFT && (
-            <Link href={`/evaluator/${projectId}`}>
+            <Link href={`/evaluator/${projectId}?applicationId=${application.id}`}>
               <div className="absolute left-1/2 z-30 -translate-x-1/2 -translate-y-[1rem] rounded-full border border-1 border-black bg-white">
                 <ListCheck
                   className="h-14 w-14 p-2 transition duration-300 ease-in-out hover:-rotate-12 hover:text-green-500"
@@ -192,7 +193,6 @@ const ApplicationCard = (props: PropType) => {
               </div>
             }
             dialogTitle="Application Preview"
-            dialogDescription="Preview Your Submitted Application"
           >
             <ApplicationForm
               projectId={projectId}
@@ -201,8 +201,6 @@ const ApplicationCard = (props: PropType) => {
               savedAnswers={savedAnswers}
               deadline={application.deadline || undefined}
               readonly
-              name={""}
-              description={""}
             />
           </PreviewModal>
         )}

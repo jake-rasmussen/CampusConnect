@@ -1,4 +1,4 @@
-import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Input, Select, SelectItem } from "@heroui/react";
 import { ApplicationQuestionType } from "@prisma/client";
 import { DotsVertical, X } from "tabler-icons-react";
 
@@ -33,7 +33,8 @@ const QuestionCard = (props: PropType) => {
           label="Question"
           defaultValue={question.question}
           onBlur={(e) => {
-            updateQuestion("question", e.target.value, index, question);
+            const value = (e.target as HTMLInputElement).value;
+            updateQuestion("question", value, index, question);
           }}
           isRequired
         />

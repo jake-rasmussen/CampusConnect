@@ -1,4 +1,4 @@
-import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Input, Select, SelectItem } from "@heroui/react";
 import { SocialMediaPlatformType } from "@prisma/client";
 import { Field, Form } from "houseform";
 import toast from "react-hot-toast";

@@ -9,6 +9,7 @@ import ApplicationCreator from "./applicationCreator";
 import ApplicationsOutline from "./applicationsOutline";
 
 import type { Application, ApplicationQuestion } from "@prisma/client";
+import { LicenseOff } from "tabler-icons-react";
 
 type PropType = {
   applications: (Application & {
@@ -87,9 +88,12 @@ const Applications = (props: PropType) => {
             </div>
           ) : (
             <>
-              <h3 className="tracking-none my-4 text-lg font-black uppercase underline md:text-xl">
-                There are no applications
-              </h3>
+              <div className="flex max-w-sm flex-col items-center justify-center gap-y-2 text-center">
+                <LicenseOff className="h-40 w-40 text-black" />
+                <h3 className="text-2xl font-semibold uppercase">
+                  There are no applications
+                </h3>
+              </div>
             </>
           )}
         </ApplicationsOutline>

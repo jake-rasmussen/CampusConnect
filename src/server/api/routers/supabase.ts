@@ -23,6 +23,7 @@ export const supabaseRouter = createTRPCRouter({
         const filesToRemove = fileList.map(
           (x) => `${applicationId}/${ctx.user.userId}/${x.name}`,
         );
+        console.log(filesToRemove)
         await supabase.storage.from("bucket").remove(filesToRemove);
       }
     }),
@@ -118,7 +119,7 @@ export const supabaseRouter = createTRPCRouter({
   createSignedUrlDownloadBanner: protectedProcedure
     .input(
       z.object({
-        projectId: z.string()
+        projectId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

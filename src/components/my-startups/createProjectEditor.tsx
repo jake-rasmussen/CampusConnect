@@ -4,28 +4,18 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/modal";
-import {
-  Autocomplete,
-  AutocompleteItem,
-  Button,
-  Input,
-  Textarea,
-  useDisclosure,
-} from "@nextui-org/react";
-import { School } from "@prisma/client";
+} from "@heroui/modal";
+import { Button, Input, Textarea, useDisclosure } from "@heroui/react";
 import { Field, Form } from "houseform";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
 import { api } from "~/utils/api";
-import { uppercaseToCapitalize } from "~/utils/helpers";
 
 type ApplicationFormType = {
   name: string;
   description: string;
-  school: School;
 };
 
 const CreateProjectEditor = () => {
@@ -48,16 +38,17 @@ const CreateProjectEditor = () => {
   //   },
   // });
 
-  const createProjectCreationForm = api.projectRouter.createProjectCreationForm.useMutation({
-    onSuccess() {
-      toast.dismiss();
-      toast.success("Successfully Submitted Form!");
-    },
-    onError() {
-      toast.dismiss();
-      toast.error("Error...");
-    },
-  })
+  const createProjectCreationForm =
+    api.projectRouter.createProjectCreationForm.useMutation({
+      onSuccess() {
+        toast.dismiss();
+        toast.success("Successfully Submitted Form!");
+      },
+      onError() {
+        toast.dismiss();
+        toast.error("Error...");
+      },
+    });
 
   return (
     <>
@@ -78,7 +69,6 @@ const CreateProjectEditor = () => {
                 await createProjectCreationForm.mutateAsync({
                   name: values.name,
                   validation: values.description,
-                  school: values.school,
                 });
               }}
             >
@@ -88,8 +78,8 @@ const CreateProjectEditor = () => {
                   <ModalBody className="max-h-[70vh] overflow-y-scroll overflow-y-scroll">
                     <main className="flex w-full flex-col items-center gap-4">
                       <p>
-                        Please submit some information about your startup. It should take 1-2 business days
-                        to be approved, and you will receive an email once it is verified!
+                        Please submit some information about your startup. It
+                        should take 1-2 business days to be approved.
                       </p>
 
                       <section className="mx-10 flex w-full flex-col gap-4">
@@ -121,8 +111,8 @@ const CreateProjectEditor = () => {
                             .string()
                             .min(1, "Enter a description")
                             .max(
-                              500,
-                              "Description must be less than 500 characters",
+                              1000,
+                              "Description must be less than 1000 characters",
                             )}
                         >
                           {({ value, setValue, onBlur, isValid, errors }) => (
@@ -135,44 +125,6 @@ const CreateProjectEditor = () => {
                               isInvalid={!isValid}
                               errorMessage={errors[0]}
                             />
-                          )}
-                        </Field>
-
-                        <Field
-                          name="school"
-                          onBlurValidate={z.enum(
-                            Object.values(School) as [string, ...string[]],
-                            {
-                              errorMap: () => {
-                                return { message: "Select School" };
-                              },
-                            },
-                          )}
-                        >
-                          {({ value, setValue, onBlur, isValid, errors }) => (
-                            <Autocomplete
-                              label="School"
-                              selectedKey={value || ""}
-                              onSelectionChange={(e) => {
-                                if (e) {
-                                  setValue(e as School);
-                                } else {
-                                  setValue("");
-                                }
-                              }}
-                              onBlur={onBlur}
-                              isInvalid={!isValid}
-                              errorMessage={errors[0]}
-                              isRequired
-                            >
-                              {Object.values(School).map(
-                                (school: School, index: number) => (
-                                  <AutocompleteItem key={school} value={school}>
-                                    {uppercaseToCapitalize(school)}
-                                  </AutocompleteItem>
-                                ),
-                              )}
-                            </Autocomplete>
                           )}
                         </Field>
                       </section>

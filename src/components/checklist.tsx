@@ -1,4 +1,4 @@
-import { Checkbox, CheckboxGroup } from "@nextui-org/react";
+import { Checkbox, CheckboxGroup } from "@heroui/react";
 import { useEffect, useState } from "react";
 
 type PropType = {
@@ -7,10 +7,11 @@ type PropType = {
   isRequired: boolean;
   label: string;
   onChange(values: string[]): void;
+  readonly?: boolean;
 };
 
 const Checklist = (props: PropType) => {
-  const { answerChoices, value, isRequired, label, onChange } = props;
+  const { answerChoices, value, isRequired, label, onChange, readonly = false } = props;
 
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
 
@@ -24,6 +25,11 @@ const Checklist = (props: PropType) => {
         label={<span className="text-xl text-white">{label}</span>}
         defaultValue={selectedAnswers}
         value={value}
+        onValueChange={(answerChoice) => {
+          onChange(answerChoice);
+        }}
+        isRequired={isRequired}
+        isReadOnly={readonly}
       >
         {answerChoices.map((answerChoice: string, index: number) => {
           return (
@@ -34,17 +40,6 @@ const Checklist = (props: PropType) => {
               <Checkbox
                 id={`${answerChoice}${index}`}
                 color="secondary"
-                onClick={() => {
-                  let updatedAnswers = [...selectedAnswers];
-                  if (selectedAnswers.includes(answerChoice)) {
-                    const targetIndex = selectedAnswers.indexOf(answerChoice);
-                    updatedAnswers.splice(targetIndex, 1);
-                  } else {
-                    updatedAnswers.push(answerChoice);
-                  }
-                  setSelectedAnswers(updatedAnswers);
-                  onChange(updatedAnswers);
-                }}
                 value={answerChoice}
               >
                 <span className="text-lg text-white">{answerChoice}</span>

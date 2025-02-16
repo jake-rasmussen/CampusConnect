@@ -1,8 +1,8 @@
 import { Colors } from "@prisma/client";
+import { useEffect } from "react";
 import { InfoCircle } from "tabler-icons-react";
 
 import HeaderOutline from "./headerOutline";
-import { useEffect } from "react";
 
 type PropType = {
   name: string;
@@ -15,15 +15,13 @@ type PropType = {
 const Header = (props: PropType) => {
   const { name, subtext, colors, bannerUrl, editable } = props;
 
-  useEffect(() => {
-    
-  })
+  useEffect(() => {});
 
   return (
     <HeaderOutline colors={colors}>
       {editable ? (
         <div className="absolute translate-y-20 rounded-xl px-8 py-2 backdrop-invert">
-          <h1 className="tracking-none md:text-md flex flex-row items-center text-sm font-black uppercase">
+          <h1 className="tracking-none md:text-md flex flex-row items-center text-sm font-black uppercase invert">
             <InfoCircle className="mr-2" />
             You are now in edit mode
           </h1>

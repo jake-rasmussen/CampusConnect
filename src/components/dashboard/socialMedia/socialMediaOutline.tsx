@@ -17,7 +17,7 @@ const SocialMediaOutline = ({
         >
           Social Media
         </h1>
-        <h1 className="text-md text-center text-gray">
+        <h1 className="text-md text-center font-normal text-gray">
           Check us out on Social Media
         </h1>
         <div className="relative flex w-full flex-wrap items-center justify-center gap-x-4 lg:mx-0">
