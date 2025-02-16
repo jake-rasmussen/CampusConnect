@@ -6,12 +6,13 @@ import {
   Button,
   Input,
   Modal,
+  ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   useDisclosure,
   user,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { debounce } from "lodash";
 import React, { Key, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -137,7 +138,7 @@ const Search = (props: PropType) => {
         <Autocomplete
           className="w-[50rem]"
           inputValue={fieldState.inputValue}
-          items={fieldState.items}
+          items={fieldState.items || []}
           isLoading={!(search.length === 0) && isLoading}
           label="Search User"
           selectedKey={fieldState.selectedKey}
@@ -156,20 +157,17 @@ const Search = (props: PropType) => {
             setSearch("");
           }}
         >
-          {(fieldState.items || []).map((query: User, index: number) => {
+          {((user: User) => {
             return (
               <AutocompleteItem
-                key={`search${index}`}
-                onClick={() => {
-                  setSelectedUser(query);
+                key={`search${user.userId}`}
+                onPress={() => {
+                  setSelectedUser(user);
                   onOpen();
                 }}
               >
-                <div className="text-md font-semibold text-secondary">
-                  {query.emailAddress}
-                </div>
-                <div className="font-medium underline">
-                  {query.firstName} {query.lastName}
+                <div className="text-md font-semibold text-black">
+                  {user.emailAddress}
                 </div>
               </AutocompleteItem>
             );
@@ -185,6 +183,9 @@ const Search = (props: PropType) => {
                 Are you sure you want to add {selectedUser?.firstName}{" "}
                 {selectedUser?.lastName}?
               </ModalHeader>
+              <ModalBody>
+                <p className="text-slate-500">{selectedUser?.emailAddress}</p>
+              </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close

@@ -6,12 +6,13 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import Error from "next/error";
 
 import LoadingPage from "~/components/loadingPage";
-import CreateProfileEditor from "~/components/profile/createProfileEditor";
+import PageWrapper from "~/components/pageWrapper";
 import ProfileDashboard from "~/components/profile/profileDashboard";
+import ProfileEditor from "~/components/profile/profileEditor";
 import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
@@ -32,27 +33,21 @@ const Profile: NextPageWithLayout = () => {
   } else if (isError) {
     return <Error statusCode={error?.data?.httpStatus || 500} />;
   } else if (profile) {
-    return <ProfileDashboard profile={profile} />;
+    return <ProfileDashboard profile={profile} editable />;
   } else {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center">
-        <section className="mb-14 mt-40">
-          <h1 className="tracking-none text-center text-4xl font-black uppercase text-black">
-            Profile
+      <PageWrapper title="My Profile">
+        <>
+          <h1 className="text-center text-2xl font-bold leading-none">
+            You do not have a profile created!
           </h1>
-        </section>
-
-        <div className="mx-auto flex flex-col items-center justify-center px-4 py-16 text-center md:px-10 md:py-32 lg:px-32 xl:max-w-3xl">
-          <h1 className="text-4xl font-bold leading-none">
-            You don't have a profile created!
-          </h1>
-          <p className="mb-12 mt-8 px-8 text-lg">
+          <p className="max-w-lg text-center text-lg">
             Increase your discoverability by creating a profile. Once you have
             created a profile, startups will be able to see it and connect
             directly with you
           </p>
           <div className="flex flex-wrap justify-center gap-8">
-            <CreateProfileEditor />
+            <ProfileEditor editType="create" />
             <Button onPress={onOpen}>Learn more</Button>
 
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -72,15 +67,15 @@ const Profile: NextPageWithLayout = () => {
                       <Button color="danger" variant="light" onPress={onClose}>
                         Cancel
                       </Button>
-                      <CreateProfileEditor />
+                      <ProfileEditor editType="create" />
                     </ModalFooter>
                   </>
                 )}
               </ModalContent>
             </Modal>
           </div>
-        </div>
-      </div>
+        </>
+      </PageWrapper>
     );
   }
 };

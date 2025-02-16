@@ -1,4 +1,4 @@
-import { nextui } from '@nextui-org/theme';
+const {heroui} = require("@heroui/react");
 import { type Config } from "tailwindcss";
 
 const {
@@ -9,7 +9,7 @@ export default {
   darkMode: ["class"],
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     container: {
@@ -77,7 +77,7 @@ export default {
       },
     },
   },
-  plugins: [addVariablesForColors, nextui()],
+  plugins: [addVariablesForColors, heroui()],
 } satisfies Config;
 
 function addVariablesForColors({ addBase, theme }: any) {

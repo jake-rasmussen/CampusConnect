@@ -9,7 +9,7 @@ import {
   ModalHeader,
   Radio,
   RadioGroup,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { UserType } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -31,15 +31,14 @@ const GetStarted = () => {
   const [step, setStep] = useState(0);
 
   const updateUser = api.usersRouter.updateUser.useMutation({
-    onSuccess() {
+    onSuccess: async () => {
       toast.dismiss();
       toast.success("Welcome to Campus Connect!");
-      queryClient.invalidate().catch((e) => console.log(e));
 
-      setTimeout(() => {
-        if (selected === "hire") router.push("/my-startups");
-        else router.push("/project");
-      }, 1000);
+      await user?.reload();
+
+      queryClient.invalidate();
+      router.reload();
     },
   });
 

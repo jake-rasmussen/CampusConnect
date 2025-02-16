@@ -1,4 +1,4 @@
-import { Pagination } from "@nextui-org/react";
+import { Pagination } from "@heroui/react";
 import { ApplicationSubmissionStatus } from "@prisma/client";
 import Error from "next/error";
 import { useState } from "react";
@@ -28,7 +28,7 @@ const MyApplications = () => {
   } else {
     const paginatedApplications = applicationSubmissions.slice(
       (page - 1) * limit,
-      page * limit
+      page * limit,
     );
 
     const totalPages = Math.ceil(applicationSubmissions.length / limit);

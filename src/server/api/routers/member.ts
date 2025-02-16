@@ -6,7 +6,9 @@ import { createTRPCRouter, isAdmin, t } from "../trpc";
 
 // A function to update a user's metadata, which stores information about which projects
 // the user has leadership roles in, by storing the project IDs
-const updateMetadata = async (user: User & { memberships: Member[] }) => {
+export const updateMetadata = async (
+  user: User & { memberships: Member[] },
+) => {
   const evaluatorProjectIds: string[] = [];
   const adminProjectIds: string[] = [];
 

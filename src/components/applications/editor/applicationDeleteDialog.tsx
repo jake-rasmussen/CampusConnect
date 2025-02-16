@@ -6,7 +6,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { motion, useAnimation } from "framer-motion";
 import toast from "react-hot-toast";
 import { Link, Trash } from "tabler-icons-react";

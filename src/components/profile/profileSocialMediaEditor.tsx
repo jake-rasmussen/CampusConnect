@@ -1,4 +1,4 @@
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { SocialMediaPlatformType } from "@prisma/client";
 import { Field, Form } from "houseform";
 import Link from "next/link";
@@ -173,13 +173,13 @@ const ProfileSocialMediaEditor = (props: PropType) => {
                 </Link>
 
                 <div className="flex grow items-end justify-end">
-                  <Button
-                    onPress={() => {
+                  <button className="group w-10 h-10"
+                    onClick={() => {
                       handleDelete(socialMedia);
                     }}
                   >
                     <Trash />
-                  </Button>
+                  </button>
                 </div>
               </div>
             ))}

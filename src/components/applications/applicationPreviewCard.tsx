@@ -12,7 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Application, ApplicationQuestion, Project } from "@prisma/client";
 import Link from "next/link";
 import { Eye } from "tabler-icons-react";
@@ -118,7 +118,7 @@ const ApplicationPreviewCard = (props: PropType) => {
                     Close
                   </Button>
                   <Link
-                    href={`/project/${application.projectId}/apply/${application.id}`}
+                    href={`/startups/${application.projectId}/apply/${application.id}`}
                   >
                     <Button color="primary" onPress={onClose}>
                       Apply

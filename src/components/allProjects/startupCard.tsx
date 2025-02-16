@@ -1,15 +1,19 @@
-import { Card, CardBody } from "@nextui-org/card";
-import { Chip, Divider } from "@nextui-org/react";
+import { Card, CardBody } from "@heroui/card";
+import { Chip, Divider } from "@heroui/react";
 import { Colors, Project, ProjectMemberType, School } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 
-import { dateToStringFormatted, dateToStringFormattedWithYear, uppercaseToCapitalize } from "~/utils/helpers";
+import {
+  dateToStringFormatted,
+  dateToStringFormattedWithYear,
+  uppercaseToCapitalize,
+} from "~/utils/helpers";
 
 type PropTypes = {
-  project: (Project & {
+  project: Project & {
     colors: Colors;
-  });
+  };
   school?: School; // Optional field for School
   role?: ProjectMemberType; // Optional field for ProjectMemberType
 };
@@ -26,7 +30,7 @@ const StartupCard = (props: PropTypes) => {
               ? role === ProjectMemberType.ADMIN
                 ? `/admin/${project.id}`
                 : `/evaluator/${project.id}`
-              : `/project/${project.id}`
+              : `/startups/${project.id}`
           }
           className="h-full w-full"
         >
@@ -44,7 +48,9 @@ const StartupCard = (props: PropTypes) => {
           {role ? (
             <div className="relative flex grid h-1/2 grid-rows-5 flex-col text-center">
               <div className="row-span-3 mx-8 flex h-full items-center justify-center font-semibold">
-                <p className="text-lg font-black">{uppercaseToCapitalize(role)}</p>
+                <p className="text-lg font-black">
+                  {uppercaseToCapitalize(role)}
+                </p>
               </div>
               <div className="row-span-2 flex flex-col items-center">
                 <Divider className="w-5/6" />
@@ -56,7 +62,12 @@ const StartupCard = (props: PropTypes) => {
           ) : (
             <div className="relative flex grid h-1/2 grid-rows-5 flex-col text-center">
               <div className="row-span-3 mx-8 flex h-full items-center justify-center font-semibold">
-                <p>Created <span>{dateToStringFormattedWithYear(project.createdAt)}</span></p>
+                <p>
+                  Created{" "}
+                  <span>
+                    {dateToStringFormattedWithYear(project.createdAt)}
+                  </span>
+                </p>
               </div>
               <div className="row-span-2 flex flex-col items-center">
                 <Divider className="w-5/6" />

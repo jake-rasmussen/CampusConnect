@@ -1,4 +1,4 @@
-import { Input, Textarea } from "@nextui-org/react";
+import { Textarea } from "@heroui/react";
 import {
   ApplicationQuestion,
   ApplicationQuestionType,
@@ -16,6 +16,7 @@ import Checklist from "../checklist";
 import FileUpload from "../fileUpload";
 import LoadingPage from "../loadingPage";
 import MultipleChoice from "../multipleChoice";
+import { Input } from "@heroui/input";
 
 type PropType = {
   projectId: string;
@@ -145,51 +146,53 @@ const ApplicationForm = (props: PropType) => {
   } else {
     return (
       <section className="flex flex-col gap-4">
-        {
-          name && deadline && description && (
-            <>
-              <h1 className="text-center text-4xl font-black uppercase text-black underline">
-                {name}
-              </h1>
-              {!readonly && (
-                <h2 className="text-center text-lg font-bold text-black">
-                  {`Deadline: ${deadline
-                      ? dateToStringFormatted(deadline) +
-                      " at " +
-                      dateToTimeStringFormatted(deadline)
-                      : " TBD"
-                    }`}
-                </h2>
-              )}
+        {name && deadline && description && (
+          <>
+            <h1 className="text-center text-4xl font-black text-black">
+              {name}
+            </h1>
+            {!readonly && (
+              <h2 className="text-center text-lg font-bold text-black">
+                {`Deadline: ${deadline
+                  ? dateToStringFormatted(deadline) +
+                  " at " +
+                  dateToTimeStringFormatted(deadline)
+                  : " TBD"
+                  }`}
+              </h2>
+            )}
 
-              <p className="text-center text-black">{description}</p>
-            </>
-          )
-        }
-        
+            <p className="text-center text-black">{description}</p>
+          </>
+        )}
+
         <div className="flex flex-col gap-y-8 overflow-y-scroll rounded-2xl border border-1 border-black bg-gradient-to-r from-primary to-secondary p-10">
           <form className="flex flex-col gap-y-10">
             {questions.map((question: ApplicationQuestion, index: number) => (
               <div key={`question${index}`}>
                 {question.type === ApplicationQuestionType.TEXT_INPUT && (
-                  <Input
-                    value={
-                      (answersMap?.get(question.id)?.answer as string) || ""
-                    }
-                    onChange={(e) => {
-                      if (!readonly)
-                        handleUpdateAnswer(question.id, e.currentTarget.value);
-                    }}
-                    isRequired={question.required}
-                    placeholder=" "
-                    labelPlacement="outside"
-                    label={
-                      <span className="text-xl text-white">
-                        {question.question}
-                      </span>
-                    }
-                    size="lg"
-                  />
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xl text-white">
+                      {question.question} <span className="text-red-600 text-sm">{question.required && "*"}</span>
+                    </span>
+                    <Input
+                      value={
+                        (answersMap?.get(question.id)?.answer as string) || ""
+                      }
+                      onChange={(e) => {
+                        if (!readonly)
+                          handleUpdateAnswer(question.id, e.currentTarget.value);
+                      }}
+                      isRequired={question.required}
+                      // label={
+                      //   <span className="text-xl text-white">
+                      //     {question.question}
+                      //   </span>
+                      // }
+                      // labelPlacement="outside" TODO: see if hero ui fixed bug
+                      size="lg"
+                    />
+                  </div>
                 )}
                 {question.type === ApplicationQuestionType.TEXT_FIELD && (
                   <Textarea
@@ -221,6 +224,7 @@ const ApplicationForm = (props: PropType) => {
                     }}
                     isRequired={question.required}
                     label={question.question}
+                    readonly={readonly}
                   />
                 )}
                 {question.type === ApplicationQuestionType.MULTIPLE_SELECT && (
@@ -234,6 +238,7 @@ const ApplicationForm = (props: PropType) => {
                     }}
                     isRequired={question.required}
                     label={question.question}
+                    readonly={readonly}
                   />
                 )}
 
@@ -273,7 +278,7 @@ const ApplicationForm = (props: PropType) => {
                   }}
                   disabled={isSaving}
                 >
-                  Save for later
+                  Save
                 </Button>
                 <Button
                   className="bg-white/10 backdrop-invert"
@@ -287,7 +292,7 @@ const ApplicationForm = (props: PropType) => {
                   }
                   disabled={isSaving}
                 >
-                  Submit application
+                  Submit
                 </Button>
               </div>
             )}

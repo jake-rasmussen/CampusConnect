@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/input";
+import { Input } from "@heroui/input";
 import {
   Button,
   Modal,
@@ -8,11 +8,12 @@ import {
   ModalHeader,
   Pagination,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Colors, Project, ProjectMemberType } from "@prisma/client";
 import Error from "next/error";
 import React, { useEffect, useState } from "react";
 
+import StartupCard from "~/components/allProjects/startupCard";
 import LoadingPage from "~/components/loadingPage";
 import CreateProjectEditor from "~/components/my-startups/createProjectEditor";
 import PageWrapper from "~/components/pageWrapper";
@@ -20,7 +21,6 @@ import UserLayout from "~/layouts/userLayout";
 import { api } from "~/utils/api";
 
 import type { NextPageWithLayout } from "./_app";
-import StartupCard from "~/components/allProjects/startupCard";
 
 const MyStartups: NextPageWithLayout = () => {
   const [query, setQuery] = useState("");
@@ -120,13 +120,9 @@ const MyStartups: NextPageWithLayout = () => {
                 </div>
               </section>
 
-              <div className="flex w-full max-w-6xl flex-wrap items-center justify-center">
+              <div className="flex w-full max-w-6xl flex-wrap items-center justify-center gap-8">
                 {displayedProjects.map(([project, type], index) => (
-                  <StartupCard
-                    project={project}
-                    role={type}
-                    key={index}
-                  />
+                  <StartupCard project={project} role={type} key={index} />
                 ))}
               </div>
 

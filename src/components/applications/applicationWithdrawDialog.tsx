@@ -4,8 +4,8 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/modal";
-import { Button, Tooltip, useDisclosure } from "@nextui-org/react";
+} from "@heroui/modal";
+import { Button, Tooltip, useDisclosure } from "@heroui/react";
 import toast from "react-hot-toast";
 import { LicenseOff } from "tabler-icons-react";
 
@@ -50,7 +50,6 @@ const ApplicationWithdrawDialog = (props: PropType) => {
           <LicenseOff className="h-14 w-14 text-primary transition duration-300 ease-in-out hover:rotate-12 hover:text-red-500" />
         </div>
       </Tooltip>
-
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>

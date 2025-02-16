@@ -6,7 +6,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -51,7 +51,7 @@ const FilePreview = (props: PropType) => {
     <>
       <div className="block flex w-full cursor-pointer flex-row items-center rounded-lg rounded-xl border bg-white p-3 text-left">
         <div
-          className="mr-2 rounded-full border-none bg-secondary px-4 py-2 font-black uppercase text-white shadow-xl"
+          className="mr-2 rounded-full border-none bg-secondary px-4 py-2 font-black uppercase text-white shadow-xl whitespace-nowrap"
           onClick={onOpen}
         >
           View File
@@ -65,14 +65,14 @@ const FilePreview = (props: PropType) => {
             <>
               <ModalHeader>Preview {filename}</ModalHeader>
               <ModalBody className="max-h-[75vh] max-w-4xl overflow-y-scroll">
+                {isLoading ? <LoadingSection /> : <></>}
+
                 <section
                   className={twMerge(
                     "flex overflow-y-scroll rounded-xl border border-dashed p-2",
                     isLoading ? "hidden" : "",
                   )}
                 >
-                  {isLoading ? <LoadingSection /> : <></>}
-
                   {filename.slice(-4).toLowerCase() === ".pdf" ? (
                     <iframe
                       src={url || ""}
@@ -101,42 +101,6 @@ const FilePreview = (props: PropType) => {
           )}
         </ModalContent>
       </Modal>
-      {/* <Dialog>
-        <DialogTrigger className="block w-full cursor-pointer items-center rounded-lg rounded-xl border bg-white p-3 text-left">
-
-        </DialogTrigger>
-        <DialogContent className="max-h-[75vh] max-w-4xl overflow-y-scroll">
-          <DialogHeader>
-            <DialogTitle></DialogTitle>
-          </DialogHeader>
-          {isLoading ? <LoadingSection /> : <></>}
-
-          <section
-            className={twMerge(
-              "flex overflow-y-scroll rounded-xl border border-dashed p-2",
-              isLoading ? "hidden" : "",
-            )}
-          >
-            {filename.slice(-4).toLowerCase() === ".pdf" ? (
-              <iframe
-                src={url || ""}
-                onLoad={() => setIsLoading(false)}
-                className="min-h-[75vh] w-full"
-              />
-            ) : (
-              <img
-                src={url || ""}
-                onLoad={() => setIsLoading(false)}
-                width="0"
-                height="0"
-                sizes="100vw"
-                className="h-auto w-full"
-                alt={filename}
-              />
-            )}
-          </section>
-        </DialogContent>
-      </Dialog> */}
     </>
   );
 };

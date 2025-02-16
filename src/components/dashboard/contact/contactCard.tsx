@@ -1,4 +1,4 @@
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import { ContactInfo } from "@prisma/client";
 import { ProjectContext } from "lib/context";
 import { useContext } from "react";

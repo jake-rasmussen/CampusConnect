@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 import { Field, Form } from "houseform";
 import toast from "react-hot-toast";
 import { z } from "zod";

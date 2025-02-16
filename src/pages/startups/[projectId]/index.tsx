@@ -64,6 +64,7 @@ const ProjectDashboardPage: NextPageWithLayout = () => {
         members={project.members}
         colors={project.colors}
         isAdminPage={false}
+        isVisible={true}
       />
     );
   }

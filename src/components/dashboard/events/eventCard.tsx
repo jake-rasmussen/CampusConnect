@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
   Divider,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Event } from "@prisma/client";
 import { ProjectContext } from "lib/context";
 import { useContext } from "react";
@@ -28,7 +28,7 @@ const EventCard = (props: PropType) => {
 
   return (
     <>
-      <Card className="relative m-6 mb-0 w-full rounded-2xl bg-white shadow-xl">
+      <Card className="relative m-6 mb-0 w-full rounded-2xl bg-white shadow-xl max-w-4xl">
         <div className="flex flex-col lg:flex-row">
           <div
             className="item flex h-auto w-full justify-center rounded-xl shadow-2xl lg:w-48 lg:rounded-l-xl"

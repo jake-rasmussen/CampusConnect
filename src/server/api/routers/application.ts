@@ -157,6 +157,9 @@ export const applicationRouter = createTRPCRouter({
         projectId: {
           not: null, // If project ID is null, it means the project has been deleted or the application has been removed from a project
         },
+        project: {
+          isVisible: true
+        },
         deadline: {
           gt: new Date(),
         },

@@ -8,7 +8,7 @@
  */
 
 import { getAuth } from "@clerk/nextjs/server";
-import { Member, ProjectMemberType, User } from "@prisma/client";
+import { Member, ProjectMemberType, User, UserType } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
@@ -184,6 +184,27 @@ export const isEvaluator = t.middleware(async ({ next, ctx, input }) => {
     (membership.type !== ProjectMemberType.EVALUATOR &&
       membership.type !== ProjectMemberType.ADMIN)
   ) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return next({
+    ctx: {
+      user: ctx.user,
+    },
+  });
+});
+
+/**
+ * Middleware to check if the user is a school admin
+ */
+export const isSchoolAdmin = t.middleware(async ({ next, ctx, input }) => {
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  const castedUser = ctx.user as User & { memberships: Member[] };
+
+  if (castedUser.userType !== UserType.SCHOOL_ADMIN) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 

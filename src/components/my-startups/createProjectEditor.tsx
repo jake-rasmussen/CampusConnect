@@ -4,8 +4,8 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@nextui-org/modal";
-import { Button, Input, Textarea, useDisclosure } from "@nextui-org/react";
+} from "@heroui/modal";
+import { Button, Input, Textarea, useDisclosure } from "@heroui/react";
 import { Field, Form } from "houseform";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
@@ -79,8 +79,7 @@ const CreateProjectEditor = () => {
                     <main className="flex w-full flex-col items-center gap-4">
                       <p>
                         Please submit some information about your startup. It
-                        should take 1-2 business days to be approved, and you
-                        will receive an email once it is verified!
+                        should take 1-2 business days to be approved.
                       </p>
 
                       <section className="mx-10 flex w-full flex-col gap-4">
@@ -112,8 +111,8 @@ const CreateProjectEditor = () => {
                             .string()
                             .min(1, "Enter a description")
                             .max(
-                              500,
-                              "Description must be less than 500 characters",
+                              1000,
+                              "Description must be less than 1000 characters",
                             )}
                         >
                           {({ value, setValue, onBlur, isValid, errors }) => (

@@ -23,13 +23,20 @@ export const profileRouter = createTRPCRouter({
             ]),
           })
           .array(),
-        majors: z.nativeEnum(Focus),
-        minors: z.nativeEnum(Focus).optional(),
+        majors: z.array(z.nativeEnum(Focus)),
+        minors: z.array(z.nativeEnum(Focus).optional()),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { skills, about, school, year, socialMedias, majors, minors } =
-        input;
+      const {
+        skills,
+        about,
+        school,
+        year,
+        socialMedias,
+        majors,
+        minors = [],
+      } = input;
 
       const userId = ctx.user.userId;
 
@@ -43,8 +50,51 @@ export const profileRouter = createTRPCRouter({
           profileSocialMedia: {
             create: socialMedias,
           },
-          majors: [majors as Focus],
-          minors: [minors as Focus],
+          majors,
+          minors: (minors || []) as Focus[],
+        },
+      });
+    }),
+  updateProfile: protectedProcedure
+    .input(
+      z.object({
+        skills: z.string().array().optional(),
+        about: z.string().optional(),
+        school: z.string().optional(),
+        year: z.string().optional(),
+        socialMedias: z
+          .object({
+            url: z.string(),
+            platform: z.enum([
+              SocialMediaPlatformType.TWITTER,
+              SocialMediaPlatformType.INSTAGRAM,
+              SocialMediaPlatformType.FACEBOOK,
+              SocialMediaPlatformType.LINKEDIN,
+              SocialMediaPlatformType.WEBSITE,
+            ]),
+          })
+          .array()
+          .optional(),
+        majors: z.array(z.nativeEnum(Focus)).optional(),
+        minors: z.array(z.nativeEnum(Focus)).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.user.userId;
+
+      return await ctx.prisma.profile.update({
+        where: { userId },
+        data: {
+          skills: input.skills,
+          about: input.about,
+          school: input.school as School,
+          year: input.year,
+          majors: input.majors,
+          minors: input.minors || [],
+          profileSocialMedia: {
+            deleteMany: {}, // Remove old social media links
+            create: input.socialMedias || [], // Add new social media links
+          },
         },
       });
     }),
