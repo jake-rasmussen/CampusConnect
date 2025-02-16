@@ -81,7 +81,7 @@ export default async function handler(
 
       await establishMetadata(user);
     } catch (_) {
-      return res.status(400).json({ error: "Failed to create user and establish metadata" });
+      return res.status(400).json({ error: "Failed to create user and establish metadata", evt });
     }
   }
 
@@ -100,7 +100,7 @@ export default async function handler(
 
       if (user) await establishMetadata(user);
     } catch (_) {
-      return res.status(400).json({ error: "Failed to create user and establish metadata" });
+      return res.status(400).json({ error: "Failed to create user and establish metadata", evt });
     }
   }
 
