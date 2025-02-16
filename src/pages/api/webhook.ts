@@ -46,12 +46,12 @@ export default async function handler(
 
   let evt: WebhookEvent;
   try {
-    // Verify the webhook payload and headers
     evt = wh.verify(payload, headers) as WebhookEvent;
-  } catch (_) {
-    // If the verification fails, return a 400 error
-    return res.status(400).json({});
+  } catch (error) {
+    console.error("Webhook verification failed:", error);
+    return res.status(400).json({ error: "Invalid webhook signature" });
   }
+
 
   const eventType = evt.type;
 
@@ -81,7 +81,7 @@ export default async function handler(
 
       await establishMetadata(user);
     } catch (_) {
-      return res.status(400).json({});
+      return res.status(400).json({ error: "Failed to create user and establish metadata" });
     }
   }
 
@@ -100,7 +100,7 @@ export default async function handler(
 
       if (user) await establishMetadata(user);
     } catch (_) {
-      return res.status(400).json({});
+      return res.status(400).json({ error: "Failed to create user and establish metadata" });
     }
   }
 
