@@ -20,20 +20,6 @@ export default authMiddleware({
       userType: UserType;
     };
 
-
-    // Redirect unauthenticated users to sign-in
-    if (!auth.userId && !auth.isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: req.url });
-    }
-
-    if (url.pathname === "/") {
-      if (metadata.userType === UserType.INCOMPLETE) {
-        return Response.redirect(new URL("/get-started", req.url));
-      } else {
-        return
-      }
-    }
-
     if (metadata) {
       if (
         url.pathname === "/get-started" &&
