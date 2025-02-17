@@ -29,17 +29,24 @@ const GetStarted = () => {
 
   const [selected, setSelected] = useState("");
   const [step, setStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const updateUser = api.usersRouter.updateUser.useMutation({
     onSuccess: async () => {
       toast.dismiss();
       toast.success("Welcome to Campus Connect!");
-
+      
       await user?.reload();
 
       queryClient.invalidate();
       router.reload();
     },
+    onError() {
+      toast.dismiss();
+      toast.error("Error...");
+
+      setIsLoading(false);
+    }
   });
 
   const nextStep = () => setStep((prev) => prev + 1);
@@ -204,6 +211,7 @@ const GetStarted = () => {
                     onPress={() => {
                       if (user) {
                         toast.loading("Getting you set up...");
+                        setIsLoading(true);
 
                         const userType =
                           selected === "hire"
@@ -220,6 +228,7 @@ const GetStarted = () => {
                         });
                       }
                     }}
+                    isDisabled={isLoading}
                   >
                     Finish
                   </Button>
