@@ -41,7 +41,7 @@ const Members = (props: PropType) => {
     onSuccess() {
       toast.dismiss();
       toast.success("Successfully Deleted Member");
-      queryClient.invalidate().catch((e) => console.log(e));
+      queryClient.invalidate();
     },
   });
 
@@ -49,7 +49,7 @@ const Members = (props: PropType) => {
     onSuccess() {
       toast.dismiss();
       toast.success("Successfully Updated Member!");
-      queryClient.invalidate().catch((e) => console.log(e));
+      queryClient.invalidate();
     },
     onError() {
       toast.dismiss();
@@ -114,7 +114,6 @@ const Members = (props: PropType) => {
                                   );
                                 }}
                                 isDisabled={member.user.externalId === user?.id}
-                                onClick={() => console.log(member.type)}
                               >
                                 <SelectItem key="ADMIN">Admin</SelectItem>
                                 <SelectItem key="EVALUATOR">

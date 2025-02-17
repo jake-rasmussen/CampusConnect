@@ -25,7 +25,7 @@ const DescriptionEditor = (props: PropType) => {
     onSuccess() {
       toast.dismiss();
       toast.success("Successfully Updated Description!");
-      queryClient.invalidate().catch((e) => console.log(e));
+      queryClient.invalidate();
     },
     onError() {
       toast.dismiss();
@@ -60,7 +60,6 @@ const DescriptionEditor = (props: PropType) => {
                 return isValid;
               })
               .catch((e) => {
-                console.log(e);
                 return false;
               });
           }}

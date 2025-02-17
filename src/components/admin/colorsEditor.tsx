@@ -35,7 +35,7 @@ const ColorsEditor = (props: PropType) => {
     onSuccess() {
       toast.dismiss();
       toast.success("Successfully Updated the Colors!");
-      queryClient.invalidate().catch((e) => console.log(e));
+      queryClient.invalidate();
     },
     onError() {
       toast.dismiss();

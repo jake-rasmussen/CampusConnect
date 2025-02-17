@@ -135,7 +135,7 @@ const CreateProjectEditor = () => {
                       Close
                     </Button>
                     <Button
-                      onClick={() => {
+                      onPress={() => {
                         submit().catch(() => {
                           return;
                         });

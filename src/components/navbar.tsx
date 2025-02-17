@@ -9,6 +9,7 @@ import { api } from "~/utils/api";
 import { HoveredLink, Menu, MenuItem } from "./aceternity-ui/navbar-menu";
 import { Menu2 } from "tabler-icons-react";
 import { twMerge } from "tailwind-merge";
+import { useRouter } from "next/router";
 
 type PropType = {
   setIsLoadingNavbar: Dispatch<SetStateAction<boolean>>;
@@ -24,6 +25,8 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
     { externalId: user?.id || "" },
     { enabled: !!user },
   );
+
+  const router = useRouter();
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -78,25 +81,17 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
                     <Button isIconOnly><Menu2 /></Button>
                   </DropdownTrigger>
                   <DropdownMenu aria-label="Mobile Menu">
-                    <DropdownItem key="startups">
-                      <Link href="/startups">
-                        <span className="block w-full">All Startups</span>
-                      </Link>
+                    <DropdownItem key="startups" href="/startups">
+                      <span className="block w-full">All Startups</span>
                     </DropdownItem>
-                    <DropdownItem key="open-applications">
-                      <Link href="/open-applications">
-                        <span className="block w-full">Open Applications</span>
-                      </Link>
+                    <DropdownItem key="open-applications" href="/open-applications">
+                      <span className="block w-full">Open Applications</span>
                     </DropdownItem>
-                    <DropdownItem key="my-applications">
-                      <Link href="/my-applications">
-                        <span className="block w-full">My Applications</span>
-                      </Link>
+                    <DropdownItem key="my-applications" href="/my-applications">
+                      <span className="block w-full">My Applications</span>
                     </DropdownItem>
-                    <DropdownItem key="profile">
-                      <Link href="/profile">
-                        <span className="block w-full">My Profile</span>
-                      </Link>
+                    <DropdownItem key="profile" href="/profile">
+                      <span className="block w-full">My Profile</span>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -156,20 +151,14 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
                     <Button isIconOnly><Menu2 /></Button>
                   </DropdownTrigger>
                   <DropdownMenu aria-label="Mobile Menu">
-                    <DropdownItem key="startups">
-                      <Link href="/startups">
-                        <span className="block w-full">All Startups</span>
-                      </Link>
+                    <DropdownItem key="startups" href="/startups">
+                      <span className="block w-full">All Startups</span>
                     </DropdownItem>
-                    <DropdownItem key="my-startups">
-                      <Link href="/my-startups">
-                        <span className="block w-full">My Startups</span>
-                      </Link>
+                    <DropdownItem key="my-startups" href="/my-startups">
+                      <span className="block w-full">My Startups</span>
                     </DropdownItem>
-                    <DropdownItem key="discover">
-                      <Link href="/profile/discover">
-                        <span className="block w-full">Discover</span>
-                      </Link>
+                    <DropdownItem key="discover" href="/profile/discover">
+                      <span className="block w-full">Discover</span>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -229,20 +218,14 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
                     <Button isIconOnly><Menu2 /></Button>
                   </DropdownTrigger>
                   <DropdownMenu aria-label="Mobile Menu">
-                    <DropdownItem key="startups">
-                      <Link href="/startups">
-                        <span className="block w-full">All Startups</span>
-                      </Link>
+                    <DropdownItem key="startups" href="/startups">
+                      <span className="block w-full">All Startups</span>
                     </DropdownItem>
-                    <DropdownItem key="project-forms">
-                      <Link href="/school-admin/create-project">
-                        <span className="block w-full">Project Forms</span>
-                      </Link>
+                    <DropdownItem key="project-forms" href="/school-admin/create-project">
+                      <span className="block w-full">Project Forms</span>
                     </DropdownItem>
-                    <DropdownItem key="data">
-                      <Link href="/school-admin/data">
-                        <span className="block w-full">View Data</span>
-                      </Link>
+                    <DropdownItem key="data" href="/school-admin/data">
+                      <span className="block w-full">View Data</span>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -279,7 +262,7 @@ const Navbar = ({ setIsLoadingNavbar }: PropType) => {
     <>
       {isSignedIn && (
         <div className="relative flex w-full items-center justify-center">
-          <div className="fixed inset-x-0 top-10 top-2 z-50 max-w-2xl rounded-full shadow-xl mx-auto px-4">
+          <div className="fixed inset-x-0 top-10 top-2 z-50 max-w-2xl rounded-full shadow-xl mx-auto px-4 w-fit">
             {menu}
           </div>
         </div>

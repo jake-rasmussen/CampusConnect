@@ -192,7 +192,7 @@ const ProfileEditor = ({ editType, initialValues = {} }: PropType) => {
                     {step < 2 && (
                       <Button
                         color="primary"
-                        onClick={nextStep}
+                        onPress={nextStep}
                         isDisabled={
                           step === 0 &&
                           (!formData.about ||
@@ -204,7 +204,7 @@ const ProfileEditor = ({ editType, initialValues = {} }: PropType) => {
                       </Button>
                     )}
                     {step === 2 && (
-                      <Button onClick={submit} color="primary">
+                      <Button onPress={submit} color="primary">
                         Submit
                       </Button>
                     )}

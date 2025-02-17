@@ -69,7 +69,6 @@ const ApplicationCreator = ({ projectId }: Props) => {
                 return isValid;
               })
               .catch((e) => {
-                console.log(e);
                 return false;
               });
           }}

@@ -23,7 +23,6 @@ export const supabaseRouter = createTRPCRouter({
         const filesToRemove = fileList.map(
           (x) => `${applicationId}/${ctx.user.userId}/${x.name}`,
         );
-        console.log(filesToRemove)
         await supabase.storage.from("bucket").remove(filesToRemove);
       }
     }),

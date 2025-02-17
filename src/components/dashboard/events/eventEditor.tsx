@@ -87,7 +87,7 @@ const EventEditor = (props: PropType) => {
     onSuccess() {
       toast.dismiss();
       toast.success("Successfully Created the Event!");
-      queryClient.invalidate().catch((e) => console.log(e));
+      queryClient.invalidate();
     },
     onError() {
       toast.dismiss();
@@ -99,7 +99,7 @@ const EventEditor = (props: PropType) => {
     onSuccess() {
       toast.dismiss();
       toast.success("Successfully Updated the Event!");
-      queryClient.invalidate().catch((e) => console.log(e));
+      queryClient.invalidate();
     },
     onError() {
       toast.dismiss();
@@ -111,7 +111,7 @@ const EventEditor = (props: PropType) => {
     onSuccess() {
       toast.dismiss();
       toast.success("Successfully Deleted the Event!");
-      queryClient.invalidate().catch((e) => console.log(e));
+      queryClient.invalidate();
     },
     onError() {
       toast.dismiss();

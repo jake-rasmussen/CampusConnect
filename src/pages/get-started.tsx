@@ -192,14 +192,14 @@ const GetStarted = () => {
                 <ModalFooter>
                   <Button
                     color="primary"
-                    onClick={prevStep}
+                    onPress={prevStep}
                     isDisabled={step === 0}
                   >
                     Back
                   </Button>
                   <Button
                     color="primary"
-                    onClick={nextStep}
+                    onPress={nextStep}
                     isDisabled={step === 1 || selected.length === 0}
                     className={step === 1 ? "hidden" : ""}
                   >

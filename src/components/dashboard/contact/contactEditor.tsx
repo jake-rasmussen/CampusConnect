@@ -36,7 +36,7 @@ const ContactEditor = (props: PropType) => {
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Created the Contact Info!");
-        queryClient.invalidate().catch((e) => console.log(e));
+        queryClient.invalidate();
       },
       onError() {
         toast.dismiss();
@@ -50,7 +50,7 @@ const ContactEditor = (props: PropType) => {
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Updated Contact!");
-        queryClient.invalidate().catch((e) => console.log(e));
+        queryClient.invalidate();
       },
       onError() {
         toast.dismiss();
@@ -63,7 +63,7 @@ const ContactEditor = (props: PropType) => {
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Deleted Contact Info!");
-        queryClient.invalidate().catch((e) => console.log(e));
+        queryClient.invalidate();
       },
       onError() {
         toast.dismiss();
@@ -127,7 +127,6 @@ const ContactEditor = (props: PropType) => {
                 return isValid;
               })
               .catch((e) => {
-                console.log(e);
                 return false;
               });
           }}

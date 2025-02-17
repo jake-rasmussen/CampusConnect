@@ -212,7 +212,7 @@ const EvaluateApplicationSubmission = () => {
               </CardBody>
               <CardFooter className="flex w-full justify-center">
                 <Button
-                  onClick={() => handleCreateApplicationSubmissionComment()}
+                  onPress={() => handleCreateApplicationSubmissionComment()}
                   color="primary"
                 >
                   Submit

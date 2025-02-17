@@ -29,7 +29,7 @@ const SocialMediaEditor = (props: PropType) => {
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Created the Social Media!");
-        queryClient.invalidate().catch((e) => console.log(e));
+        queryClient.invalidate();
       },
       onError() {
         toast.dismiss();
@@ -43,7 +43,7 @@ const SocialMediaEditor = (props: PropType) => {
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Updated Social Media!");
-        queryClient.invalidate().catch((e) => console.log(e));
+        queryClient.invalidate();
       },
       onError() {
         toast.dismiss();
@@ -56,7 +56,7 @@ const SocialMediaEditor = (props: PropType) => {
       onSuccess() {
         toast.dismiss();
         toast.success("Successfully Deleted Social Media!");
-        queryClient.invalidate().catch((e) => console.log(e));
+        queryClient.invalidate();
       },
       onError() {
         toast.dismiss();
@@ -111,7 +111,6 @@ const SocialMediaEditor = (props: PropType) => {
                 return isValid;
               })
               .catch((e) => {
-                console.log(e);
                 return false;
               });
           }}
