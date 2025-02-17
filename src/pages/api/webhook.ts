@@ -80,9 +80,15 @@ export default async function handler(
       });
 
       await establishMetadata(user);
-    } catch (_) {
-      return res.status(400).json({ error: "Failed to create user and establish metadata" });
+    } catch (error) {
+      console.error("Prisma upsert error:", error);
+
+      return res.status(400).json({
+        error: "Failed to create user and establish metadata",
+        details: error, // Capture Prisma error message
+      });
     }
+
   }
 
   if (eventType === "session.created") {

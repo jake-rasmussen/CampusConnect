@@ -1,17 +1,204 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "jsonProtocol"]
 }
 
 datasource db {
-  // provider  = "postgresql"
-  // url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  userId                 String                  @id @default(cuid())
+  externalId             String                  @unique
+  firstName              String
+  lastName               String
+  emailAddress           String
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  userType               UserType                @default(INCOMPLETE)
+  applicationSubmissions ApplicationSubmission[]
+  memberships            Member[]
+  profile                Profile?
+  projectCreationForm    ProjectCreationForm[]
+}
+
+model Profile {
+  id                 String               @id @default(cuid())
+  userId             String               @unique
+  skills             String[]
+  about              String
+  year               String
+  majors             Focus[]
+  minors             Focus[]
+  school             School
+  user               User                 @relation(fields: [userId], references: [userId])
+  profileSocialMedia ProfileSocialMedia[]
+}
+
+model ProfileSocialMedia {
+  id        String                  @id @default(cuid())
+  profileId String
+  platform  SocialMediaPlatformType
+  url       String
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+  profile   Profile                 @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model Project {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  description  String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  colorsId     String
+  school       School
+  hasBanner    Boolean       @default(false)
+  isVisible    Boolean       @default(false)
+  applications Application[]
+  contactInfo  ContactInfo[]
+  events       Event[]
+  members      Member[]
+  colors       Colors        @relation(fields: [colorsId], references: [id])
+  socialMedia  SocialMedia[]
+}
+
+model Member {
+  projectId                    String
+  userId                       String
+  type                         ProjectMemberType
+  createdAt                    DateTime                       @default(now())
+  updatedAt                    DateTime                       @updatedAt
+  applicationSubmissionComment ApplicationSubmissionComment[]
+  project                      Project                        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user                         User                           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@id([projectId, userId])
+}
+
+model ContactInfo {
+  id        String  @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  role      String
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model SocialMedia {
+  id        String                  @id @default(cuid())
+  projectId String
+  platform  SocialMediaPlatformType
+  url       String
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+  project   Project                 @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  projectId   String
+  name        String
+  description String
+  inPerson    Boolean
+  location    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  end         DateTime
+  start       DateTime
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Application {
+  id                     String                  @id @default(cuid())
+  projectId              String?
+  name                   String
+  description            String                  @default("")
+  deadline               DateTime?
+  status                 ApplicationStatus       @default(DRAFT)
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  desiredSkills          String[]
+  project                Project?                @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  questions              ApplicationQuestion[]
+  applicationSubmissions ApplicationSubmission[]
+}
+
+model ApplicationQuestion {
+  id                          String                        @id @default(cuid())
+  required                    Boolean
+  orderNumber                 Int
+  applicationId               String
+  question                    String
+  type                        ApplicationQuestionType
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime                      @updatedAt
+  answerChoices               String[]
+  application                 Application                   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationSubmissionAnswer ApplicationSubmissionAnswer[]
+}
+
+model ApplicationSubmission {
+  id                              String                           @id @default(cuid())
+  createdAt                       DateTime                         @default(now())
+  updatedAt                       DateTime                         @updatedAt
+  userId                          String
+  applicationId                   String
+  applicationSubmissionStatus     ApplicationSubmissionStatus
+  application                     Application                      @relation(fields: [applicationId], references: [id])
+  user                            User                             @relation(fields: [userId], references: [userId])
+  applicationSubmissionAnswers    ApplicationSubmissionAnswer[]
+  applicationSubmissionEvaluation ApplicationSubmissionEvaluation?
+}
+
+model ApplicationSubmissionAnswer {
+  id                      String                @id @default(cuid())
+  applicationSubmissionId String
+  applicationQuestionId   String
+  answer                  Json
+  applicationQuestion     ApplicationQuestion   @relation(fields: [applicationQuestionId], references: [id])
+  applicationSubmission   ApplicationSubmission @relation(fields: [applicationSubmissionId], references: [id])
+}
+
+model ApplicationSubmissionEvaluation {
+  id                      String                               @id @default(cuid())
+  createdAt               DateTime                             @default(now())
+  updatedAt               DateTime                             @updatedAt
+  applicationSubmissionId String                               @unique
+  evaluation              ApplicationSubmissionEvaluationGrade @default(UNGRADED)
+  comments                ApplicationSubmissionComment[]
+  applicationSubmission   ApplicationSubmission                @relation(fields: [applicationSubmissionId], references: [id])
+}
+
+model ApplicationSubmissionComment {
+  id                                String                           @id @default(cuid())
+  comment                           String
+  createdAt                         DateTime                         @default(now())
+  updatedAt                         DateTime                         @updatedAt
+  applicationSubmissionEvaluationId String?
+  memberProjectId                   String
+  memberUserId                      String
+  applicationSubmissionEvaluation   ApplicationSubmissionEvaluation? @relation(fields: [applicationSubmissionEvaluationId], references: [id])
+  evaluator                         Member                           @relation(fields: [memberProjectId, memberUserId], references: [projectId, userId])
+}
+
+model Colors {
+  id             String    @id @default(cuid())
+  primaryColor   String
+  secondaryColor String
+  project        Project[]
+}
+
+model ProjectCreationForm {
+  id         String @id @default(cuid())
+  validation String
+  school     School
+  userId     String
+  name       String
+  user       User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 enum ProjectMemberType {
@@ -55,7 +242,6 @@ enum ApplicationSubmissionEvaluationGrade {
 }
 
 enum Focus {
-  // Arts and Humanities
   ART_HISTORY
   COMMUNICATION_STUDIES
   ENGLISH
@@ -67,8 +253,6 @@ enum Focus {
   THEATER
   VISUAL_ARTS
   FILM_STUDIES
-
-  // Business
   ACCOUNTING
   BUSINESS_ADMINISTRATION
   ECONOMICS
@@ -78,15 +262,11 @@ enum Focus {
   ENTREPRENEURSHIP
   SUPPLY_CHAIN_MANAGEMENT
   INTERNATIONAL_BUSINESS
-
-  // Education
   EARLY_CHILDHOOD_EDUCATION
   ELEMENTARY_EDUCATION
   SECONDARY_EDUCATION
   SPECIAL_EDUCATION
   EDUCATIONAL_LEADERSHIP
-
-  // Engineering and Technology
   AEROSPACE_ENGINEERING
   BIOMEDICAL_ENGINEERING
   CHEMICAL_ENGINEERING
@@ -98,8 +278,6 @@ enum Focus {
   SOFTWARE_ENGINEERING
   INFORMATION_TECHNOLOGY
   ROBOTICS
-
-  // Health and Medicine
   NURSING
   PHARMACY
   PHYSICAL_THERAPY
@@ -110,8 +288,6 @@ enum Focus {
   MEDICINE
   VETERINARY_MEDICINE
   HEALTH_INFORMATICS
-
-  // Social Sciences
   ANTHROPOLOGY
   CRIMINOLOGY
   POLITICAL_SCIENCE
@@ -119,8 +295,6 @@ enum Focus {
   SOCIOLOGY
   GEOGRAPHY
   INTERNATIONAL_RELATIONS
-
-  // STEM (Science, Technology, Engineering, Mathematics)
   ASTRONOMY
   BIOLOGY
   BIOCHEMISTRY
@@ -130,8 +304,6 @@ enum Focus {
   MATHEMATICS
   PHYSICS
   STATISTICS
-
-  // Other
   ARCHITECTURE
   DESIGN
   CULINARY_ARTS
@@ -189,197 +361,4 @@ enum UserType {
   EMPLOYEE
   EMPLOYER
   SCHOOL_ADMIN
-}
-
-model User {
-  userId                 String                  @id @default(cuid())
-  externalId             String                  @unique
-  firstName              String
-  lastName               String
-  emailAddress           String
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-  userType               UserType                @default(INCOMPLETE)
-  memberships            Member[]
-  applicationSubmissions ApplicationSubmission[]
-  profile                Profile?
-  projectCreationForm    ProjectCreationForm[]
-}
-
-model Profile {
-  id                 String               @id @default(cuid())
-  user               User                 @relation(fields: [userId], references: [userId])
-  userId             String               @unique
-  skills             String[]
-  about              String
-  school             School
-  year               String
-  majors             Focus[]
-  minors             Focus[]
-  profileSocialMedia ProfileSocialMedia[]
-}
-
-model ProfileSocialMedia {
-  id        String                  @id @default(cuid())
-  profileId String
-  profile   Profile                 @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  platform  SocialMediaPlatformType
-  url       String
-  createdAt DateTime                @default(now())
-  updatedAt DateTime                @updatedAt
-}
-
-model Project {
-  id           String        @id @default(cuid())
-  name         String        @unique
-  description  String
-  school       School
-  socialMedia  SocialMedia[]
-  members      Member[]
-  applications Application[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  events       Event[]
-  contactInfo  ContactInfo[]
-  colorsId     String
-  colors       Colors        @relation(fields: [colorsId], references: [id])
-  hasBanner    Boolean       @default(false)
-  isVisible    Boolean       @default(false)
-}
-
-model Member {
-  projectId                    String
-  project                      Project                        @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  userId                       String
-  user                         User                           @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  type                         ProjectMemberType
-  createdAt                    DateTime                       @default(now())
-  updatedAt                    DateTime                       @updatedAt
-  applicationSubmissionComment ApplicationSubmissionComment[]
-
-  @@id([projectId, userId])
-}
-
-model ContactInfo {
-  id        String  @id @default(cuid())
-  firstName String
-  lastName  String
-  email     String
-  phone     String?
-  role      String
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId String
-}
-
-model SocialMedia {
-  id        String                  @id @default(cuid())
-  projectId String
-  project   Project                 @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  platform  SocialMediaPlatformType
-  url       String
-  createdAt DateTime                @default(now())
-  updatedAt DateTime                @updatedAt
-}
-
-model Event {
-  id          String   @id @default(cuid())
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   String
-  name        String
-  start       DateTime
-  end         DateTime
-  description String
-  inPerson    Boolean
-  location    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Application {
-  id                     String                  @id @default(cuid())
-  name                   String
-  description            String                  @default("")
-  projectId              String?
-  project                Project?                @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  deadline               DateTime?
-  status                 ApplicationStatus       @default(DRAFT)
-  questions              ApplicationQuestion[]
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-  applicationSubmissions ApplicationSubmission[]
-  desiredSkills          String[]
-}
-
-model ApplicationQuestion {
-  id                          String                        @id @default(cuid())
-  application                 Application                   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  required                    Boolean
-  orderNumber                 Int
-  applicationId               String
-  question                    String
-  type                        ApplicationQuestionType
-  createdAt                   DateTime                      @default(now())
-  updatedAt                   DateTime                      @updatedAt
-  answerChoices               String[]
-  applicationSubmissionAnswer ApplicationSubmissionAnswer[]
-}
-
-model ApplicationSubmission {
-  id                              String                           @id @default(cuid())
-  createdAt                       DateTime                         @default(now())
-  updatedAt                       DateTime                         @updatedAt
-  user                            User                             @relation(fields: [userId], references: [userId])
-  userId                          String
-  application                     Application                      @relation(fields: [applicationId], references: [id])
-  applicationId                   String
-  applicationSubmissionAnswers    ApplicationSubmissionAnswer[]
-  applicationSubmissionStatus     ApplicationSubmissionStatus
-  applicationSubmissionEvaluation ApplicationSubmissionEvaluation?
-}
-
-model ApplicationSubmissionAnswer {
-  id                      String                 @id @default(cuid())
-  answer                  Json
-  applicationSubmission   ApplicationSubmission? @relation(fields: [applicationSubmissionId], references: [id])
-  applicationSubmissionId String
-  applicationQuestion     ApplicationQuestion    @relation(fields: [applicationQuestionId], references: [id])
-  applicationQuestionId   String
-}
-
-model ApplicationSubmissionEvaluation {
-  id                      String                               @id @default(cuid())
-  evaluation              ApplicationSubmissionEvaluationGrade @default(UNGRADED)
-  comments                ApplicationSubmissionComment[]
-  createdAt               DateTime                             @default(now())
-  updatedAt               DateTime                             @updatedAt
-  applicationSubmission   ApplicationSubmission                @relation(fields: [applicationSubmissionId], references: [id])
-  applicationSubmissionId String                               @unique
-}
-
-model ApplicationSubmissionComment {
-  id                                String                           @id @default(cuid())
-  evaluator                         Member                           @relation(fields: [memberProjectId, memberUserId], references: [projectId, userId])
-  comment                           String
-  applicationSubmissionEvaluation   ApplicationSubmissionEvaluation? @relation(fields: [applicationSubmissionEvaluationId], references: [id])
-  applicationSubmissionEvaluationId String?
-  createdAt                         DateTime                         @default(now())
-  updatedAt                         DateTime                         @updatedAt
-  memberProjectId                   String
-  memberUserId                      String
-}
-
-model Colors {
-  id             String    @id @default(cuid())
-  primaryColor   String
-  secondaryColor String
-  project        Project[]
-}
-
-model ProjectCreationForm {
-  id         String @id @default(cuid())
-  name       String
-  validation String
-  school     School
-  userId     String
-  user       User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
